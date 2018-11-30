@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace FluentEvents.Pipelines.Projections
 {
@@ -19,14 +18,6 @@ namespace FluentEvents.Pipelines.Projections
             pipelineModuleContext.PipelineEvent = projectedPipelineEvent;
 
             await invokeNextModule(pipelineModuleContext);
-        }
-
-        public void ProjectEventsSender<TFrom, TTo>(Func<TFrom, TTo> func)
-        {
-        }
-
-        public void ProjectEventArgs<TFrom, TTo>(Func<TFrom, TTo> func)
-        {
         }
     }
 }
