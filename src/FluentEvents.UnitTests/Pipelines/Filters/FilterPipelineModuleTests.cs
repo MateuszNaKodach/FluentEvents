@@ -10,10 +10,10 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
     [TestFixture]
     public class FilterPipelineModuleTests
     {
+        private Mock<IServiceProvider> m_InternalServiceProviderMock;
         private EventsScope m_EventsScope;
         private FilterPipelineModule m_FilterPipelineModule;
         private FilterPipelineModuleConfig m_FilterPipelineModuleConfig;
-        private Mock<IServiceProvider> m_InternalServiceProviderMock;
 
         [SetUp]
         public void SetUp()
