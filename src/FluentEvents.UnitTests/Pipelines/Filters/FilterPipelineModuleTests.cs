@@ -8,18 +8,14 @@ using NUnit.Framework;
 namespace FluentEvents.UnitTests.Pipelines.Filters
 {
     [TestFixture]
-    public class FilterPipelineModuleTests
+    public class FilterPipelineModuleTests : PipelineModuleTestBase
     {
-        private Mock<IServiceProvider> m_InternalServiceProviderMock;
-        private EventsScope m_EventsScope;
         private FilterPipelineModule m_FilterPipelineModule;
         private FilterPipelineModuleConfig m_FilterPipelineModuleConfig;
 
         [SetUp]
         public void SetUp()
         {
-            m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsScope = new EventsScope();
             m_FilterPipelineModule = new FilterPipelineModule();
             m_FilterPipelineModuleConfig = new FilterPipelineModuleConfig((sender, args) => ((TestSender)sender).IsValid);
         }
@@ -30,7 +26,11 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             var testSender = new TestSender { IsValid = false };
             var testEventArgs = new TestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(testSender, testEventArgs);
+            var pipelineModuleContext = SetUpPipelineModuleContext(
+                testSender,
+                testEventArgs,
+                m_FilterPipelineModuleConfig
+            );
 
             var isInvoked = false;
 
@@ -51,7 +51,11 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             var testSender = new TestSender { IsValid = true };
             var testEventArgs = new TestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(testSender, testEventArgs);
+            var pipelineModuleContext = SetUpPipelineModuleContext(
+                testSender,
+                testEventArgs, 
+                m_FilterPipelineModuleConfig
+            );
 
             PipelineContext nextModuleContext = null;
 
@@ -66,19 +70,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
         }
-
-        private PipelineModuleContext SetUpPipelineModuleContext(TestSender testSender, TestEventArgs testEventArgs)
-        {
-            return new PipelineModuleContext(
-                m_FilterPipelineModuleConfig,
-                new PipelineContext(
-                    new PipelineEvent("f", testSender, testEventArgs),
-                    m_EventsScope,
-                    m_InternalServiceProviderMock.Object
-                )
-            );
-        }
-
+        
         private class TestSender
         {
             public bool IsValid { get; set; }

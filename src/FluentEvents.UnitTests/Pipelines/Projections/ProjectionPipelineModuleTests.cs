@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Projections;
 using Moq;
@@ -8,10 +7,8 @@ using NUnit.Framework;
 namespace FluentEvents.UnitTests.Pipelines.Projections
 {
     [TestFixture]
-    public class ProjectionPipelineModuleTests
+    public class ProjectionPipelineModuleTests : PipelineModuleTestBase
     {
-        private Mock<IServiceProvider> m_InternalServiceProviderMock;
-        private EventsScope m_EventsScope;
         private ProjectionPipelineModule m_ProjectionPipelineModule;
         private ProjectionPipelineModuleConfig m_ProjectionPipelineModuleConfig;
         private Mock<IEventsSenderProjection> m_EventSenderProjection;
@@ -20,8 +17,6 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         [SetUp]
         public void SetUp()
         {
-            m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsScope = new EventsScope();
             m_EventSenderProjection = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
             m_EventArgsProjection = new Mock<IEventArgsProjection>(MockBehavior.Strict);
             m_ProjectionPipelineModule = new ProjectionPipelineModule();
@@ -46,7 +41,11 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             var projectedTestSender = new ProjectedTestSender();
             var projectedTestEventArgs = new ProjectedTestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(testSender, testEventArgs);
+            var pipelineModuleContext = SetUpPipelineModuleContext(
+                testSender, 
+                testEventArgs, 
+                m_ProjectionPipelineModuleConfig
+            );
 
             m_EventSenderProjection
                 .Setup(x => x.Convert(testSender))
@@ -77,18 +76,6 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             Assert.That(
                 nextModuleContext.PipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalEventArgs)).EqualTo(projectedTestEventArgs)
-            );
-        }
-
-        private PipelineModuleContext SetUpPipelineModuleContext(TestSender testSender, TestEventArgs testEventArgs)
-        {
-            return new PipelineModuleContext(
-                m_ProjectionPipelineModuleConfig,
-                new PipelineContext(
-                    new PipelineEvent("f", testSender, testEventArgs),
-                    m_EventsScope,
-                    m_InternalServiceProviderMock.Object
-                )
             );
         }
 
