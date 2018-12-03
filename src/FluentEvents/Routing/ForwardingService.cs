@@ -7,11 +7,11 @@ namespace FluentEvents.Routing
 {
     public class ForwardingService : IForwardingService
     {
-        private readonly IEventsRoutingService m_EventsRoutingService;
+        private readonly IRoutingService m_RoutingService;
 
-        public ForwardingService(IEventsRoutingService eventsRoutingService)
+        public ForwardingService(IRoutingService routingService)
         {
-            m_EventsRoutingService = eventsRoutingService;
+            m_RoutingService = routingService;
         }
 
         public void ForwardEventsToRouting(SourceModel sourceModel, object source, EventsScope eventsScope)
@@ -22,12 +22,12 @@ namespace FluentEvents.Routing
             foreach (var eventField in sourceModel.EventFields)
             {
                 void HandlerAction(object sender, object args) =>
-                    m_EventsRoutingService.RouteEventAsync(
+                    m_RoutingService.RouteEventAsync(
                         new PipelineEvent(eventField.EventInfo.Name, sender, args), eventsScope
                     ).GetAwaiter().GetResult();
 
                 async Task AsyncHandlerAction(object sender, object args) =>
-                    await m_EventsRoutingService.RouteEventAsync(
+                    await m_RoutingService.RouteEventAsync(
                         new PipelineEvent(eventField.EventInfo.Name, sender, args), eventsScope
                     );
 

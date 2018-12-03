@@ -9,14 +9,14 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Routing
 {
-    public class EventsRoutingService : IEventsRoutingService
+    public class RoutingService : IRoutingService
     {
-        private readonly ILogger<EventsRoutingService> m_Logger;
+        private readonly ILogger<RoutingService> m_Logger;
         private readonly ITypesResolutionService m_TypesResolutionService;
         private readonly ISourceModelsService m_SourceModelsService;
 
-        public EventsRoutingService(
-            ILogger<EventsRoutingService> logger,
+        public RoutingService(
+            ILogger<RoutingService> logger,
             ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService
         )

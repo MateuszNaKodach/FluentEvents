@@ -45,7 +45,7 @@ namespace FluentEvents
             services.AddSingleton<EventsContextDependencies>();
             services.AddSingleton<IScopedSubscriptionsService, ScopedSubscriptionsService>();
             services.AddSingleton<ISubscriptionsFactory, SubscriptionsFactory>();
-            services.AddSingleton<IEventsRoutingService, EventsRoutingService>();
+            services.AddSingleton<IRoutingService, RoutingService>();
             services.AddSingleton<IEventsSerializationService, JsonEventsSerializationService>();
             services.AddSingleton<IGlobalSubscriptionCollection, GlobalSubscriptionCollection>();
             services.AddSingleton<ISourceModelsService, SourceModelsService>();

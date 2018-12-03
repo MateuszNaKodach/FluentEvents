@@ -25,7 +25,7 @@ namespace FluentEvents.UnitTests
         private Mock<IEventReceiversService> m_EventReceiversServiceMock;
         private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IEventsRoutingService> m_EventsRoutingServiceMock;
+        private Mock<IRoutingService> m_EventsRoutingServiceMock;
         private Mock<IAttachingService> m_AttachingServiceMock;
         private EventsContextDependencies m_EventsContextDependencies;
 
@@ -43,7 +43,7 @@ namespace FluentEvents.UnitTests
             m_EventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
             m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_EventsRoutingServiceMock = new Mock<IEventsRoutingService>(MockBehavior.Strict);
+            m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
             m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
 
             m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);

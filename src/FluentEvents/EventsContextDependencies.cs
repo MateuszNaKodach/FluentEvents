@@ -13,7 +13,7 @@ namespace FluentEvents
         public IEventReceiversService EventReceiversService { get; }
         public ITypesResolutionService TypesResolutionService { get; }
         public ISourceModelsService SourceModelsService { get; }
-        public IEventsRoutingService EventsRoutingService { get; }
+        public IRoutingService RoutingService { get; }
         public IAttachingService AttachingService { get; }
 
         public EventsContextDependencies(
@@ -22,7 +22,7 @@ namespace FluentEvents
             IEventReceiversService eventReceiversService, 
             ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService, 
-            IEventsRoutingService eventsRoutingService,
+            IRoutingService routingService,
             IAttachingService attachingService
         )
         {
@@ -31,7 +31,7 @@ namespace FluentEvents
             EventReceiversService = eventReceiversService;
             TypesResolutionService = typesResolutionService;
             SourceModelsService = sourceModelsService;
-            EventsRoutingService = eventsRoutingService;
+            RoutingService = routingService;
             AttachingService = attachingService;
         }
     }

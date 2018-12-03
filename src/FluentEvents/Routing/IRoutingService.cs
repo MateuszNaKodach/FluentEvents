@@ -3,7 +3,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Routing
 {
-    public interface IEventsRoutingService
+    public interface IRoutingService
     {
         Task RouteEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope);
     }

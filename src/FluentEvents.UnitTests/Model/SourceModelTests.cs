@@ -14,7 +14,7 @@ namespace FluentEvents.UnitTests.Model
         private SourceModel m_SourceModelWithInvalidReturnType;
         private SourceModel m_SourceModel;
         private EventsScope m_EventsScope;
-        private Mock<IEventsRoutingService> m_EventsRoutingServiceMock;
+        private Mock<IRoutingService> m_EventsRoutingServiceMock;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace FluentEvents.UnitTests.Model
             m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContext);
             m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContext);
             m_EventsScope = new EventsScope();
-            m_EventsRoutingServiceMock = new Mock<IEventsRoutingService>(MockBehavior.Strict);
+            m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
         }
 
         [Test]
