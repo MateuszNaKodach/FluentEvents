@@ -15,7 +15,7 @@ namespace FluentEvents.Model
         public FieldInfo FieldInfo { get; }
         public string Name => FieldInfo.Name;
         public IReadOnlyList<ParameterExpression> EventHandlerParameters { get; }
-        public ICollection<Pipeline> Pipelines { get; }
+        public ICollection<IPipeline> Pipelines { get; }
         public Type ReturnType { get; }
         public bool IsAsync => ReturnType == typeof(Task);
 
@@ -41,7 +41,7 @@ namespace FluentEvents.Model
             if (ReturnType != typeof(void) && ReturnType != typeof(Task))
                 throw new InvalidEventHandlerReturnTypeException();
 
-            Pipelines = new List<Pipeline>();
+            Pipelines = new List<IPipeline>();
         }
 
         private static FieldInfo GetEventFieldInfo(Type type, EventInfo eventInfo)

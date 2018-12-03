@@ -4,7 +4,7 @@ namespace FluentEvents.Queues
 {
     public class QueuedPipelineEvent
     {
-        public Pipeline Pipeline { get; set; }
+        public IPipeline Pipeline { get; set; }
         public PipelineEvent PipelineEvent { get; set; }
     }
 }

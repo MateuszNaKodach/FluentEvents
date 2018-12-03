@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Queues
 {
@@ -30,16 +31,23 @@ namespace FluentEvents.Queues
             return eventConfigurator.IsQueuedToInternal(queueName);
         }
 
-        internal static EventPipelineConfigurator<TSource, TEventArgs> IsQueuedToInternal<TSource, TEventArgs>(
+        private static EventPipelineConfigurator<TSource, TEventArgs> IsQueuedToInternal<TSource, TEventArgs>(
             this EventConfigurator<TSource, TEventArgs> eventConfigurator,
             string queueName
         )
             where TSource : class
             where TEventArgs : class
         {
-            var eventPipelineConfig = ((IEventConfigurator)eventConfigurator)
+            var configurator = (IEventConfigurator) eventConfigurator;
+
+            var eventPipelineConfig = configurator
                 .SourceModelEventField
                 .AddEventPipelineConfig(queueName);
+
+            var eventsQueuesService = ((IInternalServiceProvider) configurator.EventsContext).InternalServiceProvider
+                .GetRequiredService<IEventsQueuesService>();
+
+            eventsQueuesService.CreateQueueIfNotExists(configurator.EventsContext, queueName);
 
             return new EventPipelineConfigurator<TSource, TEventArgs>(
                 eventPipelineConfig,

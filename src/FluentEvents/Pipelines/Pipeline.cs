@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Pipelines
 {
-    public class Pipeline
+    public class Pipeline : IPipeline
     {
         public EventsContext EventsContext { get; }
         public string QueueName { get; }

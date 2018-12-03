@@ -5,8 +5,9 @@ namespace FluentEvents.Queues
 {
     public interface IEventsQueuesService
     {
+        void CreateQueueIfNotExists(IEventsContext eventsContext, string queueName);
         Task ProcessQueuedEventsAsync(EventsScope eventsScope, IEventsContext eventsContext, string queueName);
         void DiscardQueuedEvents(IEventsContext eventsContext, string queueName);
-        void EnqueueEvent(PipelineEvent pipelineEvent, Pipeline pipeline);
+        void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline);
     }
 }
