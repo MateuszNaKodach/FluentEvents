@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace FluentEvents.Queues
@@ -10,7 +11,7 @@ namespace FluentEvents.Queues
 
         public EventsQueue(string name)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             m_QueuedPipelineEvents = new ConcurrentQueue<QueuedPipelineEvent>();
         }
 
@@ -23,6 +24,7 @@ namespace FluentEvents.Queues
 
         public void Enqueue(QueuedPipelineEvent pipelineEvent)
         {
+            if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             m_QueuedPipelineEvents.Enqueue(pipelineEvent);
         }
 
