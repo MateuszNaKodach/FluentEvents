@@ -8,17 +8,17 @@ namespace FluentEvents.Routing
     {
         private readonly ITypesResolutionService m_TypesResolutionService;
         private readonly ISourceModelsService m_SourceModelsService;
-        private readonly IEventsRoutingService m_EventsRoutingService;
+        private readonly IForwardingService m_ForwardingService;
 
         public AttachingService(
             ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService,
-            IEventsRoutingService eventsRoutingService
+            IForwardingService forwardingService
         )
         {
             m_TypesResolutionService = typesResolutionService;
             m_SourceModelsService = sourceModelsService;
-            m_EventsRoutingService = eventsRoutingService;
+            m_ForwardingService = forwardingService;
         }
 
         public void Attach(object source, EventsScope eventsScope)
@@ -30,7 +30,7 @@ namespace FluentEvents.Routing
                 if (sourceModel == null)
                     continue;
 
-                sourceModel.ForwardEventsToRouting(source, m_EventsRoutingService, eventsScope);
+                m_ForwardingService.ForwardEventsToRouting(sourceModel, source, eventsScope);
                 break;
             }
         }

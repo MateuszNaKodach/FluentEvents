@@ -22,28 +22,7 @@ namespace FluentEvents.Model
             EventsContext = eventsContext;
             m_EventFields = new List<SourceModelEventField>();
         }
-
-        public void ForwardEventsToRouting(object source, IEventsRoutingService eventsRoutingService, EventsScope eventsScope)
-        {
-            if (source.GetType() != ClrType)
-                throw new SourceDoesNotMatchModelTypeException();
-
-            foreach (var eventField in m_EventFields)
-            {
-                void HandlerAction(object sender, object args) =>
-                    eventsRoutingService.RouteEventAsync(new PipelineEvent(eventField.EventInfo.Name, sender, args), eventsScope).GetAwaiter().GetResult();
-
-                async Task AsyncHandlerAction(object sender, object args) =>
-                    await eventsRoutingService.RouteEventAsync(new PipelineEvent(eventField.EventInfo.Name, sender, args), eventsScope);
-
-                var eventHandler = eventField.IsAsync
-                    ? CreateEventHandler<Func<object, object, Task>>(eventField, AsyncHandlerAction)
-                    : CreateEventHandler<Action<object, object>>(eventField, HandlerAction);
-
-                eventField.EventInfo.AddEventHandler(source, eventHandler);
-            }
-        }
-
+        
         public SourceModelEventField GetOrCreateEventField(string name)
         {
             var eventField = m_EventFields.FirstOrDefault(x => x.Name == name);
@@ -63,7 +42,7 @@ namespace FluentEvents.Model
         public SourceModelEventField GetEventField(string name)
             => m_EventFields.FirstOrDefault(x => x.Name == name);
 
-        private Delegate CreateEventHandler<T>(SourceModelEventField eventField, T handlerAction)
+        internal Delegate CreateEventHandler<T>(SourceModelEventField eventField, T handlerAction)
         {
             var invokeMethodInfo = typeof(T).GetMethod(nameof(Action.Invoke));
 
