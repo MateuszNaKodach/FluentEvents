@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Castle.Core.Logging;
 using FluentEvents.Pipelines;
-using FluentEvents.UnitTests.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;

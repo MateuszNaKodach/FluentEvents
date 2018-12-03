@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
@@ -24,7 +25,7 @@ namespace FluentEvents.Routing
             m_TypesResolutionService = typesResolutionService;
             m_SourceModelsService = sourceModelsService;
         }
-
+        
         public async Task RouteEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
         {
             using (m_Logger.BeginEventRoutingScope(pipelineEvent))

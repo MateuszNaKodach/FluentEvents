@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Filters;
-using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Pipelines.Filters
