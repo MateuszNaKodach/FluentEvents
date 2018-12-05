@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AsyncEvent;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
+using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -17,6 +18,7 @@ namespace FluentEvents.UnitTests.Model
         private SourceModelEventField m_SourceModelEventField;
         private SourceModelEventField m_AsyncSourceModelEventField;
         private SourceModelEventField m_InheritedSourceModelEventField;
+        private Mock<IPipeline> m_PipelineMock;
 
         [SetUp]
         public void SetUp()
@@ -26,6 +28,7 @@ namespace FluentEvents.UnitTests.Model
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));
             m_AsyncSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.AsyncTestEvent));
             m_InheritedSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
+            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
         }
 
         private SourceModelEventField GetSourceModelEventField(string name)
@@ -126,12 +129,10 @@ namespace FluentEvents.UnitTests.Model
         }
 
         [Test]
-        public void AddEventPipelineConfig_ShouldCreateAndAddNewPipeline([Values(null, "q")] string queueName)
+        public void AddEventPipelineConfig_ShouldAddNewPipeline([Values(null, "q")] string queueName)
         {
-            var pipeline = m_SourceModelEventField.AddEventPipelineConfig(queueName);
+            var pipeline = m_SourceModelEventField.AddEventPipelineConfig(m_PipelineMock.Object);
 
-            Assert.That(pipeline, Has.Property(nameof(Pipeline.EventsContext)).EqualTo(m_EventsContext));
-            Assert.That(pipeline, Has.Property(nameof(Pipeline.QueueName)).EqualTo(queueName));
             Assert.That(m_SourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using FluentEvents.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Queues
@@ -40,9 +41,15 @@ namespace FluentEvents.Queues
         {
             var configurator = (IEventConfigurator) eventConfigurator;
 
-            var eventPipelineConfig = configurator
+            var pipeline = new Pipeline(
+                queueName,
+                configurator.SourceModel.EventsContext,
+                ((IInternalServiceProvider) configurator.EventsContext).InternalServiceProvider
+            );
+
+            configurator
                 .SourceModelEventField
-                .AddEventPipelineConfig(queueName);
+                .AddEventPipelineConfig(pipeline);
 
             var eventsQueuesService = ((IInternalServiceProvider) configurator.EventsContext).InternalServiceProvider
                 .GetRequiredService<IEventsQueuesService>();
@@ -50,7 +57,7 @@ namespace FluentEvents.Queues
             eventsQueuesService.CreateQueueIfNotExists(configurator.EventsContext, queueName);
 
             return new EventPipelineConfigurator<TSource, TEventArgs>(
-                eventPipelineConfig,
+                pipeline,
                 eventConfigurator
             );
         }

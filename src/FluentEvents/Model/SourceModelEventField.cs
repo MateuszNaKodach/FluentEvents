@@ -54,14 +54,9 @@ namespace FluentEvents.Model
             return eventFieldInfo;
         }
 
-        public Pipeline AddEventPipelineConfig(string queueName)
+        public IPipeline AddEventPipelineConfig(IPipeline pipeline)
         {
-            var pipeline = new Pipeline(
-                queueName,
-                m_SourceModel.EventsContext,
-                ((IInternalServiceProvider)m_SourceModel.EventsContext).InternalServiceProvider
-            );
-
+            if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
             Pipelines.Add(pipeline);
             return pipeline;
         }
