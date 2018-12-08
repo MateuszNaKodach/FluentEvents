@@ -39,38 +39,34 @@ namespace FluentEvents.Azure.SignalR
             object eventArgs
         )
         {
-            var subjectArg = string.Join(",", subjectIds);
-            string url;
-            switch (publicationMethod)
+            foreach (var subjectId in subjectIds)
             {
-                case PublicationMethod.User:
-                    url = GetSendToUserUrl(hubName, subjectArg);
-                    break;
-                case PublicationMethod.Users:
-                    url = GetSendToUsersUrl(hubName, subjectArg);
-                    break;
-                case PublicationMethod.Group:
-                    url = GetSendToGroupUrl(hubName, subjectArg);
-                    break;
-                case PublicationMethod.Groups:
-                    url = GetSendToGroupsUrl(hubName, subjectArg);
-                    break;
-                case PublicationMethod.Broadcast:
-                    url = GetBroadcastUrl(hubName);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(publicationMethod));
+                string url;
+                switch (publicationMethod)
+                {
+                    case PublicationMethod.User:
+                        url = GetSendToUserUrl(hubName, subjectId);
+                        break;
+                    case PublicationMethod.Group:
+                        url = GetSendToGroupUrl(hubName, subjectId);
+                        break;
+                    case PublicationMethod.Broadcast:
+                        url = GetBroadcastUrl(hubName);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(publicationMethod));
+                }
+
+                var request = BuildRequest(url, new PayloadMessage
+                {
+                    Arguments = new[] { eventSender, eventArgs },
+                    Target = hubMethodName
+                });
+
+                var response = await m_HttpClient.SendAsync(request);
+                if (response.StatusCode != HttpStatusCode.Accepted)
+                    throw new AzureSignalRPublishingFailedException();
             }
-
-            var request = BuildRequest(url, new PayloadMessage
-            {
-                Arguments = new[] { eventSender, eventArgs },
-                Target = hubMethodName
-            });
-
-            var response = await m_HttpClient.SendAsync(request);
-            if (response.StatusCode != HttpStatusCode.Accepted)
-                throw new AzureSignalRPublishingFailedException();
         }
 
         private HttpRequestMessage BuildRequest(string url, PayloadMessage payloadMessage)
@@ -89,11 +85,7 @@ namespace FluentEvents.Azure.SignalR
 
         private string GetSendToUserUrl(string hubName, string userId) => $"{GetBaseUrl(hubName)}/user/{userId}";
 
-        private string GetSendToUsersUrl(string hubName, string userList) => $"{GetBaseUrl(hubName)}/users/{userList}";
-
         private string GetSendToGroupUrl(string hubName, string group) => $"{GetBaseUrl(hubName)}/group/{group}";
-
-        private string GetSendToGroupsUrl(string hubName, string groupList) => $"{GetBaseUrl(hubName)}/groups/{groupList}";
 
         private string GetBroadcastUrl(string hubName) => $"{GetBaseUrl(hubName)}";
 

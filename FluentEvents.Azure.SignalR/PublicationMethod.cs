@@ -3,9 +3,7 @@
     internal enum PublicationMethod
     {
         User,
-        Users,
         Group,
-        Groups,
         Broadcast,
     }
 }
