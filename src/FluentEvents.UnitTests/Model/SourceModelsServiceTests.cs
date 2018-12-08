@@ -8,12 +8,12 @@ namespace FluentEvents.UnitTests.Model
     public class SourceModelsServiceTests
     {
         private SourceModelsService m_SourceModelsService;
-        private Mock<IEventsContext> m_EventsContextMock;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_SourceModelsService = new SourceModelsService();
         }
 

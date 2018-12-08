@@ -7,13 +7,13 @@ namespace FluentEvents.Model
 {
     public class SourceModel
     {
-        public IEventsContext EventsContext { get; }
+        public IInfrastructureEventsContext EventsContext { get; }
         public Type ClrType { get; }
         public IEnumerable<SourceModelEventField> EventFields => m_EventFields;
 
         private readonly IList<SourceModelEventField> m_EventFields;
 
-        public SourceModel(Type clrType, IEventsContext eventsContext)
+        public SourceModel(Type clrType, IInfrastructureEventsContext eventsContext)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             EventsContext = eventsContext;

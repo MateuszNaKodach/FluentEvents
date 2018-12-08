@@ -18,7 +18,7 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IPipeline> m_PipelineMock;
-        private Mock<IEventsContext> m_EventsContextMock;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
 
         private EventsScope m_EventsScope;
         private RoutingService m_RoutingService;
@@ -36,7 +36,7 @@ namespace FluentEvents.UnitTests.Routing
             m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
-            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
 
             m_EventsScope = new EventsScope();
             m_RoutingService = new RoutingService(

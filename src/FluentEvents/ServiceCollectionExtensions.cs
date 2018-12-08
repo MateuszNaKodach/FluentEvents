@@ -28,7 +28,7 @@ namespace FluentEvents
             });
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
             services.AddSingleton<IEventsQueuesFactory, EventsQueuesFactory>();
-            services.AddSingleton<IEventsContext, T>(x => x.GetRequiredService<T>());
+            services.AddSingleton<IInfrastructureEventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<IHostedService, EventReceiversHostedService>();
         

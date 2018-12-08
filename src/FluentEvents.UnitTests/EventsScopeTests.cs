@@ -13,8 +13,8 @@ namespace FluentEvents.UnitTests
     [TestFixture]
     public class EventsScopeTests
     {
-        private Mock<IEventsContext> m_EventsContext1;
-        private Mock<IEventsContext> m_EventsContext2;
+        private Mock<IInfrastructureEventsContext> m_EventsContext1;
+        private Mock<IInfrastructureEventsContext> m_EventsContext2;
         private Mock<IServiceProvider> m_AppServiceProviderMock;
         private Mock<IServiceProvider> m_InternalServiceProviderMock1;
         private Mock<IServiceProvider> m_InternalServiceProviderMock2;
@@ -22,14 +22,14 @@ namespace FluentEvents.UnitTests
         private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock2;
         private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
 
-        private IEventsContext[] m_EventsContexts;
+        private IInfrastructureEventsContext[] m_EventsContexts;
         private EventsScope m_EventsScope;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext1 = new Mock<IEventsContext>(MockBehavior.Strict);
-            m_EventsContext2 = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_EventsContext1 = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+            m_EventsContext2 = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_AppServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_InternalServiceProviderMock1 = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_InternalServiceProviderMock2 = new Mock<IServiceProvider>(MockBehavior.Strict);

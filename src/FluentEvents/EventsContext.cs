@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
-    public abstract class EventsContext : IEventsContext
+    public abstract class EventsContext : IInfrastructureEventsContext
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_InternalServiceProvider;
 

@@ -13,7 +13,7 @@ namespace FluentEvents
     {
         internal IServiceProvider ServiceProvider { get; }
 
-        private readonly IEnumerable<IEventsContext> m_EventsContexts;
+        private readonly IEnumerable<IInfrastructureEventsContext> m_EventsContexts;
         private readonly IEventsQueuesService m_EventsQueuesService;
 
         private readonly object m_SyncSubscriptions = new object();
@@ -24,7 +24,7 @@ namespace FluentEvents
         }
 
         public EventsScope(
-            IEnumerable<IEventsContext> eventsContexts,
+            IEnumerable<IInfrastructureEventsContext> eventsContexts,
             IServiceProvider serviceProvider,
             IEventsQueuesService eventsQueuesService
         )
@@ -60,10 +60,10 @@ namespace FluentEvents
             }
         }
 
-        internal virtual Task ProcessQueuedEventsAsync(IEventsContext eventsContext, string queueName) 
+        internal virtual Task ProcessQueuedEventsAsync(IInfrastructureEventsContext eventsContext, string queueName) 
             => m_EventsQueuesService.ProcessQueuedEventsAsync(this, eventsContext, queueName);
 
-        internal virtual void DiscardQueuedEvents(IEventsContext eventsContext, string queueName) 
+        internal virtual void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName) 
             => m_EventsQueuesService.DiscardQueuedEvents(eventsContext, queueName);
 
         internal virtual void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline) 

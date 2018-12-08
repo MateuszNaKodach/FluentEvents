@@ -13,7 +13,7 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelEventFieldTests
     {
-        private Mock<IEventsContext> m_EventsContextMock;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private Mock<IPipeline> m_PipelineMock;
         private SourceModel m_SourceModel;
         private SourceModelEventField m_SourceModelEventField;
@@ -23,7 +23,7 @@ namespace FluentEvents.UnitTests.Model
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             m_SourceModel = new SourceModel(typeof(TestModel), m_EventsContextMock.Object);
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));

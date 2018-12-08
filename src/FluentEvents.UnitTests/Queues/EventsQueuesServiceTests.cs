@@ -15,9 +15,9 @@ namespace FluentEvents.UnitTests.Queues
         private EventsQueuesService m_EventsQueuesService;
         private Mock<IEventsQueuesFactory> m_EventsQueuesFactory;
         private Mock<IServiceProvider> m_InternalServiceProvider1;
-        private Mock<IEventsContext> m_EventsContextMock1;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock1;
         private Mock<IServiceProvider> m_InternalServiceProvider2;
-        private Mock<IEventsContext> m_EventsContextMock2;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock2;
         private Mock<IPipeline> m_PipelineMock;
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock1;
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock2;
@@ -264,9 +264,9 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
         }
 
-        private Mock<IEventsContext> MakeEventsContext(Mock<IServiceProvider> serviceProviderMock)
+        private Mock<IInfrastructureEventsContext> MakeEventsContext(Mock<IServiceProvider> serviceProviderMock)
         {
-            var eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            var eventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             eventsContextMock
                 .Setup(x => x.Instance)
                 .Returns(serviceProviderMock.Object)
