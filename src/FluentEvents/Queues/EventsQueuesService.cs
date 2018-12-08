@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Queues
 {
     public class EventsQueuesService : IEventsQueuesService
     {
+        private readonly IDictionary<IEventsContext, IEventsQueueNamesService> m_EventsQueueNamesServices;
         private readonly IEventsQueuesFactory m_EventsQueuesFactory;
         private readonly ConcurrentDictionary<(IEventsContext, string), IEventsQueue> m_EventQueues;
 
-        public EventsQueuesService(IEventsQueuesFactory eventsQueuesFactory)
+        public EventsQueuesService(
+            IEnumerable<EventsContext> eventsContexts,
+            IEventsQueuesFactory eventsQueuesFactory)
         {
+            m_EventsQueueNamesServices = eventsContexts
+                .ToDictionary(
+                    x => (IEventsContext)x, 
+                    x => ((IInternalServiceProvider)x).InternalServiceProvider.GetRequiredService<IEventsQueueNamesService>()
+                );
             m_EventsQueuesFactory = eventsQueuesFactory;
             m_EventQueues = new ConcurrentDictionary<(IEventsContext, string), IEventsQueue>();
         }
 
-        public void CreateQueueIfNotExists(IEventsContext eventsContext, string queueName)
+        private bool IsQueueNameValid(IEventsContext eventsContext, string queueName)
         {
-            if (eventsContext == null) throw new ArgumentNullException(nameof(eventsContext));
-            if (queueName == null) throw new ArgumentNullException(nameof(queueName));
-
-            m_EventQueues.GetOrAdd(
-                (eventsContext, queueName), 
-                x => m_EventsQueuesFactory.GetNew(queueName)
-            );
+            return m_EventsQueueNamesServices.TryGetValue(eventsContext, out var eventsQueueNamesService)
+                   && eventsQueueNamesService.IsQueueNameExisting(queueName);
         }
 
         public async Task ProcessQueuedEventsAsync(EventsScope eventsScope, IEventsContext eventsContext, string queueName)
@@ -34,10 +40,11 @@ namespace FluentEvents.Queues
 
             if (queueName != null)
             {
+                if (!IsQueueNameValid(eventsContext, queueName))
+                    throw new EventsQueueNotFoundException();
+
                 if (m_EventQueues.TryGetValue((eventsContext, queueName), out var eventsQueue))
                     await ProcessQueue(eventsScope, eventsQueue);
-                else
-                    throw new EventsQueueNotFoundException();
             }
             else
             {
@@ -61,10 +68,11 @@ namespace FluentEvents.Queues
 
             if (queueName != null)
             {
+                if (!IsQueueNameValid(eventsContext, queueName))
+                    throw new EventsQueueNotFoundException();
+
                 if (m_EventQueues.TryGetValue((eventsContext, queueName), out var eventsQueue))
                     eventsQueue.DiscardQueuedEvents();
-                else
-                    throw new EventsQueueNotFoundException();
             }
             else
             {
@@ -78,14 +86,19 @@ namespace FluentEvents.Queues
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
 
-            if (m_EventQueues.TryGetValue((pipeline.EventsContext, pipeline.QueueName), out var queue))
-                queue.Enqueue(new QueuedPipelineEvent
-                {
-                    Pipeline = pipeline,
-                    PipelineEvent = pipelineEvent
-                });
-            else
+            if (!IsQueueNameValid(pipeline.EventsContext, pipeline.QueueName))
                 throw new EventsQueueNotFoundException();
+
+            var queue = m_EventQueues.GetOrAdd(
+                (pipeline.EventsContext, pipeline.QueueName),
+                x => m_EventsQueuesFactory.GetNew(pipeline.QueueName)
+            );
+
+            queue.Enqueue(new QueuedPipelineEvent
+            {
+                Pipeline = pipeline,
+                PipelineEvent = pipelineEvent
+            });
         }
     }
 }

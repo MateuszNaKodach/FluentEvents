@@ -51,10 +51,10 @@ namespace FluentEvents.Queues
                 .SourceModelEventField
                 .AddEventPipelineConfig(pipeline);
 
-            var eventsQueuesService = ((IInternalServiceProvider) configurator.EventsContext).InternalServiceProvider
-                .GetRequiredService<IEventsQueuesService>();
+            var eventsQueueNamesService = ((IInternalServiceProvider) configurator.EventsContext).InternalServiceProvider
+                .GetRequiredService<IEventsQueueNamesService>();
 
-            eventsQueuesService.CreateQueueIfNotExists(configurator.EventsContext, queueName);
+            eventsQueueNamesService.RegisterQueueNameIfNotExists(queueName);
 
             return new EventPipelineConfigurator<TSource, TEventArgs>(
                 pipeline,

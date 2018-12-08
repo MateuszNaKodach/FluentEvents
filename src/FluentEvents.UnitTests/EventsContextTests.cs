@@ -227,7 +227,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             m_InternalServiceProviderMock
-                .Setup(x => x.GetService(typeof(EventsContextDependencies)))
+                .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
                 .Returns(m_EventsContextDependencies)
                 .Verifiable();
 

@@ -12,7 +12,7 @@ namespace FluentEvents
     {
         IServiceProvider IInternalServiceProvider.InternalServiceProvider => m_InternalServiceProvider;
         private IServiceProvider m_InternalServiceProvider;
-        private EventsContextDependencies m_Dependencies;
+        private IEventsContextDependencies m_Dependencies;
 
         internal void Configure(
             EventsContextOptions options, 
@@ -22,9 +22,9 @@ namespace FluentEvents
             if (options == null) throw new ArgumentNullException(nameof(options));
 
             m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
-            m_Dependencies = m_InternalServiceProvider.GetRequiredService<EventsContextDependencies>();
-            OnBuildingSubscriptions(m_InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
-            OnBuildingPipelines(m_InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
+            m_Dependencies = m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
+            OnBuildingSubscriptions(m_InternalServiceProvider.GetService<SubscriptionsBuilder>());
+            OnBuildingPipelines(m_InternalServiceProvider.GetService<PipelinesBuilder>());
         }
 
         protected virtual void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder) { }

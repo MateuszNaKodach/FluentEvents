@@ -6,7 +6,7 @@ using FluentEvents.Transmission;
 
 namespace FluentEvents
 {
-    internal class EventsContextDependencies
+    internal class EventsContextDependencies : IEventsContextDependencies
     {
         public IScopedSubscriptionsService ScopedSubscriptionsService { get; }
         public IGlobalSubscriptionCollection GlobalSubscriptionCollection { get; }
