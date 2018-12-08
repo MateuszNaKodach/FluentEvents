@@ -15,14 +15,14 @@ namespace FluentEvents.UnitTests.Routing
         private SourceModel m_SourceModel;
         private EventsScope m_EventsScope;
         private Mock<IRoutingService> m_EventsRoutingServiceMock;
-        private EventsContextImpl m_EventsContext;
+        private Mock<IEventsContext> m_EventsContextMock;
         private ForwardingService m_ForwardingService;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContext);
+            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContextMock.Object);
             m_EventsScope = new EventsScope();
             m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
             m_ForwardingService = new ForwardingService(m_EventsRoutingServiceMock.Object);

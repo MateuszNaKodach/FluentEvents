@@ -1,4 +1,5 @@
 ﻿using FluentEvents.Model;
+using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -7,19 +8,19 @@ namespace FluentEvents.UnitTests.Model
     public class SourceModelsServiceTests
     {
         private SourceModelsService m_SourceModelsService;
-        private EventsContextImpl m_EventsContext;
+        private Mock<IEventsContext> m_EventsContextMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
+            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
             m_SourceModelsService = new SourceModelsService();
         }
 
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelDoesNotExists_ShouldCreate()
         {
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContext);
+            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContextMock.Object);
 
             Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
             Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
@@ -28,8 +29,8 @@ namespace FluentEvents.UnitTests.Model
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelExists_ShouldNotCreate()
         {
-            m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContext);
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContext);
+            m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContextMock.Object);
+            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContextMock.Object);
 
             Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
             Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
@@ -38,7 +39,7 @@ namespace FluentEvents.UnitTests.Model
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelExists_ShouldReturn()
         {
-            var createdSourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContext);
+            var createdSourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object), m_EventsContextMock.Object);
             var returnedSourceModel = m_SourceModelsService.GetSourceModel(typeof(object));
 
             Assert.That(returnedSourceModel, Is.Not.Null);

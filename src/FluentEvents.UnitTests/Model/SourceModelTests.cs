@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Model;
+using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -7,16 +8,16 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelTests
     {
-        private EventsContext m_EventsContext;
+        private Mock<IEventsContext> m_EventsContextMock;
         private SourceModel m_SourceModelWithInvalidArgs;
         private SourceModel m_SourceModelWithInvalidReturnType;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContext);
-            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContext);
+            m_EventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContextMock.Object);
+            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContextMock.Object);
         }
 
         [Test]

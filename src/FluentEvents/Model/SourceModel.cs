@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using FluentEvents.Pipelines;
-using FluentEvents.Routing;
 
 namespace FluentEvents.Model
 {
     public class SourceModel
     {
-        public EventsContext EventsContext { get; }
+        public IEventsContext EventsContext { get; }
         public Type ClrType { get; }
         public IEnumerable<SourceModelEventField> EventFields => m_EventFields;
 
         private readonly IList<SourceModelEventField> m_EventFields;
 
-        public SourceModel(Type clrType, EventsContext eventsContext)
+        public SourceModel(Type clrType, IEventsContext eventsContext)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             EventsContext = eventsContext;

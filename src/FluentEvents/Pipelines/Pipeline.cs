@@ -16,7 +16,7 @@ namespace FluentEvents.Pipelines
         private readonly ICollection<IPipelineModuleConfig> m_ModuleConfigs;
         private NextModuleDelegate m_NextModule;
 
-        internal Pipeline(string queueName, EventsContext eventsContext, IServiceProvider internalServiceProvider)
+        internal Pipeline(string queueName, IEventsContext eventsContext, IServiceProvider internalServiceProvider)
         {
             QueueName = queueName;
             EventsContext = eventsContext;
