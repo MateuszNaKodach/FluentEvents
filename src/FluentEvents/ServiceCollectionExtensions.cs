@@ -30,7 +30,6 @@ namespace FluentEvents
             services.AddSingleton<IEventsQueuesFactory, EventsQueuesFactory>();
             services.AddSingleton<IEventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
-            services.AddSingleton<IScopedSubscriptionsFactory, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<IHostedService, EventReceiversHostedService>();
         
             return services;

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,13 +16,13 @@ namespace FluentEvents.Queues
         private readonly ConcurrentDictionary<(IEventsContext, string), IEventsQueue> m_EventQueues;
 
         public EventsQueuesService(
-            IEnumerable<EventsContext> eventsContexts,
+            IEnumerable<IEventsContext> eventsContexts,
             IEventsQueuesFactory eventsQueuesFactory)
         {
             m_EventsQueueNamesServices = eventsContexts
                 .ToDictionary(
-                    x => (IEventsContext)x, 
-                    x => ((IInternalServiceProvider)x).InternalServiceProvider.GetRequiredService<IEventsQueueNamesService>()
+                    x => x,
+                    x => x.Get<IServiceProvider>().GetRequiredService<IEventsQueueNamesService>()
                 );
             m_EventsQueuesFactory = eventsQueuesFactory;
             m_EventQueues = new ConcurrentDictionary<(IEventsContext, string), IEventsQueue>();

@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
-    public abstract class EventsContext : IEventsContext, IInternalServiceProvider, IScopedSubscriptionsFactory
+    public abstract class EventsContext : IEventsContext
     {
-        IServiceProvider IInternalServiceProvider.InternalServiceProvider => m_InternalServiceProvider;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_InternalServiceProvider;
         private IServiceProvider m_InternalServiceProvider;
         private IEventsContextDependencies m_Dependencies;
 
@@ -50,8 +50,5 @@ namespace FluentEvents
 
         public void CancelGlobalSubscription(Subscription subscription)
             => m_Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
-
-        IEnumerable<Subscription> IScopedSubscriptionsFactory.CreateScopedSubscriptionsForServices(IServiceProvider serviceProvider)
-            => m_Dependencies.ScopedSubscriptionsService.CreateScopedSubscriptionsForServices(serviceProvider);
     }
 }

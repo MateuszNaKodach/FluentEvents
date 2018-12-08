@@ -9,7 +9,7 @@ namespace FluentEvents.Pipelines
 {
     public class Pipeline : IPipeline
     {
-        public EventsContext EventsContext { get; }
+        public IEventsContext EventsContext { get; }
         public string QueueName { get; }
 
         private readonly IServiceProvider m_InternalServiceProvider;
