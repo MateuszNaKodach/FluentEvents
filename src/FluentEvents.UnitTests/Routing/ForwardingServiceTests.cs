@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AsyncEvent;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Routing;
@@ -12,29 +13,46 @@ namespace FluentEvents.UnitTests.Routing
     [TestFixture]
     public class ForwardingServiceTests
     {
+        private Mock<IRoutingService> m_RoutingServiceMock;
+        private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
+
         private SourceModel m_SourceModel;
         private EventsScope m_EventsScope;
-        private Mock<IRoutingService> m_EventsRoutingServiceMock;
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private ForwardingService m_ForwardingService;
 
         [SetUp]
         public void SetUp()
         {
+            m_RoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
+            m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+
             m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContextMock.Object);
             m_EventsScope = new EventsScope();
-            m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
-            m_ForwardingService = new ForwardingService(m_EventsRoutingServiceMock.Object);
+            m_ForwardingService = new ForwardingService(m_RoutingServiceMock.Object, m_TypesResolutionServiceMock.Object);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            m_RoutingServiceMock.Verify();
+            m_TypesResolutionServiceMock.Verify();
+            m_EventsContextMock.Verify();
         }
 
         [Test]
         public async Task ForwardEventsToRouting_ShouldAddEventHandlers()
         {
             var source = new TestSource();
-            m_EventsRoutingServiceMock
+            m_RoutingServiceMock
                 .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), m_EventsScope))
                 .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            m_TypesResolutionServiceMock
+                .Setup(x => x.GetSourceType(source))
+                .Returns(source.GetType())
                 .Verifiable();
 
             m_SourceModel.GetOrCreateEventField(nameof(TestSource.NoArgsEvent));
@@ -50,13 +68,18 @@ namespace FluentEvents.UnitTests.Routing
 
             await source.RaiseEvents();
 
-            Assert.That(m_EventsRoutingServiceMock.Invocations, Has.Exactly(4).Items);
+            Assert.That(m_RoutingServiceMock.Invocations, Has.Exactly(4).Items);
         }
 
         [Test]
         public void ForwardEventsToRouting_WithSourceNotMatchingModelType_ShouldThrow()
         {
             var source = new object();
+
+            m_TypesResolutionServiceMock
+                .Setup(x => x.GetSourceType(source))
+                .Returns(source.GetType())
+                .Verifiable();
 
             Assert.That(() =>
             {
