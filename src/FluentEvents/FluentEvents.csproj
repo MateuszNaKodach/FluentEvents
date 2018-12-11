@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/luca-esse/FluentEvents/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>FluentEvents is a framework that lets you subscribe to events raised from different instances of your application</Description>
+    <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
