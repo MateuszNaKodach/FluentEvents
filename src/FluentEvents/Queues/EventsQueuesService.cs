@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,30 +11,30 @@ namespace FluentEvents.Queues
 {
     public class EventsQueuesService : IEventsQueuesService
     {
-        private readonly IDictionary<IEventsContext, IEventsQueueNamesService> m_EventsQueueNamesServices;
+        private readonly IDictionary<IInfrastructureEventsContext, IEventsQueueNamesService> m_EventsQueueNamesServices;
         private readonly IEventsQueuesFactory m_EventsQueuesFactory;
-        private readonly ConcurrentDictionary<(IEventsContext, string), IEventsQueue> m_EventQueues;
+        private readonly ConcurrentDictionary<(IInfrastructureEventsContext, string), IEventsQueue> m_EventQueues;
 
         public EventsQueuesService(
-            IEnumerable<EventsContext> eventsContexts,
+            IEnumerable<IInfrastructureEventsContext> eventsContexts,
             IEventsQueuesFactory eventsQueuesFactory)
         {
             m_EventsQueueNamesServices = eventsContexts
                 .ToDictionary(
-                    x => (IEventsContext)x, 
-                    x => ((IInternalServiceProvider)x).InternalServiceProvider.GetRequiredService<IEventsQueueNamesService>()
+                    x => x,
+                    x => x.Get<IServiceProvider>().GetRequiredService<IEventsQueueNamesService>()
                 );
             m_EventsQueuesFactory = eventsQueuesFactory;
-            m_EventQueues = new ConcurrentDictionary<(IEventsContext, string), IEventsQueue>();
+            m_EventQueues = new ConcurrentDictionary<(IInfrastructureEventsContext, string), IEventsQueue>();
         }
 
-        private bool IsQueueNameValid(IEventsContext eventsContext, string queueName)
+        private bool IsQueueNameValid(IInfrastructureEventsContext eventsContext, string queueName)
         {
             return m_EventsQueueNamesServices.TryGetValue(eventsContext, out var eventsQueueNamesService)
                    && eventsQueueNamesService.IsQueueNameExisting(queueName);
         }
 
-        public async Task ProcessQueuedEventsAsync(EventsScope eventsScope, IEventsContext eventsContext, string queueName)
+        public async Task ProcessQueuedEventsAsync(EventsScope eventsScope, IInfrastructureEventsContext eventsContext, string queueName)
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
             if (eventsContext == null) throw new ArgumentNullException(nameof(eventsContext));
@@ -62,7 +63,7 @@ namespace FluentEvents.Queues
                 await queuedPipelineEvent.Pipeline.ProcessEventAsync(queuedPipelineEvent.PipelineEvent, eventsScope);
         }
 
-        public void DiscardQueuedEvents(IEventsContext eventsContext, string queueName)
+        public void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName)
         {
             if (eventsContext == null) throw new ArgumentNullException(nameof(eventsContext));
 

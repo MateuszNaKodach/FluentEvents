@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.IntegrationTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.UnitTests", "src\FluentEvents.UnitTests\FluentEvents.UnitTests.csproj", "{A599BBA6-6FCD-4A33-838B-3D177FED9CD0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.SignalR", "src\FluentEvents.Azure.SignalR\FluentEvents.Azure.SignalR.csproj", "{0505FA26-ADDC-42E2-87DB-C819362B1604}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A599BBA6-6FCD-4A33-838B-3D177FED9CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A599BBA6-6FCD-4A33-838B-3D177FED9CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A599BBA6-6FCD-4A33-838B-3D177FED9CD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0505FA26-ADDC-42E2-87DB-C819362B1604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0505FA26-ADDC-42E2-87DB-C819362B1604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0505FA26-ADDC-42E2-87DB-C819362B1604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0505FA26-ADDC-42E2-87DB-C819362B1604}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

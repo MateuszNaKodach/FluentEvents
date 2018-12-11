@@ -13,22 +13,22 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelEventFieldTests
     {
-        private EventsContextImpl m_EventsContext;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
+        private Mock<IPipeline> m_PipelineMock;
         private SourceModel m_SourceModel;
         private SourceModelEventField m_SourceModelEventField;
         private SourceModelEventField m_AsyncSourceModelEventField;
         private SourceModelEventField m_InheritedSourceModelEventField;
-        private Mock<IPipeline> m_PipelineMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_SourceModel = new SourceModel(typeof(TestModel), m_EventsContext);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            m_SourceModel = new SourceModel(typeof(TestModel), m_EventsContextMock.Object);
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));
             m_AsyncSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.AsyncTestEvent));
             m_InheritedSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
         }
 
         private SourceModelEventField GetSourceModelEventField(string name)

@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Plugins
 {
     public interface IFluentEventsPlugin
     {
-        void ApplyServices(IServiceCollection services);
+        void ApplyServices(IServiceCollection services, IServiceProvider appServiceProvider);
     }
 }

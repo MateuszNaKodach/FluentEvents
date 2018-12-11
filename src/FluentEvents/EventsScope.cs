@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Queues;
 using FluentEvents.Subscriptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
@@ -11,7 +13,7 @@ namespace FluentEvents
     {
         internal IServiceProvider ServiceProvider { get; }
 
-        private readonly IEnumerable<IScopedSubscriptionsFactory> m_ScopedSubscriptionsFactories;
+        private readonly IEnumerable<IInfrastructureEventsContext> m_EventsContexts;
         private readonly IEventsQueuesService m_EventsQueuesService;
 
         private readonly object m_SyncSubscriptions = new object();
@@ -22,14 +24,14 @@ namespace FluentEvents
         }
 
         public EventsScope(
-            IEnumerable<IScopedSubscriptionsFactory> scopedSubscriptionsFactories,
+            IEnumerable<IInfrastructureEventsContext> eventsContexts,
             IServiceProvider serviceProvider,
             IEventsQueuesService eventsQueuesService
         )
         {
             ServiceProvider = serviceProvider;
 
-            m_ScopedSubscriptionsFactories = scopedSubscriptionsFactories;
+            m_EventsContexts = eventsContexts;
             m_EventsQueuesService = eventsQueuesService;
         }
 
@@ -40,10 +42,16 @@ namespace FluentEvents
                 if (m_Subscriptions == null)
                 {
                     var subscriptions = new List<Subscription>();
-                    foreach (var scopedSubscriptionsFactory in m_ScopedSubscriptionsFactories)
+                    foreach (var eventsContext in m_EventsContexts)
+                    {
+                        var scopedSubscriptionsService = eventsContext
+                            .Get<IServiceProvider>()
+                            .GetRequiredService<IScopedSubscriptionsService>();
+
                         subscriptions.AddRange(
-                            scopedSubscriptionsFactory.CreateScopedSubscriptionsForServices(ServiceProvider)
+                            scopedSubscriptionsService.CreateScopedSubscriptionsForServices(ServiceProvider)
                         );
+                    }
 
                     m_Subscriptions = subscriptions;
                 }
@@ -52,10 +60,10 @@ namespace FluentEvents
             }
         }
 
-        internal virtual Task ProcessQueuedEventsAsync(IEventsContext eventsContext, string queueName) 
+        internal virtual Task ProcessQueuedEventsAsync(IInfrastructureEventsContext eventsContext, string queueName) 
             => m_EventsQueuesService.ProcessQueuedEventsAsync(this, eventsContext, queueName);
 
-        internal virtual void DiscardQueuedEvents(IEventsContext eventsContext, string queueName) 
+        internal virtual void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName) 
             => m_EventsQueuesService.DiscardQueuedEvents(eventsContext, queueName);
 
         internal virtual void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline) 

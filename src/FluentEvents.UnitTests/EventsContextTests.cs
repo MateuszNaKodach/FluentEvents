@@ -7,7 +7,6 @@ using FluentEvents.Model;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
@@ -189,30 +188,7 @@ namespace FluentEvents.UnitTests
 
             m_EventsContext.CancelGlobalSubscription(subscription);
         }
-
-        [Test]
-        public void CreateScopedSubscriptionsForServices_ShouldCallScopedSubscriptionsService()
-        {
-            ConfigureEventsContext();
-            var subscriptions = new []
-            {
-                new Subscription(typeof(object)),
-                new Subscription(typeof(object))
-            };
-
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
-
-            m_ScopedSubscriptionsServiceMock
-                .Setup(x => x.CreateScopedSubscriptionsForServices(serviceProvider))
-                .Returns(subscriptions)
-                .Verifiable();
-
-            var returnedSubscriptions = ((IScopedSubscriptionsFactory)m_EventsContext)
-                .CreateScopedSubscriptionsForServices(serviceProvider);
-
-            Assert.That(returnedSubscriptions, Is.EqualTo(subscriptions));
-        }
-
+        
         private void ConfigureEventsContext()
         {
             SetUpServiceProviderAndServiceCollection();

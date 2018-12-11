@@ -13,36 +13,39 @@ namespace FluentEvents.UnitTests.Routing
     [TestFixture]
     public class RoutingServiceTests
     {
-        private EventsScope m_EventsScope;
         private Mock<ILogger<RoutingService>> m_LoggerMock;
         private Mock<IDisposable> m_LoggerScopeMock;
         private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IPipeline> m_PipelineMock;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
+
+        private EventsScope m_EventsScope;
         private RoutingService m_RoutingService;
         private PipelineEvent m_PipelineEvent;
-        private string m_EventFieldName = nameof(TestSource.TestEvent);
-        private EventsContext m_EventsContext;
         private SourceModel m_SourceModel;
         private SourceModelEventField m_SourceModelEventField;
+
+        private readonly string m_EventFieldName = nameof(TestSource.TestEvent);
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_EventsScope = new EventsScope();
             m_LoggerMock = new Mock<ILogger<RoutingService>>(MockBehavior.Strict);
             m_LoggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
             m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+
+            m_EventsScope = new EventsScope();
             m_RoutingService = new RoutingService(
                 m_LoggerMock.Object,
                 m_TypesResolutionServiceMock.Object,
                 m_SourceModelsServiceMock.Object
             );
             m_PipelineEvent = new PipelineEvent(m_EventFieldName, new TestSource(), new TestEventArgs());
-            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContext);
+            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContextMock.Object);
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(m_EventFieldName);
         }
 

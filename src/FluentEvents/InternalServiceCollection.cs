@@ -62,7 +62,7 @@ namespace FluentEvents
             services.AddSingleton<ProjectionPipelineModule>();
 
             foreach (var extension in options.Plugins)
-                extension.ApplyServices(services);
+                extension.ApplyServices(services, m_AppServiceProvider);
 
             return services.BuildServiceProvider();
         }

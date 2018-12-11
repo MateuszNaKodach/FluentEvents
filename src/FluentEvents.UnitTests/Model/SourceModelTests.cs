@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Model;
-using FluentEvents.Routing;
 using Moq;
 using NUnit.Framework;
 
@@ -9,22 +8,16 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelTests
     {
-        private EventsContext m_EventsContext;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private SourceModel m_SourceModelWithInvalidArgs;
         private SourceModel m_SourceModelWithInvalidReturnType;
-        private SourceModel m_SourceModel;
-        private EventsScope m_EventsScope;
-        private Mock<IRoutingService> m_EventsRoutingServiceMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContext);
-            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContext);
-            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContext);
-            m_EventsScope = new EventsScope();
-            m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContextMock.Object);
+            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContextMock.Object);
         }
 
         [Test]
@@ -57,11 +50,6 @@ namespace FluentEvents.UnitTests.Model
         private class TestSourceWithInvalidArgs
         {
             public event EventHandlerWithInvalidArgs<TestArgs> EventWithArgs;
-
-            public void RaiseEvents()
-            {
-                EventWithArgs?.Invoke(this, new TestArgs(), null);
-            }
         }
 
         private delegate object EventHandlerWithInvalidReturnType<in TEventArgs>(object sender, TEventArgs e);
@@ -69,11 +57,6 @@ namespace FluentEvents.UnitTests.Model
         private class TestSourceWithInvalidReturnType
         {
             public event EventHandlerWithInvalidReturnType<TestArgs> EventWithArgs;
-
-            public void RaiseEvents()
-            {
-                EventWithArgs?.Invoke(this, new TestArgs());
-            }
         }
 
         private class TestSource

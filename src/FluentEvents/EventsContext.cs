@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
-    public abstract class EventsContext : IEventsContext, IInternalServiceProvider, IScopedSubscriptionsFactory
+    public abstract class EventsContext : IInfrastructureEventsContext
     {
-        IServiceProvider IInternalServiceProvider.InternalServiceProvider => m_InternalServiceProvider;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_InternalServiceProvider;
+
         private IServiceProvider m_InternalServiceProvider;
         private IEventsContextDependencies m_Dependencies;
 
@@ -23,8 +24,9 @@ namespace FluentEvents
 
             m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
             m_Dependencies = m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
-            OnBuildingSubscriptions(m_InternalServiceProvider.GetService<SubscriptionsBuilder>());
-            OnBuildingPipelines(m_InternalServiceProvider.GetService<PipelinesBuilder>());
+
+            OnBuildingSubscriptions(m_InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
+            OnBuildingPipelines(m_InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
         }
 
         protected virtual void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder) { }
@@ -50,8 +52,5 @@ namespace FluentEvents
 
         public void CancelGlobalSubscription(Subscription subscription)
             => m_Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
-
-        IEnumerable<Subscription> IScopedSubscriptionsFactory.CreateScopedSubscriptionsForServices(IServiceProvider serviceProvider)
-            => m_Dependencies.ScopedSubscriptionsService.CreateScopedSubscriptionsForServices(serviceProvider);
     }
 }

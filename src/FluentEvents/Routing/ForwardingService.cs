@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
@@ -8,15 +9,17 @@ namespace FluentEvents.Routing
     public class ForwardingService : IForwardingService
     {
         private readonly IRoutingService m_RoutingService;
+        private readonly ITypesResolutionService m_TypesResolutionService;
 
-        public ForwardingService(IRoutingService routingService)
+        public ForwardingService(IRoutingService routingService, ITypesResolutionService typesResolutionService)
         {
             m_RoutingService = routingService;
+            m_TypesResolutionService = typesResolutionService;
         }
 
         public void ForwardEventsToRouting(SourceModel sourceModel, object source, EventsScope eventsScope)
         {
-            if (source.GetType() != sourceModel.ClrType)
+            if (m_TypesResolutionService.GetSourceType(source) != sourceModel.ClrType)
                 throw new SourceDoesNotMatchModelTypeException();
 
             foreach (var eventField in sourceModel.EventFields)

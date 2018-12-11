@@ -21,7 +21,7 @@ namespace FluentEvents.Azure.ServiceBus
             m_Configuration = configuration;
         }
 
-        public void ApplyServices(IServiceCollection services)
+        public void ApplyServices(IServiceCollection services, IServiceProvider appServiceProvider)
         {
             if (m_ConfigureOptions != null)
                 services.Configure(m_ConfigureOptions);

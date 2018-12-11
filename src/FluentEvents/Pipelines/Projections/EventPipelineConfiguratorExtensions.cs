@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +19,7 @@ namespace FluentEvents.Pipelines.Projections
             where TToEventArgs : class
         {
             var configurator = (IEventPipelineConfigurator) eventPipelineConfigurator;
-            var serviceProvider = ((IInternalServiceProvider)configurator.EventsContext).InternalServiceProvider;
+            var serviceProvider = configurator.EventsContext.Get<IServiceProvider>();
             var sourceModelsService = serviceProvider.GetRequiredService<ISourceModelsService>();
 
             var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(

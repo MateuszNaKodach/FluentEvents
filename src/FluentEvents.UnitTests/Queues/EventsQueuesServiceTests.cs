@@ -15,29 +15,29 @@ namespace FluentEvents.UnitTests.Queues
         private EventsQueuesService m_EventsQueuesService;
         private Mock<IEventsQueuesFactory> m_EventsQueuesFactory;
         private Mock<IServiceProvider> m_InternalServiceProvider1;
-        private EventsContextImpl m_EventsContext1;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock1;
         private Mock<IServiceProvider> m_InternalServiceProvider2;
-        private EventsContextImpl m_EventsContext2;
-        private PipelineEvent m_PipelineEvent;
+        private Mock<IInfrastructureEventsContext> m_EventsContextMock2;
         private Mock<IPipeline> m_PipelineMock;
-        private readonly string m_QueueName = "queueName";
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock1;
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock2;
+        private PipelineEvent m_PipelineEvent;
+        private readonly string m_QueueName = "queueName";
 
         [SetUp]
         public void SetUp()
         {
             m_EventsScope = new EventsScope();
             m_InternalServiceProvider1 = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsContext1 = MakeEventsContext(m_InternalServiceProvider1);
+            m_EventsContextMock1 = MakeEventsContext(m_InternalServiceProvider1);
             m_InternalServiceProvider2 = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsContext2 = MakeEventsContext(m_InternalServiceProvider2);
+            m_EventsContextMock2 = MakeEventsContext(m_InternalServiceProvider2);
             m_EventsQueuesFactory = new Mock<IEventsQueuesFactory>(MockBehavior.Strict);
 
             m_EventsQueueNamesServiceMock1 = SetUpEventsQueuesNameService(m_InternalServiceProvider1);
             m_EventsQueueNamesServiceMock2 = SetUpEventsQueuesNameService(m_InternalServiceProvider2);
             m_EventsQueuesService = new EventsQueuesService(
-                new[] { m_EventsContext1, m_EventsContext2 },
+                new[] { m_EventsContextMock1.Object, m_EventsContextMock2.Object },
                 m_EventsQueuesFactory.Object
             );
             m_PipelineEvent = MakeNewPipelineEvent();
@@ -59,10 +59,14 @@ namespace FluentEvents.UnitTests.Queues
         [TearDown]
         public void TearDown()
         {
+            m_EventsQueuesFactory.Verify();
+            m_InternalServiceProvider1.Verify();
+            m_EventsContextMock1.Verify();
+            m_InternalServiceProvider2.Verify();
+            m_EventsContextMock2.Verify();
+            m_PipelineMock.Verify();
             m_EventsQueueNamesServiceMock1.Verify();
             m_EventsQueueNamesServiceMock2.Verify();
-            m_EventsQueuesFactory.Verify();
-            m_PipelineMock.Verify();
         }
 
         [Test]
@@ -76,7 +80,7 @@ namespace FluentEvents.UnitTests.Queues
             {
                 await m_EventsQueuesService.ProcessQueuedEventsAsync(
                     isEventsScopeNull ? null : m_EventsScope,
-                    isEventsContextNull ? null : m_EventsContext1,
+                    isEventsContextNull ? null : m_EventsContextMock1.Object,
                     null
                 );
             }, Throws.TypeOf<ArgumentNullException>());
@@ -98,7 +102,7 @@ namespace FluentEvents.UnitTests.Queues
                 EnqueueEvent(pipelineEvent, queueName);
             }
 
-            await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContext1, null);
+            await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContextMock1.Object, null);
         }
 
         [Test]
@@ -115,7 +119,7 @@ namespace FluentEvents.UnitTests.Queues
 
             m_EventsQueuesService.EnqueueEvent(pipelineEvent, m_PipelineMock.Object);
 
-            await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContext1, m_QueueName);
+            await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContextMock1.Object, m_QueueName);
         }
 
         [Test]
@@ -128,7 +132,7 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(async () =>
             {
-                await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContext1, m_QueueName);
+                await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContextMock1.Object, m_QueueName);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
@@ -155,7 +159,7 @@ namespace FluentEvents.UnitTests.Queues
                 EnqueueEvent(m_PipelineEvent, queueName);
             }
 
-            m_EventsQueuesService.DiscardQueuedEvents(m_EventsContext1, null);
+            m_EventsQueuesService.DiscardQueuedEvents(m_EventsContextMock1.Object, null);
         }
 
         [Test]
@@ -168,7 +172,7 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(() =>
             {
-                m_EventsQueuesService.DiscardQueuedEvents(m_EventsContext1, m_QueueName);
+                m_EventsQueuesService.DiscardQueuedEvents(m_EventsContextMock1.Object, m_QueueName);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
@@ -198,7 +202,7 @@ namespace FluentEvents.UnitTests.Queues
 
             m_PipelineMock
                 .Setup(x => x.EventsContext)
-                .Returns(m_EventsContext1)
+                .Returns(m_EventsContextMock1.Object)
                 .Verifiable();
 
             m_EventsQueueNamesServiceMock1
@@ -222,7 +226,7 @@ namespace FluentEvents.UnitTests.Queues
 
             m_PipelineMock
                 .Setup(x => x.EventsContext)
-                .Returns(m_EventsContext1)
+                .Returns(m_EventsContextMock1.Object)
                 .Verifiable();
 
             SetUpQueueCreation(m_QueueName);
@@ -251,7 +255,7 @@ namespace FluentEvents.UnitTests.Queues
 
             m_PipelineMock
                 .Setup(x => x.EventsContext)
-                .Returns(m_EventsContext1)
+                .Returns(m_EventsContextMock1.Object)
                 .Verifiable();
 
             m_EventsQueueNamesServiceMock1
@@ -260,35 +264,15 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
         }
 
-        private EventsContextImpl MakeEventsContext(Mock<IServiceProvider> serviceProviderMock)
+        private Mock<IInfrastructureEventsContext> MakeEventsContext(Mock<IServiceProvider> serviceProviderMock)
         {
-            var context = new EventsContextImpl();
-            var options = new EventsContextOptions();
-            var services = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
-            services
-                .Setup(x => x.BuildServiceProvider(context, options))
+            var eventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+            eventsContextMock
+                .Setup(x => x.Instance)
                 .Returns(serviceProviderMock.Object)
                 .Verifiable();
-            var dependenciesMock = new Mock<IEventsContextDependencies>(MockBehavior.Strict);
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
-                .Returns(dependenciesMock.Object)
-                .Verifiable();
 
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(null)
-                .Verifiable();
-
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(null)
-                .Verifiable();
-
-            context.Configure(options, services.Object);
-            services.Verify();
-
-            return context;
+            return eventsContextMock;
         }
     }
 }
