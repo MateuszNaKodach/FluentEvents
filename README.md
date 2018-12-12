@@ -1,5 +1,7 @@
 # FluentEvents
 
+[![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8)
+
 ## Is FluentEvents ready to use?
 Not yet, it's still under active development but you are free to give suggestions or contribute :)
 
