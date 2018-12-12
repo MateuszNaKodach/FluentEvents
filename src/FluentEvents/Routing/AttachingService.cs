@@ -1,4 +1,5 @@
-﻿using FluentEvents.Infrastructure;
+﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Utils;
 
@@ -23,7 +24,11 @@ namespace FluentEvents.Routing
 
         public void Attach(object source, EventsScope eventsScope)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
+
             var sourceType = m_TypesResolutionService.GetSourceType(source);
+
             foreach (var type in sourceType.GetBaseTypesInclusive())
             {
                 var sourceModel = m_SourceModelsService.GetSourceModel(type);
