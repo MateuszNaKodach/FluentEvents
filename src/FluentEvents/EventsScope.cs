@@ -11,7 +11,7 @@ namespace FluentEvents
 {
     public class EventsScope
     {
-        internal IServiceProvider ServiceProvider { get; }
+        private readonly IServiceProvider m_ServiceProvider;
 
         private readonly IEnumerable<IInfrastructureEventsContext> m_EventsContexts;
         private readonly IEventsQueuesService m_EventsQueuesService;
@@ -29,7 +29,7 @@ namespace FluentEvents
             IEventsQueuesService eventsQueuesService
         )
         {
-            ServiceProvider = serviceProvider;
+            m_ServiceProvider = serviceProvider;
 
             m_EventsContexts = eventsContexts;
             m_EventsQueuesService = eventsQueuesService;
@@ -49,7 +49,7 @@ namespace FluentEvents
                             .GetRequiredService<IScopedSubscriptionsService>();
 
                         subscriptions.AddRange(
-                            scopedSubscriptionsService.CreateScopedSubscriptionsForServices(ServiceProvider)
+                            scopedSubscriptionsService.CreateScopedSubscriptionsForServices(m_ServiceProvider)
                         );
                     }
 
