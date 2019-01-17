@@ -44,7 +44,7 @@ namespace FluentEvents.Subscriptions
             {
                 try
                 {
-                    await eventsSubscription.PublishEvent(pipelineEvent);
+                    await eventsSubscription.PublishEventAsync(pipelineEvent);
                 }
                 catch (Exception ex)
                 {

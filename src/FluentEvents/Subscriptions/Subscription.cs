@@ -23,7 +23,7 @@ namespace FluentEvents.Subscriptions
             m_EventHandlers.AddOrUpdate(eventName, eventsHandler, (s, d) => Delegate.Combine(eventsHandler, d));
         }
 
-        internal async Task PublishEvent(PipelineEvent pipelineEvent)
+        internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!SourceType.IsInstanceOfType(pipelineEvent.OriginalSender))
