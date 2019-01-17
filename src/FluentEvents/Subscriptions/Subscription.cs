@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 
@@ -34,12 +35,32 @@ namespace FluentEvents.Subscriptions
 
                 var asyncEventHandlers = invocationList.Where(x => x.Method.ReturnType == typeof(Task));
                 foreach (var asyncEventHandler in asyncEventHandlers)
-                    await (Task) asyncEventHandler.DynamicInvoke(pipelineEvent.OriginalSender,
-                        pipelineEvent.OriginalEventArgs);
+                {
+                    try
+                    {
+                        await (Task) asyncEventHandler.DynamicInvoke(
+                            pipelineEvent.OriginalSender,
+                            pipelineEvent.OriginalEventArgs
+                        );
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
 
                 var syncEventHandlers = invocationList.Where(x => x.Method.ReturnType != typeof(Task));
                 foreach (var syncEventHandler in syncEventHandlers)
-                    syncEventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+                {
+                    try
+                    {
+                        syncEventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
             }
         }
     }

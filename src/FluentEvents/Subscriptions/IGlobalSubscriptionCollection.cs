@@ -9,6 +9,5 @@ namespace FluentEvents.Subscriptions
         void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction);
         void RemoveGlobalScopeSubscription(Subscription subscription);
         IEnumerable<Subscription> GetGlobalScopeSubscriptions();
-       
     }
 }

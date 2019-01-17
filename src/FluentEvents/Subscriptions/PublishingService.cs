@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
-using FluentEvents.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Subscriptions
@@ -12,11 +10,17 @@ namespace FluentEvents.Subscriptions
     {
         private readonly ILogger<PublishingService> m_Logger;
         private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
+        private readonly ISubscriptionsMatchingService m_SubscriptionsMatchingService;
 
-        public PublishingService(ILogger<PublishingService> logger, IGlobalSubscriptionCollection globalSubscriptionCollection)
+        public PublishingService(
+            ILogger<PublishingService> logger,
+            IGlobalSubscriptionCollection globalSubscriptionCollection,
+            ISubscriptionsMatchingService subscriptionsMatchingService
+        )
         {
             m_Logger = logger;
             m_GlobalSubscriptionCollection = globalSubscriptionCollection;
+            m_SubscriptionsMatchingService = subscriptionsMatchingService;
         }
 
         public async Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
@@ -33,10 +37,8 @@ namespace FluentEvents.Subscriptions
         {
             m_Logger.PublishingEvent(pipelineEvent);
 
-            var types = pipelineEvent.OriginalSender.GetType().GetBaseTypesInclusive();
-
-            var eventsSubscriptions = subscriptions
-                .Where(x => types.Any(y => y == x.SourceType));
+            var eventsSubscriptions = m_SubscriptionsMatchingService
+                .GetMatchingSubscriptionsForSender(subscriptions, pipelineEvent.OriginalSender);
 
             foreach (var eventsSubscription in eventsSubscriptions)
             {
