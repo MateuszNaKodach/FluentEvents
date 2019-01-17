@@ -6,7 +6,7 @@ namespace FluentEvents.Subscriptions
     public interface IGlobalSubscriptionCollection
     {
         Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction);
-        void AddGlobalScopeSubscription<TService, TSource>(Action<TService, TSource> subscriptionCallback);
+        void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction);
         void RemoveGlobalScopeSubscription(Subscription subscription);
         IEnumerable<Subscription> GetGlobalScopeSubscriptions();
        

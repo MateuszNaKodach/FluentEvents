@@ -26,9 +26,11 @@ namespace FluentEvents.Subscriptions
             return subscription;
         }
 
-        public void AddGlobalScopeSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
+        public void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
         {
-            m_SubscriptionCreationTasks.Enqueue(new SubscriptionCreationTask<TService,TSource>(subscriptionAction, m_SubscriptionsFactory));
+            m_SubscriptionCreationTasks.Enqueue(
+                new SubscriptionCreationTask<TService, TSource>(subscriptionAction, m_SubscriptionsFactory)
+            );
         }
 
         public void RemoveGlobalScopeSubscription(Subscription subscription) => m_GlobalScopeSubscriptions.TryRemove(subscription, out _);

@@ -31,7 +31,7 @@ namespace FluentEvents.Config
         )
             where TSource : class
         {
-            m_GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionCallback);
+            m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription(subscriptionCallback);
             return this;
         }
     }
