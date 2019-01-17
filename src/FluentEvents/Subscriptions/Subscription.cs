@@ -45,7 +45,7 @@ namespace FluentEvents.Subscriptions
                     }
                     catch (TargetInvocationException ex)
                     {
-                        throw ex.InnerException;
+                        throw new SubscriptionPublishException(ex);
                     }
                 }
 
@@ -58,7 +58,7 @@ namespace FluentEvents.Subscriptions
                     }
                     catch (TargetInvocationException ex)
                     {
-                        throw ex.InnerException;
+                        throw new SubscriptionPublishException(ex);
                     }
                 }
             }

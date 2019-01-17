@@ -46,9 +46,9 @@ namespace FluentEvents.Subscriptions
                 {
                     await eventsSubscription.PublishEventAsync(pipelineEvent);
                 }
-                catch (Exception ex)
+                catch (SubscriptionPublishException ex)
                 {
-                    m_Logger.EventHandlerThrew(ex);
+                    m_Logger.EventHandlerThrew(ex.InnerException);
                 }
             }
         }
