@@ -26,12 +26,12 @@ namespace FluentEvents.Subscriptions
             m_ScopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
-        public IEnumerable<Subscription> CreateScopedSubscriptionsForServices(IServiceProvider serviceProvider)
+        public IEnumerable<Subscription> SubscribeServices(IServiceProvider serviceProvider)
         {
             var subscriptions = new List<Subscription>();
 
-            foreach (var subscription in m_ScopedSubscriptionCreationTasks.Keys)
-                subscriptions.Add(subscription.CreateSubscription(serviceProvider));
+            foreach (var subscriptionCreationTask in m_ScopedSubscriptionCreationTasks.Keys)
+                subscriptions.Add(subscriptionCreationTask.CreateSubscription(serviceProvider));
 
             return subscriptions;
         }

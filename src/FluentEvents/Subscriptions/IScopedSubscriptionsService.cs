@@ -9,6 +9,6 @@ namespace FluentEvents.Subscriptions
             where TService : class
             where TSource : class;
 
-        IEnumerable<Subscription> CreateScopedSubscriptionsForServices(IServiceProvider serviceProvider);
+        IEnumerable<Subscription> SubscribeServices(IServiceProvider serviceProvider);
     }
 }

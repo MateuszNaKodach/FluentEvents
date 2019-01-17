@@ -49,7 +49,7 @@ namespace FluentEvents
                             .GetRequiredService<IScopedSubscriptionsService>();
 
                         subscriptions.AddRange(
-                            scopedSubscriptionsService.CreateScopedSubscriptionsForServices(m_ServiceProvider)
+                            scopedSubscriptionsService.SubscribeServices(m_ServiceProvider)
                         );
                     }
 

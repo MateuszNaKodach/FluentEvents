@@ -144,7 +144,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             m_ScopedSubscriptionsServiceMock1
-                .Setup(x => x.CreateScopedSubscriptionsForServices(m_AppServiceProviderMock.Object))
+                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory1Subscriptions)
                 .Verifiable();
 
@@ -159,7 +159,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             m_ScopedSubscriptionsServiceMock2
-                .Setup(x => x.CreateScopedSubscriptionsForServices(m_AppServiceProviderMock.Object))
+                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory2Subscriptions)
                 .Verifiable();
 
