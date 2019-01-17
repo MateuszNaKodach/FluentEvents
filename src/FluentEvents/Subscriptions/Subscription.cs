@@ -36,17 +36,7 @@ namespace FluentEvents.Subscriptions
                 var asyncEventHandlers = invocationList.Where(x => x.Method.ReturnType == typeof(Task));
                 foreach (var asyncEventHandler in asyncEventHandlers)
                 {
-                    try
-                    {
-                        await (Task) asyncEventHandler.DynamicInvoke(
-                            pipelineEvent.OriginalSender,
-                            pipelineEvent.OriginalEventArgs
-                        );
-                    }
-                    catch (TargetInvocationException ex)
-                    {
-                        throw new SubscriptionPublishException(ex);
-                    }
+                    await PublishAndHandleExceptionAsync(true, pipelineEvent, asyncEventHandler);
                 }
 
                 var syncEventHandlers = invocationList.Where(x => x.Method.ReturnType != typeof(Task));
@@ -54,13 +44,35 @@ namespace FluentEvents.Subscriptions
                 {
                     try
                     {
-                        syncEventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+                        await PublishAndHandleExceptionAsync(false, pipelineEvent, syncEventHandler);
                     }
                     catch (TargetInvocationException ex)
                     {
                         throw new SubscriptionPublishException(ex);
                     }
                 }
+            }
+        }
+
+        private static async Task PublishAndHandleExceptionAsync(bool isAsync, PipelineEvent pipelineEvent, Delegate eventHandler)
+        {
+            try
+            {
+                if (isAsync)
+                {
+                    await (Task) eventHandler.DynamicInvoke(
+                        pipelineEvent.OriginalSender,
+                        pipelineEvent.OriginalEventArgs
+                    );
+                }
+                else
+                {
+                    eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+                }
+            }
+            catch (TargetInvocationException ex) when (ex.InnerException != null)
+            {
+                throw new SubscriptionPublishException(ex);
             }
         }
     }
