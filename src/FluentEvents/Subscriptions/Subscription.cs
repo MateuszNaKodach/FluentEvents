@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -31,35 +32,34 @@ namespace FluentEvents.Subscriptions
 
             if (m_EventHandlers.TryGetValue(pipelineEvent.OriginalEventFieldName, out var eventDelegate))
             {
+                var exceptions = new List<TargetInvocationException>();
                 var invocationList = eventDelegate.GetInvocationList();
 
                 foreach (var eventHandler in invocationList)
                 {
                     var isAsync = eventHandler.Method.ReturnType == typeof(Task);
-                    await PublishAndHandleExceptionAsync(isAsync, pipelineEvent, eventHandler);
+                    try
+                    {
+                        if (isAsync)
+                        {
+                            await (Task) eventHandler.DynamicInvoke(
+                                pipelineEvent.OriginalSender,
+                                pipelineEvent.OriginalEventArgs
+                            );
+                        }
+                        else
+                        {
+                            eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+                        }
+                    }
+                    catch (TargetInvocationException ex) when (ex.InnerException != null)
+                    {
+                        exceptions.Add(ex);
+                    }
                 }
-            }
-        }
 
-        private static async Task PublishAndHandleExceptionAsync(bool isAsync, PipelineEvent pipelineEvent, Delegate eventHandler)
-        {
-            try
-            {
-                if (isAsync)
-                {
-                    await (Task) eventHandler.DynamicInvoke(
-                        pipelineEvent.OriginalSender,
-                        pipelineEvent.OriginalEventArgs
-                    );
-                }
-                else
-                {
-                    eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
-                }
-            }
-            catch (TargetInvocationException ex) when (ex.InnerException != null)
-            {
-                throw new SubscriptionPublishException(ex);
+                if (exceptions.Any())
+                    throw new SubscriptionPublishAggregateException(exceptions);
             }
         }
     }
