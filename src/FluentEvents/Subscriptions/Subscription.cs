@@ -33,13 +33,11 @@ namespace FluentEvents.Subscriptions
             {
                 var invocationList = eventDelegate.GetInvocationList();
 
-                var asyncEventHandlers = invocationList.Where(x => x.Method.ReturnType == typeof(Task));
-                foreach (var asyncEventHandler in asyncEventHandlers)
-                    await PublishAndHandleExceptionAsync(true, pipelineEvent, asyncEventHandler);
-
-                var syncEventHandlers = invocationList.Where(x => x.Method.ReturnType != typeof(Task));
-                foreach (var syncEventHandler in syncEventHandlers)
-                    await PublishAndHandleExceptionAsync(false, pipelineEvent, syncEventHandler);
+                foreach (var eventHandler in invocationList)
+                {
+                    var isAsync = eventHandler.Method.ReturnType == typeof(Task);
+                    await PublishAndHandleExceptionAsync(isAsync, pipelineEvent, eventHandler);
+                }
             }
         }
 
