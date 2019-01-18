@@ -22,7 +22,7 @@ namespace FluentEvents.Subscriptions
 
         public override Subscription CreateSubscription(IServiceProvider serviceProvider)
         {
-            var service = (TService)serviceProvider.GetRequiredService(typeof(TService));
+            var service = (TService) serviceProvider.GetRequiredService(typeof(TService));
             return m_SubscriptionsFactory.CreateSubscription<TSource>(x => m_SubscriptionAction(service, x));
         }
     }
