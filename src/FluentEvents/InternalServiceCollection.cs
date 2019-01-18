@@ -56,6 +56,7 @@ namespace FluentEvents
             services.AddSingleton<IEventReceiversService, EventReceiversService>();
             services.AddSingleton<ITypesResolutionService, DefaultTypesResolutionService>();
             services.AddSingleton<IAttachingService, AttachingService>();
+            services.AddSingleton<ISubscriptionsMatchingService, SubscriptionsMatchingService>();
             services.AddSingleton<FilterPipelineModule>();
             services.AddSingleton<GlobalPublishPipelineModule>();
             services.AddSingleton<ScopedPublishPipelineModule>();
