@@ -59,6 +59,15 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Verifiable();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            m_LoggerMock.Verify();
+            m_GlobalSubscriptionCollectionMock.Verify();
+            m_SubscriptionsMatchingServiceMock.Verify();
+            m_EventsScopeMock.Verify();
+        }
+
         [Test]
         public async Task PublishEventToScopedSubscriptionsAsync_ShouldHandlePublishingException()
         {
