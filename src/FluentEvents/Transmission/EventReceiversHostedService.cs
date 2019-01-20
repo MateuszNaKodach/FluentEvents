@@ -6,21 +6,21 @@ namespace FluentEvents.Transmission
 {
     public class EventReceiversHostedService : IHostedService
     {
-        private readonly EventsContext m_EventsContext;
+        private readonly IEventReceiversService m_EventReceiversService;
 
-        public EventReceiversHostedService(EventsContext eventsContext)
+        public EventReceiversHostedService(IEventReceiversService eventReceiversService)
         {
-            m_EventsContext = eventsContext;
+            m_EventReceiversService = eventReceiversService;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return m_EventsContext.StartEventReceivers(cancellationToken);
+            return m_EventReceiversService.StartReceiversAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return m_EventsContext.StopEventReceivers(cancellationToken);
+            return m_EventReceiversService.StopReceiversAsync(cancellationToken);
         }
     }
 }
