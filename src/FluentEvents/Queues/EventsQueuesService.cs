@@ -17,7 +17,8 @@ namespace FluentEvents.Queues
 
         public EventsQueuesService(
             IEnumerable<IInfrastructureEventsContext> eventsContexts,
-            IEventsQueuesFactory eventsQueuesFactory)
+            IEventsQueuesFactory eventsQueuesFactory
+        )
         {
             m_EventsQueueNamesServices = eventsContexts
                 .ToDictionary(

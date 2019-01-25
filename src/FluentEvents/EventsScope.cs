@@ -25,13 +25,19 @@ namespace FluentEvents
 
         public EventsScope(
             IEnumerable<IInfrastructureEventsContext> eventsContexts,
+            IServiceProvider serviceProvider)
+            : this(eventsContexts, serviceProvider, new EventsQueuesService(eventsContexts, new EventsQueuesFactory()))
+        {
+        }
+
+        internal EventsScope(
+            IEnumerable<IInfrastructureEventsContext> eventsContexts,
             IServiceProvider serviceProvider,
             IEventsQueuesService eventsQueuesService
-        )
+        ) 
         {
-            m_ServiceProvider = serviceProvider;
-
             m_EventsContexts = eventsContexts;
+            m_ServiceProvider = serviceProvider;
             m_EventsQueuesService = eventsQueuesService;
         }
 

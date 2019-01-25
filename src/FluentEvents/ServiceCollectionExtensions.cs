@@ -1,6 +1,4 @@
 ﻿using System;
-using FluentEvents.Queues;
-using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +24,6 @@ namespace FluentEvents
                 context.Configure(options, new InternalServiceCollection(x));
                 return context;
             });
-            services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
-            services.AddSingleton<IEventsQueuesFactory, EventsQueuesFactory>();
             services.AddSingleton<IInfrastructureEventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<IHostedService, EventReceiversHostedService>();
