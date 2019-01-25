@@ -26,6 +26,12 @@ namespace FluentEvents.UnitTests.Subscriptions
             m_SubscriptionsFactory = new SubscriptionsFactory(m_SourceModelsServiceMock.Object);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            m_SourceModelsServiceMock.Verify();
+        }
+
         [Test]
         public async Task CreateSubscription_ShouldTrackHandlersAndReturnNewSubscription()
         {
