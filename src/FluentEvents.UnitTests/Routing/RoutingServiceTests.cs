@@ -46,7 +46,7 @@ namespace FluentEvents.UnitTests.Routing
                 m_SourceModelsServiceMock.Object
             );
             m_PipelineEvent = new PipelineEvent(m_EventFieldName, new TestSource(), new TestEventArgs());
-            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContextMock.Object);
+            m_SourceModel = new SourceModel(typeof(TestSource));
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(m_EventFieldName);
         }
 

@@ -20,9 +20,9 @@ namespace FluentEvents.Model
             return sourceModel;
         }
 
-        public SourceModel GetOrCreateSourceModel(Type clrType, IInfrastructureEventsContext eventsContext)
+        public SourceModel GetOrCreateSourceModel(Type clrType)
         {
-            return m_SourceModels.GetOrAdd(clrType, new SourceModel(clrType, eventsContext));
+            return m_SourceModels.GetOrAdd(clrType, new SourceModel(clrType));
         }
         
         public IEnumerable<SourceModel> GetSourceModels()

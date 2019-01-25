@@ -8,16 +8,14 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelTests
     {
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private SourceModel m_SourceModelWithInvalidArgs;
         private SourceModel m_SourceModelWithInvalidReturnType;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
-            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs), m_EventsContextMock.Object);
-            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType), m_EventsContextMock.Object);
+            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs));
+            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType));
         }
 
         [Test]

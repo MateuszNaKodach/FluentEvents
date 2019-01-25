@@ -23,7 +23,7 @@ namespace FluentEvents.Config
             where TSource : class
             where TEventArgs : class
         {
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource), EventsContext);
+            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource));
             var eventField = sourceModel.GetOrCreateEventField(eventFieldName);
 
             return new EventConfigurator<TSource, TEventArgs>(sourceModel, eventField, EventsContext);

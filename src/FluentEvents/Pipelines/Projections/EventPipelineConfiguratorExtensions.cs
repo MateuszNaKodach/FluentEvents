@@ -23,8 +23,7 @@ namespace FluentEvents.Pipelines.Projections
             var sourceModelsService = serviceProvider.GetRequiredService<ISourceModelsService>();
 
             var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(
-                typeof(TToSource),
-                configurator.SourceModel.EventsContext
+                typeof(TToSource)
             );
 
             var projectedEventField = projectedSourceModel.GetOrCreateEventField(

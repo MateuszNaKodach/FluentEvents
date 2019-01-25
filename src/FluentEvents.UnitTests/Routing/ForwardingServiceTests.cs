@@ -15,7 +15,6 @@ namespace FluentEvents.UnitTests.Routing
     {
         private Mock<IRoutingService> m_RoutingServiceMock;
         private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
 
         private SourceModel m_SourceModel;
         private EventsScope m_EventsScope;
@@ -26,9 +25,8 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_RoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
             m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
 
-            m_SourceModel = new SourceModel(typeof(TestSource), m_EventsContextMock.Object);
+            m_SourceModel = new SourceModel(typeof(TestSource));
             m_EventsScope = new EventsScope();
             m_ForwardingService = new ForwardingService(m_RoutingServiceMock.Object, m_TypesResolutionServiceMock.Object);
         }
@@ -38,7 +36,6 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_RoutingServiceMock.Verify();
             m_TypesResolutionServiceMock.Verify();
-            m_EventsContextMock.Verify();
         }
 
         [Test]

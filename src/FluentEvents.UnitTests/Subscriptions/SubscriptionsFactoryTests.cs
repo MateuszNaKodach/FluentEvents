@@ -11,7 +11,6 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionsFactoryTests
     {
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private SourceModel m_SourceModel;
 
@@ -20,9 +19,8 @@ namespace FluentEvents.UnitTests.Subscriptions
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_SourceModel = new SourceModel(typeof(EventsSource), m_EventsContextMock.Object);
+            m_SourceModel = new SourceModel(typeof(EventsSource));
             m_SourceModel.GetOrCreateEventField(nameof(EventsSource.TestEvent));
 
             m_SubscriptionsFactory = new SubscriptionsFactory(m_SourceModelsServiceMock.Object);
