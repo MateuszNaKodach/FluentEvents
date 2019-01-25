@@ -118,13 +118,13 @@ namespace FluentEvents.UnitTests
         {
             const string queueName = "queueName";
             var pipelineEvent = new PipelineEvent("a", new object(), new object());
-            var pipeline = new Pipeline(queueName, null, m_InternalServiceProviderMock1.Object);
+            var pipeline = new Pipeline(queueName, m_InternalServiceProviderMock1.Object);
 
             m_EventsQueuesServiceMock
-                .Setup(x => x.EnqueueEvent(pipelineEvent, pipeline))
+                .Setup(x => x.EnqueueEvent(m_EventsContext1.Object, pipelineEvent, pipeline))
                 .Verifiable();
 
-            m_EventsScope.EnqueueEvent(pipelineEvent, pipeline);
+            m_EventsScope.EnqueueEvent(m_EventsContext1.Object, pipelineEvent, pipeline);
         }
 
         private IEnumerable<Subscription> SetUpSubscriptionsCreation()

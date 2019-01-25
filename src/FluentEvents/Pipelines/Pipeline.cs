@@ -9,17 +9,15 @@ namespace FluentEvents.Pipelines
 {
     public class Pipeline : IPipeline
     {
-        public IInfrastructureEventsContext EventsContext { get; }
         public string QueueName { get; }
 
         private readonly IServiceProvider m_InternalServiceProvider;
         private readonly ICollection<IPipelineModuleConfig> m_ModuleConfigs;
         private NextModuleDelegate m_NextModule;
 
-        internal Pipeline(string queueName, IInfrastructureEventsContext eventsContext, IServiceProvider internalServiceProvider)
+        internal Pipeline(string queueName, IServiceProvider internalServiceProvider)
         {
             QueueName = queueName;
-            EventsContext = eventsContext;
             m_InternalServiceProvider = internalServiceProvider;
             m_ModuleConfigs = new List<IPipelineModuleConfig>();
             m_NextModule = null;

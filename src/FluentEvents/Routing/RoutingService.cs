@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
@@ -11,16 +10,19 @@ namespace FluentEvents.Routing
 {
     public class RoutingService : IRoutingService
     {
+        private readonly IInfrastructureEventsContext m_EventsContext;
         private readonly ILogger<RoutingService> m_Logger;
         private readonly ITypesResolutionService m_TypesResolutionService;
         private readonly ISourceModelsService m_SourceModelsService;
 
         public RoutingService(
+            IInfrastructureEventsContext eventsContext,
             ILogger<RoutingService> logger,
             ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService
         )
         {
+            m_EventsContext = eventsContext;
             m_Logger = logger;
             m_TypesResolutionService = typesResolutionService;
             m_SourceModelsService = sourceModelsService;
@@ -42,7 +44,7 @@ namespace FluentEvents.Routing
                         if (pipeline.QueueName != null)
                         {
                             m_Logger.EventRoutedToQueue(pipeline.QueueName);
-                            eventsScope.EnqueueEvent(pipelineEvent, pipeline);
+                            eventsScope.EnqueueEvent(m_EventsContext, pipelineEvent, pipeline);
                         }
                         else
                         {

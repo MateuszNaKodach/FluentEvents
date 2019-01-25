@@ -31,7 +31,7 @@ namespace FluentEvents.UnitTests.Pipelines
             m_ServiceScopeFactoryMock = new Mock<IServiceScopeFactory>(MockBehavior.Strict);
             m_ServiceScopeMock = new Mock<IServiceScope>(MockBehavior.Strict);
             m_PipelineModuleConfigMock = new Mock<IPipelineModuleConfig>(MockBehavior.Strict);
-            m_Pipeline = new Pipeline(null, m_EventsContextMock.Object, m_InternalServiceProviderMock.Object);
+            m_Pipeline = new Pipeline(null, m_InternalServiceProviderMock.Object);
         }
 
         [TearDown]

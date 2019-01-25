@@ -44,7 +44,6 @@ namespace FluentEvents.Queues
 
             var pipeline = new Pipeline(
                 queueName,
-                configurator.SourceModel.EventsContext,
                 configurator.EventsContext.Get<IServiceProvider>()
             );
 

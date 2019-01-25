@@ -72,7 +72,7 @@ namespace FluentEvents
         internal virtual void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName) 
             => m_EventsQueuesService.DiscardQueuedEvents(eventsContext, queueName);
 
-        internal virtual void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline) 
-            => m_EventsQueuesService.EnqueueEvent(pipelineEvent, pipeline);
+        internal virtual void EnqueueEvent(IInfrastructureEventsContext eventsContext, PipelineEvent pipelineEvent, IPipeline pipeline) 
+            => m_EventsQueuesService.EnqueueEvent(eventsContext, pipelineEvent, pipeline);
     }
 }

@@ -7,6 +7,6 @@ namespace FluentEvents.Queues
     {
         Task ProcessQueuedEventsAsync(EventsScope eventsScope, IInfrastructureEventsContext eventsContext, string queueName);
         void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName);
-        void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline);
+        void EnqueueEvent(IInfrastructureEventsContext eventsContext, PipelineEvent pipelineEvent, IPipeline pipeline);
     }
 }

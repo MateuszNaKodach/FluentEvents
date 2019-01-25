@@ -83,16 +83,16 @@ namespace FluentEvents.Queues
             }
         }
 
-        public void EnqueueEvent(PipelineEvent pipelineEvent, IPipeline pipeline)
+        public void EnqueueEvent(IInfrastructureEventsContext eventsContext, PipelineEvent pipelineEvent, IPipeline pipeline)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
 
-            if (!IsQueueNameValid(pipeline.EventsContext, pipeline.QueueName))
+            if (!IsQueueNameValid(eventsContext, pipeline.QueueName))
                 throw new EventsQueueNotFoundException();
 
             var queue = m_EventQueues.GetOrAdd(
-                (pipeline.EventsContext, pipeline.QueueName),
+                (eventsContext, pipeline.QueueName),
                 x => m_EventsQueuesFactory.GetNew(pipeline.QueueName)
             );
 

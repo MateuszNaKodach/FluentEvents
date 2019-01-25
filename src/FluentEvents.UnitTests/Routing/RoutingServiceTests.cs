@@ -40,6 +40,7 @@ namespace FluentEvents.UnitTests.Routing
 
             m_EventsScope = new EventsScope();
             m_RoutingService = new RoutingService(
+                m_EventsContextMock.Object,
                 m_LoggerMock.Object,
                 m_TypesResolutionServiceMock.Object,
                 m_SourceModelsServiceMock.Object
