@@ -26,9 +26,9 @@ namespace FluentEvents.Transmission
             return data;
         }
 
-        public PipelineEvent Deserialize(string jsonData)
+        public PipelineEvent DeserializeEvent(string jsonEventData)
         {
-            return (PipelineEvent) JsonConvert.DeserializeObject(jsonData, m_SerializerSettings);
+            return (PipelineEvent) JsonConvert.DeserializeObject(jsonEventData, m_SerializerSettings);
         }
 
         private class CustomResolver : DefaultContractResolver
