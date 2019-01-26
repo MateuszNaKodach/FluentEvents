@@ -1,5 +1,6 @@
 ﻿using FluentEvents.Infrastructure;
 using FluentEvents.Model;
+using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
@@ -15,6 +16,7 @@ namespace FluentEvents
         public ISourceModelsService SourceModelsService { get; }
         public IRoutingService RoutingService { get; }
         public IAttachingService AttachingService { get; }
+        public IEventsQueuesService EventsQueuesService { get; }
 
         public EventsContextDependencies(
             IScopedSubscriptionsService scopedSubscriptionsService,
@@ -23,7 +25,8 @@ namespace FluentEvents
             ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService, 
             IRoutingService routingService,
-            IAttachingService attachingService
+            IAttachingService attachingService,
+            IEventsQueuesService eventsQueuesService
         )
         {
             ScopedSubscriptionsService = scopedSubscriptionsService;
@@ -33,6 +36,7 @@ namespace FluentEvents
             SourceModelsService = sourceModelsService;
             RoutingService = routingService;
             AttachingService = attachingService;
+            EventsQueuesService = eventsQueuesService;
         }
     }
 }

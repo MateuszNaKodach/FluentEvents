@@ -20,7 +20,6 @@ namespace FluentEvents.UnitTests
         private Mock<IServiceProvider> m_InternalServiceProviderMock2;
         private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock1;
         private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock2;
-        private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
 
         private IInfrastructureEventsContext[] m_EventsContexts;
         private EventsScope m_EventsScope;
@@ -35,7 +34,6 @@ namespace FluentEvents.UnitTests
             m_InternalServiceProviderMock2 = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_ScopedSubscriptionsServiceMock1 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
             m_ScopedSubscriptionsServiceMock2 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
 
             m_EventsContexts = new[]
             {
@@ -45,8 +43,7 @@ namespace FluentEvents.UnitTests
 
             m_EventsScope = new EventsScope(
                 m_EventsContexts,
-                m_AppServiceProviderMock.Object,
-                m_EventsQueuesServiceMock.Object
+                m_AppServiceProviderMock.Object
             );
         }
 
@@ -60,7 +57,6 @@ namespace FluentEvents.UnitTests
             m_InternalServiceProviderMock2.Verify();
             m_ScopedSubscriptionsServiceMock1.Verify();
             m_ScopedSubscriptionsServiceMock2.Verify();
-            m_EventsQueuesServiceMock.Verify();
         }
 
         [Test]
@@ -87,46 +83,7 @@ namespace FluentEvents.UnitTests
             Assert.That(createdSubscriptions, Is.EquivalentTo(allSubscriptions));
             Assert.That(storedSubscriptions, Is.EquivalentTo(createdSubscriptions));
         }
-
-        [Test]
-        public async Task ProcessQueuedEventsAsync_ShouldCallEventsQueuesService()
-        {
-            const string queueName = "queueName";
-
-            m_EventsQueuesServiceMock
-                .Setup(x => x.ProcessQueuedEventsAsync(m_EventsScope, m_EventsContext1.Object, queueName))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            await m_EventsScope.ProcessQueuedEventsAsync(m_EventsContext1.Object, queueName);
-        }
-
-        [Test]
-        public void DiscardQueuedEvents_ShouldCallEventsQueuesService()
-        {
-            const string queueName = "queueName";
-
-            m_EventsQueuesServiceMock
-                .Setup(x => x.DiscardQueuedEvents(m_EventsContext1.Object, queueName))
-                .Verifiable();
-
-            m_EventsScope.DiscardQueuedEvents(m_EventsContext1.Object, queueName);
-        }
-
-        [Test]
-        public void EnqueueEvent_ShouldCallEventsQueuesService()
-        {
-            const string queueName = "queueName";
-            var pipelineEvent = new PipelineEvent("a", new object(), new object());
-            var pipeline = new Pipeline(queueName, m_InternalServiceProviderMock1.Object);
-
-            m_EventsQueuesServiceMock
-                .Setup(x => x.EnqueueEvent(m_EventsContext1.Object, pipelineEvent, pipeline))
-                .Verifiable();
-
-            m_EventsScope.EnqueueEvent(m_EventsContext1.Object, pipelineEvent, pipeline);
-        }
-
+        
         private IEnumerable<Subscription> SetUpSubscriptionsCreation()
         {
             var scopedSubscriptionsFactory1Subscriptions = new[] { new Subscription(typeof(object)), new Subscription(typeof(object)) };

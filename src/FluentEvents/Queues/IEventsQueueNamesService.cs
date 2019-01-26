@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace FluentEvents.Queues
+﻿namespace FluentEvents.Queues
 {
     public interface IEventsQueueNamesService
     {

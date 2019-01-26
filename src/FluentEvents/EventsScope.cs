@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
-using FluentEvents.Pipelines;
 using FluentEvents.Queues;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,33 +10,35 @@ namespace FluentEvents
     public class EventsScope
     {
         private readonly IServiceProvider m_ServiceProvider;
-
         private readonly IEnumerable<IInfrastructureEventsContext> m_EventsContexts;
-        private readonly IEventsQueuesService m_EventsQueuesService;
 
         private readonly object m_SyncSubscriptions = new object();
         private IEnumerable<Subscription> m_Subscriptions;
 
-        internal EventsScope()
-        {
-        }
+        internal IEventQueueCollection EventQueues { get; }
 
-        public EventsScope(
-            IEnumerable<IInfrastructureEventsContext> eventsContexts,
-            IServiceProvider serviceProvider)
-            : this(eventsContexts, serviceProvider, new EventsQueuesService(eventsContexts, new EventsQueuesFactory()))
+        internal EventsScope()
         {
         }
 
         internal EventsScope(
             IEnumerable<IInfrastructureEventsContext> eventsContexts,
             IServiceProvider serviceProvider,
-            IEventsQueuesService eventsQueuesService
+            IEventQueueCollection eventQueues
+        ) : this(eventsContexts, serviceProvider)
+        {
+            EventQueues = eventQueues;
+        }
+
+
+        public EventsScope(
+            IEnumerable<IInfrastructureEventsContext> eventsContexts,
+            IServiceProvider serviceProvider
         ) 
         {
             m_EventsContexts = eventsContexts;
             m_ServiceProvider = serviceProvider;
-            m_EventsQueuesService = eventsQueuesService;
+            EventQueues = new EventQueueCollection();
         }
 
         internal virtual IEnumerable<Subscription> GetSubscriptions()
@@ -65,14 +65,5 @@ namespace FluentEvents
                 return m_Subscriptions;
             }
         }
-
-        internal virtual Task ProcessQueuedEventsAsync(IInfrastructureEventsContext eventsContext, string queueName) 
-            => m_EventsQueuesService.ProcessQueuedEventsAsync(this, eventsContext, queueName);
-
-        internal virtual void DiscardQueuedEvents(IInfrastructureEventsContext eventsContext, string queueName) 
-            => m_EventsQueuesService.DiscardQueuedEvents(eventsContext, queueName);
-
-        internal virtual void EnqueueEvent(IInfrastructureEventsContext eventsContext, PipelineEvent pipelineEvent, IPipeline pipeline) 
-            => m_EventsQueuesService.EnqueueEvent(eventsContext, pipelineEvent, pipeline);
     }
 }

@@ -41,11 +41,11 @@ namespace FluentEvents
         public void Attach(object source, EventsScope eventsScope)
             => m_Dependencies.AttachingService.Attach(source, eventsScope);
 
-        public async Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
-            => await eventsScope.ProcessQueuedEventsAsync(this, queueName);
+        public Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
+            => m_Dependencies.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
 
         public void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
-            => eventsScope.DiscardQueuedEvents(this, queueName);
+            => m_Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
         
         public Subscription MakeGlobalSubscriptionTo<TSource>(Action<TSource> subscriptionAction)
             => m_Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);

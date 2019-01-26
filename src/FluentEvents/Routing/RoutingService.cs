@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
+using FluentEvents.Queues;
 using FluentEvents.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -10,22 +11,22 @@ namespace FluentEvents.Routing
 {
     public class RoutingService : IRoutingService
     {
-        private readonly IInfrastructureEventsContext m_EventsContext;
         private readonly ILogger<RoutingService> m_Logger;
         private readonly ITypesResolutionService m_TypesResolutionService;
         private readonly ISourceModelsService m_SourceModelsService;
+        private readonly IEventsQueuesService m_EventsQueuesService;
 
         public RoutingService(
-            IInfrastructureEventsContext eventsContext,
             ILogger<RoutingService> logger,
             ITypesResolutionService typesResolutionService,
-            ISourceModelsService sourceModelsService
+            ISourceModelsService sourceModelsService,
+            IEventsQueuesService eventsQueuesService
         )
         {
-            m_EventsContext = eventsContext;
             m_Logger = logger;
             m_TypesResolutionService = typesResolutionService;
             m_SourceModelsService = sourceModelsService;
+            m_EventsQueuesService = eventsQueuesService;
         }
         
         public async Task RouteEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
@@ -44,7 +45,7 @@ namespace FluentEvents.Routing
                         if (pipeline.QueueName != null)
                         {
                             m_Logger.EventRoutedToQueue(pipeline.QueueName);
-                            eventsScope.EnqueueEvent(m_EventsContext, pipelineEvent, pipeline);
+                            m_EventsQueuesService.EnqueueEvent(eventsScope, pipelineEvent, pipeline);
                         }
                         else
                         {

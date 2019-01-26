@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
+using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
@@ -29,6 +30,7 @@ namespace FluentEvents.UnitTests
         private EventsContextDependencies m_EventsContextDependencies;
 
         private Mock<EventsScope> m_EventsScopeMock;
+        private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
 
         [SetUp]
         public void SetUp()
@@ -44,6 +46,7 @@ namespace FluentEvents.UnitTests
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
             m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
+            m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
 
             m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
@@ -54,7 +57,8 @@ namespace FluentEvents.UnitTests
                 m_TypesResolutionServiceMock.Object,
                 m_SourceModelsServiceMock.Object,
                 m_EventsRoutingServiceMock.Object,
-                m_AttachingServiceMock.Object
+                m_AttachingServiceMock.Object,
+                m_EventsQueuesServiceMock.Object
             );
         }
 
@@ -69,6 +73,8 @@ namespace FluentEvents.UnitTests
             m_TypesResolutionServiceMock.Verify();
             m_SourceModelsServiceMock.Verify();
             m_EventsRoutingServiceMock.Verify();
+            m_AttachingServiceMock.Verify();
+            m_EventsQueuesServiceMock.Verify();
         }
 
         [Test]
@@ -133,12 +139,14 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public async Task ProcessQueuedEventsAsync_ShouldCallEventsScopeProcessQueuedEventsAsync()
+        public async Task ProcessQueuedEventsAsync_ShouldCallEventsQueuesServiceProcessQueuedEventsAsync()
         {
+            ConfigureEventsContext();
+
             const string queueName = "queueName";
 
-            m_EventsScopeMock
-                .Setup(x => x.ProcessQueuedEventsAsync(m_EventsContext, queueName))
+            m_EventsQueuesServiceMock
+                .Setup(x => x.ProcessQueuedEventsAsync(m_EventsScopeMock.Object, queueName))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
@@ -146,12 +154,14 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void DiscardQueuedEventsAsync_ShouldCallEventsScopeDiscardQueuedEventsAsync()
+        public void DiscardQueuedEventsAsync_ShouldCallEventsQueuesServiceDiscardQueuedEventsAsync()
         {
+            ConfigureEventsContext();
+
             const string queueName = "queueName";
 
-            m_EventsScopeMock
-                .Setup(x => x.DiscardQueuedEvents(m_EventsContext, queueName))
+            m_EventsQueuesServiceMock
+                .Setup(x => x.DiscardQueuedEvents(m_EventsScopeMock.Object, queueName))
                 .Verifiable();
 
             m_EventsContext.DiscardQueuedEvents(m_EventsScopeMock.Object, queueName);
