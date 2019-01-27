@@ -24,7 +24,7 @@ namespace FluentEvents
                 context.Configure(options, new InternalServiceCollection(x));
                 return context;
             });
-            services.AddSingleton<IInfrastructureEventsContext, T>(x => x.GetRequiredService<T>());
+
             services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
             services.AddSingleton<IHostedService, EventReceiversHostedService>();
         

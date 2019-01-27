@@ -10,7 +10,7 @@ namespace FluentEvents
     public class EventsScope
     {
         private readonly IServiceProvider m_ServiceProvider;
-        private readonly IEnumerable<IInfrastructureEventsContext> m_EventsContexts;
+        private readonly IEnumerable<EventsContext> m_EventsContexts;
 
         private readonly object m_SyncSubscriptions = new object();
         private IEnumerable<Subscription> m_Subscriptions;
@@ -22,7 +22,7 @@ namespace FluentEvents
         }
 
         internal EventsScope(
-            IEnumerable<IInfrastructureEventsContext> eventsContexts,
+            IEnumerable<EventsContext> eventsContexts,
             IServiceProvider serviceProvider,
             IEventQueueCollection eventQueues
         ) : this(eventsContexts, serviceProvider)
@@ -30,9 +30,8 @@ namespace FluentEvents
             EventQueues = eventQueues;
         }
 
-
         public EventsScope(
-            IEnumerable<IInfrastructureEventsContext> eventsContexts,
+            IEnumerable<EventsContext> eventsContexts,
             IServiceProvider serviceProvider
         ) 
         {

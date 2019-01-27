@@ -13,7 +13,7 @@ namespace FluentEvents.UnitTests.Queues
     {
         private Mock<IEventQueueCollection> m_EventQueueCollectionMock;
         private Mock<IServiceProvider> m_ServiceProviderMock;
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
+        private Mock<EventsContext> m_EventsContextMock;
         private Mock<IPipeline> m_PipelineMock;
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock;
 
@@ -29,7 +29,7 @@ namespace FluentEvents.UnitTests.Queues
         {
             m_EventQueueCollectionMock = new Mock<IEventQueueCollection>(MockBehavior.Strict);
             m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
+            m_EventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             m_EventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
             m_EventsQueuesContext = new EventsQueuesContext();
