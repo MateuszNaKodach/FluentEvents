@@ -6,12 +6,12 @@ namespace FluentEvents.Queues
 {
     public class EventsQueuesService : IEventsQueuesService
     {
-        private readonly IInfrastructureEventsContext m_EventsContext;
+        private readonly EventsQueuesContext m_EventsQueuesContext;
         private readonly IEventsQueueNamesService m_EventsQueueNamesService;
 
-        public EventsQueuesService(IInfrastructureEventsContext eventsContext, IEventsQueueNamesService eventsQueueNamesService)
+        public EventsQueuesService(EventsQueuesContext eventsQueuesContext, IEventsQueueNamesService eventsQueueNamesService)
         {
-            m_EventsContext = eventsContext;
+            m_EventsQueuesContext = eventsQueuesContext;
             m_EventsQueueNamesService = eventsQueueNamesService;
         }
 
@@ -24,7 +24,7 @@ namespace FluentEvents.Queues
                 if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsContext, queueName);
+                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
                 await ProcessQueue(eventsScope, eventsQueue);
             }
             else
@@ -52,7 +52,7 @@ namespace FluentEvents.Queues
                 if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsContext, queueName);
+                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
                 eventsQueue.DiscardQueuedEvents();
             }
             else
@@ -71,7 +71,7 @@ namespace FluentEvents.Queues
             if (!m_EventsQueueNamesService.IsQueueNameExisting(pipeline.QueueName))
                 throw new EventsQueueNotFoundException();
 
-            var queue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsContext, pipeline.QueueName);
+            var queue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, pipeline.QueueName);
 
             queue.Enqueue(new QueuedPipelineEvent
             {

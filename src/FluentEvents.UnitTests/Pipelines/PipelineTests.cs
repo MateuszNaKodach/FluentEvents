@@ -13,7 +13,6 @@ namespace FluentEvents.UnitTests.Pipelines
     public class PipelineTests
     {
         private EventsScope m_EventsScope;
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
         private Mock<IServiceProvider> m_InternalServiceProviderMock;
         private Mock<IServiceProvider> m_ScopedServiceProviderMock;
         private Mock<IServiceScopeFactory> m_ServiceScopeFactoryMock;
@@ -25,7 +24,6 @@ namespace FluentEvents.UnitTests.Pipelines
         public void SetUp()
         {
             m_EventsScope = new EventsScope();
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_ScopedServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_ServiceScopeFactoryMock = new Mock<IServiceScopeFactory>(MockBehavior.Strict);
@@ -38,6 +36,7 @@ namespace FluentEvents.UnitTests.Pipelines
         public void TearDown()
         {
             m_InternalServiceProviderMock.Verify();
+            m_ScopedServiceProviderMock.Verify();
             m_ServiceScopeFactoryMock.Verify();
             m_ServiceScopeMock.Verify();
             m_PipelineModuleConfigMock.Verify();

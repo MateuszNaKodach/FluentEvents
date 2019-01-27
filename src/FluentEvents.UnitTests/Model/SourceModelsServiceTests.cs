@@ -1,5 +1,4 @@
 ﻿using FluentEvents.Model;
-using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -8,12 +7,10 @@ namespace FluentEvents.UnitTests.Model
     public class SourceModelsServiceTests
     {
         private SourceModelsService m_SourceModelsService;
-        private Mock<IInfrastructureEventsContext> m_EventsContextMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock = new Mock<IInfrastructureEventsContext>(MockBehavior.Strict);
             m_SourceModelsService = new SourceModelsService();
         }
 
