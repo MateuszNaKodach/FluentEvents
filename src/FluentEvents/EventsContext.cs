@@ -109,9 +109,9 @@ namespace FluentEvents
             => m_Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
 
         /// <summary>
-        /// Cancels a global subscription
+        /// Cancels a global subscription.
         /// </summary>
-        /// <param name="subscription"></param>
+        /// <param name="subscription">The subscription to cancel.</param>
         public void CancelGlobalSubscription(Subscription subscription)
             => m_Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
     }
