@@ -23,9 +23,7 @@ namespace FluentEvents.UnitTests
         private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock;
         private Mock<IGlobalSubscriptionCollection> m_GlobalSubscriptionCollectionMock;
         private Mock<IEventReceiversService> m_EventReceiversServiceMock;
-        private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IRoutingService> m_EventsRoutingServiceMock;
         private Mock<IAttachingService> m_AttachingServiceMock;
         private EventsContextDependencies m_EventsContextDependencies;
 
@@ -42,21 +40,15 @@ namespace FluentEvents.UnitTests
             m_ScopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
             m_GlobalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
             m_EventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
-            m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_EventsRoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
             m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
             m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
 
             m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
             m_EventsContextDependencies = new EventsContextDependencies(
-                m_ScopedSubscriptionsServiceMock.Object,
                 m_GlobalSubscriptionCollectionMock.Object,
                 m_EventReceiversServiceMock.Object,
-                m_TypesResolutionServiceMock.Object,
-                m_SourceModelsServiceMock.Object,
-                m_EventsRoutingServiceMock.Object,
                 m_AttachingServiceMock.Object,
                 m_EventsQueuesServiceMock.Object
             );
@@ -70,9 +62,7 @@ namespace FluentEvents.UnitTests
             m_ScopedSubscriptionsServiceMock.Verify();
             m_GlobalSubscriptionCollectionMock.Verify();
             m_EventReceiversServiceMock.Verify();
-            m_TypesResolutionServiceMock.Verify();
             m_SourceModelsServiceMock.Verify();
-            m_EventsRoutingServiceMock.Verify();
             m_AttachingServiceMock.Verify();
             m_EventsQueuesServiceMock.Verify();
         }
