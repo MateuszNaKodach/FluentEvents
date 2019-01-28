@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using FluentEvents.Config;
 using FluentEvents.Model;
 
@@ -8,10 +7,12 @@ namespace FluentEvents.Subscriptions
     public class SubscriptionsFactory : ISubscriptionsFactory
     {
         private readonly ISourceModelsService m_SourceModelsService;
+        private readonly ISubscriptionScanService m_SubscriptionScanService;
 
-        public SubscriptionsFactory(ISourceModelsService sourceModelsService)
+        public SubscriptionsFactory(ISourceModelsService sourceModelsService, ISubscriptionScanService subscriptionScanService)
         {
             m_SourceModelsService = sourceModelsService;
+            m_SubscriptionScanService = subscriptionScanService;
         }
 
         public Subscription CreateSubscription<TSource>(Action<TSource> subscriptionAction)
@@ -25,18 +26,11 @@ namespace FluentEvents.Subscriptions
             if (sourceModel == null)
                 throw new SourceIsNotConfiguredException(sourceType);
 
-            var mockSource = FormatterServices.GetUninitializedObject(sourceType);
-            subscriptionAction.Invoke(mockSource);
-
             var subscription = new Subscription(sourceType);
+            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(sourceModel, subscriptionAction);
 
-            foreach (var eventField in sourceModel.EventFields)
-            {
-                var eventsHandler = (Delegate)eventField.FieldInfo.GetValue(mockSource);
-
-                if (eventsHandler != null)
-                    subscription.AddHandler(eventField.EventInfo.Name, eventsHandler);
-            }
+            foreach (var subscribedHandler in subscribedHandlers)
+                subscription.AddHandler(subscribedHandler.EventName, subscribedHandler.EventsHandler);
 
             return subscription;
         }

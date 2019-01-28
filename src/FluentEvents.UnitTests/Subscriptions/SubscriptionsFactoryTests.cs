@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
@@ -12,6 +13,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     public class SubscriptionsFactoryTests
     {
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
+        private Mock<ISubscriptionScanService> m_SubscriptionScanServiceMock;
         private SourceModel m_SourceModel;
 
         private SubscriptionsFactory m_SubscriptionsFactory;
@@ -20,38 +22,39 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void SetUp()
         {
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            m_SubscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
             m_SourceModel = new SourceModel(typeof(EventsSource));
             m_SourceModel.GetOrCreateEventField(nameof(EventsSource.TestEvent));
 
-            m_SubscriptionsFactory = new SubscriptionsFactory(m_SourceModelsServiceMock.Object);
+            m_SubscriptionsFactory = new SubscriptionsFactory(
+                m_SourceModelsServiceMock.Object,
+                m_SubscriptionScanServiceMock.Object
+            );
         }
 
         [TearDown]
         public void TearDown()
         {
             m_SourceModelsServiceMock.Verify();
+            m_SubscriptionScanServiceMock.Verify();
         }
 
         [Test]
-        public async Task CreateSubscription_ShouldTrackHandlersAndReturnNewSubscription()
+        public void CreateSubscription_ShouldScanSubscribedHandlersAndReturnNewSubscription()
         {
             m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(EventsSource)))
                 .Returns(m_SourceModel)
                 .Verifiable();
 
-            var isEventHandled = false;
-            var subscription = m_SubscriptionsFactory.CreateSubscription<EventsSource>(x =>
-            {
-                x.TestEvent += (sender, args) => { isEventHandled = true; };
-            });
+            Action<object> subscriptionAction = x => { };
 
-            await subscription.PublishEventAsync(
-                new PipelineEvent(nameof(EventsSource.TestEvent), new EventsSource(), EventArgs.Empty)
-            );
+            m_SubscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, subscriptionAction))
+                .Returns(new List<SubscribedHandler>())
+                .Verifiable();
 
-            Assert.That(subscription, Is.Not.Null);
-            Assert.That(isEventHandled, Is.True);
+            m_SubscriptionsFactory.CreateSubscription(typeof(EventsSource), subscriptionAction);
         }
 
         private class EventsSource

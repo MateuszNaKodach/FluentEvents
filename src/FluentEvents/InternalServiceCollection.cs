@@ -44,6 +44,7 @@ namespace FluentEvents
             services.AddSingleton<EventsQueuesContext>();
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
+            services.AddSingleton<ISubscriptionScanService, SubscriptionScanService>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
             services.AddSingleton<IEventsContextDependencies, EventsContextDependencies>();
             services.AddSingleton<IScopedSubscriptionsService, ScopedSubscriptionsService>();
