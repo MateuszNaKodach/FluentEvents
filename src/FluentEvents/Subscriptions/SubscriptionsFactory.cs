@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using FluentEvents.Config;
 using FluentEvents.Model;
 
@@ -24,7 +25,7 @@ namespace FluentEvents.Subscriptions
             if (sourceModel == null)
                 throw new SourceIsNotConfiguredException(sourceType);
 
-            var mockSource = Activator.CreateInstance(sourceType, true);
+            var mockSource = FormatterServices.GetUninitializedObject(sourceType);
             subscriptionAction.Invoke(mockSource);
 
             var subscription = new Subscription(sourceType);
