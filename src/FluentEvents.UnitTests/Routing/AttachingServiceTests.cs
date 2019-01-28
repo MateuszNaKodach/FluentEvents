@@ -11,8 +11,8 @@ namespace FluentEvents.UnitTests.Routing
     public class AttachingServiceTests
     {
         private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
-        private Mock<ISourceModelsService> m_SourceModelsService;
-        private Mock<IForwardingService> m_ForwardingService;
+        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
+        private Mock<IForwardingService> m_ForwardingServiceMock;
         private AttachingService m_AttachingService;
         private EventsScope m_EventsScope;
         private SourceModel m_Source2SourceModel;
@@ -21,12 +21,12 @@ namespace FluentEvents.UnitTests.Routing
         public void SetUp()
         {
             m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
-            m_SourceModelsService = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_ForwardingService = new Mock<IForwardingService>(MockBehavior.Strict);
+            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            m_ForwardingServiceMock = new Mock<IForwardingService>(MockBehavior.Strict);
             m_AttachingService = new AttachingService(
                 m_TypesResolutionServiceMock.Object,
-                m_SourceModelsService.Object,
-                m_ForwardingService.Object
+                m_SourceModelsServiceMock.Object,
+                m_ForwardingServiceMock.Object
             );
             m_EventsScope = new EventsScope();
             m_Source2SourceModel = new SourceModel(typeof(Source2));
@@ -36,8 +36,8 @@ namespace FluentEvents.UnitTests.Routing
         public void TearDown()
         {
             m_TypesResolutionServiceMock.Verify();
-            m_SourceModelsService.Verify();
-            m_ForwardingService.Verify();
+            m_SourceModelsServiceMock.Verify();
+            m_ForwardingServiceMock.Verify();
         }
 
         [Test]
@@ -66,17 +66,17 @@ namespace FluentEvents.UnitTests.Routing
                 .Returns(typeof(Source3))
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))
                 .Returns<SourceModel>(null)
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source2)))
                 .Returns(m_Source2SourceModel)
                 .Verifiable();
 
-            m_ForwardingService
+            m_ForwardingServiceMock
                 .Setup(x => x.ForwardEventsToRouting(m_Source2SourceModel, source, m_EventsScope))
                 .Verifiable();
 
@@ -93,22 +93,22 @@ namespace FluentEvents.UnitTests.Routing
                 .Returns(typeof(Source3))
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))
                 .Returns<SourceModel>(null)
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source2)))
                 .Returns<SourceModel>(null)
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source1)))
                 .Returns<SourceModel>(null)
                 .Verifiable();
 
-            m_SourceModelsService
+            m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(object)))
                 .Returns<SourceModel>(null)
                 .Verifiable();

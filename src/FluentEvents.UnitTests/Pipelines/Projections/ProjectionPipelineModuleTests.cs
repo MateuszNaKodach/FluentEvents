@@ -11,26 +11,26 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
     {
         private ProjectionPipelineModule m_ProjectionPipelineModule;
         private ProjectionPipelineModuleConfig m_ProjectionPipelineModuleConfig;
-        private Mock<IEventsSenderProjection> m_EventSenderProjection;
-        private Mock<IEventArgsProjection> m_EventArgsProjection;
+        private Mock<IEventsSenderProjection> m_EventSenderProjectionMock;
+        private Mock<IEventArgsProjection> m_EventArgsProjectionMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventSenderProjection = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
-            m_EventArgsProjection = new Mock<IEventArgsProjection>(MockBehavior.Strict);
+            m_EventSenderProjectionMock = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
+            m_EventArgsProjectionMock = new Mock<IEventArgsProjection>(MockBehavior.Strict);
             m_ProjectionPipelineModule = new ProjectionPipelineModule();
             m_ProjectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
-                m_EventSenderProjection.Object,
-                m_EventArgsProjection.Object
+                m_EventSenderProjectionMock.Object,
+                m_EventArgsProjectionMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_EventSenderProjection.Verify();
-            m_EventArgsProjection.Verify();
+            m_EventSenderProjectionMock.Verify();
+            m_EventArgsProjectionMock.Verify();
         }
 
         [Test]
@@ -47,12 +47,12 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 m_ProjectionPipelineModuleConfig
             );
 
-            m_EventSenderProjection
+            m_EventSenderProjectionMock
                 .Setup(x => x.Convert(testSender))
                 .Returns(projectedTestSender)
                 .Verifiable();
 
-            m_EventArgsProjection
+            m_EventArgsProjectionMock
                 .Setup(x => x.Convert(testEventArgs))
                 .Returns(projectedTestEventArgs)
                 .Verifiable();
