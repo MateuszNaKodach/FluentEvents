@@ -28,14 +28,5 @@ namespace FluentEvents.Config
 
             return new EventConfigurator<TSource, TEventArgs>(sourceModel, eventField, EventsContext);
         }
-
-        public EventConfigurator<TSource, TEventArgs> Event<TSource, TEventArgs>(
-            Action<TSource> eventSelector
-        )
-            where TSource : class
-            where TEventArgs : class
-        {
-            throw new NotImplementedException();
-        }
     }
 }
