@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Pipelines
 {
-    public static class PipeliningLoggerMessages
+    public static class PipelinesLoggerMessages
     {
         private static readonly Action<ILogger, string, string, string, Exception> m_InvokingPipelineModule = LoggerMessage.Define<string, string, string>(
             LogLevel.Information,
