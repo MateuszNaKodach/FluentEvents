@@ -20,6 +20,12 @@ namespace FluentEvents.Config
             m_ScopedSubscriptionsService = scopedSubscriptionsService;
         }
 
+        /// <summary>
+        /// Returns an object that can be used to configure subscriptions for a service.
+        /// configure multiple pipelines.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <returns>The configuration object for the specified service.</returns>
         public ServiceSubscriptionsConfiguration<TService> Service<TService>()
             where TService : class
         {
