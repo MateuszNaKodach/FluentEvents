@@ -14,18 +14,18 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         private GlobalPublishPipelineModuleConfig m_GlobalPublishPipelineModuleConfig;
         private GlobalPublishPipelineModule m_GlobalPublishPipelineModule;
         private Mock<IPublishingService> m_PublishingServiceMock;
-        private Mock<IEventSender1> m_IEventSender1Mock;
-        private Mock<IEventSender2> m_IEventSender2Mock;
+        private Mock<IEventSender1> m_EventSender1Mock;
+        private Mock<IEventSender2> m_EventSender2Mock;
 
         [SetUp]
         public void SetUp()
         {
             m_PublishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
-            m_IEventSender1Mock = new Mock<IEventSender1>(MockBehavior.Strict);
-            m_IEventSender2Mock = new Mock<IEventSender2>(MockBehavior.Strict);
+            m_EventSender1Mock = new Mock<IEventSender1>(MockBehavior.Strict);
+            m_EventSender2Mock = new Mock<IEventSender2>(MockBehavior.Strict);
             m_GlobalPublishPipelineModule = new GlobalPublishPipelineModule(
                 m_PublishingServiceMock.Object,
-                new IEventSender[] { m_IEventSender1Mock.Object, m_IEventSender2Mock.Object }
+                new IEventSender[] { m_EventSender1Mock.Object, m_EventSender2Mock.Object }
             );
             m_GlobalPublishPipelineModuleConfig = new GlobalPublishPipelineModuleConfig();
         }
@@ -34,6 +34,8 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         public void TearDown()
         {
             m_PublishingServiceMock.Verify();
+            m_EventSender1Mock.Verify();
+            m_EventSender2Mock.Verify();
         }
 
         [Test]
@@ -73,7 +75,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             var testSender = new TestSender();
             var testEventArgs = new TestEventArgs();
 
-            m_GlobalPublishPipelineModuleConfig.SenderType = m_IEventSender1Mock.Object.GetType();
+            m_GlobalPublishPipelineModuleConfig.SenderType = m_EventSender1Mock.Object.GetType();
 
             var pipelineModuleContext = SetUpPipelineModuleContext(
                 testSender,
@@ -89,7 +91,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 return Task.CompletedTask;
             }
 
-            m_IEventSender1Mock
+            m_EventSender1Mock
                 .Setup(x => x.SendAsync(pipelineModuleContext.PipelineEvent))
                 .Returns(Task.CompletedTask)
                 .Verifiable();

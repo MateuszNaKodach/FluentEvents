@@ -49,6 +49,7 @@ namespace FluentEvents.UnitTests.Queues
         {
             m_EventQueueCollectionMock.Verify();
             m_ServiceProviderMock.Verify();
+            m_EventsContextMock.Verify();
             m_PipelineMock.Verify();
             m_EventsContextMock.Verify();
             m_EventsQueueNamesServiceMock.Verify();

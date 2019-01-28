@@ -29,6 +29,12 @@ namespace FluentEvents.UnitTests.Model
             m_InheritedSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            m_PipelineMock.Verify();
+        }
+
         private SourceModelEventField GetSourceModelEventField(string name)
         {
             switch (name)

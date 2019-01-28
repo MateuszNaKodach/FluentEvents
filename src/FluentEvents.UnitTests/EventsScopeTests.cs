@@ -53,6 +53,20 @@ namespace FluentEvents.UnitTests
             );
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            m_EventsContextMock1.Verify();
+            m_EventsContextMock2.Verify();
+            m_AppServiceProviderMock.Verify();
+            m_InternalServiceCollectionMock1.Verify();
+            m_InternalServiceCollectionMock2.Verify();
+            m_InternalServiceProviderMock1.Verify();
+            m_InternalServiceProviderMock2.Verify();
+            m_ScopedSubscriptionsServiceMock1.Verify();
+            m_ScopedSubscriptionsServiceMock2.Verify();
+        }
+
         private static void SetUpEventsContext(
             Mock<EventsContext> eventsContext, 
             Mock<IInternalServiceCollection> internalServiceCollectionMock,
@@ -80,20 +94,6 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             eventsContext.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            m_EventsContextMock1.Verify();
-            m_EventsContextMock2.Verify();
-            m_AppServiceProviderMock.Verify();
-            m_InternalServiceCollectionMock1.Verify();
-            m_InternalServiceCollectionMock2.Verify();
-            m_InternalServiceProviderMock1.Verify();
-            m_InternalServiceProviderMock2.Verify();
-            m_ScopedSubscriptionsServiceMock1.Verify();
-            m_ScopedSubscriptionsServiceMock2.Verify();
         }
 
         [Test]

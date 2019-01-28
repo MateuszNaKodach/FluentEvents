@@ -17,6 +17,12 @@ namespace FluentEvents.UnitTests.Pipelines
             EventsScope = new EventsScope();
         }
 
+        [TearDown]
+        public void BaseTearDown()
+        {
+            InternalServiceProviderMock.Verify();
+        }
+
         protected PipelineModuleContext SetUpPipelineModuleContext(object testSender, object testEventArgs, IPipelineModuleConfig projectionPipelineModuleConfig)
         {
             return new PipelineModuleContext(
