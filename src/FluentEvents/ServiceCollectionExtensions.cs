@@ -22,6 +22,7 @@ namespace FluentEvents
             {
                 var context = ActivatorUtilities.CreateInstance<T>(x);
                 context.Configure(options, new InternalServiceCollection(x));
+                context.Build();
                 return context;
             });
 

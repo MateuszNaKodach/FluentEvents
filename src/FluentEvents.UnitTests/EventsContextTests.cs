@@ -68,9 +68,19 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void Configure_ShouldBuildServiceProviderAndCallBuilders()
+        public void Configure_ShouldBuildServiceProvider()
         {
             SetUpServiceProviderAndServiceCollection();
+          
+            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+        }
+
+        [Test]
+        public void Build_ShouldCallBuilders()
+        {
+            SetUpServiceProviderAndServiceCollection();
+            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+            SetUpGetBuilders();
 
             var isOnBuildingPipelinesCalled = false;
             m_EventsContext.OnBuildingPipelinesCalled += (sender, args) =>
@@ -78,11 +88,10 @@ namespace FluentEvents.UnitTests
                 isOnBuildingPipelinesCalled = true;
             };
 
-            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+            m_EventsContext.Build();
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
         }
-
 
         [Test]
         public void StartEventReceivers_ShouldCallEventReceiversService()
@@ -193,6 +202,9 @@ namespace FluentEvents.UnitTests
         {
             SetUpServiceProviderAndServiceCollection();
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+
+            SetUpGetBuilders();
+            m_EventsContext.Build();
         }
 
         private void SetUpServiceProviderAndServiceCollection()
@@ -206,7 +218,10 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
                 .Returns(m_EventsContextDependencies)
                 .Verifiable();
+        }
 
+        private void SetUpGetBuilders()
+        {
             m_InternalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
                 .Returns(new SubscriptionsBuilder(

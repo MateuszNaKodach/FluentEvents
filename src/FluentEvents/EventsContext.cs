@@ -24,7 +24,10 @@ namespace FluentEvents
 
             m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
             m_Dependencies = m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
+        }
 
+        internal void Build()
+        {
             OnBuildingSubscriptions(m_InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
             OnBuildingPipelines(m_InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
         }

@@ -83,16 +83,6 @@ namespace FluentEvents.UnitTests
                 .Returns(new Mock<IEventsContextDependencies>(MockBehavior.Strict).Object)
                 .Verifiable();
 
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(null, null, null, null))
-                .Verifiable();
-
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(new PipelinesBuilder(null, null, null))
-                .Verifiable();
-
             eventsContext.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);
         }
 
