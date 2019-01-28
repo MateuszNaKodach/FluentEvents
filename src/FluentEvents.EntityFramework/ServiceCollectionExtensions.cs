@@ -12,12 +12,9 @@ namespace FluentEvents.EntityFramework
             where TDbContext : DbContext
             where TEventsContext : EventsContext
         {
-            var proxyDbContextType = FluentEventsProxyBuilder.CreateClassProxyType(typeof(TDbContext));
-
-            services.Add(new ServiceDescriptor(proxyDbContextType, proxyDbContextType, ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(TDbContext), x =>
             {
-                var dbContext = (TDbContext)x.GetRequiredService(proxyDbContextType);
+                var dbContext = (TDbContext) ActivatorUtilities.CreateInstance(x, typeof(TDbContext));
                 var eventsContext = x.GetRequiredService<TEventsContext>();
                 var eventsScope = x.GetRequiredService<EventsScope>();
                 ((IObjectContextAdapter)dbContext).ObjectContext.ObjectMaterialized += delegate (object sender, ObjectMaterializedEventArgs e)

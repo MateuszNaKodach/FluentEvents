@@ -47,12 +47,9 @@ namespace FluentEvents
         private static void AddWithEventsAttachedTo<TEventsContext>(this IServiceCollection services, ServiceDescriptor serviceDescriptor)
             where TEventsContext : EventsContext
         {
-            var proxyType = FluentEventsProxyBuilder.CreateClassProxyType(serviceDescriptor.ImplementationType);
-
-            services.Add(new ServiceDescriptor(proxyType, proxyType, serviceDescriptor.Lifetime));
             services.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
             {
-                var service = x.GetService(proxyType);
+                var service = ActivatorUtilities.CreateInstance(x, serviceDescriptor.ImplementationType);
                 var eventsContext = x.GetRequiredService<TEventsContext>();
                 var eventsScope = x.GetRequiredService<EventsScope>();
                 eventsContext.Attach(service, eventsScope);
