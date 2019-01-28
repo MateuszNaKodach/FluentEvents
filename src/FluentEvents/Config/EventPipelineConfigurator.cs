@@ -23,18 +23,7 @@ namespace FluentEvents.Config
         {
             m_Pipeline = pipeline;
         }
-
-        public EventPipelineConfigurator(
-            IEventPipelineConfigurator eventPipelineConfigurator
-        ) : base(
-            eventPipelineConfigurator.SourceModel,
-            eventPipelineConfigurator.SourceModelEventField,
-            eventPipelineConfigurator.EventsContext
-        )
-        {
-            m_Pipeline = eventPipelineConfigurator.Pipeline;
-        }
-
+        
         public EventPipelineConfigurator(
             SourceModel sourceModel,
             SourceModelEventField sourceModelEventField,
