@@ -27,11 +27,13 @@ namespace FluentEvents.IntegrationTests
         public async Task AsyncEventShouldBeQueuedAndPublishedOnCommit()
         {
             TestEventArgs testEventArgs = null;
-            Context.MakeGlobalSubscriptionTo<TestEntity>(testEntity => testEntity.AsyncTest += (sender, args) =>
-            {
-                testEventArgs = args;
-                return Task.CompletedTask;
-            });
+            Context.MakeGlobalSubscriptionTo<TestEntity>(
+                testEntity => testEntity.AsyncTest += (sender, args) =>
+                {
+                    testEventArgs = args;
+                    return Task.CompletedTask;
+                }
+            );
 
             await Entity.RaiseAsyncEvent(TestValue);
 
@@ -45,11 +47,13 @@ namespace FluentEvents.IntegrationTests
         {
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsQueuedToDefaultQueue()
                     .ThenIsPublishedToGlobalSubscriptions();
 
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsQueuedToDefaultQueue()
                     .ThenIsPublishedToGlobalSubscriptions();
             }

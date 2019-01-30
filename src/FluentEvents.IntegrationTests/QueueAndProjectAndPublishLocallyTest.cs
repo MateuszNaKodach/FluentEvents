@@ -46,7 +46,8 @@ namespace FluentEvents.IntegrationTests
         {
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsQueuedToDefaultQueue()
                     .ThenIsProjected(x => new ProjectedTestEntity
                     {
@@ -57,7 +58,8 @@ namespace FluentEvents.IntegrationTests
                     })
                     .ThenIsPublishedToGlobalSubscriptions();
 
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsQueuedToDefaultQueue()
                     .ThenIsProjected(x => new ProjectedTestEntity
                     {

@@ -18,7 +18,8 @@ namespace FluentEvents.IntegrationTests
         {
             TestEventArgs testEventArgs = null;
             Context.MakeGlobalSubscriptionTo<TestEntity>(
-                testEntity => testEntity.Test += (sender, args) => { testEventArgs = args; });
+                testEntity => testEntity.Test += (sender, args) => { testEventArgs = args; }
+            );
 
             Entity.RaiseEvent(argsValue);
 
@@ -44,7 +45,8 @@ namespace FluentEvents.IntegrationTests
                 {
                     testEventArgs = args;
                     return Task.CompletedTask;
-                });
+                }
+            );
 
             await Entity.RaiseAsyncEvent(argsValue);
 
@@ -65,12 +67,14 @@ namespace FluentEvents.IntegrationTests
         {
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsQueuedToDefaultQueue()
                     .ThenIsFiltered((sender, args) => args.Value == ValidValue)
                     .ThenIsPublishedToGlobalSubscriptions();
 
-                pipelinesBuilder.Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsQueuedToDefaultQueue()
                     .ThenIsFiltered((sender, args) => args.Value == ValidValue)
                     .ThenIsPublishedToGlobalSubscriptions();
