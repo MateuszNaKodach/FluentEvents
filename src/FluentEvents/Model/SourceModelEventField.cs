@@ -19,12 +19,10 @@ namespace FluentEvents.Model
         public Type ReturnType { get; }
         public bool IsAsync => ReturnType == typeof(Task);
 
-        private readonly SourceModel m_SourceModel;
         private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
 
-        internal SourceModelEventField(SourceModel sourceModel, Type clrType, EventInfo eventInfo)
+        internal SourceModelEventField(Type clrType, EventInfo eventInfo)
         {
-            m_SourceModel = sourceModel;
             EventInfo = eventInfo ?? throw new ArgumentNullException(nameof(eventInfo));
             EventHandlerParameters = eventInfo.EventHandlerType
                 .GetMethod(nameof(EventHandler.Invoke))

@@ -27,7 +27,7 @@ namespace FluentEvents.Model
                 if (eventInfo == null)
                     throw new EventFieldNotFoundException();
 
-                eventField = new SourceModelEventField(this, ClrType, eventInfo);
+                eventField = new SourceModelEventField(ClrType, eventInfo);
                 m_EventFields.Add(eventField);
             }
 
