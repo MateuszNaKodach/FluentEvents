@@ -17,17 +17,16 @@ namespace FluentEvents.Subscriptions
 
         public Subscription CreateSubscription<TSource>(Action<TSource> subscriptionAction)
         {
-            return CreateSubscription(typeof(TSource), x => subscriptionAction((TSource)x));
-        }
-
-        public Subscription CreateSubscription(Type sourceType, Action<object> subscriptionAction)
-        {
+            var sourceType = typeof(TSource);
             var sourceModel = m_SourceModelsService.GetSourceModel(sourceType);
             if (sourceModel == null)
                 throw new SourceIsNotConfiguredException(sourceType);
 
             var subscription = new Subscription(sourceType);
-            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(sourceModel, subscriptionAction);
+            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
+                sourceModel, 
+                x => subscriptionAction((TSource)x)
+            );
 
             foreach (var subscribedHandler in subscribedHandlers)
                 subscription.AddHandler(subscribedHandler.EventName, subscribedHandler.EventsHandler);

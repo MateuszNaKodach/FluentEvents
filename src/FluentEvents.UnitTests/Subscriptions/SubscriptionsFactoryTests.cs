@@ -54,7 +54,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Returns(new List<SubscribedHandler>())
                 .Verifiable();
 
-            m_SubscriptionsFactory.CreateSubscription(typeof(EventsSource), subscriptionAction);
+            m_SubscriptionsFactory.CreateSubscription<EventsSource>(subscriptionAction);
         }
 
         private class EventsSource
