@@ -28,7 +28,7 @@ namespace FluentEvents.Subscriptions
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!SourceType.IsInstanceOfType(pipelineEvent.OriginalSender))
-                throw new InvalidOperationException("Event source type mismatch");
+                throw new EventSourceTypeMismatchException();
 
             if (m_EventHandlers.TryGetValue(pipelineEvent.OriginalEventFieldName, out var eventDelegate))
             {
