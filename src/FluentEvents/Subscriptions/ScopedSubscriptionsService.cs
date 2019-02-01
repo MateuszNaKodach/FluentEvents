@@ -8,12 +8,12 @@ namespace FluentEvents.Subscriptions
     internal class ScopedSubscriptionsService : IScopedSubscriptionsService
     {
         private readonly ISubscriptionsFactory m_SubscriptionsFactory;
-        private readonly ConcurrentDictionary<SubscriptionCreationTask, bool> m_ScopedSubscriptionCreationTasks;
+        private readonly ConcurrentDictionary<ISubscriptionCreationTask, bool> m_ScopedSubscriptionCreationTasks;
 
         public ScopedSubscriptionsService(ISubscriptionsFactory subscriptionsFactory)
         {
             m_SubscriptionsFactory = subscriptionsFactory;
-            m_ScopedSubscriptionCreationTasks = new ConcurrentDictionary<SubscriptionCreationTask, bool>();
+            m_ScopedSubscriptionCreationTasks = new ConcurrentDictionary<ISubscriptionCreationTask, bool>();
         }
 
         public void ConfigureScopedServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)

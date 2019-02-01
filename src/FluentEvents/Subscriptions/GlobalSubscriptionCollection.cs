@@ -7,14 +7,14 @@ namespace FluentEvents.Subscriptions
     public class GlobalSubscriptionCollection : IGlobalSubscriptionCollection
     {
         private readonly ConcurrentDictionary<Subscription, bool> m_GlobalScopeSubscriptions;
-        private readonly ConcurrentQueue<SubscriptionCreationTask> m_SubscriptionCreationTasks;
+        private readonly ConcurrentQueue<ISubscriptionCreationTask> m_SubscriptionCreationTasks;
         private readonly ISubscriptionsFactory m_SubscriptionsFactory;
         private readonly IServiceProvider m_ServiceProvider;
 
         public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IServiceProvider serviceProvider)
         {
             m_GlobalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
-            m_SubscriptionCreationTasks = new ConcurrentQueue<SubscriptionCreationTask>();
+            m_SubscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
             m_SubscriptionsFactory = subscriptionsFactory;
             m_ServiceProvider = serviceProvider;
         }

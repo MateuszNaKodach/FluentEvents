@@ -12,7 +12,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
         private Subscription m_Subscription;
 
-        private SubscriptionCreationTask m_SubscriptionCreationTask;
+        private ISubscriptionCreationTask m_SubscriptionCreationTask;
 
         [SetUp]
         public void SetUp()
