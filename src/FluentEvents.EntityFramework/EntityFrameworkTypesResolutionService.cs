@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity.Core.Objects;
 using FluentEvents.Infrastructure;
 
 namespace FluentEvents.EntityFramework
@@ -7,9 +8,7 @@ namespace FluentEvents.EntityFramework
     {
         public Type GetSourceType(object source)
         {
-            var entityType = source.GetType();
-
-            return entityType.Namespace == "System.Data.Entity.DynamicProxies" ? entityType.BaseType : entityType;
+            return ObjectContext.GetObjectType(source.GetType());
         }
 
         public Type GetEventArgsType(object eventArgs)
