@@ -10,10 +10,9 @@ namespace FluentEvents.Subscriptions
     {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
         private static readonly ProxyGenerationOptions ProxyGenerationOptions = new ProxyGenerationOptions();
-        private static readonly Type[] EmptyTypes = new Type[0];
 
         private static Type CreateClassProxyType(Type type)
-            => ProxyBuilder.CreateClassProxyType(type, EmptyTypes, ProxyGenerationOptions);
+            => ProxyBuilder.CreateClassProxyType(type, Type.EmptyTypes, ProxyGenerationOptions);
 
         public IEnumerable<SubscribedHandler> GetSubscribedHandlers(SourceModel sourceModel, Action<object> subscriptionAction)
         {

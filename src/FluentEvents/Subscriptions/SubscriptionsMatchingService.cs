@@ -6,7 +6,10 @@ namespace FluentEvents.Subscriptions
 {
     public class SubscriptionsMatchingService : ISubscriptionsMatchingService
     {
-        public IEnumerable<Subscription> GetMatchingSubscriptionsForSender(IEnumerable<Subscription> subscriptions, object sender)
+        public IEnumerable<Subscription> GetMatchingSubscriptionsForSender(
+            IEnumerable<Subscription> subscriptions,
+            object sender
+        )
         {
             var types = sender.GetType().GetBaseTypesInclusive();
 

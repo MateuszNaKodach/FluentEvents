@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FluentEvents.Subscriptions
 {
@@ -19,21 +20,19 @@ namespace FluentEvents.Subscriptions
             where TService : class
             where TSource : class
         {
-            var serviceSubscriptionTask =
-                new SubscriptionCreationTask<TService, TSource>(subscriptionAction,
-                    m_SubscriptionsFactory);
+            var serviceSubscriptionTask = new SubscriptionCreationTask<TService, TSource>(
+                subscriptionAction,
+                m_SubscriptionsFactory
+            );
 
             m_ScopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
         public IEnumerable<Subscription> SubscribeServices(IServiceProvider serviceProvider)
         {
-            var subscriptions = new List<Subscription>();
-
-            foreach (var subscriptionCreationTask in m_ScopedSubscriptionCreationTasks.Keys)
-                subscriptions.Add(subscriptionCreationTask.CreateSubscription(serviceProvider));
-
-            return subscriptions;
+            return m_ScopedSubscriptionCreationTasks.Keys
+                .Select(subscriptionCreationTask => subscriptionCreationTask.CreateSubscription(serviceProvider))
+                .ToList();
         }
     }
 }
