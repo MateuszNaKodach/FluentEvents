@@ -47,14 +47,12 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Returns(m_SourceModel)
                 .Verifiable();
 
-            Action<object> subscriptionAction = x => { };
-
             m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, subscriptionAction))
+                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, It.IsAny<Action<object>>()))
                 .Returns(new List<SubscribedHandler>())
                 .Verifiable();
 
-            m_SubscriptionsFactory.CreateSubscription<EventsSource>(subscriptionAction);
+            m_SubscriptionsFactory.CreateSubscription<EventsSource>(x => { });
         }
 
         private class EventsSource
