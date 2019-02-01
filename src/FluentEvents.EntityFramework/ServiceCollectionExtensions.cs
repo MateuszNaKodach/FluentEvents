@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.EntityFramework

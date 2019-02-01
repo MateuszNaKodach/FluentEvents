@@ -1,5 +1,4 @@
-﻿using System;
-using FluentEvents.Model;
+﻿using FluentEvents.Model;
 
 namespace FluentEvents.Config
 {

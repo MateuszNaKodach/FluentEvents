@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentEvents.Model;
-using FluentEvents.Pipelines;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;

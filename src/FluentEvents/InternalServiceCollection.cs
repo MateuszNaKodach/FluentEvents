@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FluentEvents.Config;
 using FluentEvents.Plugins;
-using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using FluentEvents.Model;
 using FluentEvents.Pipelines.Filters;

@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Routing;
 using Moq;

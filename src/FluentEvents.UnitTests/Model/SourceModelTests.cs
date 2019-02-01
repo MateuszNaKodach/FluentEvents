@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Model;
-using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model

@@ -1,6 +1,4 @@
-﻿using FluentEvents.Infrastructure;
-using FluentEvents.Model;
-using FluentEvents.Queues;
+﻿using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;

@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Transmission;
-using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

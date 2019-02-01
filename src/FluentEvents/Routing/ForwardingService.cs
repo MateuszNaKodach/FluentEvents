@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
