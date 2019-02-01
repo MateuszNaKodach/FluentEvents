@@ -48,20 +48,20 @@ public class SampleEventsContext : EventsContext
 public class NotificationsService : IHostedService
 {
     private readonly SampleEventsContext m_EventsContext;
-    private readonly IHubContext<AppHub> m_IHubContext;
+    private readonly IHubContext<AppHub> m_HubContext;
     private Subscription m_Subscription;
 
     public NotificationsService(SampleEventsContext eventsContext, IHubContext<AppHub> hubContext)
     {
         m_EventsContext = eventsContext;
-        m_IHubContext = hubContext;
+        m_HubContext = hubContext;
     }
 
     private async Task UserOnExperienceGained(object sender, UserExperienceGainedEventArgs e)
     {
         var user = (User)sender;
 
-        await m_IHubContext.Clients.Group(user.Id.ToString()).SendAsync
+        await m_HubContext.Clients.Group(user.Id.ToString()).SendAsync
         (
             "ShowExperienceGainedNotification",
             user.Level,
