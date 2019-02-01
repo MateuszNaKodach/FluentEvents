@@ -55,8 +55,13 @@ namespace FluentEvents.UnitTests.Queues
             m_EventsQueueNamesServiceMock.Verify();
         }
 
-        private static PipelineEvent MakeNewPipelineEvent() 
-            => new PipelineEvent("f", new object(), new object());
+        private static PipelineEvent MakeNewPipelineEvent()
+            => new PipelineEvent(
+                typeof(object),
+                "f",
+                new object(),
+                new object()
+            );
 
         [Test]
         [Sequential]

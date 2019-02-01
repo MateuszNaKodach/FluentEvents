@@ -16,7 +16,12 @@ namespace FluentEvents.UnitTests.Subscriptions
         [SetUp]
         public void SetUp()
         {
-            m_PipelineEvent = new PipelineEvent("fieldName", new object(), new object());
+            m_PipelineEvent = new PipelineEvent(
+                typeof(object),
+                "fieldName",
+                new object(),
+                new object()
+            );
 
             m_Subscription = new Subscription(typeof(object));
         }

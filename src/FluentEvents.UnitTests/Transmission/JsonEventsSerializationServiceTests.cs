@@ -23,8 +23,11 @@ namespace FluentEvents.UnitTests.Transmission
             {
                 Property1 = 20
             };
-            m_PipelineEvent = new PipelineEvent("f",
-                m_OriginalSender, m_OriginalEventArgs
+            m_PipelineEvent = new PipelineEvent(
+                typeof(TestSender),
+                "f",
+                m_OriginalSender,
+                m_OriginalEventArgs
             );
 
             m_JsonEventsSerializationService = new JsonEventsSerializationService();

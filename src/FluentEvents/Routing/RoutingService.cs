@@ -12,19 +12,16 @@ namespace FluentEvents.Routing
     public class RoutingService : IRoutingService
     {
         private readonly ILogger<RoutingService> m_Logger;
-        private readonly ITypesResolutionService m_TypesResolutionService;
         private readonly ISourceModelsService m_SourceModelsService;
         private readonly IEventsQueuesService m_EventsQueuesService;
 
         public RoutingService(
             ILogger<RoutingService> logger,
-            ITypesResolutionService typesResolutionService,
             ISourceModelsService sourceModelsService,
             IEventsQueuesService eventsQueuesService
         )
         {
             m_Logger = logger;
-            m_TypesResolutionService = typesResolutionService;
             m_SourceModelsService = sourceModelsService;
             m_EventsQueuesService = eventsQueuesService;
         }
@@ -33,7 +30,7 @@ namespace FluentEvents.Routing
         {
             using (m_Logger.BeginEventRoutingScope(pipelineEvent))
             {
-                var originalSenderType = m_TypesResolutionService.GetSourceType(pipelineEvent.OriginalSender);
+                var originalSenderType = pipelineEvent.OriginalSender.GetType();
                 foreach (var baseSenderType in originalSenderType.GetBaseTypesInclusive())
                 {
                     var field = m_SourceModelsService.GetSourceModel(baseSenderType)?.GetEventField(pipelineEvent.OriginalEventFieldName);

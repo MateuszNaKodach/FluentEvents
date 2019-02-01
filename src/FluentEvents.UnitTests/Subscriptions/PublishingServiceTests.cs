@@ -41,7 +41,12 @@ namespace FluentEvents.UnitTests.Subscriptions
                 new Subscription(typeof(object)),
             };
 
-            m_PipelineEvent = new PipelineEvent("fieldName", new object(), new object());
+            m_PipelineEvent = new PipelineEvent(
+                typeof(object), 
+                "fieldName", 
+                new object(),
+                new object()
+            );
 
             m_LoggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Information))

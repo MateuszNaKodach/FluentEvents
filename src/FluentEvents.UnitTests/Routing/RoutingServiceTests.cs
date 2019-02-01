@@ -16,7 +16,6 @@ namespace FluentEvents.UnitTests.Routing
     {
         private Mock<ILogger<RoutingService>> m_LoggerMock;
         private Mock<IDisposable> m_LoggerScopeMock;
-        private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IPipeline> m_PipelineMock;
         private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
@@ -34,7 +33,6 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_LoggerMock = new Mock<ILogger<RoutingService>>(MockBehavior.Strict);
             m_LoggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
-            m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
@@ -42,11 +40,15 @@ namespace FluentEvents.UnitTests.Routing
             m_EventsScope = new EventsScope();
             m_RoutingService = new RoutingService(
                 m_LoggerMock.Object,
-                m_TypesResolutionServiceMock.Object,
                 m_SourceModelsServiceMock.Object,
                 m_EventsQueuesServiceMock.Object
             );
-            m_PipelineEvent = new PipelineEvent(m_EventFieldName, new TestSource(), new TestEventArgs());
+            m_PipelineEvent = new PipelineEvent(
+                typeof(TestSource),
+                m_EventFieldName,
+                new TestSource(),
+                new TestEventArgs()
+            );
             m_SourceModel = new SourceModel(typeof(TestSource));
             m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(m_EventFieldName);
         }
@@ -56,7 +58,6 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_LoggerMock.Verify();
             m_LoggerScopeMock.Verify();
-            m_TypesResolutionServiceMock.Verify();
             m_SourceModelsServiceMock.Verify();
             m_PipelineMock.Verify();
             m_EventsQueuesServiceMock.Verify();
@@ -73,11 +74,6 @@ namespace FluentEvents.UnitTests.Routing
             m_PipelineMock
                 .Setup(x => x.QueueName)
                 .Returns<string>(null)
-                .Verifiable();
-
-            m_TypesResolutionServiceMock
-                .Setup(x => x.GetSourceType(m_PipelineEvent.OriginalSender))
-                .Returns<object>(x => x.GetType())
                 .Verifiable();
 
             m_SourceModelsServiceMock

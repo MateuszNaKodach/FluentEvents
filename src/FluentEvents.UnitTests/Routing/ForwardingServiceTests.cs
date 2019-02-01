@@ -14,7 +14,6 @@ namespace FluentEvents.UnitTests.Routing
     public class ForwardingServiceTests
     {
         private Mock<IRoutingService> m_RoutingServiceMock;
-        private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
 
         private SourceModel m_SourceModel;
         private EventsScope m_EventsScope;
@@ -24,18 +23,16 @@ namespace FluentEvents.UnitTests.Routing
         public void SetUp()
         {
             m_RoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
-            m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
 
             m_SourceModel = new SourceModel(typeof(TestSource));
             m_EventsScope = new EventsScope();
-            m_ForwardingService = new ForwardingService(m_RoutingServiceMock.Object, m_TypesResolutionServiceMock.Object);
+            m_ForwardingService = new ForwardingService(m_RoutingServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
             m_RoutingServiceMock.Verify();
-            m_TypesResolutionServiceMock.Verify();
         }
 
         [Test]
@@ -45,11 +42,6 @@ namespace FluentEvents.UnitTests.Routing
             m_RoutingServiceMock
                 .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), m_EventsScope))
                 .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            m_TypesResolutionServiceMock
-                .Setup(x => x.GetSourceType(source))
-                .Returns(source.GetType())
                 .Verifiable();
 
             m_SourceModel.GetOrCreateEventField(nameof(TestSource.NoArgsEvent));
@@ -73,11 +65,6 @@ namespace FluentEvents.UnitTests.Routing
         {
             var source = new object();
 
-            m_TypesResolutionServiceMock
-                .Setup(x => x.GetSourceType(source))
-                .Returns(source.GetType())
-                .Verifiable();
-
             Assert.That(() =>
             {
                 m_ForwardingService.ForwardEventsToRouting(
@@ -87,8 +74,6 @@ namespace FluentEvents.UnitTests.Routing
                 );
             }, Throws.TypeOf<SourceDoesNotMatchModelTypeException>());
         }
-
-
 
         private class TestSource
         {

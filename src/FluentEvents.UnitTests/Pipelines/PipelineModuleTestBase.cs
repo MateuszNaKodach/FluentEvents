@@ -28,7 +28,7 @@ namespace FluentEvents.UnitTests.Pipelines
             return new PipelineModuleContext(
                 projectionPipelineModuleConfig,
                 new PipelineContext(
-                    new PipelineEvent("f", testSender, testEventArgs),
+                    new PipelineEvent(typeof(object), "f", testSender, testEventArgs),
                     EventsScope,
                     InternalServiceProviderMock.Object
                 )

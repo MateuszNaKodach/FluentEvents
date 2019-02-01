@@ -10,7 +10,6 @@ namespace FluentEvents.UnitTests.Routing
     [TestFixture]
     public class AttachingServiceTests
     {
-        private Mock<ITypesResolutionService> m_TypesResolutionServiceMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IForwardingService> m_ForwardingServiceMock;
         private AttachingService m_AttachingService;
@@ -20,11 +19,9 @@ namespace FluentEvents.UnitTests.Routing
         [SetUp]
         public void SetUp()
         {
-            m_TypesResolutionServiceMock = new Mock<ITypesResolutionService>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_ForwardingServiceMock = new Mock<IForwardingService>(MockBehavior.Strict);
             m_AttachingService = new AttachingService(
-                m_TypesResolutionServiceMock.Object,
                 m_SourceModelsServiceMock.Object,
                 m_ForwardingServiceMock.Object
             );
@@ -35,7 +32,6 @@ namespace FluentEvents.UnitTests.Routing
         [TearDown]
         public void TearDown()
         {
-            m_TypesResolutionServiceMock.Verify();
             m_SourceModelsServiceMock.Verify();
             m_ForwardingServiceMock.Verify();
         }
@@ -61,11 +57,6 @@ namespace FluentEvents.UnitTests.Routing
         {
             var source = new Source3();
 
-            m_TypesResolutionServiceMock
-                .Setup(x => x.GetSourceType(source))
-                .Returns(typeof(Source3))
-                .Verifiable();
-
             m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))
                 .Returns<SourceModel>(null)
@@ -87,11 +78,6 @@ namespace FluentEvents.UnitTests.Routing
         public void Attach_WithNoExistingSourceModel_ShouldIterateBaseTypesAndNotAttach()
         {
             var source = new Source3();
-
-            m_TypesResolutionServiceMock
-                .Setup(x => x.GetSourceType(source))
-                .Returns(typeof(Source3))
-                .Verifiable();
 
             m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))

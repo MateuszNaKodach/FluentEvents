@@ -10,6 +10,7 @@ namespace FluentEvents.Pipelines.Projections
             var proxySender = config.EventsSenderProjection.Convert(pipelineModuleContext.PipelineEvent.OriginalSender);
             var proxyEventArgs = config.EventArgsProjection.Convert(pipelineModuleContext.PipelineEvent.OriginalEventArgs);
             var projectedPipelineEvent = new PipelineEvent(
+                pipelineModuleContext.PipelineEvent.OriginalSenderType,
                 pipelineModuleContext.PipelineEvent.OriginalEventFieldName,
                 proxySender,
                 proxyEventArgs

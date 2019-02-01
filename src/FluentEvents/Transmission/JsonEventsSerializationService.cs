@@ -22,7 +22,7 @@ namespace FluentEvents.Transmission
 
         public string SerializeEvent(PipelineEvent pipelineEvent)
         {
-            var data = JsonConvert.SerializeObject(pipelineEvent, m_SerializerSettings);
+            var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, m_SerializerSettings);
             return data;
         }
 
