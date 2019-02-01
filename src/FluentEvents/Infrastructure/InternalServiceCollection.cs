@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentEvents.Config;
-using FluentEvents.Plugins;
-using Microsoft.Extensions.DependencyInjection;
 using FluentEvents.Model;
 using FluentEvents.Pipelines.Filters;
-using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Projections;
+using FluentEvents.Pipelines.Publication;
+using FluentEvents.Plugins;
 using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace FluentEvents
+namespace FluentEvents.Infrastructure
 {
     internal class InternalServiceCollection : IInternalServiceCollection
     {

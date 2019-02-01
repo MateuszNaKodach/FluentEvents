@@ -3,7 +3,7 @@ using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 
-namespace FluentEvents
+namespace FluentEvents.Infrastructure
 {
     internal class EventsContextDependencies : IEventsContextDependencies
     {

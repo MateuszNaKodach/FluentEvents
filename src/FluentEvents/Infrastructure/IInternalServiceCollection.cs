@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentEvents.Plugins;
 
-namespace FluentEvents
+namespace FluentEvents.Infrastructure
 {
     internal interface IInternalServiceCollection
     {

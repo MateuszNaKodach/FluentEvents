@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Queues;
 using FluentEvents.Routing;

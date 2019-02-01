@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

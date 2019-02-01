@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Subscriptions;
 using Moq;
