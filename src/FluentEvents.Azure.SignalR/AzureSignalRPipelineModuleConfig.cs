@@ -1,9 +1,8 @@
 ﻿using System;
-using FluentEvents.Pipelines;
 
 namespace FluentEvents.Azure.SignalR
 {
-    internal class AzureSignalRPipelineModuleConfig : PipelineModuleConfig<AzureSignalRPipelineModule>
+    internal class AzureSignalRPipelineModuleConfig
     {
         public PublicationMethod PublicationMethod { get; }
         public string HubName { get; }

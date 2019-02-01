@@ -1,6 +1,6 @@
 ﻿namespace FluentEvents.Pipelines.Projections
 {
-    public class ProjectionPipelineModuleConfig : PipelineModuleConfig<ProjectionPipelineModule>
+    public class ProjectionPipelineModuleConfig
     {
         public ProjectionPipelineModuleConfig(IEventsSenderProjection eventsSenderProjection, IEventArgsProjection eventArgsProjection)
         {

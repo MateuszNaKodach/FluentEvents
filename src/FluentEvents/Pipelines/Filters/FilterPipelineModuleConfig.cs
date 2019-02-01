@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Pipelines.Filters
 {
-    public class FilterPipelineModuleConfig : PipelineModuleConfig<FilterPipelineModule>
+    public class FilterPipelineModuleConfig
     {
         public Func<object, object, bool> IsMatching { get; }
 

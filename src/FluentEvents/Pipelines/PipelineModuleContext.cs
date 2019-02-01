@@ -4,10 +4,10 @@ namespace FluentEvents.Pipelines
 {
     public class PipelineModuleContext : PipelineContext
     {
-        public IPipelineModuleConfig ModuleConfig { get; }
+        public object ModuleConfig { get; }
 
         public PipelineModuleContext(
-            IPipelineModuleConfig moduleConfig,
+            object moduleConfig,
             PipelineContext pipelineContext
         ) 
             : base(pipelineContext.PipelineEvent, pipelineContext.EventsScope, pipelineContext.ServiceProvider)

@@ -17,7 +17,6 @@ namespace FluentEvents.UnitTests.Pipelines
         private Mock<IServiceProvider> m_ScopedServiceProviderMock;
         private Mock<IServiceScopeFactory> m_ServiceScopeFactoryMock;
         private Mock<IServiceScope> m_ServiceScopeMock;
-        private Mock<IPipelineModuleConfig> m_PipelineModuleConfigMock;
         private Pipeline m_Pipeline;
 
         [SetUp]
@@ -28,7 +27,6 @@ namespace FluentEvents.UnitTests.Pipelines
             m_ScopedServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             m_ServiceScopeFactoryMock = new Mock<IServiceScopeFactory>(MockBehavior.Strict);
             m_ServiceScopeMock = new Mock<IServiceScope>(MockBehavior.Strict);
-            m_PipelineModuleConfigMock = new Mock<IPipelineModuleConfig>(MockBehavior.Strict);
             m_Pipeline = new Pipeline(null, m_InternalServiceProviderMock.Object);
         }
 
@@ -39,13 +37,12 @@ namespace FluentEvents.UnitTests.Pipelines
             m_ScopedServiceProviderMock.Verify();
             m_ServiceScopeFactoryMock.Verify();
             m_ServiceScopeMock.Verify();
-            m_PipelineModuleConfigMock.Verify();
         }
 
         [Test]
         public void AddModuleConfig_ShouldAdd()
         {
-            m_Pipeline.AddModuleConfig(m_PipelineModuleConfigMock.Object);
+            m_Pipeline.AddModule<PipelineModule1>(new object());
         }
 
         [Test]
@@ -53,7 +50,7 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             Assert.That(() =>
             {
-                m_Pipeline.AddModuleConfig(null);
+                m_Pipeline.AddModule<PipelineModule1>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -75,15 +72,13 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public async Task ProcessEventAsync_ShouldBuildAndInvokeAllPipelineModules()
         {
-            var pipelineModuleConfigMocks = new List<Mock<IPipelineModuleConfig>>();
             var pipelineModuleMocks = new List<Mock<IPipelineModule>>();
 
             SetUpCreateScope();
             for (var i = 0; i < 4; i++)
             {
-                var (pipelineModuleConfigMock, pipelineModuleMock) = SetUpPipelineModule(i);
+                var pipelineModuleMock = SetUpPipelineModule(i);
 
-                pipelineModuleConfigMocks.Add(pipelineModuleConfigMock);
                 pipelineModuleMocks.Add(pipelineModuleMock);
             }
 
@@ -96,18 +91,14 @@ namespace FluentEvents.UnitTests.Pipelines
                 m_EventsScope
             );
 
-            foreach (var pipelineModuleConfigMock in pipelineModuleConfigMocks)
-                pipelineModuleConfigMock.Verify();
-            
             foreach (var pipelineModuleMock in pipelineModuleMocks)
                 pipelineModuleMock.Verify();
         }
 
-        private (Mock<IPipelineModuleConfig>, Mock<IPipelineModule>) SetUpPipelineModule(int index)
+        private Mock<IPipelineModule> SetUpPipelineModule(int index)
         {
-            var pipelineModuleConfigMock = new Mock<IPipelineModuleConfig>(MockBehavior.Strict);
             var pipelineModuleMock = new Mock<IPipelineModule>(MockBehavior.Strict);
-            var module = GetModule(index);
+            var module = AddModule(index);
 
             pipelineModuleMock
                 .Setup(x => x.InvokeAsync(It.IsAny<PipelineModuleContext>(), It.IsAny<NextModuleDelegate>()))
@@ -115,42 +106,48 @@ namespace FluentEvents.UnitTests.Pipelines
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            pipelineModuleConfigMock
-                .Setup(x => x.ModuleType)
-                .Returns(module.GetType())
-                .Verifiable();
-
-            var loggerType = typeof(ILogger<>).MakeGenericType(pipelineModuleConfigMock.Object.ModuleType);
+            var loggerType = typeof(ILogger<>).MakeGenericType(module.GetType());
             m_ScopedServiceProviderMock
                 .Setup(x => x.GetService(loggerType))
                 .Returns(new LoggerFactory().CreateLogger(loggerType))
                 .Verifiable();
 
             m_ScopedServiceProviderMock
-                .Setup(x => x.GetService(pipelineModuleConfigMock.Object.ModuleType))
+                .Setup(x => x.GetService(module.GetType()))
                 .Returns(pipelineModuleMock.Object)
                 .Verifiable();
 
-            m_Pipeline.AddModuleConfig(pipelineModuleConfigMock.Object);
-
-            return (pipelineModuleConfigMock, pipelineModuleMock);
+            return pipelineModuleMock;
         }
 
-        private object GetModule(int index)
+        private object AddModule(int index)
         {
+            IPipelineModule module;
+
             switch (index)
             {
                 case 0:
-                    return new PipelineModule1();
+                    module = new PipelineModule1();
+                    m_Pipeline.AddModule<PipelineModule1>(new object());
+                    break;
                 case 1:
-                    return new PipelineModule2();
+                    module = new PipelineModule2();
+                    m_Pipeline.AddModule<PipelineModule2>(new object());
+                    break;
                 case 2:
-                    return new PipelineModule3();
+                    module = new PipelineModule3();
+                    m_Pipeline.AddModule<PipelineModule3>(new object());
+                    break;
                 case 3:
-                    return new PipelineModule4();
+                    module = new PipelineModule4();
+                    m_Pipeline.AddModule<PipelineModule4>(new object());
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+
+            return module;
         }
 
         private void SetUpCreateScope()

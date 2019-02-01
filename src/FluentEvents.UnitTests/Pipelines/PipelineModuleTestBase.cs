@@ -23,10 +23,10 @@ namespace FluentEvents.UnitTests.Pipelines
             InternalServiceProviderMock.Verify();
         }
 
-        protected PipelineModuleContext SetUpPipelineModuleContext(object testSender, object testEventArgs, IPipelineModuleConfig projectionPipelineModuleConfig)
+        protected PipelineModuleContext SetUpPipelineModuleContext(object testSender, object testEventArgs, object pipelineModuleConfig)
         {
             return new PipelineModuleContext(
-                projectionPipelineModuleConfig,
+                pipelineModuleConfig,
                 new PipelineContext(
                     new PipelineEvent(typeof(object), "f", testSender, testEventArgs),
                     EventsScope,

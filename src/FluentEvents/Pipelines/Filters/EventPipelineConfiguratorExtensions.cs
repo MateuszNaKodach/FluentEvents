@@ -11,7 +11,7 @@ namespace FluentEvents.Pipelines.Filters
             where TSource : class 
             where TEventArgs : class 
         {
-            ((IEventPipelineConfigurator)eventPipelineConfigurator).Pipeline.AddModuleConfig(
+            ((IEventPipelineConfigurator)eventPipelineConfigurator).Pipeline.AddModule<FilterPipelineModule>(
                 new FilterPipelineModuleConfig((sender, args) => filter((TSource)sender, (TEventArgs)args))
             );
             return eventPipelineConfigurator;
