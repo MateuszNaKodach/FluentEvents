@@ -1,4 +1,5 @@
-﻿using FluentEvents.Queues;
+﻿using System;
+using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;

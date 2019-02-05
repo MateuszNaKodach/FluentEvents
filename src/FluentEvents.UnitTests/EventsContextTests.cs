@@ -88,7 +88,11 @@ namespace FluentEvents.UnitTests
                 isOnBuildingPipelinesCalled = true;
             };
 
-            m_EventsContext.Build();
+            m_AttachingServiceMock
+                .Setup(x => x.Attach(It.IsAny<object>(), m_EventsScopeMock.Object))
+                .Verifiable();
+
+            m_EventsContext.Attach(new object(), m_EventsScopeMock.Object);
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
         }
@@ -204,7 +208,6 @@ namespace FluentEvents.UnitTests
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
 
             SetUpGetBuilders();
-            m_EventsContext.Build();
         }
 
         private void SetUpServiceProviderAndServiceCollection()

@@ -10,10 +10,28 @@ namespace FluentEvents
 {
     public abstract class EventsContext : IInfrastructure<IServiceProvider>
     {
+        private readonly EventsContextOptions m_Options;
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_InternalServiceProvider;
-
         private IServiceProvider m_InternalServiceProvider;
-        private IEventsContextDependencies m_Dependencies;
+
+        private Lazy<IEventsContextDependencies> m_Dependencies;
+
+        protected EventsContext()
+            : this(null)
+        {
+        }
+
+        protected EventsContext(EventsContextOptions options)
+        {
+            m_Options = options;
+
+            var emptyServiceCollection = new ServiceCollection();
+            var emptyServiceProvider = emptyServiceCollection.BuildServiceProvider();
+            var internalServices = new InternalServiceCollection(emptyServiceProvider);
+
+            m_Dependencies = new Lazy<IEventsContextDependencies>(() => Build(options, internalServices));
+
+        }
 
         internal void Configure(
             EventsContextOptions options, 
@@ -22,14 +40,22 @@ namespace FluentEvents
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
-            m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
-            m_Dependencies = m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
+            options = m_Options ?? options;
+
+            m_Dependencies = new Lazy<IEventsContextDependencies>(() => Build(options, internalServices));
         }
 
-        internal void Build()
+        private IEventsContextDependencies Build(EventsContextOptions options, IInternalServiceCollection internalServices)
         {
+            if (options == null)
+                throw new EventsContextOptionsAreMissingException();
+
+            m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
+
             OnBuildingSubscriptions(m_InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
             OnBuildingPipelines(m_InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
+
+            return m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
         }
 
         /// <summary>
@@ -61,7 +87,7 @@ namespace FluentEvents
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StartEventReceivers(CancellationToken cancellationToken = default) 
-            => m_Dependencies.EventReceiversService.StartReceiversAsync(cancellationToken);
+            => m_Dependencies.Value.EventReceiversService.StartReceiversAsync(cancellationToken);
 
         /// <summary>
         /// Stops the registered event receivers manually.
@@ -72,7 +98,7 @@ namespace FluentEvents
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StopEventReceivers(CancellationToken cancellationToken = default) 
-            => m_Dependencies.EventReceiversService.StopReceiversAsync(cancellationToken);
+            => m_Dependencies.Value.EventReceiversService.StopReceiversAsync(cancellationToken);
 
         /// <summary>
         /// Manually attach an event source to the context in order to forward it's events to the configured pipelines.
@@ -80,7 +106,7 @@ namespace FluentEvents
         /// <param name="source">The event source.</param>
         /// <param name="eventsScope">The scope where the events should be queued and published.</param>
         public void Attach(object source, EventsScope eventsScope)
-            => m_Dependencies.AttachingService.Attach(source, eventsScope);
+            => m_Dependencies.Value.AttachingService.Attach(source, eventsScope);
 
         /// <summary>
         /// Forward the events of a queue to the corresponding pipelines.
@@ -88,7 +114,7 @@ namespace FluentEvents
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
         public Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
-            => m_Dependencies.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
+            => m_Dependencies.Value.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
 
         /// <summary>
         /// Discards all the events of a queue.
@@ -96,7 +122,7 @@ namespace FluentEvents
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
         public void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
-            => m_Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
+            => m_Dependencies.Value.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
 
         /// <summary>
         /// Makes a subscription in the global scope.
@@ -106,13 +132,13 @@ namespace FluentEvents
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
         /// <returns>The subscription that should be passed to CancelGlobalSubscription() to stop receiving the events.</returns>
         public Subscription MakeGlobalSubscriptionTo<TSource>(Action<TSource> subscriptionAction)
-            => m_Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
+            => m_Dependencies.Value.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
 
         /// <summary>
         /// Cancels a global subscription.
         /// </summary>
         /// <param name="subscription">The subscription to cancel.</param>
         public void CancelGlobalSubscription(Subscription subscription)
-            => m_Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
+            => m_Dependencies.Value.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
     }
 }
