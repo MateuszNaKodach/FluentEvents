@@ -68,15 +68,20 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void Configure_ShouldBuildServiceProvider()
+        public void Configure_ShouldOverrideOptionsAndServiceProvider()
         {
             SetUpServiceProviderAndServiceCollection();
-          
+            SetUpGetBuilders();
+
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+
+            var serviceProvider = m_EventsContext.Get<IServiceProvider>();
+
+            Assert.That(serviceProvider, Is.EqualTo(m_InternalServiceProviderMock.Object));
         }
 
         [Test]
-        public void Build_ShouldCallBuilders()
+        public void Instance_OnFirstCall_ShouldCallBuilders()
         {
             SetUpServiceProviderAndServiceCollection();
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
@@ -88,11 +93,7 @@ namespace FluentEvents.UnitTests
                 isOnBuildingPipelinesCalled = true;
             };
 
-            m_AttachingServiceMock
-                .Setup(x => x.Attach(It.IsAny<object>(), m_EventsScopeMock.Object))
-                .Verifiable();
-
-            m_EventsContext.Attach(new object(), m_EventsScopeMock.Object);
+            m_EventsContext.Get<IServiceProvider>();
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
         }
@@ -205,6 +206,7 @@ namespace FluentEvents.UnitTests
         private void ConfigureEventsContext()
         {
             SetUpServiceProviderAndServiceCollection();
+            SetUpGetDependencies();
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
 
             SetUpGetBuilders();
@@ -217,6 +219,10 @@ namespace FluentEvents.UnitTests
                 .Returns(m_InternalServiceProviderMock.Object)
                 .Verifiable();
 
+        }
+
+        private void SetUpGetDependencies()
+        {
             m_InternalServiceProviderMock
                 .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
                 .Returns(m_EventsContextDependencies)
@@ -248,6 +254,10 @@ namespace FluentEvents.UnitTests
         private class EventsContextImpl : EventsContext
         {
             public event EventHandler OnBuildingPipelinesCalled;
+
+            public EventsContextImpl() : base(new EventsContextOptions())
+            {
+            }
 
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {

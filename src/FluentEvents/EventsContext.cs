@@ -10,27 +10,52 @@ namespace FluentEvents
 {
     public abstract class EventsContext : IInfrastructure<IServiceProvider>
     {
-        private readonly EventsContextOptions m_Options;
-        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_InternalServiceProvider;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => InternalServiceProvider;
+
+        private EventsContextOptions m_Options;
+        private IInternalServiceCollection m_InternalServices;
+
         private IServiceProvider m_InternalServiceProvider;
+        private IEventsContextDependencies m_Dependencies;
 
-        private Lazy<IEventsContextDependencies> m_Dependencies;
+        private IServiceProvider InternalServiceProvider
+        {
+            get
+            {
+                if (m_InternalServiceProvider == null)
+                {
+                    OnConfiguring(m_Options);
+                    m_InternalServiceProvider = m_InternalServices.BuildServiceProvider(this, m_Options);
+                    Build();
+                }
 
+                return m_InternalServiceProvider;
+            }
+        }
+
+        private IEventsContextDependencies Dependencies =>
+            m_Dependencies ??
+            (m_Dependencies = InternalServiceProvider.GetRequiredService<IEventsContextDependencies>());
+
+        /// <summary>
+        /// This constructor can be used when the <see cref="EventsContext" /> is configured with
+        /// the <see cref="IServiceCollection" /> extension method.
+        /// </summary>
         protected EventsContext()
-            : this(null)
+            : this(new EventsContextOptions())
         {
         }
 
+        /// <summary>
+        /// This constructor can be used when the <see cref="EventsContext" /> is not configured with
+        /// the <see cref="IServiceCollection" /> extension method.
+        /// </summary>
         protected EventsContext(EventsContextOptions options)
         {
-            m_Options = options;
+            m_Options = options ?? throw new ArgumentNullException(nameof(options));
 
-            var emptyServiceCollection = new ServiceCollection();
-            var emptyServiceProvider = emptyServiceCollection.BuildServiceProvider();
-            var internalServices = new InternalServiceCollection(emptyServiceProvider);
-
-            m_Dependencies = new Lazy<IEventsContextDependencies>(() => Build(options, internalServices));
-
+            var emptyAppServiceProvider = new ServiceCollection().BuildServiceProvider();
+            m_InternalServices = new InternalServiceCollection(emptyAppServiceProvider);
         }
 
         internal void Configure(
@@ -39,24 +64,24 @@ namespace FluentEvents
         )
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
+            if (internalServices == null) throw new ArgumentNullException(nameof(internalServices));
 
-            options = m_Options ?? options;
-
-            m_Dependencies = new Lazy<IEventsContextDependencies>(() => Build(options, internalServices));
+            m_Options = options;
+            m_InternalServices = internalServices;
         }
 
-        private IEventsContextDependencies Build(EventsContextOptions options, IInternalServiceCollection internalServices)
+        private void Build()
         {
-            if (options == null)
-                throw new EventsContextOptionsAreMissingException();
-
-            m_InternalServiceProvider = internalServices.BuildServiceProvider(this, options);
-
-            OnBuildingSubscriptions(m_InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
-            OnBuildingPipelines(m_InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
-
-            return m_InternalServiceProvider.GetRequiredService<IEventsContextDependencies>();
+            OnBuildingSubscriptions(InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
+            OnBuildingPipelines(InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
         }
+
+        /// <summary>
+        /// The default implementation of this method does nothing, but it can be overridden in a derived class
+        /// to override the options supplied in the constructor or with DI.
+        /// </summary>
+        /// <param name="options">The options of the EventsContext.</param>
+        protected virtual void OnConfiguring(EventsContextOptions options) { }
 
         /// <summary>
         /// The default implementation of this method does nothing, but it can be overridden in a derived class
@@ -87,7 +112,7 @@ namespace FluentEvents
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StartEventReceivers(CancellationToken cancellationToken = default) 
-            => m_Dependencies.Value.EventReceiversService.StartReceiversAsync(cancellationToken);
+            => Dependencies.EventReceiversService.StartReceiversAsync(cancellationToken);
 
         /// <summary>
         /// Stops the registered event receivers manually.
@@ -98,7 +123,7 @@ namespace FluentEvents
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StopEventReceivers(CancellationToken cancellationToken = default) 
-            => m_Dependencies.Value.EventReceiversService.StopReceiversAsync(cancellationToken);
+            => Dependencies.EventReceiversService.StopReceiversAsync(cancellationToken);
 
         /// <summary>
         /// Manually attach an event source to the context in order to forward it's events to the configured pipelines.
@@ -106,7 +131,7 @@ namespace FluentEvents
         /// <param name="source">The event source.</param>
         /// <param name="eventsScope">The scope where the events should be queued and published.</param>
         public void Attach(object source, EventsScope eventsScope)
-            => m_Dependencies.Value.AttachingService.Attach(source, eventsScope);
+            => Dependencies.AttachingService.Attach(source, eventsScope);
 
         /// <summary>
         /// Forward the events of a queue to the corresponding pipelines.
@@ -114,7 +139,7 @@ namespace FluentEvents
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
         public Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
-            => m_Dependencies.Value.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
+            => Dependencies.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
 
         /// <summary>
         /// Discards all the events of a queue.
@@ -122,7 +147,7 @@ namespace FluentEvents
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
         public void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
-            => m_Dependencies.Value.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
+            => Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
 
         /// <summary>
         /// Makes a subscription in the global scope.
@@ -132,13 +157,13 @@ namespace FluentEvents
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
         /// <returns>The subscription that should be passed to CancelGlobalSubscription() to stop receiving the events.</returns>
         public Subscription MakeGlobalSubscriptionTo<TSource>(Action<TSource> subscriptionAction)
-            => m_Dependencies.Value.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
+            => Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
 
         /// <summary>
         /// Cancels a global subscription.
         /// </summary>
         /// <param name="subscription">The subscription to cancel.</param>
         public void CancelGlobalSubscription(Subscription subscription)
-            => m_Dependencies.Value.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
+            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
     }
 }

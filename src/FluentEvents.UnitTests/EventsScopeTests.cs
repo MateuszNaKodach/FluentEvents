@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Subscriptions;
@@ -68,22 +69,27 @@ namespace FluentEvents.UnitTests
         }
 
         private static void SetUpEventsContext(
-            Mock<EventsContext> eventsContext, 
+            Mock<EventsContext> eventsContextMock, 
             Mock<IInternalServiceCollection> internalServiceCollectionMock,
             Mock<IServiceProvider> serviceProviderMock
         )
         {
             internalServiceCollectionMock
-                .Setup(x => x.BuildServiceProvider(eventsContext.Object, It.IsAny<IFluentEventsPluginOptions>()))
+                .Setup(x => x.BuildServiceProvider(eventsContextMock.Object, It.IsAny<IFluentEventsPluginOptions>()))
                 .Returns(serviceProviderMock.Object)
                 .Verifiable();
             
             serviceProviderMock
-                .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
-                .Returns(new Mock<IEventsContextDependencies>(MockBehavior.Strict).Object)
+                .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
+                .Returns(new SubscriptionsBuilder(eventsContextMock.Object, serviceProviderMock.Object, null, null))
                 .Verifiable();
 
-            eventsContext.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(PipelinesBuilder)))
+                .Returns(new PipelinesBuilder(eventsContextMock.Object, serviceProviderMock.Object, null))
+                .Verifiable();
+
+            eventsContextMock.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);
         }
 
         [Test]
