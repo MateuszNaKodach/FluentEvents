@@ -80,7 +80,7 @@ namespace FluentEvents
         /// The default implementation of this method does nothing, but it can be overridden in a derived class
         /// to override the options supplied in the constructor or with DI.
         /// </summary>
-        /// <param name="options">The options of the EventsContext.</param>
+        /// <param name="options">The options of the <see cref="EventsContext"/>.</param>
         protected virtual void OnConfiguring(EventsContextOptions options) { }
 
         /// <summary>
@@ -102,13 +102,13 @@ namespace FluentEvents
         /// </remarks>
         /// <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
         protected abstract void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder);
-        
+
         /// <summary>
         /// Starts the registered event receivers manually.
         /// </summary>
         /// <remarks>
-        /// Usually it's not necessary to call this method because the event receivers lifetime controlled by an IHostedService so
-        /// this method should to be called only if the context hasn't been configured inside of a HostBuilder.
+        /// Event receivers lifetime is controlled by an <see cref="Microsoft.Extensions.Hosting.IHostedService"/>.
+        /// This method should to be called only if the application isn't using the <see cref="Microsoft.Extensions.Hosting.HostBuilder"/>.
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StartEventReceivers(CancellationToken cancellationToken = default) 
@@ -118,8 +118,8 @@ namespace FluentEvents
         /// Stops the registered event receivers manually.
         /// </summary>
         /// <remarks>
-        /// Usually it's not necessary to call this method because the event receivers lifetime controlled by an IHostedService so
-        /// this method should to be called only if the context hasn't been configured inside of a HostBuilder.
+        /// Event receivers lifetime is controlled by an <see cref="Microsoft.Extensions.Hosting.IHostedService"/>.
+        /// This method should to be called only if the application isn't using the <see cref="Microsoft.Extensions.Hosting.HostBuilder"/>.
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
         public Task StopEventReceivers(CancellationToken cancellationToken = default) 
@@ -152,7 +152,7 @@ namespace FluentEvents
         /// <summary>
         /// Makes a subscription in the global scope.
         /// </summary>
-        /// <remarks>You can call CancelGlobalSubscription() to stop receiving the events.</remarks>
+        /// <remarks>You can call <see cref="CancelGlobalSubscription"/> to stop receiving the events.</remarks>
         /// <typeparam name="TSource">The type of the events source.</typeparam>
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
         /// <returns>The subscription that should be passed to CancelGlobalSubscription() to stop receiving the events.</returns>
