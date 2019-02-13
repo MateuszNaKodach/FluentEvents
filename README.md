@@ -57,18 +57,6 @@ public class NotificationsService : IHostedService
         m_HubContext = hubContext;
     }
 
-    private async Task UserOnExperienceGained(object sender, UserExperienceGainedEventArgs e)
-    {
-        var user = (User)sender;
-
-        await m_HubContext.Clients.Group(user.Id.ToString()).SendAsync
-        (
-            "ShowExperienceGainedNotification",
-            user.Level,
-            e.GainedExperience
-        );
-    }
-
     public Task StartAsync(CancellationToken cancellationToken)
     {
         m_Subscription = m_EventsContext.MakeGlobalSubscriptionTo<User>(user =>
@@ -83,6 +71,18 @@ public class NotificationsService : IHostedService
     {
         m_EventsContext.CancelGlobalSubscription(m_Subscription);
         return Task.CompletedTask;
+    }
+
+    private async Task UserOnExperienceGained(object sender, UserExperienceGainedEventArgs e)
+    {
+        var user = (User)sender;
+
+        await m_HubContext.Clients.Group(user.Id.ToString()).SendAsync
+        (
+            "ShowExperienceGainedNotification",
+            user.Level,
+            e.GainedExperience
+        );
     }
 }
 ```
