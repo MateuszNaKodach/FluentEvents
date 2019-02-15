@@ -52,7 +52,7 @@ namespace FluentEvents.Model
             return eventFieldInfo;
         }
 
-        public IPipeline AddEventPipelineConfig(IPipeline pipeline)
+        public IPipeline AddPipeline(IPipeline pipeline)
         {
             if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
             Pipelines.Add(pipeline);

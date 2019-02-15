@@ -105,7 +105,7 @@ namespace FluentEvents.UnitTests.Routing
                 .Verifiable();
 
             m_SourceModelEventField
-                .AddEventPipelineConfig(m_PipelineMock.Object);
+                .AddPipeline(m_PipelineMock.Object);
 
             await m_RoutingService.RouteEventAsync(m_PipelineEvent, m_EventsScope);
         }

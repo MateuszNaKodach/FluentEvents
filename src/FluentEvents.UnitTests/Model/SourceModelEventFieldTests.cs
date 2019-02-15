@@ -133,9 +133,9 @@ namespace FluentEvents.UnitTests.Model
         }
 
         [Test]
-        public void AddEventPipelineConfig_ShouldAddNewPipeline([Values(null, "q")] string queueName)
+        public void AddPipeline_ShouldAddNewPipeline([Values(null, "q")] string queueName)
         {
-            var pipeline = m_SourceModelEventField.AddEventPipelineConfig(m_PipelineMock.Object);
+            var pipeline = m_SourceModelEventField.AddPipeline(m_PipelineMock.Object);
 
             Assert.That(m_SourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
         }

@@ -2,12 +2,12 @@
 
 namespace FluentEvents.Config
 {
-    public class BuilderBase
+    public abstract class BuilderBase
     {
-        protected internal EventsContext EventsContext { get; }
-        protected internal IServiceProvider ServiceProvider { get; }
+        protected EventsContext EventsContext { get; }
+        protected IServiceProvider ServiceProvider { get; }
 
-        public BuilderBase(EventsContext eventsContext, IServiceProvider serviceProvider)
+        protected BuilderBase(EventsContext eventsContext, IServiceProvider serviceProvider)
         {
             EventsContext = eventsContext;
             ServiceProvider = serviceProvider;

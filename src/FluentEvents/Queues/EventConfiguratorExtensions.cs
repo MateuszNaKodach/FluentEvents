@@ -49,7 +49,7 @@ namespace FluentEvents.Queues
 
             configurator
                 .SourceModelEventField
-                .AddEventPipelineConfig(pipeline);
+                .AddPipeline(pipeline);
 
             if (queueName != null)
             {
