@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public interface ISenderTypeConfiguration
+    public interface IPublishTransmissionConfiguration
     {
         Type SenderType { get; }
     }
