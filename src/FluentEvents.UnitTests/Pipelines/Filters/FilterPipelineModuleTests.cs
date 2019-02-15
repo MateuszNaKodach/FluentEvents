@@ -24,10 +24,9 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             var testSender = new TestSender { IsValid = false };
             var testEventArgs = new TestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender,
-                testEventArgs,
-                m_FilterPipelineModuleConfig
+                testEventArgs
             );
 
             var isInvoked = false;
@@ -38,7 +37,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 return Task.CompletedTask;
             }
 
-            await m_FilterPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_FilterPipelineModule.InvokeAsync(m_FilterPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(isInvoked, Is.False);
         }
@@ -49,10 +48,9 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             var testSender = new TestSender { IsValid = true };
             var testEventArgs = new TestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender,
-                testEventArgs, 
-                m_FilterPipelineModuleConfig
+                testEventArgs
             );
 
             PipelineContext nextModuleContext = null;
@@ -63,10 +61,10 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 return Task.CompletedTask;
             }
 
-            await m_FilterPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_FilterPipelineModule.InvokeAsync(m_FilterPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
-            Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
+            Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
         }
         
         private class TestSender

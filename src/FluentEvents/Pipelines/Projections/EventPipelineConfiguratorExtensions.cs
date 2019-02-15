@@ -35,7 +35,9 @@ namespace FluentEvents.Pipelines.Projections
                 new EventArgsProjection<TEventArgs, TToEventArgs>(eventArgsConverter)
             );
 
-            configurator.Pipeline.AddModule<ProjectionPipelineModule>(projectionPipelineModuleConfig);
+            configurator.Pipeline.AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
+                projectionPipelineModuleConfig
+            );
 
             return new EventPipelineConfigurator<TToSource, TToEventArgs>(
                 projectedSourceModel,

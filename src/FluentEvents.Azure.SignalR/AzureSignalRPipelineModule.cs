@@ -3,7 +3,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Azure.SignalR
 {
-    internal class AzureSignalRPipelineModule : IPipelineModule
+    internal class AzureSignalRPipelineModule : IPipelineModule<AzureSignalRPipelineModuleConfig>
     {
         private readonly IAzureSignalRClient m_AzureSignalRClient;
 
@@ -11,23 +11,26 @@ namespace FluentEvents.Azure.SignalR
         {
             m_AzureSignalRClient = azureSignalRClient;
         }
-        public async Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule)
-        {
-            var config = (AzureSignalRPipelineModuleConfig)pipelineModuleContext.ModuleConfig;
 
+        public async Task InvokeAsync(
+            AzureSignalRPipelineModuleConfig config, 
+            PipelineContext pipelineContext, 
+            NextModuleDelegate invokeNextModule
+        )
+        {
             await m_AzureSignalRClient.SendEventAsync(
                 config.PublicationMethod,
                 config.HubName,
                 config.HubMethodName,
                 config.SubjectIdsProvider(
-                    pipelineModuleContext.PipelineEvent.OriginalSender,
-                    pipelineModuleContext.PipelineEvent.OriginalEventArgs
+                    pipelineContext.PipelineEvent.OriginalSender,
+                    pipelineContext.PipelineEvent.OriginalEventArgs
                 ),
-                pipelineModuleContext.PipelineEvent.OriginalSender,
-                pipelineModuleContext.PipelineEvent.OriginalEventArgs
+                pipelineContext.PipelineEvent.OriginalSender,
+                pipelineContext.PipelineEvent.OriginalEventArgs
             );
 
-            await invokeNextModule(pipelineModuleContext);
+            await invokeNextModule(pipelineContext);
         }
     }
 }

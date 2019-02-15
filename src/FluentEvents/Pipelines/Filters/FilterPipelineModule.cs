@@ -2,14 +2,16 @@
 
 namespace FluentEvents.Pipelines.Filters
 {
-    public class FilterPipelineModule : IPipelineModule
+    public class FilterPipelineModule : IPipelineModule<FilterPipelineModuleConfig>
     {
-        public async Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule)
+        public async Task InvokeAsync(
+            FilterPipelineModuleConfig config,
+            PipelineContext pipelineContext, 
+            NextModuleDelegate invokeNextModule
+        )
         {
-            var config = (FilterPipelineModuleConfig)pipelineModuleContext.ModuleConfig;
-
-            if (config.IsMatching(pipelineModuleContext.PipelineEvent.OriginalSender, pipelineModuleContext.PipelineEvent.OriginalEventArgs))
-                await invokeNextModule(pipelineModuleContext);
+            if (config.IsMatching(pipelineContext.PipelineEvent.OriginalSender, pipelineContext.PipelineEvent.OriginalEventArgs))
+                await invokeNextModule(pipelineContext);
         }
     }
 }

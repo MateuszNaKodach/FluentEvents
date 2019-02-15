@@ -42,7 +42,7 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public void AddModuleConfig_ShouldAdd()
         {
-            m_Pipeline.AddModule<PipelineModule1>(new object());
+            m_Pipeline.AddModule<PipelineModule1, object>(new object());
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             Assert.That(() =>
             {
-                m_Pipeline.AddModule<PipelineModule1>(null);
+                m_Pipeline.AddModule<PipelineModule1, object>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -72,7 +72,7 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public async Task ProcessEventAsync_ShouldBuildAndInvokeAllPipelineModules()
         {
-            var pipelineModuleMocks = new List<Mock<IPipelineModule>>();
+            var pipelineModuleMocks = new List<Mock<IPipelineModule<object>>>();
 
             SetUpCreateScope();
             for (var i = 0; i < 4; i++)
@@ -95,14 +95,14 @@ namespace FluentEvents.UnitTests.Pipelines
                 pipelineModuleMock.Verify();
         }
 
-        private Mock<IPipelineModule> SetUpPipelineModule(int index)
+        private Mock<IPipelineModule<object>> SetUpPipelineModule(int index)
         {
-            var pipelineModuleMock = new Mock<IPipelineModule>(MockBehavior.Strict);
+            var pipelineModuleMock = new Mock<IPipelineModule<object>>(MockBehavior.Strict);
             var module = AddModule(index);
 
             pipelineModuleMock
-                .Setup(x => x.InvokeAsync(It.IsAny<PipelineModuleContext>(), It.IsAny<NextModuleDelegate>()))
-                .Callback<PipelineModuleContext, NextModuleDelegate>(async (context, next) => await next(context))
+                .Setup(x => x.InvokeAsync(It.IsAny<object>(), It.IsAny<PipelineContext>(), It.IsAny<NextModuleDelegate>()))
+                .Callback<object, PipelineContext, NextModuleDelegate>(async (config, context, next) => await next(context))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
@@ -122,25 +122,25 @@ namespace FluentEvents.UnitTests.Pipelines
 
         private object AddModule(int index)
         {
-            IPipelineModule module;
+            IPipelineModule<object> module;
 
             switch (index)
             {
                 case 0:
                     module = new PipelineModule1();
-                    m_Pipeline.AddModule<PipelineModule1>(new object());
+                    m_Pipeline.AddModule<PipelineModule1, object>(new object());
                     break;
                 case 1:
                     module = new PipelineModule2();
-                    m_Pipeline.AddModule<PipelineModule2>(new object());
+                    m_Pipeline.AddModule<PipelineModule2, object>(new object());
                     break;
                 case 2:
                     module = new PipelineModule3();
-                    m_Pipeline.AddModule<PipelineModule3>(new object());
+                    m_Pipeline.AddModule<PipelineModule3, object>(new object());
                     break;
                 case 3:
                     module = new PipelineModule4();
-                    m_Pipeline.AddModule<PipelineModule4>(new object());
+                    m_Pipeline.AddModule<PipelineModule4, object>(new object());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -172,9 +172,10 @@ namespace FluentEvents.UnitTests.Pipelines
                 .Verifiable();
         }
 
-        private abstract class PipelineModuleBase : IPipelineModule
+        private abstract class PipelineModuleBase : IPipelineModule<object>
         {
-            public Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule) => Task.CompletedTask;
+            public Task InvokeAsync(object config, PipelineContext pipelineContext, NextModuleDelegate invokeNextModule) 
+                => Task.CompletedTask;
         }
 
         private class PipelineModule1 : PipelineModuleBase { }

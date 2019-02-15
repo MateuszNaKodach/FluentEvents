@@ -12,23 +12,23 @@ namespace FluentEvents.Pipelines
         public string QueueName { get; }
 
         private readonly IServiceProvider m_InternalServiceProvider;
-        private readonly ICollection<ModuleTypeConfigPair> m_ModuleConfigs;
+        private readonly ICollection<ModuleProxy> m_ModuleProxies;
         private NextModuleDelegate m_NextModule;
 
         internal Pipeline(string queueName, IServiceProvider internalServiceProvider)
         {
             QueueName = queueName;
             m_InternalServiceProvider = internalServiceProvider;
-            m_ModuleConfigs = new List<ModuleTypeConfigPair>();
+            m_ModuleProxies = new List<ModuleProxy>();
             m_NextModule = null;
         }
 
-        public void AddModule<TModule>(object moduleConfig) where TModule : IPipelineModule
+        public void AddModule<TModule, TConfig>(TConfig moduleConfig) where TModule : IPipelineModule<TConfig>
         {
             if (moduleConfig == null)
                 throw new ArgumentNullException(nameof(moduleConfig));
 
-            m_ModuleConfigs.Add(new ModuleTypeConfigPair(typeof(TModule), moduleConfig));
+            m_ModuleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
         }
 
         public async Task ProcessEventAsync(
@@ -45,47 +45,60 @@ namespace FluentEvents.Pipelines
 
         private NextModuleDelegate Build()
         {
-            var stack = new Stack<ModuleTypeConfigPair>(m_ModuleConfigs.Reverse());
+            var stack = new Stack<ModuleProxy>(m_ModuleProxies.Reverse());
             var next = GetNextModuleDelegate(stack);
             return next;
         }
 
-        private static NextModuleDelegate GetNextModuleDelegate(Stack<ModuleTypeConfigPair> moduleConfigs)
+        private static NextModuleDelegate GetNextModuleDelegate(Stack<ModuleProxy> moduleProxies)
         {
-            var moduleTypeConfigPair = moduleConfigs.Count > 0 ? moduleConfigs.Pop() : null;
-            if (moduleTypeConfigPair == null)
+            var moduleProxy = moduleProxies.Count > 0 ? moduleProxies.Pop() : null;
+            if (moduleProxy == null)
                 return x => Task.CompletedTask;
 
-            var next = GetNextModuleDelegate(moduleConfigs);
-            var moduleType = moduleTypeConfigPair.Type;
+            var next = GetNextModuleDelegate(moduleProxies);
+            var moduleType = moduleProxy.Type;
             var loggerType = typeof(ILogger<>).MakeGenericType(moduleType);
 
-            async Task NextModuleDelegate(PipelineContext pipelineContext)
+            Task NextModuleDelegate(PipelineContext pipelineContext)
             {
-                var module = (IPipelineModule) pipelineContext.ServiceProvider.GetService(moduleType);
-                if (module == null) throw new PipelineModuleNotFoundException();
-
                 var logger = (ILogger) pipelineContext.ServiceProvider.GetRequiredService(loggerType);
-
                 logger.InvokingPipelineModule(moduleType, pipelineContext.PipelineEvent);
 
-                var pipelineModuleContext = new PipelineModuleContext(moduleTypeConfigPair.Config, pipelineContext);
-
-                await module.InvokeAsync(pipelineModuleContext, next);
+                return moduleProxy.InvokeAsync(pipelineContext, next);
             }
 
             return NextModuleDelegate;
         }
 
-        private class ModuleTypeConfigPair
+        private abstract class ModuleProxy
         {
             public Type Type { get; }
-            public object Config { get; }
 
-            public ModuleTypeConfigPair(Type type, object config)
+            protected ModuleProxy(Type type)
             {
                 Type = type;
-                Config = config;
+            }
+
+            public abstract Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next);
+        }
+
+        private class ModuleProxy<TConfig> : ModuleProxy
+        {
+            private readonly TConfig m_Config;
+
+            public ModuleProxy(Type type, TConfig config) : base(type)
+            {
+                m_Config = config;
+            }
+
+            public override Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next)
+            {
+                var module = (IPipelineModule<TConfig>) pipelineContext.ServiceProvider.GetService(Type);
+                if (module == null)
+                    throw new PipelineModuleNotFoundException();
+
+                return module.InvokeAsync(m_Config, pipelineContext, next);
             }
         }
     }

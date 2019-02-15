@@ -41,10 +41,9 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             var projectedTestSender = new ProjectedTestSender();
             var projectedTestEventArgs = new ProjectedTestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender, 
-                testEventArgs, 
-                m_ProjectionPipelineModuleConfig
+                testEventArgs
             );
 
             m_EventSenderProjectionMock
@@ -65,10 +64,10 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 return Task.CompletedTask;
             }
 
-            await m_ProjectionPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_ProjectionPipelineModule.InvokeAsync(m_ProjectionPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
-            Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
+            Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
             Assert.That(
                 nextModuleContext.PipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalSender)).EqualTo(projectedTestSender)

@@ -9,11 +9,12 @@ namespace FluentEvents.Pipelines.Filters
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, bool> filter)
             where TSource : class 
-            where TEventArgs : class 
+            where TEventArgs : class
         {
-            ((IEventPipelineConfigurator)eventPipelineConfigurator).Pipeline.AddModule<FilterPipelineModule>(
-                new FilterPipelineModuleConfig((sender, args) => filter((TSource)sender, (TEventArgs)args))
-            );
+            ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
+                .AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
+                    new FilterPipelineModuleConfig((sender, args) => filter((TSource) sender, (TEventArgs) args))
+                );
             return eventPipelineConfigurator;
         }
     }

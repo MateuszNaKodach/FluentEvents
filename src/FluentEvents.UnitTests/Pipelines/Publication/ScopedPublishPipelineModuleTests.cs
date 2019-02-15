@@ -31,10 +31,9 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         [Test]
         public async Task InvokeAsync_ShouldPublishEventInScope()
         {
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 new object(),
-                new object(),
-                m_ScopedPublishPipelineModuleConfig
+                new object()
             );
 
             PipelineContext nextModuleContext = null;
@@ -46,14 +45,14 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             }
 
             m_PublishingServiceMock
-                .Setup(x => x.PublishEventToScopedSubscriptionsAsync(pipelineModuleContext.PipelineEvent, EventsScope))
+                .Setup(x => x.PublishEventToScopedSubscriptionsAsync(pipelineContext.PipelineEvent, EventsScope))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_ScopedPublishPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_ScopedPublishPipelineModule.InvokeAsync(m_ScopedPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
-            Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
+            Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
         }
     }
 }

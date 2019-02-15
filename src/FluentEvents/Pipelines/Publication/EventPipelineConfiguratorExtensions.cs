@@ -18,9 +18,11 @@ namespace FluentEvents.Pipelines.Publication
             where TSource : class
             where TEventArgs : class
         {
-            ((IEventPipelineConfigurator)eventPipelineConfigurator).Pipeline.AddModule<ScopedPublishPipelineModule>(
-                new ScopedPublishPipelineModuleConfig()
-            );
+            ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
+                .AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
+                    new ScopedPublishPipelineModuleConfig()
+                );
+
             return eventPipelineConfigurator;
         }
 
@@ -49,7 +51,7 @@ namespace FluentEvents.Pipelines.Publication
             };
 
             ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
-                .AddModule<GlobalPublishPipelineModule>(
+                .AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                     moduleConfig
                 );
             return eventPipelineConfigurator;

@@ -44,10 +44,9 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             var testSender = new TestSender();
             var testEventArgs = new TestEventArgs();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender,
-                testEventArgs,
-                m_GlobalPublishPipelineModuleConfig
+                testEventArgs
             );
 
             PipelineContext nextModuleContext = null;
@@ -59,14 +58,14 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             }
 
             m_PublishingServiceMock
-                .Setup(x => x.PublishEventToGlobalSubscriptionsAsync(pipelineModuleContext.PipelineEvent))
+                .Setup(x => x.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_GlobalPublishPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
-            Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
+            Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
         }
 
         [Test]
@@ -77,10 +76,9 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             m_GlobalPublishPipelineModuleConfig.SenderType = m_EventSender1Mock.Object.GetType();
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender,
-                testEventArgs,
-                m_GlobalPublishPipelineModuleConfig
+                testEventArgs
             );
 
             PipelineContext nextModuleContext = null;
@@ -92,14 +90,14 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             }
 
             m_EventSender1Mock
-                .Setup(x => x.SendAsync(pipelineModuleContext.PipelineEvent))
+                .Setup(x => x.SendAsync(pipelineContext.PipelineEvent))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_GlobalPublishPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+            await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
-            Assert.That(nextModuleContext, Is.EqualTo(pipelineModuleContext));
+            Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
         }
 
         [Test]
@@ -110,17 +108,16 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             m_GlobalPublishPipelineModuleConfig.SenderType = typeof(object);
 
-            var pipelineModuleContext = SetUpPipelineModuleContext(
+            var pipelineContext = CreatePipelineContext(
                 testSender,
-                testEventArgs,
-                m_GlobalPublishPipelineModuleConfig
+                testEventArgs
             );
 
-            Task InvokeNextModule(PipelineContext pipelineContext) => Task.CompletedTask;
+            Task InvokeNextModule(PipelineContext context) => Task.CompletedTask;
 
             Assert.That(async () =>
             {
-                await m_GlobalPublishPipelineModule.InvokeAsync(pipelineModuleContext, InvokeNextModule);
+                await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
             }, Throws.TypeOf<EventSenderNotFoundException>());
         }
 

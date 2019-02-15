@@ -2,23 +2,26 @@
 
 namespace FluentEvents.Pipelines.Projections
 {
-    public class ProjectionPipelineModule : IPipelineModule
+    public class ProjectionPipelineModule : IPipelineModule<ProjectionPipelineModuleConfig>
     {
-        public async Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule)
+        public async Task InvokeAsync(
+            ProjectionPipelineModuleConfig config,
+            PipelineContext pipelineContext, 
+            NextModuleDelegate invokeNextModule
+        )
         {
-            var config = (ProjectionPipelineModuleConfig)pipelineModuleContext.ModuleConfig;
-            var proxySender = config.EventsSenderProjection.Convert(pipelineModuleContext.PipelineEvent.OriginalSender);
-            var proxyEventArgs = config.EventArgsProjection.Convert(pipelineModuleContext.PipelineEvent.OriginalEventArgs);
+            var proxySender = config.EventsSenderProjection.Convert(pipelineContext.PipelineEvent.OriginalSender);
+            var proxyEventArgs = config.EventArgsProjection.Convert(pipelineContext.PipelineEvent.OriginalEventArgs);
             var projectedPipelineEvent = new PipelineEvent(
-                pipelineModuleContext.PipelineEvent.OriginalSenderType,
-                pipelineModuleContext.PipelineEvent.OriginalEventFieldName,
+                pipelineContext.PipelineEvent.OriginalSenderType,
+                pipelineContext.PipelineEvent.OriginalEventFieldName,
                 proxySender,
                 proxyEventArgs
             );
             
-            pipelineModuleContext.PipelineEvent = projectedPipelineEvent;
+            pipelineContext.PipelineEvent = projectedPipelineEvent;
 
-            await invokeNextModule(pipelineModuleContext);
+            await invokeNextModule(pipelineContext);
         }
     }
 }

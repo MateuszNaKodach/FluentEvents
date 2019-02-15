@@ -2,8 +2,8 @@
 
 namespace FluentEvents.Pipelines
 {
-    public interface IPipelineModule
+    public interface IPipelineModule<in TConfig>
     {
-        Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule);
+        Task InvokeAsync(TConfig config, PipelineContext pipelineContext, NextModuleDelegate invokeNextModule);
     }
 }

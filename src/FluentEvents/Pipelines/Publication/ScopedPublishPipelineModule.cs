@@ -3,7 +3,7 @@ using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public class ScopedPublishPipelineModule : IPipelineModule
+    public class ScopedPublishPipelineModule : IPipelineModule<ScopedPublishPipelineModuleConfig>
     {
         private readonly IPublishingService m_PublishingService;
 
@@ -12,14 +12,18 @@ namespace FluentEvents.Pipelines.Publication
             m_PublishingService = publishingService;
         }
 
-        public async Task InvokeAsync(PipelineModuleContext pipelineModuleContext, NextModuleDelegate invokeNextModule)
+        public async Task InvokeAsync(
+            ScopedPublishPipelineModuleConfig config,
+            PipelineContext pipelineContext, 
+            NextModuleDelegate invokeNextModule
+        )
         {
             await m_PublishingService.PublishEventToScopedSubscriptionsAsync(
-                pipelineModuleContext.PipelineEvent, 
-                pipelineModuleContext.EventsScope
+                pipelineContext.PipelineEvent, 
+                pipelineContext.EventsScope
             );
 
-            await invokeNextModule(pipelineModuleContext);
+            await invokeNextModule(pipelineContext);
         }
     }
 }
