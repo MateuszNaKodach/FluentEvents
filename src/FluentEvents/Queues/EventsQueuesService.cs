@@ -40,7 +40,7 @@ namespace FluentEvents.Queues
             if (eventsQueue == null) throw new ArgumentNullException(nameof(eventsQueue));
 
             foreach (var queuedPipelineEvent in eventsQueue.DequeueAll())
-                await queuedPipelineEvent.Pipeline.ProcessEventAsync(queuedPipelineEvent.PipelineEvent, eventsScope);
+                await queuedPipelineEvent.InvokeNextModule();
         }
 
         public void DiscardQueuedEvents(EventsScope eventsScope, string queueName)
@@ -62,20 +62,20 @@ namespace FluentEvents.Queues
             }
         }
 
-        public void EnqueueEvent(EventsScope eventsScope, PipelineEvent pipelineEvent, IPipeline pipeline)
+        public void EnqueueEvent(EventsScope eventsScope, PipelineEvent pipelineEvent, string queueName, Func<Task> invokeNextModule)
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
-            if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
+            if (queueName == null) throw new ArgumentNullException(nameof(queueName));
 
-            if (!m_EventsQueueNamesService.IsQueueNameExisting(pipeline.QueueName))
+            if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                 throw new EventsQueueNotFoundException();
 
-            var queue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, pipeline.QueueName);
+            var queue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
 
             queue.Enqueue(new QueuedPipelineEvent
             {
-                Pipeline = pipeline,
+                InvokeNextModule = invokeNextModule,
                 PipelineEvent = pipelineEvent
             });
         }

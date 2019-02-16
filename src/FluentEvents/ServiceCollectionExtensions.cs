@@ -31,7 +31,10 @@ namespace FluentEvents
             return services;
         }
 
-        public static IServiceCollection AddWithEventsAttachedTo<TEventsContext>(this IServiceCollection services, Action<IServiceCollection> configurator)
+        public static IServiceCollection AddWithEventsAttachedTo<TEventsContext>(
+            this IServiceCollection services,
+            Action<IServiceCollection> configurator
+        )
             where TEventsContext : EventsContext
         {
             var trackedServices = new ServiceCollection();
@@ -43,7 +46,10 @@ namespace FluentEvents
             return services;
         }
 
-        private static void AddWithEventsAttachedTo<TEventsContext>(this IServiceCollection services, ServiceDescriptor serviceDescriptor)
+        private static void AddWithEventsAttachedTo<TEventsContext>(
+            this IServiceCollection services, 
+            ServiceDescriptor serviceDescriptor
+        )
             where TEventsContext : EventsContext
         {
             services.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>

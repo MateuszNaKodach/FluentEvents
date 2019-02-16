@@ -8,7 +8,7 @@ namespace FluentEvents.Pipelines.Projections
 {
     public static class EventPipelineConfiguratorExtensions
     {
-        public static EventPipelineConfigurator<TToSource, TToEventArgs> ThenIsProjected<TSource, TToSource, TEventArgs, TToEventArgs>(
+        public static EventPipelineConfigurator<TToSource, TToEventArgs> ThenProject<TSource, TToSource, TEventArgs, TToEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TToSource> senderConverter,
             Func<TEventArgs, TToEventArgs> eventArgsConverter

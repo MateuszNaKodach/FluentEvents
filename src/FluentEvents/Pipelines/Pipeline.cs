@@ -9,15 +9,12 @@ namespace FluentEvents.Pipelines
 {
     public class Pipeline : IPipeline
     {
-        public string QueueName { get; }
-
         private readonly IServiceProvider m_InternalServiceProvider;
         private readonly ICollection<ModuleProxy> m_ModuleProxies;
         private NextModuleDelegate m_NextModule;
 
-        internal Pipeline(string queueName, IServiceProvider internalServiceProvider)
+        internal Pipeline(IServiceProvider internalServiceProvider)
         {
-            QueueName = queueName;
             m_InternalServiceProvider = internalServiceProvider;
             m_ModuleProxies = new List<ModuleProxy>();
             m_NextModule = null;
@@ -36,11 +33,8 @@ namespace FluentEvents.Pipelines
             EventsScope eventsScope
         )
         {
-            using (var serviceScope = m_InternalServiceProvider.CreateScope())
-            {
-                var pipeline = m_NextModule ?? (m_NextModule = Build());
-                await pipeline(new PipelineContext(pipelineEvent, eventsScope, serviceScope.ServiceProvider));
-            }
+            var pipeline = m_NextModule ?? (m_NextModule = Build());
+            await pipeline(new PipelineContext(pipelineEvent, eventsScope, m_InternalServiceProvider));
         }
 
         private NextModuleDelegate Build()

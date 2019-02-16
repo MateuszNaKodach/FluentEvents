@@ -14,9 +14,6 @@ namespace FluentEvents.UnitTests.Pipelines
     {
         private EventsScope m_EventsScope;
         private Mock<IServiceProvider> m_InternalServiceProviderMock;
-        private Mock<IServiceProvider> m_ScopedServiceProviderMock;
-        private Mock<IServiceScopeFactory> m_ServiceScopeFactoryMock;
-        private Mock<IServiceScope> m_ServiceScopeMock;
         private Pipeline m_Pipeline;
 
         [SetUp]
@@ -24,19 +21,13 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             m_EventsScope = new EventsScope();
             m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_ScopedServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_ServiceScopeFactoryMock = new Mock<IServiceScopeFactory>(MockBehavior.Strict);
-            m_ServiceScopeMock = new Mock<IServiceScope>(MockBehavior.Strict);
-            m_Pipeline = new Pipeline(null, m_InternalServiceProviderMock.Object);
+            m_Pipeline = new Pipeline(m_InternalServiceProviderMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
             m_InternalServiceProviderMock.Verify();
-            m_ScopedServiceProviderMock.Verify();
-            m_ServiceScopeFactoryMock.Verify();
-            m_ServiceScopeMock.Verify();
         }
 
         [Test]
@@ -57,8 +48,6 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public async Task ProcessEventAsync_ShouldCreateAndDisposeNewServiceScope()
         {
-            SetUpCreateScope();
-
             await m_Pipeline.ProcessEventAsync(new PipelineEvent(
                     typeof(object),
                     "f",
@@ -74,7 +63,6 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             var pipelineModuleMocks = new List<Mock<IPipelineModule<object>>>();
 
-            SetUpCreateScope();
             for (var i = 0; i < 4; i++)
             {
                 var pipelineModuleMock = SetUpPipelineModule(i);
@@ -107,12 +95,12 @@ namespace FluentEvents.UnitTests.Pipelines
                 .Verifiable();
 
             var loggerType = typeof(ILogger<>).MakeGenericType(module.GetType());
-            m_ScopedServiceProviderMock
+            m_InternalServiceProviderMock
                 .Setup(x => x.GetService(loggerType))
                 .Returns(new LoggerFactory().CreateLogger(loggerType))
                 .Verifiable();
 
-            m_ScopedServiceProviderMock
+            m_InternalServiceProviderMock
                 .Setup(x => x.GetService(module.GetType()))
                 .Returns(pipelineModuleMock.Object)
                 .Verifiable();
@@ -149,29 +137,7 @@ namespace FluentEvents.UnitTests.Pipelines
 
             return module;
         }
-
-        private void SetUpCreateScope()
-        {
-            m_InternalServiceProviderMock
-                .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
-                .Returns(m_ServiceScopeFactoryMock.Object)
-                .Verifiable();
-
-            m_ServiceScopeFactoryMock
-                .Setup(x => x.CreateScope())
-                .Returns(m_ServiceScopeMock.Object)
-                .Verifiable();
-
-            m_ServiceScopeMock
-                .Setup(x => x.ServiceProvider)
-                .Returns(m_ScopedServiceProviderMock.Object)
-                .Verifiable();
-
-            m_ServiceScopeMock
-                .Setup(x => x.Dispose())
-                .Verifiable();
-        }
-
+        
         private abstract class PipelineModuleBase : IPipelineModule<object>
         {
             public Task InvokeAsync(object config, PipelineContext pipelineContext, NextModuleDelegate invokeNextModule) 

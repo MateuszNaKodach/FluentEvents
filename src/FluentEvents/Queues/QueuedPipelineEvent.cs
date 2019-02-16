@@ -1,10 +1,12 @@
-﻿using FluentEvents.Pipelines;
+﻿using System;
+using System.Threading.Tasks;
+using FluentEvents.Pipelines;
 
 namespace FluentEvents.Queues
 {
     public class QueuedPipelineEvent
     {
-        public IPipeline Pipeline { get; set; }
+        public Func<Task> InvokeNextModule { get; set; }
         public PipelineEvent PipelineEvent { get; set; }
     }
 }

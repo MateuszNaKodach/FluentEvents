@@ -48,27 +48,29 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsQueuedToDefaultQueue()
-                    .ThenIsProjected(x => new ProjectedTestEntity
+                    .ForwardToPipeline()
+                    .ThenEnqueueToDefaultQueue()
+                    .ThenProject(x => new ProjectedTestEntity
                     {
                         Id = x.Id
                     }, x => new ProjectedEventArgs
                     {
                         Value = x.Value
                     })
-                    .ThenIsPublishedToGlobalSubscriptions();
+                    .ThenPublishToGlobalSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
-                    .IsQueuedToDefaultQueue()
-                    .ThenIsProjected(x => new ProjectedTestEntity
+                    .ForwardToPipeline()
+                    .ThenEnqueueToDefaultQueue()
+                    .ThenProject(x => new ProjectedTestEntity
                     {
                         Id = x.Id
                     }, x => new ProjectedEventArgs
                     {
                         Value = x.Value
                     })
-                    .ThenIsPublishedToGlobalSubscriptions();
+                    .ThenPublishToGlobalSubscriptions();
             }
         }
     }

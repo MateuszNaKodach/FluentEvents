@@ -12,7 +12,7 @@ namespace FluentEvents.Pipelines.Publication
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
         /// <param name="eventPipelineConfigurator">The configuration object for the specified event.</param>
         /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator"></param>.</returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToScopedSubscriptions<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenPublishToScopedSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )
             where TSource : class
@@ -36,7 +36,7 @@ namespace FluentEvents.Pipelines.Publication
         /// <param name="configurePublishTransmission">A delegate for configuring how the event is transmitted.</param>
         /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator" />.</returns>
         /// <remarks>This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/></remarks>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToGlobalSubscriptions<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenPublishToGlobalSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator, 
             Func<GlobalPublishingOptionsFactory, IPublishTransmissionConfiguration> configurePublishTransmission
         )
@@ -64,11 +64,11 @@ namespace FluentEvents.Pipelines.Publication
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
         /// <param name="eventPipelineConfigurator">The configuration object for the specified event.</param>
         /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator" />.</returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToGlobalSubscriptions<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenPublishToGlobalSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )
             where TSource : class
             where TEventArgs : class
-            => eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(x => x.Locally());
+            => eventPipelineConfigurator.ThenPublishToGlobalSubscriptions(x => x.Locally());
     }
 }

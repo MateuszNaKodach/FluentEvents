@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Queues
@@ -7,6 +8,6 @@ namespace FluentEvents.Queues
     {
         Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName);
         void DiscardQueuedEvents(EventsScope eventsScope, string queueName);
-        void EnqueueEvent(EventsScope eventsScope, PipelineEvent pipelineEvent, IPipeline pipeline);
+        void EnqueueEvent(EventsScope eventsScope, PipelineEvent pipelineEvent, string queueName, Func<Task> invokeNextModule);
     }
 }

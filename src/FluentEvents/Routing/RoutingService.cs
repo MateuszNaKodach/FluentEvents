@@ -12,17 +12,14 @@ namespace FluentEvents.Routing
     {
         private readonly ILogger<RoutingService> m_Logger;
         private readonly ISourceModelsService m_SourceModelsService;
-        private readonly IEventsQueuesService m_EventsQueuesService;
 
         public RoutingService(
             ILogger<RoutingService> logger,
-            ISourceModelsService sourceModelsService,
-            IEventsQueuesService eventsQueuesService
+            ISourceModelsService sourceModelsService
         )
         {
             m_Logger = logger;
             m_SourceModelsService = sourceModelsService;
-            m_EventsQueuesService = eventsQueuesService;
         }
         
         public async Task RouteEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
@@ -38,16 +35,8 @@ namespace FluentEvents.Routing
 
                     foreach (var pipeline in field.Pipelines)
                     {
-                        if (pipeline.QueueName != null)
-                        {
-                            m_Logger.EventRoutedToQueue(pipeline.QueueName);
-                            m_EventsQueuesService.EnqueueEvent(eventsScope, pipelineEvent, pipeline);
-                        }
-                        else
-                        {
-                            m_Logger.EventRoutedToPipeline();
-                            await pipeline.ProcessEventAsync(pipelineEvent, eventsScope);
-                        }
+                        m_Logger.EventRoutedToPipeline();
+                        await pipeline.ProcessEventAsync(pipelineEvent, eventsScope);
                     }
 
                     if (field.Pipelines.Any())

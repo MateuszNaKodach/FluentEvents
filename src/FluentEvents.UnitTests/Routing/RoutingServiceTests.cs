@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
-using FluentEvents.Queues;
 using FluentEvents.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -17,7 +16,6 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<IDisposable> m_LoggerScopeMock;
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IPipeline> m_PipelineMock;
-        private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
 
         private EventsScope m_EventsScope;
         private RoutingService m_RoutingService;
@@ -34,13 +32,11 @@ namespace FluentEvents.UnitTests.Routing
             m_LoggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
-            m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
 
             m_EventsScope = new EventsScope();
             m_RoutingService = new RoutingService(
                 m_LoggerMock.Object,
-                m_SourceModelsServiceMock.Object,
-                m_EventsQueuesServiceMock.Object
+                m_SourceModelsServiceMock.Object
             );
             m_PipelineEvent = new PipelineEvent(
                 typeof(TestSource),
@@ -59,20 +55,14 @@ namespace FluentEvents.UnitTests.Routing
             m_LoggerScopeMock.Verify();
             m_SourceModelsServiceMock.Verify();
             m_PipelineMock.Verify();
-            m_EventsQueuesServiceMock.Verify();
         }
 
         [Test]
-        public async Task RouteEventAsync_WithoutQueue_ShouldProcessEvent()
+        public async Task RouteEventAsync_ShouldProcessEvent()
         {
             m_PipelineMock
                 .Setup(x => x.ProcessEventAsync(m_PipelineEvent, m_EventsScope))
                 .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            m_PipelineMock
-                .Setup(x => x.QueueName)
-                .Returns<string>(null)
                 .Verifiable();
 
             m_SourceModelsServiceMock
@@ -104,8 +94,7 @@ namespace FluentEvents.UnitTests.Routing
                 ))
                 .Verifiable();
 
-            m_SourceModelEventField
-                .AddPipeline(m_PipelineMock.Object);
+            m_SourceModelEventField.AddPipeline(m_PipelineMock.Object);
 
             await m_RoutingService.RouteEventAsync(m_PipelineEvent, m_EventsScope);
         }

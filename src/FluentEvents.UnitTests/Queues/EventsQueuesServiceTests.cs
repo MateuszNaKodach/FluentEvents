@@ -99,14 +99,19 @@ namespace FluentEvents.UnitTests.Queues
 
             SetUpGetQueue(m_QueueName);
 
-            m_PipelineMock
-                .Setup(x => x.ProcessEventAsync(pipelineEvent, m_EventsScope))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+            var isNextModuleInvoked = false;
 
-            m_EventsQueuesService.EnqueueEvent(m_EventsScope, pipelineEvent, m_PipelineMock.Object);
+            Task InvokeNextModule()
+            {
+                isNextModuleInvoked = true;
+                return Task.CompletedTask;
+            }
+
+            m_EventsQueuesService.EnqueueEvent(m_EventsScope, pipelineEvent, m_QueueName, InvokeNextModule);
 
             await m_EventsQueuesService.ProcessQueuedEventsAsync(m_EventsScope, m_QueueName);
+
+            Assert.That(isNextModuleInvoked, Is.True);
         }
 
         [Test]
@@ -170,7 +175,7 @@ namespace FluentEvents.UnitTests.Queues
         public void EnqueueEvent_WithNullArgs_ShouldThrow(
             [Values(true, false, false)] bool isEventsScopeNull,
             [Values(false, true, false)] bool isPipelineEventNull,
-            [Values(false, false, true)] bool isPipelineNull
+            [Values(false, false, true)] bool isQueueNameNull
         )
         {
             Assert.That(() =>
@@ -178,7 +183,8 @@ namespace FluentEvents.UnitTests.Queues
                 m_EventsQueuesService.EnqueueEvent(
                     isEventsScopeNull ? null : m_EventsScope,
                     isPipelineEventNull ? null : m_PipelineEvent,
-                    isPipelineNull ? null : m_PipelineMock.Object
+                    isQueueNameNull ? null : m_QueueName,
+                    () => Task.CompletedTask
                 );
             }, Throws.TypeOf<ArgumentNullException>());
         }
@@ -186,11 +192,6 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void EnqueueEvent_WithNonExistingQueue_ShouldThrow()
         {
-            m_PipelineMock
-                .Setup(x => x.QueueName)
-                .Returns(m_QueueName)
-                .Verifiable();
-
             m_EventsQueueNamesServiceMock
                 .Setup(x => x.IsQueueNameExisting(m_QueueName))
                 .Returns(false)
@@ -198,21 +199,16 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(() =>
             {
-                m_EventsQueuesService.EnqueueEvent(m_EventsScope, m_PipelineEvent, m_PipelineMock.Object);
+                m_EventsQueuesService.EnqueueEvent(m_EventsScope, m_PipelineEvent, m_QueueName, () => Task.CompletedTask);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
         [Test]
         public void EnqueueEvent_ShouldEnqueue()
         {
-            m_PipelineMock
-                .Setup(x => x.QueueName)
-                .Returns(m_QueueName)
-                .Verifiable();
-
             SetUpGetQueue(m_QueueName);
 
-            m_EventsQueuesService.EnqueueEvent(m_EventsScope, m_PipelineEvent, m_PipelineMock.Object);
+            m_EventsQueuesService.EnqueueEvent(m_EventsScope, m_PipelineEvent, m_QueueName, () => Task.CompletedTask);
         }
 
         private void SetUpGetQueue(string queueName)
@@ -222,11 +218,6 @@ namespace FluentEvents.UnitTests.Queues
             m_EventQueueCollectionMock
                 .Setup(x => x.GetOrAddEventsQueue(m_EventsQueuesContext, queueName))
                 .Returns(eventsQueue)
-                .Verifiable();
-
-            m_PipelineMock
-                .Setup(x => x.QueueName)
-                .Returns(queueName)
                 .Verifiable();
 
             m_EventsQueueNamesServiceMock

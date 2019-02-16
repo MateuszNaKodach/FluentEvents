@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Filters;
+using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Queues;
 using NUnit.Framework;
@@ -69,15 +70,17 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsQueuedToDefaultQueue()
-                    .ThenIsFiltered((sender, args) => args.Value == ValidValue)
-                    .ThenIsPublishedToGlobalSubscriptions();
+                    .ForwardToPipeline()
+                    .ThenEnqueueToDefaultQueue()
+                    .ThenFilter((sender, args) => args.Value == ValidValue)
+                    .ThenPublishToGlobalSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
-                    .IsQueuedToDefaultQueue()
-                    .ThenIsFiltered((sender, args) => args.Value == ValidValue)
-                    .ThenIsPublishedToGlobalSubscriptions();
+                    .ForwardToPipeline()
+                    .ThenEnqueueToDefaultQueue()
+                    .ThenFilter((sender, args) => args.Value == ValidValue)
+                    .ThenPublishToGlobalSubscriptions();
             }
         }
     }
