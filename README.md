@@ -69,7 +69,7 @@ public class NotificationsService : IHostedService
 {
     private readonly SampleEventsContext m_EventsContext;
     private readonly IMailService m_MailService;
-    private Subscription m_Subscription;
+    private ISubscriptionsCancellationToken m_SubscriptionsCancellationToken;
 
     public NotificationsService(SampleEventsContext eventsContext, IMailService mailService)
     {
@@ -79,7 +79,7 @@ public class NotificationsService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_Subscription = m_EventsContext.MakeGlobalSubscriptionsTo<User>(user =>
+        m_SubscriptionsCancellationToken = m_EventsContext.MakeGlobalSubscriptionsTo<User>(user =>
         {
             user.FriendRequestApproved += UserOnFriendRequestApproved;
         });
@@ -89,7 +89,7 @@ public class NotificationsService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        m_EventsContext.CancelGlobalSubscription(m_Subscription);
+        m_EventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
         
         return Task.CompletedTask;
     }
