@@ -36,7 +36,7 @@ public class SampleEventsContext : EventsContext
     {
         pipelinesBuilder
             .Event<User, UserExperienceGainedEventArgs>(nameof(User.ExperienceGained))
-            .IsNotQueued()
+            .IsForwardedToPipeline()
             .ThenIsFiltered((user, args) => user.Level < 200)
             .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
     }
