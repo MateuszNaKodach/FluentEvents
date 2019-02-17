@@ -5,7 +5,7 @@ namespace FluentEvents.Pipelines.Filters
 {
     public static class EventPipelineConfiguratorExtensions
     {
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenFilter<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsFiltered<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, bool> filter)
             where TSource : class 

@@ -1,7 +1,4 @@
-﻿using System;
-using FluentEvents.Infrastructure;
-using FluentEvents.Model;
-using FluentEvents.Pipelines;
+﻿using FluentEvents.Model;
 
 namespace FluentEvents.Config
 {
@@ -28,16 +25,5 @@ namespace FluentEvents.Config
             m_EventsContext = eventsContext;
         }
 
-        public EventPipelineConfigurator<TSource, TEventArgs> ForwardToPipeline()
-        {
-            var pipeline = new Pipeline(m_EventsContext.Get<IServiceProvider>());
-
-            m_SourceModelEventField.AddPipeline(pipeline);
-
-            return new EventPipelineConfigurator<TSource, TEventArgs>(
-                pipeline,
-                this
-            );
-        }
     }
 }

@@ -70,17 +70,17 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .ForwardToPipeline()
-                    .ThenEnqueueToDefaultQueue()
-                    .ThenFilter((sender, args) => args.Value == ValidValue)
-                    .ThenPublishToGlobalSubscriptions();
+                    .IsForwardedToPipeline()
+                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsFiltered((sender, args) => args.Value == ValidValue)
+                    .ThenIsPublishedToGlobalSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
-                    .ForwardToPipeline()
-                    .ThenEnqueueToDefaultQueue()
-                    .ThenFilter((sender, args) => args.Value == ValidValue)
-                    .ThenPublishToGlobalSubscriptions();
+                    .IsForwardedToPipeline()
+                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsFiltered((sender, args) => args.Value == ValidValue)
+                    .ThenIsPublishedToGlobalSubscriptions();
             }
         }
     }

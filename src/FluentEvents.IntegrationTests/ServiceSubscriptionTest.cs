@@ -43,15 +43,15 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .ForwardToPipeline()
-                    .ThenEnqueueToDefaultQueue()
-                    .ThenPublishToScopedSubscriptions();
+                    .IsForwardedToPipeline()
+                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsPublishedToScopedSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
-                    .ForwardToPipeline()
-                    .ThenEnqueueToDefaultQueue()
-                    .ThenPublishToScopedSubscriptions();
+                    .IsForwardedToPipeline()
+                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsPublishedToScopedSubscriptions();
             }
         }
     }

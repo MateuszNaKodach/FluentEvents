@@ -8,14 +8,14 @@ namespace FluentEvents.Queues
 {
     public static class EventPipelineConfiguratorExtensions
     {
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenEnqueueToDefaultQueue<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsEnqueuedToDefaultQueue<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )
             where TSource : class
             where TEventArgs : class
             => eventPipelineConfigurator.IsQueuedToInternal("Default");
         
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenEnqueueTo<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsEnqueuedTo<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             string queueName
         )
