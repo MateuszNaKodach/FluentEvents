@@ -39,6 +39,16 @@ public class SampleEventsContext : EventsContext
 }
 ```
 
+#### Attach your entity and raise the event (this can be done automatically if you have an ORM):
+```csharp
+var eventsScope = new EventsScope();
+var user = GetCurrentUser();
+
+m_EventsContext.Attach(user, eventsScope);
+
+user.AcceptAllFriendRequests();
+```
+
 #### Handle your event:
 ```csharp
 public class NotificationsService : IHostedService
