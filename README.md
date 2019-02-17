@@ -15,7 +15,7 @@ Events can also be transmitted transparently to all the instances of your applic
 2. You need to send a notification to the clients of a web application when a domain event is raiesd
 
 ### How do I get started?
-Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext.
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach the entities materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries
 In this example we are going to send an email when the "FriendRequestApproved" event is raised.
 
 #### Add the events context to your services:
@@ -23,6 +23,7 @@ In this example we are going to send an email when the "FriendRequestApproved" e
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddEventsContext<SampleEventsContext>();
+    services.AddDbContextWithEntityEventsAttachedTo<DemoDbContext, SampleEventsContext>();
 }
 ```
 
@@ -40,20 +41,20 @@ public class SampleEventsContext : EventsContext
 }
 ```
 
-#### Attach your entity and raise the event (attaching can be done automatically if you have an ORM):
+#### Raise the event (The entity is attached automatically to the EventsContext by the EntityFramework plugin):
 ```csharp
 public class ExampleService {
     
-    private EventsScope m_EventsScope;
+    private DemoDbContext m_DemoDbContext;
     
-    public ExampleService(EventsScope eventsScope) {
-        m_EventsScope = eventsScope;
+    public ExampleService(DemoDbContext demoDbContext) 
+    {
+        m_DemoDbContext = demoDbContext;
     }
 
-    public async Task AcceptAllFriendRequests(User user) {
-    
-        m_EventsContext.Attach(user, m_EventsScope);
-
+    public async Task AcceptAllFriendRequests(int userId) 
+    {
+        var user = await m_DemoDbContext.Users.FirstAsync(x => x.Id == userId);
         await user.AcceptAllFriendRequests();
     }
 }
