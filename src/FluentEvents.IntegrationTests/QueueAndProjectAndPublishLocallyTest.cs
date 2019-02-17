@@ -14,7 +14,7 @@ namespace FluentEvents.IntegrationTests
         public async Task EventShouldBeQueuedAndProjectedAndPublishedOnCommit()
         {
             ProjectedEventArgs projectedEventArgs = null;
-            Context.MakeGlobalSubscriptionTo<ProjectedTestEntity>(testEntity => testEntity.Test += (sender, args) => { projectedEventArgs = args; });
+            Context.MakeGlobalSubscriptionsTo<ProjectedTestEntity>(testEntity => testEntity.Test += (sender, args) => { projectedEventArgs = args; });
 
             Entity.RaiseEvent(TestValue);
 
@@ -28,7 +28,7 @@ namespace FluentEvents.IntegrationTests
         public async Task AsyncEventShouldBeQueuedAndProjectedAndPublishedOnCommit()
         {
             ProjectedEventArgs projectedEventArgs = null;
-            Context.MakeGlobalSubscriptionTo<ProjectedTestEntity>(testEntity => testEntity.AsyncTest += (sender, args) =>
+            Context.MakeGlobalSubscriptionsTo<ProjectedTestEntity>(testEntity => testEntity.AsyncTest += (sender, args) =>
             {
                 projectedEventArgs = args;
                 return Task.CompletedTask;

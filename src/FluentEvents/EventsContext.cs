@@ -150,20 +150,23 @@ namespace FluentEvents
             => Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
 
         /// <summary>
-        /// Makes a subscription in the global scope.
+        /// Creates one ore more subscriptions in the global scope.
         /// </summary>
-        /// <remarks>You can call <see cref="CancelGlobalSubscription"/> to stop receiving the events.</remarks>
+        /// <remarks>You can call <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.</remarks>
         /// <typeparam name="TSource">The type of the events source.</typeparam>
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
-        /// <returns>The subscription that should be passed to CancelGlobalSubscription() to stop receiving the events.</returns>
-        public Subscription MakeGlobalSubscriptionTo<TSource>(Action<TSource> subscriptionAction)
+        /// <returns>
+        /// The <see cref="ISubscriptionsCancellationToken"/> that should be passed to
+        /// <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.
+        /// </returns>
+        public ISubscriptionsCancellationToken MakeGlobalSubscriptionsTo<TSource>(Action<TSource> subscriptionAction)
             => Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
 
         /// <summary>
         /// Cancels a global subscription.
         /// </summary>
-        /// <param name="subscription">The subscription to cancel.</param>
-        public void CancelGlobalSubscription(Subscription subscription)
-            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
+        /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
+        public void CancelGlobalSubscriptions(ISubscriptionsCancellationToken subscriptionsCancellationToken)
+            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscriptionsCancellationToken);
     }
 }

@@ -33,7 +33,8 @@ namespace FluentEvents.Subscriptions
             );
         }
 
-        public void RemoveGlobalScopeSubscription(Subscription subscription) => m_GlobalScopeSubscriptions.TryRemove(subscription, out _);
+        public void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription) 
+            => m_GlobalScopeSubscriptions.TryRemove((Subscription)subscription, out _);
 
         public IEnumerable<Subscription> GetGlobalScopeSubscriptions()
         {

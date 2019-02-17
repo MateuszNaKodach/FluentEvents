@@ -8,7 +8,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Subscriptions
 {
-    public class Subscription
+    public class Subscription : ISubscriptionsCancellationToken
     {
         internal Type SourceType { get; }
         private readonly ConcurrentDictionary<string, Delegate> m_EventHandlers;

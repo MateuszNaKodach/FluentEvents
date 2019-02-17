@@ -184,7 +184,7 @@ namespace FluentEvents.UnitTests
                 .Returns(subscription)
                 .Verifiable();
 
-            var returnedSubscription = m_EventsContext.MakeGlobalSubscriptionTo(subscriptionAction);
+            var returnedSubscription = m_EventsContext.MakeGlobalSubscriptionsTo(subscriptionAction);
 
             Assert.That(returnedSubscription, Is.EqualTo(subscription));
         }
@@ -200,7 +200,7 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.RemoveGlobalScopeSubscription(subscription))
                 .Verifiable();
 
-            m_EventsContext.CancelGlobalSubscription(subscription);
+            m_EventsContext.CancelGlobalSubscriptions(subscription);
         }
         
         private void ConfigureEventsContext()

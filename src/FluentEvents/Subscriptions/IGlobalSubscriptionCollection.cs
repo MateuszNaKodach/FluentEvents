@@ -7,7 +7,7 @@ namespace FluentEvents.Subscriptions
     {
         Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction);
         void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction);
-        void RemoveGlobalScopeSubscription(Subscription subscription);
+        void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription);
         IEnumerable<Subscription> GetGlobalScopeSubscriptions();
     }
 }

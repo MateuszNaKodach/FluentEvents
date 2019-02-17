@@ -18,7 +18,7 @@ namespace FluentEvents.IntegrationTests
         public async Task EventShouldBeQueuedAndPublishedOnCommit([Values(ValidValue, InvalidValue)] string argsValue)
         {
             TestEventArgs testEventArgs = null;
-            Context.MakeGlobalSubscriptionTo<TestEntity>(
+            Context.MakeGlobalSubscriptionsTo<TestEntity>(
                 testEntity => testEntity.Test += (sender, args) => { testEventArgs = args; }
             );
 
@@ -41,7 +41,7 @@ namespace FluentEvents.IntegrationTests
         public async Task AsyncEventShouldBeQueuedAndPublishedOnCommit([Values(ValidValue, InvalidValue)] string argsValue)
         {
             TestEventArgs testEventArgs = null;
-            Context.MakeGlobalSubscriptionTo<TestEntity>(
+            Context.MakeGlobalSubscriptionsTo<TestEntity>(
                 testEntity => testEntity.AsyncTest += (sender, args) =>
                 {
                     testEventArgs = args;
