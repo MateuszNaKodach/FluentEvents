@@ -2,9 +2,6 @@
 
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) [![NuGet](https://img.shields.io/nuget/v/FluentEvents.svg)](https://www.nuget.org/packages/FluentEvents/)
 
-## Is FluentEvents ready to use?
-Not yet, it's still under active development but you are free to give suggestions or contribute :)
-
 ## What is FluentEvents?
 FluentEvents is an extensible framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs.
 
