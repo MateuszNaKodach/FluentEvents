@@ -14,17 +14,14 @@ Events can be transmitted transparently to all the instances using whatever prot
 2. You need to send a notification to the clients of the web application when a domain event is raiesd
 
 ### How do I get started?
-Here is an example that uses the Microsoft.DependencyInjection package to inject the EventsContext and SignalR to send a notification on an ASP.NET Core application
+Here is an example that uses the Microsoft.DependencyInjection package to inject the EventsContext.
+In this example we are going to send an email when the "FriendRequestApproved" event is raised.
 
 #### Add the events context to your services:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddEventsContext<SampleEventsContext>(options =>
-    {
-        options.AddAzureTopicReceiver(Configuration.GetSection("sampleEventsContext:azureTopicReceiver"));
-        options.AddAzureTopicSender(Configuration.GetSection("sampleEventsContext:azureTopicSender"));
-    });
+    services.AddEventsContext<SampleEventsContext>();
 }
 ```
 
@@ -35,10 +32,9 @@ public class SampleEventsContext : EventsContext
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
         pipelinesBuilder
-            .Event<User, UserExperienceGainedEventArgs>(nameof(User.ExperienceGained))
+            .Event<User, FriendRequestApprovedEventArgs>(nameof(User.FriendRequestApproved))
             .IsForwardedToPipeline()
-            .ThenIsFiltered((user, args) => user.Level < 200)
-            .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
+            .ThenIsPublishedToGlobalSubscriptions();
     }
 }
 ```
@@ -48,20 +44,20 @@ public class SampleEventsContext : EventsContext
 public class NotificationsService : IHostedService
 {
     private readonly SampleEventsContext m_EventsContext;
-    private readonly IHubContext<AppHub> m_HubContext;
+    private readonly IMailService m_MailService;
     private Subscription m_Subscription;
 
-    public NotificationsService(SampleEventsContext eventsContext, IHubContext<AppHub> hubContext)
+    public NotificationsService(SampleEventsContext eventsContext, IMailService mailService)
     {
         m_EventsContext = eventsContext;
-        m_HubContext = hubContext;
+        m_MailService = mailService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
         m_Subscription = m_EventsContext.MakeGlobalSubscriptionsTo<User>(user =>
         {
-            user.ExperienceGained += UserOnExperienceGained;
+            user.FriendRequestApproved += UserOnFriendRequestApproved;
         });
 
         return Task.CompletedTask;
@@ -73,16 +69,11 @@ public class NotificationsService : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task UserOnExperienceGained(object sender, UserExperienceGainedEventArgs e)
+    private async Task UserOnFriendRequestApproved(object sender, FriendRequestApprovedEventArgs e)
     {
         var user = (User)sender;
 
-        await m_HubContext.Clients.Group(user.Id.ToString()).SendAsync
-        (
-            "ShowExperienceGainedNotification",
-            user.Level,
-            e.GainedExperience
-        );
+        await m_MailService.SendFriendRequestApprovedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
 ```
