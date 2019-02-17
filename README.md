@@ -11,10 +11,6 @@ FluentEvents is an extensible framework that lets you persist and manage event s
 
 Events can also be transmitted transparently to all the instances of your application (using whatever protocol you like but at the moment only Azure Topics are supported). This is particularly useful when you want to send a push notification on a web application with multiple istances and/or background workers.
 
-### Example scenario where FluentEvents can be useful
-1. You have a common domain model shared between different web applications and/or workers
-2. You need to send a notification to the clients of a web application when a domain event is raiesd
-
 ### How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the EventsContext every entity materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries.
 
