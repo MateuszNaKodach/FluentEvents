@@ -56,6 +56,7 @@ public class ExampleService {
     public async Task AcceptAllFriendRequests(int userId) 
     {
         var user = await m_DemoDbContext.Users.FirstAsync(x => x.Id == userId);
+        
         await user.AcceptAllFriendRequests();
     }
 }
@@ -88,6 +89,7 @@ public class NotificationsService : IHostedService
     public Task StopAsync(CancellationToken cancellationToken)
     {
         m_EventsContext.CancelGlobalSubscription(m_Subscription);
+        
         return Task.CompletedTask;
     }
 
