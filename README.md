@@ -7,6 +7,7 @@ Not yet, it's still under active development but you are free to give suggestion
 
 ## What is FluentEvents?
 FluentEvents is an extensible framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs.
+
 Events can also be transmitted transparently to all the instances of your application (using whatever protocol you like but at the moment only Azure Topics are supported). This is particularly useful when you want to send a push notification on a web application with multiple istances and/or background workers.
 
 ### Example scenario where FluentEvents can be useful
@@ -39,14 +40,23 @@ public class SampleEventsContext : EventsContext
 }
 ```
 
-#### Attach your entity and raise the event (this can be done automatically if you have an ORM):
+#### Attach your entity and raise the event (attaching can be done automatically if you have an ORM):
 ```csharp
-var eventsScope = new EventsScope();
-var user = GetCurrentUser();
+public class ExampleService {
+    
+    private EventsScope m_EventsScope;
+    
+    public ExampleService(EventsScope eventsScope) {
+        m_EventsScope = eventsScope;
+    }
 
-m_EventsContext.Attach(user, eventsScope);
+    public async Task AcceptAllFriendRequests(User user) {
+    
+        m_EventsContext.Attach(user, m_EventsScope);
 
-user.AcceptAllFriendRequests();
+        await user.AcceptAllFriendRequests();
+    }
+}
 ```
 
 #### Handle your event:
