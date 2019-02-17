@@ -59,7 +59,7 @@ public class NotificationsService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_Subscription = m_EventsContext.MakeGlobalSubscriptionTo<User>(user =>
+        m_Subscription = m_EventsContext.MakeGlobalSubscriptionsTo<User>(user =>
         {
             user.ExperienceGained += UserOnExperienceGained;
         });
