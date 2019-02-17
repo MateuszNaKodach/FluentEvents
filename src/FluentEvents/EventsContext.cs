@@ -151,6 +151,13 @@ namespace FluentEvents
 
         /// <summary>
         /// Creates one ore more subscriptions in the global scope.
+        /// This method can be used like this:
+        /// eventsContext.MakeGlobalSubscriptionsTo&lt;ExampleEntity&gt;(exampleEntity =&gt;
+        ///     {
+        ///         exampleEntity.ExampleEvent1 += ExampleEventHandlerMethod1;
+        ///         exampleEntity.ExampleEvent2 += ExampleEventHandlerMethod2;
+        ///     }
+        /// );
         /// </summary>
         /// <remarks>You can call <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.</remarks>
         /// <typeparam name="TSource">The type of the events source.</typeparam>
