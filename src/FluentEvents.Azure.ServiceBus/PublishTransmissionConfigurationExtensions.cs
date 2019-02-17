@@ -5,10 +5,10 @@ namespace FluentEvents.Azure.ServiceBus
     public static class PublishTransmissionConfigurationExtensions
     {
         public static IPublishTransmissionConfiguration WithAzureTopic(
-            this IGlobalPublishingOptionsFactory globalPublishingOptionsFactory
+            this IConfigureTransmission configureTransmission
         )
         {
-            return globalPublishingOptionsFactory.With<TopicEventSender>();
+            return configureTransmission.With<TopicEventSender>();
         }
     }
 }

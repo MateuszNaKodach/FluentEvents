@@ -38,12 +38,12 @@ namespace FluentEvents.Pipelines.Publication
         /// <remarks>This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/></remarks>
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToGlobalSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator, 
-            Func<GlobalPublishingOptionsFactory, IPublishTransmissionConfiguration> configurePublishTransmission
+            Func<ConfigureTransmission, IPublishTransmissionConfiguration> configurePublishTransmission
         )
             where TSource : class
             where TEventArgs : class
         {
-            var globalPublishingOptionsFactory = new GlobalPublishingOptionsFactory();
+            var globalPublishingOptionsFactory = new ConfigureTransmission();
             var senderTypeConfiguration = configurePublishTransmission(globalPublishingOptionsFactory);
             var moduleConfig = new GlobalPublishPipelineModuleConfig
             {

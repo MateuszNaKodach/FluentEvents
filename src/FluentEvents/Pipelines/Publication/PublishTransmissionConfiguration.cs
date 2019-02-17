@@ -2,12 +2,12 @@
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public class GlobalPublishingOptions : IPublishTransmissionConfiguration
+    public class PublishTransmissionConfiguration : IPublishTransmissionConfiguration
     {
         private readonly Type m_SenderType;
         Type IPublishTransmissionConfiguration.SenderType => m_SenderType;
 
-        internal GlobalPublishingOptions(Type senderType)
+        internal PublishTransmissionConfiguration(Type senderType)
         {
             m_SenderType = senderType;
         }
