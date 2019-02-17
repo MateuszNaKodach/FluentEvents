@@ -15,7 +15,7 @@ Events can also be transmitted transparently to all the instances of your applic
 2. You need to send a notification to the clients of a web application when a domain event is raiesd
 
 ### How do I get started?
-Here is an example that uses the Microsoft.DependencyInjection package to inject the EventsContext.
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext.
 In this example we are going to send an email when the "FriendRequestApproved" event is raised.
 
 #### Add the events context to your services:
