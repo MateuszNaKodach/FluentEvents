@@ -168,7 +168,7 @@ namespace FluentEvents
         /// The <see cref="ISubscriptionsCancellationToken"/> that should be passed to
         /// <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.
         /// </returns>
-        public ISubscriptionsCancellationToken MakeGlobalSubscriptionsTo<TSource>(Action<TSource> subscriptionAction)
+        public ISubscriptionsCancellationToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
             => Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
 
         /// <summary>

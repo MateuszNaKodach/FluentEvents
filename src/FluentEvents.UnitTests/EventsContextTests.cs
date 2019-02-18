@@ -184,7 +184,7 @@ namespace FluentEvents.UnitTests
                 .Returns(subscription)
                 .Verifiable();
 
-            var returnedSubscription = m_EventsContext.MakeGlobalSubscriptionsTo(subscriptionAction);
+            var returnedSubscription = m_EventsContext.SubscribeGloballyTo(subscriptionAction);
 
             Assert.That(returnedSubscription, Is.EqualTo(subscription));
         }
