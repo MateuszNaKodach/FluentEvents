@@ -75,7 +75,7 @@ public class NotificationsService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_SubscriptionsCancellationToken = m_EventsContext.MakeGlobalSubscriptionsTo<User>(user =>
+        m_SubscriptionsCancellationToken = m_EventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestApproved += UserOnFriendRequestApproved;
         });
