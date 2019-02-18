@@ -39,7 +39,7 @@ namespace FluentEvents
 
         /// <summary>
         /// This constructor can be used when the <see cref="EventsContext" /> is configured with
-        /// the <see cref="IServiceCollection" /> extension method.
+        /// the <see cref="ServiceCollectionExtensions.AddEventsContext{T}(IServiceCollection, Action{EventsContextOptions})" /> extension method.
         /// </summary>
         protected EventsContext()
             : this(new EventsContextOptions())
@@ -151,16 +151,17 @@ namespace FluentEvents
 
         /// <summary>
         /// Creates one ore more subscriptions in the global scope.
-        /// This method can be used like this:
-        /// <code>
-        /// eventsContext.MakeGlobalSubscriptionsTo&lt;ExampleEntity&gt;(exampleEntity =&gt;
-        ///     {
-        ///         exampleEntity.ExampleEvent1 += ExampleEventHandlerMethod1;
-        ///         exampleEntity.ExampleEvent2 += ExampleEventHandlerMethod2;
-        ///     }
-        /// );
-        /// </code>
         /// </summary>
+        /// <example>
+        ///     <code>
+        ///         eventsContext.MakeGlobalSubscriptionsTo&lt;ExampleEntity&gt;(exampleEntity =&gt;
+        ///             {
+        ///                 exampleEntity.ExampleEvent1 += ExampleEventHandlerMethod1;
+        ///                 exampleEntity.ExampleEvent2 += ExampleEventHandlerMethod2;
+        ///             }
+        ///         );
+        ///     </code>
+        /// </example>
         /// <remarks>You can call <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.</remarks>
         /// <typeparam name="TSource">The type of the events source.</typeparam>
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
