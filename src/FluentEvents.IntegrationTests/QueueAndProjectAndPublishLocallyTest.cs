@@ -2,6 +2,7 @@
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Projections;
+using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;
 using NUnit.Framework;
 
@@ -49,7 +50,7 @@ namespace FluentEvents.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsProjected(x => new ProjectedTestEntity
                     {
                         Id = x.Id
@@ -62,7 +63,7 @@ namespace FluentEvents.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsProjected(x => new ProjectedTestEntity
                     {
                         Id = x.Id

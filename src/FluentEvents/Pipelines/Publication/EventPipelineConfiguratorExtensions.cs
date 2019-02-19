@@ -6,12 +6,14 @@ namespace FluentEvents.Pipelines.Publication
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>
-        /// Publishes the event to all the subscriptions in scope locally.
+        ///     Adds a module to the current pipeline that publishes the event to all the subscriptions in scope locally.
         /// </summary>
         /// <typeparam name="TSource">The type that publishes the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
-        /// <param name="eventPipelineConfigurator">The configuration object for the specified event.</param>
-        /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator"></param>.</returns>
+        /// <param name="eventPipelineConfigurator">
+        ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
+        /// </param>
+        /// <returns>The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.</returns>
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToScopedSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )
@@ -27,15 +29,19 @@ namespace FluentEvents.Pipelines.Publication
         }
 
         /// <summary>
-        /// Publishes the event to all the global subscriptions using a transmission method
-        /// configurable with the <param name="configurePublishTransmission" /> parameter.
+        ///     Adds a module to the current pipeline that publishes the event to all the global subscriptions using a transmission method
+        ///     configurable with the <param name="configurePublishTransmission" /> parameter.
         /// </summary>
+        /// <remarks>
+        ///     This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/>
+        /// </remarks>
         /// <typeparam name="TSource">The type that publishes the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
-        /// <param name="eventPipelineConfigurator">The configuration object for the specified event.</param>
+        /// <param name="eventPipelineConfigurator">
+        ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
+        /// </param>
         /// <param name="configurePublishTransmission">A delegate for configuring how the event is transmitted.</param>
-        /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator" />.</returns>
-        /// <remarks>This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/></remarks>
+        /// <returns>The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.</returns>
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToGlobalSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator, 
             Func<ConfigureTransmission, IPublishTransmissionConfiguration> configurePublishTransmission
@@ -58,12 +64,14 @@ namespace FluentEvents.Pipelines.Publication
         }
 
         /// <summary>
-        /// Publishes the event to all the global subscriptions locally.
+        ///     Adds a module to the current pipeline that publishes the event to all the global subscriptions locally.
         /// </summary>
         /// <typeparam name="TSource">The type that publishes the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
-        /// <param name="eventPipelineConfigurator">The configuration object for the specified event.</param>
-        /// <returns>The configuration object supplied in <param name="eventPipelineConfigurator" />.</returns>
+        /// <param name="eventPipelineConfigurator">
+        ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
+        /// </param>
+        /// <returns>The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.</returns>
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToGlobalSubscriptions<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )

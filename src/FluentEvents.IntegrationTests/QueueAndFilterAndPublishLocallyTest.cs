@@ -3,6 +3,7 @@ using FluentEvents.Config;
 using FluentEvents.Pipelines.Filters;
 using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;
 using NUnit.Framework;
 
@@ -71,14 +72,14 @@ namespace FluentEvents.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsFiltered((sender, args) => args.Value == ValidValue)
                     .ThenIsPublishedToGlobalSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsFiltered((sender, args) => args.Value == ValidValue)
                     .ThenIsPublishedToGlobalSubscriptions();
             }

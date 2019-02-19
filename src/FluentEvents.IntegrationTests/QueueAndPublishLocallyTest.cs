@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;
 using NUnit.Framework;
 
@@ -50,13 +51,13 @@ namespace FluentEvents.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsPublishedToGlobalSubscriptions();
 
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.AsyncTest))
                     .IsForwardedToPipeline()
-                    .ThenIsEnqueuedToDefaultQueue()
+                    .ThenIsQueuedToDefaultQueue()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }
