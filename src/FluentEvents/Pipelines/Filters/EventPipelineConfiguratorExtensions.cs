@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines.Filters
 {
@@ -28,7 +29,7 @@ namespace FluentEvents.Pipelines.Filters
             where TSource : class 
             where TEventArgs : class
         {
-            ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
+            eventPipelineConfigurator.Get<Pipeline>()
                 .AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
                     new FilterPipelineModuleConfig((sender, args) => filter((TSource) sender, (TEventArgs) args))
                 );

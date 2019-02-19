@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines.Publication
 {
@@ -20,7 +21,8 @@ namespace FluentEvents.Pipelines.Publication
             where TSource : class
             where TEventArgs : class
         {
-            ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
+            eventPipelineConfigurator
+                .Get<Pipeline>()
                 .AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
                     new ScopedPublishPipelineModuleConfig()
                 );
@@ -56,10 +58,12 @@ namespace FluentEvents.Pipelines.Publication
                 SenderType = senderTypeConfiguration.SenderType
             };
 
-            ((IEventPipelineConfigurator) eventPipelineConfigurator).Pipeline
+            eventPipelineConfigurator
+                .Get<Pipeline>()
                 .AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                     moduleConfig
                 );
+
             return eventPipelineConfigurator;
         }
 

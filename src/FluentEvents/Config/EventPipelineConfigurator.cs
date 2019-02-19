@@ -1,16 +1,21 @@
-﻿using FluentEvents.Model;
+﻿using FluentEvents.Infrastructure;
+using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Config
 {
-    public class EventPipelineConfigurator<TSource, TEventArgs> : IEventPipelineConfigurator 
+    public class EventPipelineConfigurator<TSource, TEventArgs>
+        : IInfrastructure<SourceModel>,
+            IInfrastructure<SourceModelEventField>,
+            IInfrastructure<EventsContext>,
+            IInfrastructure<Pipeline>
         where TSource : class
         where TEventArgs : class
     {
-        SourceModel IEventPipelineConfigurator.SourceModel => m_SourceModel;
-        SourceModelEventField IEventPipelineConfigurator.SourceModelEventField => m_SourceModelEventField;
-        EventsContext IEventPipelineConfigurator.EventsContext => m_EventsContext;
-        Pipeline IEventPipelineConfigurator.Pipeline => m_Pipeline;
+        SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
+        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
+        EventsContext IInfrastructure<EventsContext>.Instance => m_EventsContext;
+        Pipeline IInfrastructure<Pipeline>.Instance => m_Pipeline;
 
         private readonly SourceModel m_SourceModel;
         private readonly SourceModelEventField m_SourceModelEventField;
@@ -19,25 +24,26 @@ namespace FluentEvents.Config
 
         public EventPipelineConfigurator(
             Pipeline pipeline,
-            IEventConfigurator eventConfigurator
+            EventConfigurator<TSource, TEventArgs> eventConfigurator
         )
         {
-            m_SourceModel = eventConfigurator.SourceModel;
-            m_SourceModelEventField = eventConfigurator.SourceModelEventField;
-            m_EventsContext = eventConfigurator.EventsContext;
+            m_SourceModel = eventConfigurator.Get<SourceModel>();
+            m_SourceModelEventField = eventConfigurator.Get<SourceModelEventField>();
+            m_EventsContext = eventConfigurator.Get<EventsContext>();
             m_Pipeline = pipeline;
         }
-        
+
         public EventPipelineConfigurator(
             SourceModel sourceModel,
             SourceModelEventField sourceModelEventField,
-            IEventPipelineConfigurator eventPipelineConfigurator
+            EventsContext eventsContext,
+            Pipeline pipeline
         )
         {
             m_SourceModel = sourceModel;
             m_SourceModelEventField = sourceModelEventField;
-            m_EventsContext = eventPipelineConfigurator.EventsContext;
-            m_Pipeline = eventPipelineConfigurator.Pipeline;
+            m_EventsContext = eventsContext;
+            m_Pipeline = pipeline;
         }
     }
 }

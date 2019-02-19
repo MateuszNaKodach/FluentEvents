@@ -41,8 +41,7 @@ namespace FluentEvents.Pipelines.Projections
             where TToSource : class
             where TToEventArgs : class
         {
-            var configurator = (IEventPipelineConfigurator) eventPipelineConfigurator;
-            var serviceProvider = configurator.EventsContext.Get<IServiceProvider>();
+            var serviceProvider = eventPipelineConfigurator.Get<EventsContext>().Get<IServiceProvider>();
             var sourceModelsService = serviceProvider.GetRequiredService<ISourceModelsService>();
 
             var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(
@@ -50,7 +49,7 @@ namespace FluentEvents.Pipelines.Projections
             );
 
             var projectedEventField = projectedSourceModel.GetOrCreateEventField(
-                configurator.SourceModelEventField.Name
+                eventPipelineConfigurator.Get<SourceModelEventField>().Name
             );
 
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
@@ -58,14 +57,17 @@ namespace FluentEvents.Pipelines.Projections
                 new EventArgsProjection<TEventArgs, TToEventArgs>(eventArgsConverter)
             );
 
-            configurator.Pipeline.AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
-                projectionPipelineModuleConfig
-            );
+            eventPipelineConfigurator
+                .Get<Pipeline>()
+                .AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
+                    projectionPipelineModuleConfig
+                );
 
             return new EventPipelineConfigurator<TToSource, TToEventArgs>(
                 projectedSourceModel,
                 projectedEventField,
-                configurator
+                eventPipelineConfigurator.Get<EventsContext>(),
+                eventPipelineConfigurator.Get<Pipeline>()
             );
         }
     }

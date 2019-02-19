@@ -1,14 +1,18 @@
-﻿using FluentEvents.Model;
+﻿using FluentEvents.Infrastructure;
+using FluentEvents.Model;
 
 namespace FluentEvents.Config
 {
-    public class EventConfigurator<TSource, TEventArgs> : IEventConfigurator
+    public class EventConfigurator<TSource, TEventArgs> 
+        : IInfrastructure<SourceModel>,
+            IInfrastructure<SourceModelEventField>,
+            IInfrastructure<EventsContext>
         where TSource : class 
         where TEventArgs : class 
     {
-        SourceModel IEventConfigurator.SourceModel => m_SourceModel;
-        SourceModelEventField IEventConfigurator.SourceModelEventField => m_SourceModelEventField;
-        EventsContext IEventConfigurator.EventsContext => m_EventsContext;
+        SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
+        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
+        EventsContext IInfrastructure<EventsContext>.Instance => m_EventsContext;
 
         private readonly SourceModel m_SourceModel;
         private readonly SourceModelEventField m_SourceModelEventField;
@@ -24,6 +28,5 @@ namespace FluentEvents.Config
             m_SourceModelEventField = sourceModelEventField;
             m_EventsContext = eventsContext;
         }
-
     }
 }

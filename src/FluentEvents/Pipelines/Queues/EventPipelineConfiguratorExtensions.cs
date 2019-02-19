@@ -59,22 +59,22 @@ namespace FluentEvents.Pipelines.Queues
             where TSource : class
             where TEventArgs : class
         {
-            var configurator = (IEventPipelineConfigurator) eventPipelineConfigurator;
-
             if (queueName != null)
             {
-                var eventsQueueNamesService = configurator.EventsContext.Get<IServiceProvider>()
+                var eventsQueueNamesService = eventPipelineConfigurator.Get<EventsContext>().Get<IServiceProvider>()
                     .GetRequiredService<IEventsQueueNamesService>();
 
                 eventsQueueNamesService.RegisterQueueNameIfNotExists(queueName);
             }
 
-            configurator.Pipeline.AddModule<EnqueuePipelineModule, EnqueuePipelineModuleConfig>(
-                new EnqueuePipelineModuleConfig
-                {
-                    QueueName = queueName
-                }
-            );
+            eventPipelineConfigurator
+                .Get<Pipeline>()
+                .AddModule<EnqueuePipelineModule, EnqueuePipelineModuleConfig>(
+                    new EnqueuePipelineModuleConfig
+                    {
+                        QueueName = queueName
+                    }
+                );
 
             return eventPipelineConfigurator;
         }

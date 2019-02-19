@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Infrastructure;
+using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Config
@@ -22,15 +23,13 @@ namespace FluentEvents.Config
             where TSource : class
             where TEventArgs : class
         {
-            var configurator = (IEventConfigurator) eventConfigurator;
+            var pipeline = new Pipeline(eventConfigurator.Get<EventsContext>().Get<IServiceProvider>());
 
-            var pipeline = new Pipeline(configurator.EventsContext.Get<IServiceProvider>());
-
-            configurator.SourceModelEventField.AddPipeline(pipeline);
+            eventConfigurator.Get<SourceModelEventField>().AddPipeline(pipeline);
 
             return new EventPipelineConfigurator<TSource, TEventArgs>(
                 pipeline,
-                configurator
+                eventConfigurator
             );
         }
     }
