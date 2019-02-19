@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentEvents.Queues;
 
 namespace FluentEvents.Pipelines.Queues
 {
-    public class EnqueuePipelineModule : IPipelineModule<EnqueuePipelineModuleConfig>
+    internal class EnqueuePipelineModule : IPipelineModule<EnqueuePipelineModuleConfig>
     {
         private readonly IEventsQueuesService m_EventsQueuesService;
 

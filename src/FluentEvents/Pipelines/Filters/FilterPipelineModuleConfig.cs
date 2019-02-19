@@ -2,11 +2,11 @@
 
 namespace FluentEvents.Pipelines.Filters
 {
-    public class FilterPipelineModuleConfig
+    internal class FilterPipelineModuleConfig
     {
-        public Func<object, object, bool> IsMatching { get; }
+        internal Func<object, object, bool> IsMatching { get; }
 
-        public FilterPipelineModuleConfig(Func<object, object, bool> isMatching)
+        internal FilterPipelineModuleConfig(Func<object, object, bool> isMatching)
         {
             IsMatching = isMatching;
         }

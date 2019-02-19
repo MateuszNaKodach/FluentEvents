@@ -4,8 +4,16 @@ using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions
 {
+    /// <summary>
+    ///     This API supports the FluentEvents infrastructure and is not intended to be used
+    ///     directly from your code. This API may change or be removed in future releases.
+    /// </summary>
     public interface ISubscriptionScanService
     {
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         IEnumerable<SubscribedHandler> GetSubscribedHandlers(SourceModel sourceModel, Action<object> subscriptionAction);
     }
 }

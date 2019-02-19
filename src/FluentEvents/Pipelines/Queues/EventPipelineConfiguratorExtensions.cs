@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Pipelines.Queues
 {
+    /// <summary>
+    ///     Extension methods for adding a pipeline module that queues the events.
+    /// </summary>
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>

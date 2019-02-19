@@ -7,7 +7,7 @@ using FluentEvents.Transmission;
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public class GlobalPublishPipelineModule : IPipelineModule<GlobalPublishPipelineModuleConfig>
+    internal class GlobalPublishPipelineModule : IPipelineModule<GlobalPublishPipelineModuleConfig>
     {
         private readonly IPublishingService m_PublishingService;
         private readonly Dictionary<Type, IEventSender> m_EventSenders;

@@ -9,6 +9,10 @@
     <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Luca\Source\Repos\luca-esse\FluentEvents\src\FluentEvents\FluentEvents.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="AsyncEvent" Version="0.2.0" />

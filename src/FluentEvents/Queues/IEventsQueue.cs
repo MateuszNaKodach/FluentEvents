@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Queues
 {
-    public interface IEventsQueue
+    internal interface IEventsQueue
     {
         void DiscardQueuedEvents();
         void Enqueue(QueuedPipelineEvent pipelineEvent);

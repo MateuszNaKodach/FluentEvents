@@ -4,6 +4,9 @@ using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines.Filters
 {
+    /// <summary>
+    ///     Extension methods for adding an events filter to a pipeline.
+    /// </summary>
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>

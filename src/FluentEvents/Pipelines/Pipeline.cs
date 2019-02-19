@@ -7,6 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Pipelines
 {
+    /// <summary>
+    ///     This API supports the FluentEvents infrastructure and is not intended to be used
+    ///     directly from your code. This API may change or be removed in future releases.
+    /// </summary>
     public class Pipeline : IPipeline
     {
         private readonly IServiceProvider m_InternalServiceProvider;
@@ -20,6 +24,12 @@ namespace FluentEvents.Pipelines
             m_NextModule = null;
         }
 
+        /// <summary>
+        ///     Adds a module with the associated configuration to the pipeline.
+        /// </summary>
+        /// <typeparam name="TModule">The type of the module.</typeparam>
+        /// <typeparam name="TConfig">The type of the module configuration.</typeparam>
+        /// <param name="moduleConfig">An instance of the module configuration</param>
         public void AddModule<TModule, TConfig>(TConfig moduleConfig) where TModule : IPipelineModule<TConfig>
         {
             if (moduleConfig == null)
@@ -28,6 +38,7 @@ namespace FluentEvents.Pipelines
             m_ModuleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
         }
 
+        /// <inheritdoc />
         public async Task ProcessEventAsync(
             PipelineEvent pipelineEvent,
             EventsScope eventsScope

@@ -4,6 +4,9 @@ using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines.Publication
 {
+    /// <summary>
+    ///     Extension methods for adding a publishing module to the pipeline.
+    /// </summary>
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace FluentEvents.Pipelines.Publication
 
         /// <summary>
         ///     Adds a module to the current pipeline that publishes the event to all the global subscriptions using a transmission method
-        ///     configurable with the <param name="configurePublishTransmission" /> parameter.
+        ///     configurable with the configurePublishTransmission parameter.
         /// </summary>
         /// <remarks>
         ///     This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/>

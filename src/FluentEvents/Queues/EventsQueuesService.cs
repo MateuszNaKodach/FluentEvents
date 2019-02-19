@@ -4,7 +4,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Queues
 {
-    public class EventsQueuesService : IEventsQueuesService
+    internal class EventsQueuesService : IEventsQueuesService
     {
         private readonly EventsQueuesContext m_EventsQueuesContext;
         private readonly IEventsQueueNamesService m_EventsQueueNamesService;

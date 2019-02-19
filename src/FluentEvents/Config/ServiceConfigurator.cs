@@ -3,12 +3,15 @@ using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Config
 {
+    /// <summary>
+    ///     Provides a simple API surface for configuring a service.
+    /// </summary>
     public class ServiceConfigurator<TService> where TService : class 
     {
         private readonly IScopedSubscriptionsService m_ScopedSubscriptionsService;
         private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
 
-        public ServiceConfigurator(
+        internal ServiceConfigurator(
             IScopedSubscriptionsService scopedSubscriptionsService,
             IGlobalSubscriptionCollection globalSubscriptionCollection
         )

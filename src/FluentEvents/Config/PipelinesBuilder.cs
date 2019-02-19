@@ -1,14 +1,19 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 using FluentEvents.Model;
-using FluentEvents.Pipelines;
 
 namespace FluentEvents.Config
 {
+    /// <summary>
+    ///     Provides a simple API surface to select an event and configure it fluently.
+    /// </summary>
     public class PipelinesBuilder : BuilderBase
     {
         private readonly ISourceModelsService m_SourceModelsService;
 
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public PipelinesBuilder(
             EventsContext eventsContext,
             IServiceProvider serviceProvider,
@@ -20,9 +25,9 @@ namespace FluentEvents.Config
         }
 
         /// <summary>
-        /// Registers an entity and an event as part of the model and returns an object that can be used to
-        /// configure how the event is handled. This method can be called multiple times for the same event to
-        /// configure multiple pipelines.
+        ///     Registers an entity and an event as part of the model and returns an object that can be used to
+        ///     configure how the event is handled. This method can be called multiple times for the same event to
+        ///     configure multiple pipelines.
         /// </summary>
         /// <typeparam name="TSource">The type of the event source.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event args.</typeparam>

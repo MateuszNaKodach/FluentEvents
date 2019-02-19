@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace FluentEvents.Subscriptions
 {
+    /// <inheritdoc />
     public class GlobalSubscriptionCollection : IGlobalSubscriptionCollection
     {
         private readonly ConcurrentDictionary<Subscription, bool> m_GlobalScopeSubscriptions;
@@ -11,6 +12,10 @@ namespace FluentEvents.Subscriptions
         private readonly ISubscriptionsFactory m_SubscriptionsFactory;
         private readonly IServiceProvider m_ServiceProvider;
 
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IServiceProvider serviceProvider)
         {
             m_GlobalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
@@ -18,7 +23,8 @@ namespace FluentEvents.Subscriptions
             m_SubscriptionsFactory = subscriptionsFactory;
             m_ServiceProvider = serviceProvider;
         }
-        
+
+        /// <inheritdoc />
         public Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction)
         {
             var subscription = m_SubscriptionsFactory.CreateSubscription(subscriptionAction);
@@ -26,6 +32,7 @@ namespace FluentEvents.Subscriptions
             return subscription;
         }
 
+        /// <inheritdoc />
         public void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
         {
             m_SubscriptionCreationTasks.Enqueue(
@@ -33,9 +40,11 @@ namespace FluentEvents.Subscriptions
             );
         }
 
+        /// <inheritdoc />
         public void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription) 
             => m_GlobalScopeSubscriptions.TryRemove((Subscription)subscription, out _);
 
+        /// <inheritdoc />
         public IEnumerable<Subscription> GetGlobalScopeSubscriptions()
         {
             while (m_SubscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))

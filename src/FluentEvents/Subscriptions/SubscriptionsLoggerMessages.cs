@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Subscriptions
 {
-    public static class SubscriptionsLoggerMessages
+    internal static class SubscriptionsLoggerMessages
     {
         private static readonly Action<ILogger, Exception> m_EventHandlerThrew = LoggerMessage.Define(
             LogLevel.Error,
@@ -13,7 +13,7 @@ namespace FluentEvents.Subscriptions
             "An event handler threw an exception"
         );
 
-        public static void EventHandlerThrew(this ILogger logger, Exception exception)
+        internal static void EventHandlerThrew(this ILogger logger, Exception exception)
             => m_EventHandlerThrew(logger, exception);
 
         private static readonly Action<ILogger, string, string, Exception> m_PublishingEvent = LoggerMessage.Define<string, string>(
@@ -22,7 +22,7 @@ namespace FluentEvents.Subscriptions
             "Publishing event fired from {eventSenderTypeName}.{eventSenderFieldName}"
         );
 
-        public static void PublishingEvent(this ILogger logger, PipelineEvent pipelineEvent)
+        internal static void PublishingEvent(this ILogger logger, PipelineEvent pipelineEvent)
             => m_PublishingEvent(
                 logger,
                 pipelineEvent.OriginalSender.GetType().Name,
@@ -30,7 +30,7 @@ namespace FluentEvents.Subscriptions
                 null
             );
 
-        public sealed class EventIds
+        internal sealed class EventIds
         {
             public static EventId EventHandlerThrew { get; } = new EventId(1, nameof(EventHandlerThrew));
             public static EventId PublishingEvent { get; } = new EventId(2, nameof(PublishingEvent));

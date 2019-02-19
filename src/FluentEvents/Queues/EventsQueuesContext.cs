@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Queues
 {
-    public class EventsQueuesContext
+    internal class EventsQueuesContext
     {
         public Guid Guid { get; } = Guid.NewGuid();
     }

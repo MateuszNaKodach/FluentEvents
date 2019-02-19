@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace FluentEvents.Queues
 {
-    public class EventsQueue : IEventsQueue
+    internal class EventsQueue : IEventsQueue
     {
         public string Name { get; }
         private readonly ConcurrentQueue<QueuedPipelineEvent> m_QueuedPipelineEvents;
 
-        public EventsQueue(string name)
+        internal EventsQueue(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             m_QueuedPipelineEvents = new ConcurrentQueue<QueuedPipelineEvent>();

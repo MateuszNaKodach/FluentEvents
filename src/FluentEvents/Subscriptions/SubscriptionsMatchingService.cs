@@ -4,8 +4,10 @@ using FluentEvents.Utils;
 
 namespace FluentEvents.Subscriptions
 {
+    /// <inheritdoc />
     public class SubscriptionsMatchingService : ISubscriptionsMatchingService
     {
+        /// <inheritdoc />
         public IEnumerable<Subscription> GetMatchingSubscriptionsForSender(
             IEnumerable<Subscription> subscriptions,
             object sender

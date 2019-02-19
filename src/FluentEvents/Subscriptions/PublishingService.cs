@@ -6,12 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Subscriptions
 {
+    /// <inheritdoc />
     public class PublishingService : IPublishingService
     {
         private readonly ILogger<PublishingService> m_Logger;
         private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
         private readonly ISubscriptionsMatchingService m_SubscriptionsMatchingService;
 
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public PublishingService(
             ILogger<PublishingService> logger,
             IGlobalSubscriptionCollection globalSubscriptionCollection,
@@ -23,6 +28,7 @@ namespace FluentEvents.Subscriptions
             m_SubscriptionsMatchingService = subscriptionsMatchingService;
         }
 
+        /// <inheritdoc />
         public async Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
@@ -30,6 +36,7 @@ namespace FluentEvents.Subscriptions
             await PublishInternalAsync(pipelineEvent, eventsScope.GetSubscriptions());
         }
 
+        /// <inheritdoc />
         public async Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
             => await PublishInternalAsync(pipelineEvent, m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions());
 

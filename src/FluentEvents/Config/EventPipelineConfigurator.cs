@@ -4,6 +4,9 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Config
 {
+    /// <summary>
+    ///     Provides a simple API surface for configuring an event pipeline.
+    /// </summary>
     public class EventPipelineConfigurator<TSource, TEventArgs>
         : IInfrastructure<SourceModel>,
             IInfrastructure<SourceModelEventField>,
@@ -22,6 +25,11 @@ namespace FluentEvents.Config
         private readonly EventsContext m_EventsContext;
         private readonly Pipeline m_Pipeline;
 
+        /// <summary>
+        ///     Creates an instance by taking dependencies from an <see cref="EventConfigurator{TSource,TEventArgs}"/>
+        /// </summary>
+        /// <param name="pipeline">The pipeline to configure.</param>
+        /// <param name="eventConfigurator">The event configurator.</param>
         public EventPipelineConfigurator(
             Pipeline pipeline,
             EventConfigurator<TSource, TEventArgs> eventConfigurator
@@ -33,6 +41,13 @@ namespace FluentEvents.Config
             m_Pipeline = pipeline;
         }
 
+        /// <summary>
+        ///     Allows to create an instance without passing an <see cref="EventConfigurator{TSource,TEventArgs}"/>
+        /// </summary>
+        /// <param name="sourceModel">The source model.</param>
+        /// <param name="sourceModelEventField">The source model event field.</param>
+        /// <param name="eventsContext">The events context.</param>
+        /// <param name="pipeline">The pipeline to configure.</param>
         public EventPipelineConfigurator(
             SourceModel sourceModel,
             SourceModelEventField sourceModelEventField,

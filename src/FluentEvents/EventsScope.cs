@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
+    /// <summary>
+    /// The EventsScope represents the scope where entities are attached and the events are handled or queued.
+    /// An EventsScope should be treated as scoped and should be short-lived.
+    /// </summary>
     public class EventsScope
     {
         private readonly IServiceProvider m_ServiceProvider;
@@ -30,6 +34,8 @@ namespace FluentEvents
             EventsQueues = eventsQueues;
         }
 
+        /// <param name="eventsContexts">A list of the <see cref="EventsContext"/>s in the current scope.</param>
+        /// <param name="serviceProvider">The application service provider.</param>
         public EventsScope(
             IEnumerable<EventsContext> eventsContexts,
             IServiceProvider serviceProvider

@@ -3,7 +3,7 @@ using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public class ScopedPublishPipelineModule : IPipelineModule<ScopedPublishPipelineModuleConfig>
+    internal class ScopedPublishPipelineModule : IPipelineModule<ScopedPublishPipelineModuleConfig>
     {
         private readonly IPublishingService m_PublishingService;
 

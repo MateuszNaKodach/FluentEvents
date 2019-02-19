@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace FluentEvents
 {
+    /// <summary>
+    ///     Extension methods for configuring an <see cref="EventsContext"/> with Dependency Injection.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>

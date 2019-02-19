@@ -5,15 +5,21 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Routing
 {
+    /// <inheritdoc />
     public class ForwardingService : IForwardingService
     {
         private readonly IRoutingService m_RoutingService;
 
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public ForwardingService(IRoutingService routingService)
         {
             m_RoutingService = routingService;
         }
 
+        /// <inheritdoc />
         public void ForwardEventsToRouting(SourceModel sourceModel, object source, EventsScope eventsScope)
         {
             if (!sourceModel.ClrType.IsInstanceOfType(source))

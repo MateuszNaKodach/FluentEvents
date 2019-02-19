@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Queues
 {
-    public interface IEventsQueueCollection : IEnumerable<IEventsQueue>
+    internal interface IEventsQueueCollection : IEnumerable<IEventsQueue>
     {
         IEventsQueue GetOrAddEventsQueue(EventsQueuesContext eventsQueuesContext, string queueName);
     }

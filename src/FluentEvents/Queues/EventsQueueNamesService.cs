@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FluentEvents.Queues
 {
-    public class EventsQueueNamesService : IEventsQueueNamesService
+    internal class EventsQueueNamesService : IEventsQueueNamesService
     {
         private readonly IList<string> m_QueueNames;
 

@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Pipelines.Filters
 {
-    public class FilterPipelineModule : IPipelineModule<FilterPipelineModuleConfig>
+    internal class FilterPipelineModule : IPipelineModule<FilterPipelineModuleConfig>
     {
         public async Task InvokeAsync(
             FilterPipelineModuleConfig config,

@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Pipelines.Projections
 {
-    public class ProjectionPipelineModule : IPipelineModule<ProjectionPipelineModuleConfig>
+    internal class ProjectionPipelineModule : IPipelineModule<ProjectionPipelineModuleConfig>
     {
         public async Task InvokeAsync(
             ProjectionPipelineModuleConfig config,

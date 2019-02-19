@@ -1,14 +1,14 @@
 ﻿namespace FluentEvents.Pipelines.Projections
 {
-    public class ProjectionPipelineModuleConfig
+    internal class ProjectionPipelineModuleConfig
     {
-        public ProjectionPipelineModuleConfig(IEventsSenderProjection eventsSenderProjection, IEventArgsProjection eventArgsProjection)
+        internal ProjectionPipelineModuleConfig(IEventsSenderProjection eventsSenderProjection, IEventArgsProjection eventArgsProjection)
         {
             EventsSenderProjection = eventsSenderProjection;
             EventArgsProjection = eventArgsProjection;
         }
 
-        public IEventsSenderProjection EventsSenderProjection { get; }
-        public IEventArgsProjection EventArgsProjection { get; }
+        internal IEventsSenderProjection EventsSenderProjection { get; }
+        internal IEventArgsProjection EventArgsProjection { get; }
     }
 }

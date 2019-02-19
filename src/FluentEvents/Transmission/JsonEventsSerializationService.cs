@@ -5,10 +5,15 @@ using Newtonsoft.Json.Serialization;
 
 namespace FluentEvents.Transmission
 {
+    /// <inheritdoc />
     public class JsonEventsSerializationService : IEventsSerializationService
     {
         private readonly JsonSerializerSettings m_SerializerSettings;
 
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public JsonEventsSerializationService()
         {
             m_SerializerSettings = new JsonSerializerSettings
@@ -20,15 +25,17 @@ namespace FluentEvents.Transmission
             };
         }
 
+        /// <inheritdoc />
         public string SerializeEvent(PipelineEvent pipelineEvent)
         {
             var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, m_SerializerSettings);
             return data;
         }
 
-        public PipelineEvent DeserializeEvent(string jsonEventData)
+        /// <inheritdoc />
+        public PipelineEvent DeserializeEvent(string eventData)
         {
-            return (PipelineEvent) JsonConvert.DeserializeObject(jsonEventData, m_SerializerSettings);
+            return (PipelineEvent) JsonConvert.DeserializeObject(eventData, m_SerializerSettings);
         }
 
         private class CustomResolver : DefaultContractResolver

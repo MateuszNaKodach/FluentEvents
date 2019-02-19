@@ -4,7 +4,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Queues
 {
-    public interface IEventsQueuesService
+    internal interface IEventsQueuesService
     {
         Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName);
         void DiscardQueuedEvents(EventsScope eventsScope, string queueName);

@@ -2,8 +2,8 @@
 
 namespace FluentEvents.Pipelines.Publication
 {
-    public class GlobalPublishPipelineModuleConfig
+    internal class GlobalPublishPipelineModuleConfig
     {
-        public Type SenderType { get; set; }
+        internal Type SenderType { get; set; }
     }
 }

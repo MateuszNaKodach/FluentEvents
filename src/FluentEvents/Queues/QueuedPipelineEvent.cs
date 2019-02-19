@@ -4,7 +4,7 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Queues
 {
-    public class QueuedPipelineEvent
+    internal class QueuedPipelineEvent
     {
         public Func<Task> InvokeNextModule { get; set; }
         public PipelineEvent PipelineEvent { get; set; }

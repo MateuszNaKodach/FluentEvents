@@ -5,19 +5,33 @@ using System.Linq.Expressions;
 
 namespace FluentEvents.Model
 {
+    /// <summary>
+    ///     Represents an event source.
+    /// </summary>
     public class SourceModel
     {
+        /// <summary>
+        ///     The type of the event source.
+        /// </summary>
         public Type ClrType { get; }
+
+        /// <summary>
+        ///     The list of the event fields present on the <see cref="ClrType"/> and created on this model.
+        /// </summary>
         public IEnumerable<SourceModelEventField> EventFields => m_EventFields;
 
         private readonly IList<SourceModelEventField> m_EventFields;
 
-        public SourceModel(Type clrType)
+        internal SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             m_EventFields = new List<SourceModelEventField>();
         }
-        
+
+        /// <summary>
+        ///     Gets or creates an event field if present on the <see cref="ClrType"/>.
+        /// </summary>
+        /// <param name="name">The name of the event field.</param>
         public SourceModelEventField GetOrCreateEventField(string name)
         {
             var eventField = m_EventFields.FirstOrDefault(x => x.Name == name);
@@ -34,6 +48,10 @@ namespace FluentEvents.Model
             return eventField;
         }
 
+        /// <summary>
+        ///     Gets an event field previously created with <see cref="GetOrCreateEventField"/>
+        /// </summary>
+        /// <param name="name">The name of the event field.</param>
         public SourceModelEventField GetEventField(string name)
             => m_EventFields.FirstOrDefault(x => x.Name == name);
 

@@ -5,6 +5,9 @@ using FluentEvents.Pipelines;
 
 namespace FluentEvents.Config
 {
+    /// <summary>
+    ///     Provides a simple API surface for configuring an event.
+    /// </summary>
     public class EventConfigurator<TSource, TEventArgs> 
         : IInfrastructure<SourceModel>,
             IInfrastructure<SourceModelEventField>,
@@ -20,7 +23,7 @@ namespace FluentEvents.Config
         private readonly SourceModelEventField m_SourceModelEventField;
         private readonly EventsContext m_EventsContext;
 
-        public EventConfigurator(
+        internal EventConfigurator(
             SourceModel sourceModel,
             SourceModelEventField sourceModelEventField,
             EventsContext eventsContext

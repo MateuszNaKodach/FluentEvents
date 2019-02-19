@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Pipelines.Projections
 {
+    /// <summary>
+    ///     Extension methods for adding a projection to a pipeline.
+    /// </summary>
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>

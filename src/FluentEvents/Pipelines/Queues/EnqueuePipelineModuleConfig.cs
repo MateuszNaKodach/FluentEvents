@@ -1,7 +1,7 @@
 ﻿namespace FluentEvents.Pipelines.Queues
 {
-    public class EnqueuePipelineModuleConfig
+    internal class EnqueuePipelineModuleConfig
     {
-        public string QueueName { get; set; }
+        internal string QueueName { get; set; }
     }
 }

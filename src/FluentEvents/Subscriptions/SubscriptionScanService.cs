@@ -6,6 +6,7 @@ using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions
 {
+    /// <inheritdoc />
     public class SubscriptionScanService : ISubscriptionScanService
     {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
@@ -14,6 +15,7 @@ namespace FluentEvents.Subscriptions
         private static Type CreateClassProxyType(Type type)
             => ProxyBuilder.CreateClassProxyType(type, Type.EmptyTypes, ProxyGenerationOptions);
 
+        /// <inheritdoc />
         public IEnumerable<SubscribedHandler> GetSubscribedHandlers(SourceModel sourceModel, Action<object> subscriptionAction)
         {
             var type = sourceModel.ClrType;
