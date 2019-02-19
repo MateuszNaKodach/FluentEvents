@@ -24,12 +24,12 @@ namespace FluentEvents.Queues
                 if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
+                var eventsQueue = eventsScope.EventsQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
                 await ProcessQueue(eventsScope, eventsQueue);
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.EventQueues)
+                foreach (var eventsQueue in eventsScope.EventsQueues)
                     await ProcessQueue(eventsScope, eventsQueue);
             }
         }
@@ -52,12 +52,12 @@ namespace FluentEvents.Queues
                 if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
+                var eventsQueue = eventsScope.EventsQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
                 eventsQueue.DiscardQueuedEvents();
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.EventQueues)
+                foreach (var eventsQueue in eventsScope.EventsQueues)
                     eventsQueue.DiscardQueuedEvents();
             }
         }
@@ -71,7 +71,7 @@ namespace FluentEvents.Queues
             if (!m_EventsQueueNamesService.IsQueueNameExisting(queueName))
                 throw new EventsQueueNotFoundException();
 
-            var queue = eventsScope.EventQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
+            var queue = eventsScope.EventsQueues.GetOrAddEventsQueue(m_EventsQueuesContext, queueName);
 
             queue.Enqueue(new QueuedPipelineEvent
             {

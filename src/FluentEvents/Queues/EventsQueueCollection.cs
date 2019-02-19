@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace FluentEvents.Queues
 {
-    public class EventQueueCollection : IEventQueueCollection
+    public class EventsQueueCollection : IEventsQueueCollection
     {
         private readonly ConcurrentDictionary<(EventsQueuesContext, string), IEventsQueue> m_EventsQueues;
 
-        public EventQueueCollection()
+        public EventsQueueCollection()
         {
             m_EventsQueues = new ConcurrentDictionary<(EventsQueuesContext, string), IEventsQueue>();
         }
