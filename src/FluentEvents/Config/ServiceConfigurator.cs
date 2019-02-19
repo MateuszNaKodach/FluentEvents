@@ -3,12 +3,12 @@ using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Config
 {
-    public class ServiceSubscriptionsConfiguration<TService> where TService : class 
+    public class ServiceConfigurator<TService> where TService : class 
     {
         private readonly IScopedSubscriptionsService m_ScopedSubscriptionsService;
         private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
 
-        public ServiceSubscriptionsConfiguration(
+        public ServiceConfigurator(
             IScopedSubscriptionsService scopedSubscriptionsService,
             IGlobalSubscriptionCollection globalSubscriptionCollection
         )
@@ -25,7 +25,7 @@ namespace FluentEvents.Config
         /// The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        public ServiceSubscriptionsConfiguration<TService> HasScopedSubscription<TSource>(
+        public ServiceConfigurator<TService> HasScopedSubscription<TSource>(
             Action<TService, TSource> subscriptionCallback
         )
             where TSource : class
@@ -42,7 +42,7 @@ namespace FluentEvents.Config
         /// The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        public ServiceSubscriptionsConfiguration<TService> HasGlobalSubscription<TSource>(
+        public ServiceConfigurator<TService> HasGlobalSubscription<TSource>(
             Action<TService, TSource> subscriptionCallback
         )
             where TSource : class

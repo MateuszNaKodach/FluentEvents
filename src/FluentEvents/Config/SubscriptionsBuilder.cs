@@ -26,10 +26,10 @@ namespace FluentEvents.Config
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <returns>The configuration object for the specified service.</returns>
-        public ServiceSubscriptionsConfiguration<TService> Service<TService>()
+        public ServiceConfigurator<TService> Service<TService>()
             where TService : class
         {
-            return new ServiceSubscriptionsConfiguration<TService>(
+            return new ServiceConfigurator<TService>(
                 m_ScopedSubscriptionsService,
                 m_GlobalSubscriptionCollection
             );
