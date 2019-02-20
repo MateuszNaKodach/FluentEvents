@@ -2,7 +2,10 @@
 {
     internal class ProjectionPipelineModuleConfig
     {
-        internal ProjectionPipelineModuleConfig(IEventsSenderProjection eventsSenderProjection, IEventArgsProjection eventArgsProjection)
+        internal ProjectionPipelineModuleConfig(
+            IEventsSenderProjection eventsSenderProjection,
+            IEventArgsProjection eventArgsProjection
+        )
         {
             EventsSenderProjection = eventsSenderProjection;
             EventArgsProjection = eventArgsProjection;

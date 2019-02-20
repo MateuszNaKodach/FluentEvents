@@ -18,7 +18,7 @@ namespace FluentEvents
         /// <param name="services">The <see cref="IServiceCollection"/> to register with.</param>
         /// <param name="optionsBuilder">
         ///     <para>
-        ///         An optional action to configure the <see cref="EventsContextOptions" /> for the context. This provides an
+        ///         An action to configure the <see cref="EventsContextOptions" /> for the context. This provides an
         ///         alternative to performing configuration of the context by overriding the
         ///         <see cref="EventsContext.OnConfiguring" /> method in your derived context.
         ///     </para>

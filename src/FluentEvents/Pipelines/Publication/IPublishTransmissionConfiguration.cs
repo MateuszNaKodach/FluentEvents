@@ -8,7 +8,7 @@ namespace FluentEvents.Pipelines.Publication
     public interface IPublishTransmissionConfiguration
     {
         /// <summary>
-        /// The type of the event sender.
+        ///     The type of the event sender.
         /// </summary>
         Type SenderType { get; }
     }
