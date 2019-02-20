@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace FluentEvents.Azure.ServiceBus
 {
@@ -11,6 +10,5 @@ namespace FluentEvents.Azure.ServiceBus
         TimeSpan SubscriptionsAutoDeleteOnIdleTimeout { get; }
         int MaxConcurrentMessages { get; }
         Func<string> SubscriptionNameGenerator { get; }
-        Encoding Encoding { get; }
     }
 }

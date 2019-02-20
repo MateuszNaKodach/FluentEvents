@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using FluentEvents.Pipelines;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,16 +27,17 @@ namespace FluentEvents.Transmission
         }
 
         /// <inheritdoc />
-        public string SerializeEvent(PipelineEvent pipelineEvent)
+        public byte[] SerializeEvent(PipelineEvent pipelineEvent)
         {
             var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, m_SerializerSettings);
-            return data;
+            return Encoding.UTF8.GetBytes(data);
         }
 
         /// <inheritdoc />
-        public PipelineEvent DeserializeEvent(string eventData)
+        public PipelineEvent DeserializeEvent(byte[] eventData)
         {
-            return (PipelineEvent) JsonConvert.DeserializeObject(eventData, m_SerializerSettings);
+            var stringData = Encoding.UTF8.GetString(eventData);
+            return (PipelineEvent) JsonConvert.DeserializeObject(stringData, m_SerializerSettings);
         }
 
         private class CustomResolver : DefaultContractResolver

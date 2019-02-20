@@ -11,6 +11,5 @@ namespace FluentEvents.Azure.ServiceBus
         public TimeSpan SubscriptionsAutoDeleteOnIdleTimeout { get; set; } = TimeSpan.FromMinutes(10);
         public int MaxConcurrentMessages { get; set; } = 1;
         public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
-        public Encoding Encoding { get; set; } = Encoding.UTF8;
     }
 }

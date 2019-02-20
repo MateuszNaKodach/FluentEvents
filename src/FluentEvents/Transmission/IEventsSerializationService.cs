@@ -12,13 +12,13 @@ namespace FluentEvents.Transmission
         /// </summary>
         /// <param name="pipelineEvent">The event to serialize.</param>
         /// <returns>The event serialized.</returns>
-        string SerializeEvent(PipelineEvent pipelineEvent);
+        byte[] SerializeEvent(PipelineEvent pipelineEvent);
 
         /// <summary>
         ///     This method should deserialize an event.
         /// </summary>
         /// <param name="eventData">The event to deserialize.</param>
         /// <returns>The event deserialized.</returns>
-        PipelineEvent DeserializeEvent(string eventData);
+        PipelineEvent DeserializeEvent(byte[] eventData);
     }
 }

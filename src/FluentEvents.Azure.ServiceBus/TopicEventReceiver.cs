@@ -69,9 +69,7 @@ namespace FluentEvents.Azure.ServiceBus
         {
             try
             {
-                var stringMessageBody = m_Config.Encoding.GetString(message.Body);
-
-                var entityEvent = m_EventsSerializationService.DeserializeEvent(stringMessageBody);
+                var entityEvent = m_EventsSerializationService.DeserializeEvent(message.Body);
 
                 await m_PublishingService.PublishEventToGlobalSubscriptionsAsync(entityEvent);
             }
