@@ -5,7 +5,7 @@
     <LangVersion>7.3</LangVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/luca-esse/FluentEvents/blob/master/LICENSE</PackageLicenseUrl>
-    <Description>Azure ServiceBus plugin for FluentEvents event broadcasting</Description>
+    <Description>Azure ServiceBus plugin for FluentEvents event transmission</Description>
     <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
   </PropertyGroup>
 

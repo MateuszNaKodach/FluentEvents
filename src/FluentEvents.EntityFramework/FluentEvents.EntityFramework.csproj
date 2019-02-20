@@ -5,7 +5,7 @@
     <LangVersion>7.3</LangVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/luca-esse/FluentEvents/blob/master/LICENSE</PackageLicenseUrl>
-    <Description>Entity Framework 6 plugin for FluentEvents auto-attaching</Description>
+    <Description>Entity Framework 6 plugin for attaching the entities materialized from queries to a FluentEvents EventsContext automatically</Description>
     <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
   </PropertyGroup>
 
