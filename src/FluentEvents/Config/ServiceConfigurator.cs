@@ -21,11 +21,11 @@ namespace FluentEvents.Config
         }
 
         /// <summary>
-        /// Subscribes a service to scoped events the first time a matching event is published. 
+        ///     Subscribes a service to scoped events the first time a matching event is published. 
         /// </summary>
         /// <typeparam name="TSource">The type of the event source.</typeparam>
         /// <param name="subscriptionCallback">
-        /// The method that will be called to make the subscriptions to the source's events.
+        ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceConfigurator<TService> HasScopedSubscription<TSource>(
@@ -38,11 +38,11 @@ namespace FluentEvents.Config
         }
 
         /// <summary>
-        /// Subscribes a service to global events when the EventsContext is initialized. 
+        ///     Subscribes a service to global events when the EventsContext is initialized. 
         /// </summary>
         /// <typeparam name="TSource">The type of the event source.</typeparam>
         /// <param name="subscriptionCallback">
-        /// The method that will be called to make the subscriptions to the source's events.
+        ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceConfigurator<TService> HasGlobalSubscription<TSource>(

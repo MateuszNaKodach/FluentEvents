@@ -12,7 +12,7 @@ namespace FluentEvents
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Registers the given <see cref="EventsContext"/> as a service in the <see cref="IServiceCollection" />.
+        ///     Registers the given <see cref="EventsContext"/> as a service in the <see cref="IServiceCollection" />.
         /// </summary>
         /// <typeparam name="T">The type of context to be registered.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to register with.</param>
@@ -53,8 +53,9 @@ namespace FluentEvents
         }
 
         /// <summary>
-        /// This method adds multiple services to a <see cref="IServiceCollection"/> and makes sure that they are attached
-        /// to the <see cref="EventsContext"/> when they are requested from the <see cref="IServiceProvider"/>.
+        ///     This method adds multiple services to a <see cref="IServiceCollection"/> and makes sure that
+        ///     they are attached to the <see cref="EventsContext"/> when they are requested from
+        ///     the <see cref="IServiceProvider"/>.
         /// </summary>
         /// <example>
         ///     <code>
