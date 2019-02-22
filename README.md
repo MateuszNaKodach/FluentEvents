@@ -15,7 +15,7 @@ Events transmission is particularly useful when you want to send a push notifica
 ### How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the EventsContext every entity materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries.
 
-In this example, we are going to send an email when the "FriendRequestApproved" event is raised.
+In this example, we are going to send an email when the "FriendRequestApproved" event is published.
 
 #### Add the events context to your services:
 ```csharp
