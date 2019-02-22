@@ -15,7 +15,7 @@ Events transmission is particularly useful when you want to send a push notifica
 ### How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the EventsContext every entity materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries.
 
-In this example, we are going to send an email when the "FriendRequestApproved" event is published.
+In this example, we are going to send an email when the "FriendRequestAccepted" event is published.
 
 #### Add the events context to your services:
 ```csharp
@@ -33,7 +33,7 @@ public class SampleEventsContext : EventsContext
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
         pipelinesBuilder
-            .Event<User, FriendRequestApprovedEventArgs>(nameof(User.FriendRequestApproved))
+            .Event<User, FriendRequestAcceptedEventArgs>(nameof(User.FriendRequestAccepted))
             .IsForwardedToPipeline()
             .ThenIsPublishedToGlobalSubscriptions();
     }
@@ -78,7 +78,7 @@ public class NotificationsService : IHostedService
     {
         m_SubscriptionsCancellationToken = m_EventsContext.SubscribeGloballyTo<User>(user =>
         {
-            user.FriendRequestApproved += UserOnFriendRequestApproved;
+            user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
 
         return Task.CompletedTask;
@@ -91,11 +91,11 @@ public class NotificationsService : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task UserOnFriendRequestApproved(object sender, FriendRequestApprovedEventArgs e)
+    private async Task UserOnFriendRequestAccepted(object sender, FriendRequestAcceptedEventArgs e)
     {
         var user = (User)sender;
 
-        await m_MailService.SendFriendRequestApprovedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
+        await m_MailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
 ```
