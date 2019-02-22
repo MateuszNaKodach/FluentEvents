@@ -42,8 +42,8 @@ public class SampleEventsContext : EventsContext
 
 #### Raise the event (The entity is attached automatically to the EventsContext by the EntityFramework plugin):
 ```csharp
-public class ExampleService {
-    
+public class ExampleService 
+{    
     private DemoDbContext m_DemoDbContext;
     
     public ExampleService(DemoDbContext demoDbContext) 
