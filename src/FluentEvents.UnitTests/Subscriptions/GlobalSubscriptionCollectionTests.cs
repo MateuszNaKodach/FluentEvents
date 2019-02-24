@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class GlobalSubscriptionCollectionTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
+        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
         private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
 
         private GlobalSubscriptionCollection m_GlobalSubscriptionCollection;
@@ -17,11 +18,11 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void SetUp()
         {
             m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
 
             m_GlobalSubscriptionCollection = new GlobalSubscriptionCollection(
                 m_SubscriptionsFactoryMock.Object,
-                m_ServiceProviderMock.Object
+                m_AppServiceProviderMock.Object
             );
         }
 
@@ -29,7 +30,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void TearDown()
         {
             m_SubscriptionsFactoryMock.Verify();
-            m_ServiceProviderMock.Verify();
+            m_AppServiceProviderMock.Verify();
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription<TestService, object>((x, y) => {});
             SetUpSubscriptionsFactory(false);
 
-            m_ServiceProviderMock
+            m_AppServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(new TestService())
                 .Verifiable();

@@ -1,9 +1,10 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Subscriptions
 {
     internal interface ISubscriptionCreationTask
     {
-        Subscription CreateSubscription(IServiceProvider serviceProvider);
+        Subscription CreateSubscription(IAppServiceProvider serviceProvider);
     }
 }

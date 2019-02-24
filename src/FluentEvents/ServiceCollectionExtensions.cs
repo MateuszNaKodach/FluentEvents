@@ -42,7 +42,7 @@ namespace FluentEvents
             services.AddSingleton(x =>
             {
                 var context = ActivatorUtilities.CreateInstance<T>(x);
-                context.Configure(options, new InternalServiceCollection(x));
+                context.Configure(options, new InternalServiceCollection(new AppServiceProvider(x)));
                 return context;
             });
 

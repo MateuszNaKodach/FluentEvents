@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class ScopedSubscriptionsServiceTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
+        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
         private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
 
         private ScopedSubscriptionsService m_ScopedSubscriptionsService;
@@ -16,7 +17,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
             m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
 
             m_ScopedSubscriptionsService = new ScopedSubscriptionsService(m_SubscriptionsFactoryMock.Object);
@@ -26,7 +27,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void TearDown()
         {
             m_SubscriptionsFactoryMock.Verify();
-            m_ServiceProviderMock.Verify();
+            m_AppServiceProviderMock.Verify();
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                 subscribedService2 = service;
             });
 
-            var subscriptions = m_ScopedSubscriptionsService.SubscribeServices(m_ServiceProviderMock.Object);
+            var subscriptions = m_ScopedSubscriptionsService.SubscribeServices(m_AppServiceProviderMock.Object);
 
             Assert.That(subscriptions, Has.Exactly(2).Items);
             Assert.That(subscribedService1, Is.EqualTo(service1));
@@ -71,7 +72,7 @@ namespace FluentEvents.UnitTests.Subscriptions
 
         private T SetUpServiceProviderService<T>(T service)
         {
-            m_ServiceProviderMock
+            m_AppServiceProviderMock
                 .Setup(x => x.GetService(typeof(T)))
                 .Returns(service)
                 .Verifiable();

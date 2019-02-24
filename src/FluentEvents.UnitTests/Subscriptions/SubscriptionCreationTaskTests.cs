@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionCreationTaskTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
+        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
         private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
         private Subscription m_Subscription;
 
@@ -17,7 +18,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
             m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
             m_Subscription = new Subscription(typeof(object));
 
@@ -30,14 +31,14 @@ namespace FluentEvents.UnitTests.Subscriptions
         [TearDown]
         public void TearDown()
         {
-            m_ServiceProviderMock.Verify();
+            m_AppServiceProviderMock.Verify();
             m_SubscriptionsFactoryMock.Verify();
         }
 
         [Test]
         public void CreateSubscription_ShouldGetServiceAndCreateSubscription()
         {
-            m_ServiceProviderMock
+            m_AppServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(new TestService())
                 .Verifiable();
@@ -47,7 +48,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Returns(m_Subscription)
                 .Verifiable();
 
-            var subscription = m_SubscriptionCreationTask.CreateSubscription(m_ServiceProviderMock.Object);
+            var subscription = m_SubscriptionCreationTask.CreateSubscription(m_AppServiceProviderMock.Object);
 
             Assert.That(subscription, Is.Not.Null);
         }

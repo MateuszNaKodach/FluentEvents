@@ -60,7 +60,7 @@ namespace FluentEvents
             m_Options = options ?? throw new ArgumentNullException(nameof(options));
 
             var emptyAppServiceProvider = new ServiceCollection().BuildServiceProvider();
-            m_InternalServices = new InternalServiceCollection(emptyAppServiceProvider);
+            m_InternalServices = new InternalServiceCollection(new AppServiceProvider(emptyAppServiceProvider));
         }
 
         internal void Configure(

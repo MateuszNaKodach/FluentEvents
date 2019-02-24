@@ -262,7 +262,7 @@
         </member>
         <member name="M:FluentEvents.EventsScope.#ctor(System.Collections.Generic.IEnumerable{FluentEvents.EventsContext},System.IServiceProvider)">
             <param name="eventsContexts">A list of the <see cref="T:FluentEvents.EventsContext"/>s in the current scope.</param>
-            <param name="serviceProvider">The application service provider.</param>
+            <param name="appServiceProvider">The application service provider.</param>
         </member>
         <member name="T:FluentEvents.Infrastructure.IInfrastructure`1">
             <summary>
@@ -799,7 +799,7 @@
         <member name="T:FluentEvents.Subscriptions.GlobalSubscriptionCollection">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.#ctor(FluentEvents.Subscriptions.ISubscriptionsFactory,System.IServiceProvider)">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.#ctor(FluentEvents.Subscriptions.ISubscriptionsFactory,FluentEvents.Infrastructure.IAppServiceProvider)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -879,7 +879,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(System.IServiceProvider)">
+        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(FluentEvents.Infrastructure.IAppServiceProvider)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

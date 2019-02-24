@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
@@ -15,7 +16,7 @@ namespace FluentEvents.Subscriptions
             m_SubscriptionsFactory = subscriptionsFactory;
         }
 
-        public virtual Subscription CreateSubscription(IServiceProvider serviceProvider)
+        public virtual Subscription CreateSubscription(IAppServiceProvider serviceProvider)
         {
             var service = (TService) serviceProvider.GetRequiredService(typeof(TService));
             return m_SubscriptionsFactory.CreateSubscription<TSource>(x => m_SubscriptionAction(service, x));

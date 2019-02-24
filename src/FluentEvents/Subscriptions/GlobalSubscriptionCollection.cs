@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Subscriptions
 {
@@ -10,18 +11,18 @@ namespace FluentEvents.Subscriptions
         private readonly ConcurrentDictionary<Subscription, bool> m_GlobalScopeSubscriptions;
         private readonly ConcurrentQueue<ISubscriptionCreationTask> m_SubscriptionCreationTasks;
         private readonly ISubscriptionsFactory m_SubscriptionsFactory;
-        private readonly IServiceProvider m_ServiceProvider;
+        private readonly IAppServiceProvider m_AppServiceProvider;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IServiceProvider serviceProvider)
+        public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IAppServiceProvider appServiceProvider)
         {
             m_GlobalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
             m_SubscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
             m_SubscriptionsFactory = subscriptionsFactory;
-            m_ServiceProvider = serviceProvider;
+            m_AppServiceProvider = appServiceProvider;
         }
 
         /// <inheritdoc />
@@ -48,7 +49,7 @@ namespace FluentEvents.Subscriptions
         public IEnumerable<Subscription> GetGlobalScopeSubscriptions()
         {
             while (m_SubscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
-                m_GlobalScopeSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(m_ServiceProvider), true);
+                m_GlobalScopeSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(m_AppServiceProvider), true);
 
             return m_GlobalScopeSubscriptions.Keys;
         }

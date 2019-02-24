@@ -14,7 +14,7 @@ namespace FluentEvents
     /// </summary>
     public class EventsScope
     {
-        private readonly IServiceProvider m_ServiceProvider;
+        private readonly IAppServiceProvider m_AppServiceProvider;
         private readonly IEnumerable<EventsContext> m_EventsContexts;
 
         private readonly object m_SyncSubscriptions = new object();
@@ -28,22 +28,22 @@ namespace FluentEvents
 
         internal EventsScope(
             IEnumerable<EventsContext> eventsContexts,
-            IServiceProvider serviceProvider,
+            IServiceProvider appServiceProvider,
             IEventsQueueCollection eventsQueues
-        ) : this(eventsContexts, serviceProvider)
+        ) : this(eventsContexts, appServiceProvider)
         {
             EventsQueues = eventsQueues;
         }
 
         /// <param name="eventsContexts">A list of the <see cref="EventsContext"/>s in the current scope.</param>
-        /// <param name="serviceProvider">The application service provider.</param>
+        /// <param name="appServiceProvider">The application service provider.</param>
         public EventsScope(
             IEnumerable<EventsContext> eventsContexts,
-            IServiceProvider serviceProvider
+            IServiceProvider appServiceProvider
         ) 
         {
             m_EventsContexts = eventsContexts;
-            m_ServiceProvider = serviceProvider;
+            m_AppServiceProvider = new AppServiceProvider(appServiceProvider);
             EventsQueues = new EventsQueueCollection();
         }
 
@@ -61,7 +61,7 @@ namespace FluentEvents
                             .GetRequiredService<IScopedSubscriptionsService>();
 
                         subscriptions.AddRange(
-                            scopedSubscriptionsService.SubscribeServices(m_ServiceProvider)
+                            scopedSubscriptionsService.SubscribeServices(m_AppServiceProvider)
                         );
                     }
 

@@ -19,9 +19,9 @@ namespace FluentEvents.Infrastructure
 {
     internal class InternalServiceCollection : IInternalServiceCollection
     {
-        private readonly IServiceProvider m_AppServiceProvider;
+        private readonly IAppServiceProvider m_AppServiceProvider;
 
-        public InternalServiceCollection(IServiceProvider appServiceProvider)
+        public InternalServiceCollection(IAppServiceProvider appServiceProvider)
         {
             m_AppServiceProvider = appServiceProvider;
         }
@@ -40,6 +40,7 @@ namespace FluentEvents.Infrastructure
                 ServiceLifetime.Singleton
             ));
 
+            services.AddSingleton(m_AppServiceProvider);
             services.AddSingleton(eventsContext);
             services.AddSingleton<EventsQueuesContext>();
             services.AddSingleton<PipelinesBuilder>();
