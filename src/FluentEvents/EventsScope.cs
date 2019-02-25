@@ -14,7 +14,7 @@ namespace FluentEvents
     /// </summary>
     public class EventsScope
     {
-        private readonly IAppServiceProvider m_AppServiceProvider;
+        private readonly IAppServiceProvider m_ScopedAppServiceProvider;
         private readonly IEnumerable<EventsContext> m_EventsContexts;
 
         private readonly object m_SyncSubscriptions = new object();
@@ -28,22 +28,22 @@ namespace FluentEvents
 
         internal EventsScope(
             IEnumerable<EventsContext> eventsContexts,
-            IServiceProvider appServiceProvider,
+            IServiceProvider scopedAppServiceProvider,
             IEventsQueueCollection eventsQueues
-        ) : this(eventsContexts, appServiceProvider)
+        ) : this(eventsContexts, scopedAppServiceProvider)
         {
             EventsQueues = eventsQueues;
         }
 
         /// <param name="eventsContexts">A list of the <see cref="EventsContext"/>s in the current scope.</param>
-        /// <param name="appServiceProvider">The application service provider.</param>
+        /// <param name="scopedAppServiceProvider">The application service provider.</param>
         public EventsScope(
             IEnumerable<EventsContext> eventsContexts,
-            IServiceProvider appServiceProvider
+            IServiceProvider scopedAppServiceProvider
         ) 
         {
             m_EventsContexts = eventsContexts;
-            m_AppServiceProvider = new AppServiceProvider(appServiceProvider);
+            m_ScopedAppServiceProvider = new AppServiceProvider(scopedAppServiceProvider);
             EventsQueues = new EventsQueueCollection();
         }
 
@@ -61,7 +61,7 @@ namespace FluentEvents
                             .GetRequiredService<IScopedSubscriptionsService>();
 
                         subscriptions.AddRange(
-                            scopedSubscriptionsService.SubscribeServices(m_AppServiceProvider)
+                            scopedSubscriptionsService.SubscribeServices(m_ScopedAppServiceProvider)
                         );
                     }
 

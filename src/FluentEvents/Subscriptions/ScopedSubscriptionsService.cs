@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using FluentEvents.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
 {
@@ -29,10 +30,10 @@ namespace FluentEvents.Subscriptions
             m_ScopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
-        public IEnumerable<Subscription> SubscribeServices(IAppServiceProvider appServiceProvider)
+        public IEnumerable<Subscription> SubscribeServices(IAppServiceProvider scopedAppServiceProvider)
         {
             return m_ScopedSubscriptionCreationTasks.Keys
-                .Select(subscriptionCreationTask => subscriptionCreationTask.CreateSubscription(appServiceProvider))
+                .Select(subscriptionCreationTask => subscriptionCreationTask.CreateSubscription(scopedAppServiceProvider))
                 .ToList();
         }
     }
