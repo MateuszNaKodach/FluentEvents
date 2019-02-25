@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Queues;
 using Moq;
@@ -12,7 +13,7 @@ namespace FluentEvents.UnitTests.Queues
     public class EventsQueuesServiceTests
     {
         private Mock<IEventsQueueCollection> m_EventQueueCollectionMock;
-        private Mock<IServiceProvider> m_ServiceProviderMock;
+        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
         private Mock<EventsContext> m_EventsContextMock;
         private Mock<IPipeline> m_PipelineMock;
         private Mock<IEventsQueueNamesService> m_EventsQueueNamesServiceMock;
@@ -28,14 +29,14 @@ namespace FluentEvents.UnitTests.Queues
         public void SetUp()
         {
             m_EventQueueCollectionMock = new Mock<IEventsQueueCollection>(MockBehavior.Strict);
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
             m_EventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
             m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             m_EventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
             m_EventsQueuesContext = new EventsQueuesContext();
             m_EventsScope = new EventsScope(
                 new[] {m_EventsContextMock.Object},
-                m_ServiceProviderMock.Object,
+                m_AppServiceProviderMock.Object,
                 m_EventQueueCollectionMock.Object
             );
 
@@ -48,7 +49,7 @@ namespace FluentEvents.UnitTests.Queues
         public void TearDown()
         {
             m_EventQueueCollectionMock.Verify();
-            m_ServiceProviderMock.Verify();
+            m_AppServiceProviderMock.Verify();
             m_EventsContextMock.Verify();
             m_PipelineMock.Verify();
             m_EventsContextMock.Verify();

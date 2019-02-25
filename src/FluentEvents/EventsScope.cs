@@ -28,10 +28,12 @@ namespace FluentEvents
 
         internal EventsScope(
             IEnumerable<EventsContext> eventsContexts,
-            IServiceProvider scopedAppServiceProvider,
+            IAppServiceProvider scopedAppServiceProvider,
             IEventsQueueCollection eventsQueues
-        ) : this(eventsContexts, scopedAppServiceProvider)
+        ) 
         {
+            m_EventsContexts = eventsContexts;
+            m_ScopedAppServiceProvider = scopedAppServiceProvider;
             EventsQueues = eventsQueues;
         }
 
@@ -40,11 +42,8 @@ namespace FluentEvents
         public EventsScope(
             IEnumerable<EventsContext> eventsContexts,
             IServiceProvider scopedAppServiceProvider
-        ) 
+        ) : this(eventsContexts, new AppServiceProvider(scopedAppServiceProvider), new EventsQueueCollection())
         {
-            m_EventsContexts = eventsContexts;
-            m_ScopedAppServiceProvider = new AppServiceProvider(scopedAppServiceProvider);
-            EventsQueues = new EventsQueueCollection();
         }
 
         internal virtual IEnumerable<Subscription> GetSubscriptions()

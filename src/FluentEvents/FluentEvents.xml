@@ -264,6 +264,11 @@
             <param name="eventsContexts">A list of the <see cref="T:FluentEvents.EventsContext"/>s in the current scope.</param>
             <param name="scopedAppServiceProvider">The application service provider.</param>
         </member>
+        <member name="T:FluentEvents.Infrastructure.IAppServiceProvider">
+            <summary>
+                Represents the application service provider.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Infrastructure.IInfrastructure`1">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used

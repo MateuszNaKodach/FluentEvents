@@ -4,6 +4,7 @@ using System.Linq;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
+using FluentEvents.Queues;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
@@ -25,12 +26,14 @@ namespace FluentEvents.UnitTests
 
         private EventsContext[] m_EventsContexts;
         private EventsScope m_EventsScope;
+        private Mock<IEventsQueueCollection> m_EventsQueueCollectionMock;
 
         [SetUp]
         public void SetUp()
         {
             m_EventsContextMock1 = new Mock<EventsContext>();
             m_EventsContextMock2 = new Mock<EventsContext>();
+            m_EventsQueueCollectionMock = new Mock<IEventsQueueCollection>(MockBehavior.Strict);
             m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
             m_InternalServiceCollectionMock1 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
             m_InternalServiceCollectionMock2 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
@@ -50,7 +53,8 @@ namespace FluentEvents.UnitTests
 
             m_EventsScope = new EventsScope(
                 m_EventsContexts,
-                m_AppServiceProviderMock.Object
+                m_AppServiceProviderMock.Object,
+                m_EventsQueueCollectionMock.Object
             );
         }
 
@@ -59,6 +63,7 @@ namespace FluentEvents.UnitTests
         {
             m_EventsContextMock1.Verify();
             m_EventsContextMock2.Verify();
+            m_EventsQueueCollectionMock.Verify();
             m_AppServiceProviderMock.Verify();
             m_InternalServiceCollectionMock1.Verify();
             m_InternalServiceCollectionMock2.Verify();
@@ -127,7 +132,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             m_ScopedSubscriptionsServiceMock1
-                .Setup(x => x.SubscribeServices(It.IsAny<IAppServiceProvider>()))
+                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory1Subscriptions)
                 .Verifiable();
             
@@ -137,7 +142,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
 
             m_ScopedSubscriptionsServiceMock2
-                .Setup(x => x.SubscribeServices(It.IsAny<IAppServiceProvider>()))
+                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory2Subscriptions)
                 .Verifiable();
 
