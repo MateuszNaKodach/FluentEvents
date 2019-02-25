@@ -5,6 +5,6 @@ namespace FluentEvents.Subscriptions
 {
     internal interface ISubscriptionCreationTask
     {
-        Subscription CreateSubscription(IAppServiceProvider serviceProvider);
+        Subscription CreateSubscription(IAppServiceProvider appServiceProvider);
     }
 }

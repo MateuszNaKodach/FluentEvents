@@ -9,16 +9,21 @@ namespace FluentEvents.Subscriptions
         private readonly Action<TService, TSource> m_SubscriptionAction;
         private readonly ISubscriptionsFactory m_SubscriptionsFactory;
 
-        public SubscriptionCreationTask(Action<TService, TSource> subscriptionAction,
-            ISubscriptionsFactory subscriptionsFactory)
+        public SubscriptionCreationTask(
+            Action<TService, TSource> subscriptionAction,
+            ISubscriptionsFactory subscriptionsFactory
+        )
         {
             m_SubscriptionAction = subscriptionAction;
             m_SubscriptionsFactory = subscriptionsFactory;
         }
 
-        public virtual Subscription CreateSubscription(IAppServiceProvider serviceProvider)
+        public virtual Subscription CreateSubscription(IAppServiceProvider appServiceProvider)
         {
-            var service = (TService) serviceProvider.GetRequiredService(typeof(TService));
+            var service = appServiceProvider.GetService<TService>();
+            if (service == null)
+                throw new SubscribingServiceNotFoundException(typeof(TService));
+
             return m_SubscriptionsFactory.CreateSubscription<TSource>(x => m_SubscriptionAction(service, x));
         }
     }

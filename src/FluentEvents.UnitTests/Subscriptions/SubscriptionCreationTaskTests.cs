@@ -53,6 +53,20 @@ namespace FluentEvents.UnitTests.Subscriptions
             Assert.That(subscription, Is.Not.Null);
         }
 
+        [Test]
+        public void CreateSubscription_WhenServiceIsNotFound_ShouldThrow()
+        {
+            m_AppServiceProviderMock
+                .Setup(x => x.GetService(typeof(TestService)))
+                .Returns(null)
+                .Verifiable();
+
+            Assert.That(() =>
+            {
+                m_SubscriptionCreationTask.CreateSubscription(m_AppServiceProviderMock.Object);
+            }, Throws.TypeOf<SubscribingServiceNotFoundException>());
+        }
+
         public class TestService { }
     }
 }
