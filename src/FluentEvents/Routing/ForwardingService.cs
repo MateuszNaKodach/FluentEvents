@@ -28,10 +28,7 @@ namespace FluentEvents.Routing
             foreach (var eventField in sourceModel.EventFields)
             {
                 void HandlerAction(object sender, object args) =>
-                    m_RoutingService.RouteEventAsync(
-                        new PipelineEvent(sourceModel.ClrType, eventField.EventInfo.Name, sender, args),
-                        eventsScope
-                    ).GetAwaiter().GetResult();
+                    AsyncHandlerAction(sender, args).GetAwaiter().GetResult();
 
                 async Task AsyncHandlerAction(object sender, object args) =>
                     await m_RoutingService.RouteEventAsync(
