@@ -654,7 +654,7 @@
                 This interface should be implemented by plugins.
             </summary>
         </member>
-        <member name="M:FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.IServiceProvider)">
+        <member name="M:FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,FluentEvents.Infrastructure.IAppServiceProvider)">
             <summary>
                 Adds the services required for the plugin to the framework's internal <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>

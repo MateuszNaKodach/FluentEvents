@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Plugins
@@ -13,6 +14,6 @@ namespace FluentEvents.Plugins
         /// </summary>
         /// <param name="services">The framework's internal <see cref="IServiceCollection"/></param>
         /// <param name="appServiceProvider">The application's service provider.</param>
-        void ApplyServices(IServiceCollection services, IServiceProvider appServiceProvider);
+        void ApplyServices(IServiceCollection services, IAppServiceProvider appServiceProvider);
     }
 }
