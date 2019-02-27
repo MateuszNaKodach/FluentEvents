@@ -11,6 +11,8 @@ namespace FluentEvents.UnitTests.Routing
     {
         private Mock<ISourceModelsService> m_SourceModelsServiceMock;
         private Mock<IForwardingService> m_ForwardingServiceMock;
+        private Mock<IAttachingInterceptor> m_AttachingInterceptorMock1;
+        private Mock<IAttachingInterceptor> m_AttachingInterceptorMock2;
         private AttachingService m_AttachingService;
         private EventsScope m_EventsScope;
         private SourceModel m_Source2SourceModel;
@@ -20,9 +22,16 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_ForwardingServiceMock = new Mock<IForwardingService>(MockBehavior.Strict);
+            m_AttachingInterceptorMock1 = new Mock<IAttachingInterceptor>(MockBehavior.Strict);
+            m_AttachingInterceptorMock2 = new Mock<IAttachingInterceptor>(MockBehavior.Strict);
             m_AttachingService = new AttachingService(
                 m_SourceModelsServiceMock.Object,
-                m_ForwardingServiceMock.Object
+                m_ForwardingServiceMock.Object,
+                new[]
+                {
+                    m_AttachingInterceptorMock1.Object,
+                    m_AttachingInterceptorMock2.Object
+                }
             );
             m_EventsScope = new EventsScope();
             m_Source2SourceModel = new SourceModel(typeof(Source2));
@@ -33,6 +42,8 @@ namespace FluentEvents.UnitTests.Routing
         {
             m_SourceModelsServiceMock.Verify();
             m_ForwardingServiceMock.Verify();
+            m_AttachingInterceptorMock1.Verify();
+            m_AttachingInterceptorMock2.Verify();
         }
 
         [Test]
@@ -56,6 +67,8 @@ namespace FluentEvents.UnitTests.Routing
         {
             var source = new Source3();
 
+            SetUpInterceptors(source);
+
             m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))
                 .Returns<SourceModel>(null)
@@ -78,6 +91,8 @@ namespace FluentEvents.UnitTests.Routing
         {
             var source = new Source3();
 
+            SetUpInterceptors(source);
+
             m_SourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(Source3)))
                 .Returns<SourceModel>(null)
@@ -99,6 +114,17 @@ namespace FluentEvents.UnitTests.Routing
                 .Verifiable();
 
             m_AttachingService.Attach(source, m_EventsScope);
+        }
+
+        private void SetUpInterceptors(object source)
+        {
+            m_AttachingInterceptorMock1
+                .Setup(x => x.OnAttaching(source, m_EventsScope))
+                .Verifiable();
+
+            m_AttachingInterceptorMock2
+                .Setup(x => x.OnAttaching(source, m_EventsScope))
+                .Verifiable();
         }
 
         public class Source1 { }

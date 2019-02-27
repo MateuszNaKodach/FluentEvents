@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentEvents.Model;
 using FluentEvents.Utils;
 
@@ -9,6 +11,7 @@ namespace FluentEvents.Routing
     {
         private readonly ISourceModelsService m_SourceModelsService;
         private readonly IForwardingService m_ForwardingService;
+        private readonly IEnumerable<IAttachingInterceptor> m_AttachingInterceptors;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -16,11 +19,13 @@ namespace FluentEvents.Routing
         /// </summary>
         public AttachingService(
             ISourceModelsService sourceModelsService,
-            IForwardingService forwardingService
+            IForwardingService forwardingService,
+            IEnumerable<IAttachingInterceptor> attachingInterceptors
         )
         {
             m_SourceModelsService = sourceModelsService;
             m_ForwardingService = forwardingService;
+            m_AttachingInterceptors = attachingInterceptors;
         }
 
         /// <inheritdoc />
@@ -28,6 +33,9 @@ namespace FluentEvents.Routing
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
+
+            foreach (var attachingInterceptor in m_AttachingInterceptors)
+                attachingInterceptor.OnAttaching(source, eventsScope);
 
             var sourceType = source.GetType();
 
