@@ -654,12 +654,11 @@
                 This interface should be implemented by plugins.
             </summary>
         </member>
-        <member name="M:FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,FluentEvents.Infrastructure.IAppServiceProvider)">
+        <member name="M:FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
                 Adds the services required for the plugin to the framework's internal <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
             <param name="services">The framework's internal <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
-            <param name="appServiceProvider">The application's service provider.</param>
         </member>
         <member name="T:FluentEvents.Plugins.IFluentEventsPluginOptions">
             <summary>

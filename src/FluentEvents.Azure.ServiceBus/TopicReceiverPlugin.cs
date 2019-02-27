@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +21,7 @@ namespace FluentEvents.Azure.ServiceBus
             m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public void ApplyServices(IServiceCollection services, IAppServiceProvider appServiceProvider)
+        public void ApplyServices(IServiceCollection services)
         {
             if (m_ConfigureOptions != null)
                 services.Configure(m_ConfigureOptions);
