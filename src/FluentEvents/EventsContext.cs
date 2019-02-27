@@ -22,6 +22,8 @@ namespace FluentEvents
         private IServiceProvider m_InternalServiceProvider;
         private IEventsContextDependencies m_Dependencies;
 
+        internal bool IsInitializing => m_InternalServiceProvider != null && m_Dependencies == null;
+
         private IServiceProvider InternalServiceProvider
         {
             get

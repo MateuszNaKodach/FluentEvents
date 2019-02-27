@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentEvents.Model;
 using FluentEvents.Utils;
 
@@ -35,7 +34,7 @@ namespace FluentEvents.Routing
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
             foreach (var attachingInterceptor in m_AttachingInterceptors)
-                attachingInterceptor.OnAttaching(source, eventsScope);
+                attachingInterceptor.OnAttaching(this, source, eventsScope);
 
             var sourceType = source.GetType();
 

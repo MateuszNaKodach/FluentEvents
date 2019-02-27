@@ -2,6 +2,6 @@
 {
     public interface IAttachingInterceptor
     {
-        void OnAttaching(object source, EventsScope eventsScope);
+        void OnAttaching(IAttachingService attachingService, object source, EventsScope eventsScope);
     }
 }

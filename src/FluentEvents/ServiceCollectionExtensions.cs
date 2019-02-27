@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using FluentEvents.Infrastructure;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace FluentEvents
 {
@@ -88,22 +91,43 @@ namespace FluentEvents
             return services;
         }
 
+
         private static void AddWithEventsAttachedTo<TEventsContext>(
             this IServiceCollection services, 
             ServiceDescriptor serviceDescriptor
         )
             where TEventsContext : EventsContext
         {
-            services.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
-            {
-                var service = ActivatorUtilities.CreateInstance(x, serviceDescriptor.ImplementationType);
-                var eventsContext = x.GetRequiredService<TEventsContext>();
-                var eventsScope = x.GetRequiredService<EventsScope>();
+            if (serviceDescriptor.ServiceType.IsGenericTypeDefinition)
+                services.Add(serviceDescriptor);
+            else
+                services.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
+                {
+                    object service;
+
+                    if (serviceDescriptor.ImplementationType != null)
+                        service = ActivatorUtilities.CreateInstance(x, serviceDescriptor.ImplementationType);
+                    else if (serviceDescriptor.ImplementationFactory != null)
+                        service = serviceDescriptor.ImplementationFactory(x);
+                    else if (serviceDescriptor.ImplementationInstance != null)
+                        service = serviceDescriptor.ImplementationInstance;
+                    else
+                        throw new NotSupportedException();
+
+                    AttachService<TEventsContext>(x, service);
+
+                    return service;
+                }, serviceDescriptor.Lifetime));
+        }
+
+        private static void AttachService<TEventsContext>(IServiceProvider x, object service)
+            where TEventsContext : EventsContext
+        {
+            var eventsContext = x.GetRequiredService<TEventsContext>();
+            var eventsScope = x.GetRequiredService<EventsScope>();
+
+            if (!eventsContext.IsInitializing)
                 eventsContext.Attach(service, eventsScope);
-
-                return service;
-
-            }, serviceDescriptor.Lifetime));
         }
     }
 }
