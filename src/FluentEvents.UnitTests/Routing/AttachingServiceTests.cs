@@ -13,7 +13,7 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<IForwardingService> m_ForwardingServiceMock;
         private Mock<IAttachingInterceptor> m_AttachingInterceptorMock1;
         private Mock<IAttachingInterceptor> m_AttachingInterceptorMock2;
-        private AttachingService m_AttachingService;
+        private IAttachingService m_AttachingService;
         private EventsScope m_EventsScope;
         private SourceModel m_Source2SourceModel;
 
@@ -119,11 +119,11 @@ namespace FluentEvents.UnitTests.Routing
         private void SetUpInterceptors(object source)
         {
             m_AttachingInterceptorMock1
-                .Setup(x => x.OnAttaching(source, m_EventsScope))
+                .Setup(x => x.OnAttaching(m_AttachingService, source, m_EventsScope))
                 .Verifiable();
 
             m_AttachingInterceptorMock2
-                .Setup(x => x.OnAttaching(source, m_EventsScope))
+                .Setup(x => x.OnAttaching(m_AttachingService, source, m_EventsScope))
                 .Verifiable();
         }
 

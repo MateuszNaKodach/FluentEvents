@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AsyncEvent;
 
-namespace FluentEvents.IntegrationTests
+namespace FluentEvents.IntegrationTests.Common
 {
     public class TestEntity
     {

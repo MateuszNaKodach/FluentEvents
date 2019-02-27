@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Filters;
 using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;

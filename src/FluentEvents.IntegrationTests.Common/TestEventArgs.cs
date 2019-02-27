@@ -1,4 +1,4 @@
-﻿namespace FluentEvents.IntegrationTests
+﻿namespace FluentEvents.IntegrationTests.Common
 {
     public class TestEventArgs
     {

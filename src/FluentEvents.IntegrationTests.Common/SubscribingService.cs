@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FluentEvents.IntegrationTests
+namespace FluentEvents.IntegrationTests.Common
 {
     public class SubscribingService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using AsyncEvent;
 
-namespace FluentEvents.IntegrationTests
+namespace FluentEvents.IntegrationTests.Common
 {
     public class ProjectedTestEntity
     {
