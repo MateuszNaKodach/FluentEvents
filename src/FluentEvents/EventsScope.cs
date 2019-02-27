@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FluentEvents
 {
     /// <summary>
-    ///     The EventsScope represents the scope where entities are attached and the events
+    ///     The <see cref="EventsScope"/> represents the scope where entities are attached and the events
     ///     are handled or queued.
-    ///     An EventsScope should be treated as scoped and should be short-lived.
+    ///     An <see cref="EventsScope"/> should be treated as scoped and should be short-lived.
     /// </summary>
     public class EventsScope
     {
