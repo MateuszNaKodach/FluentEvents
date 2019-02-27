@@ -66,8 +66,8 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<ScopedPublishPipelineModule>();
             services.AddSingleton<ProjectionPipelineModule>();
 
-            foreach (var extension in options.Plugins)
-                extension.ApplyServices(services);
+            foreach (var plugin in options.Plugins)
+                plugin.ApplyServices(services);
 
             return services.BuildServiceProvider();
         }
