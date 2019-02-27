@@ -1,6 +1,6 @@
 ﻿namespace FluentEvents.Pipelines
 {
-    internal class PipelineModuleNotFoundException : FluentEventsException
+    public class PipelineModuleNotFoundException : FluentEventsException
     {
     }
 }
