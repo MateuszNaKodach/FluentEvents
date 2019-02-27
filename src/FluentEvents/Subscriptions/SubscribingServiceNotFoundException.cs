@@ -2,6 +2,10 @@
 
 namespace FluentEvents.Subscriptions
 {
+    /// <summary>
+    ///     An exception thrown when the application's <see cref="IServiceProvider"/> can't resolve a service
+    ///     with an automatic subscription configured.
+    /// </summary>
     public class SubscribingServiceNotFoundException : FluentEventsException
     {
         /// <summary>
