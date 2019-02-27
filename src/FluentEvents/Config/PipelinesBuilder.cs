@@ -19,7 +19,7 @@ namespace FluentEvents.Config
             IServiceProvider serviceProvider,
             ISourceModelsService sourceModelsService
         )
-            : base(eventsContext, serviceProvider)
+            : base(eventsContext)
         {
             m_SourceModelsService = sourceModelsService;
         }

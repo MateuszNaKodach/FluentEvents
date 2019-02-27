@@ -16,13 +16,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="P:FluentEvents.Config.BuilderBase.ServiceProvider">
-            <summary>
-                This API supports the FluentEvents Core infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Config.BuilderBase.#ctor(FluentEvents.EventsContext,System.IServiceProvider)">
+        <member name="M:FluentEvents.Config.BuilderBase.#ctor(FluentEvents.EventsContext)">
             <summary>
                 This API supports the FluentEvents Core infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -255,9 +249,9 @@
         </member>
         <member name="T:FluentEvents.EventsScope">
             <summary>
-                The EventsScope represents the scope where entities are attached and the events
+                The <see cref="T:FluentEvents.EventsScope"/> represents the scope where entities are attached and the events
                 are handled or queued.
-                An EventsScope should be treated as scoped and should be short-lived.
+                An <see cref="T:FluentEvents.EventsScope"/> should be treated as scoped and should be short-lived.
             </summary>
         </member>
         <member name="M:FluentEvents.EventsScope.#ctor(System.Collections.Generic.IEnumerable{FluentEvents.EventsContext},System.IServiceProvider)">

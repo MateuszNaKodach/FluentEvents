@@ -21,7 +21,7 @@ namespace FluentEvents.Config
             IGlobalSubscriptionCollection globalSubscriptionCollection,
             IScopedSubscriptionsService scopedSubscriptionsService
         )
-            : base(eventsContext, serviceProvider)
+            : base(eventsContext)
         {
             m_GlobalSubscriptionCollection = globalSubscriptionCollection;
             m_ScopedSubscriptionsService = scopedSubscriptionsService;
