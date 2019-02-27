@@ -1,12 +1,15 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.EntityFramework
 {
+    [Obsolete]
     public static class ServiceCollectionExtensions
     {
+        [Obsolete("Use AddEntityFrameworkPlugin()")]
         public static IServiceCollection AddDbContextWithEntityEventsAttachedTo<TDbContext, TEventsContext>(this IServiceCollection services)
             where TDbContext : DbContext
             where TEventsContext : EventsContext
