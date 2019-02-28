@@ -9,11 +9,11 @@ Events can also be transmitted transparently to all the instances of your applic
 Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
 
 ## How do I get started?
-Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the EventsContext every entity materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries.
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/EntityFramework) `DbContext`.
 
-In this example, we are going to send an email when the "FriendRequestAccepted" event is published.
+In this example, we are going to send an email when the `FriendRequestAccepted` event is published.
 
-#### Add the EventsContext and the DbContext to your services:
+#### Add the `EventsContext` and the `DbContext` to your services:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -27,7 +27,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-#### Create an EventsContext and configure your event pipelines:
+#### Create an `EventsContext` and configure your event pipelines:
 ```csharp
 public class MyEventsContext : EventsContext
 {
@@ -41,7 +41,7 @@ public class MyEventsContext : EventsContext
 }
 ```
 
-#### Raise the event (The entity is attached automatically to the EventsContext by the EntityFramework plugin):
+#### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
 ```csharp
 public class ExampleService 
 {    
