@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FluentEvents.EntityFrameworkCore</name>
+    </assembly>
+    <members>
+        <member name="T:FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions">
+            <summary>
+                Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
+            </summary>
+        </member>
+        <member name="M:FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions.AttachToDbContextEntities``1(FluentEvents.Plugins.IFluentEventsPluginOptions)">
+            <summary>
+                Adds a plugin that attaches the entities tracked by a <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/>
+                to the <see cref="T:FluentEvents.EventsContext"/> automatically.
+            </summary>
+            <remarks>
+                In order to automatically attach the entities the <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> must be attached
+                to the <see cref="T:FluentEvents.EventsContext"/> manually or by using the 
+                <see cref="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)"/>
+                method. (See example)
+            </remarks>
+            <example>
+                services.AddWithEventsAttachedTo&lt;SampleEventsContext&gt;(() =&gt; {
+                    services.AddDbContext&lt;MyDbContext&gt;();
+                });
+                    
+                services.AddEventsContext&lt;SampleEventsContext&gt;(options =&gt; {
+                    options.AttachToDbContextEntities&lt;MyDbContext&gt;();
+                });
+            </example>
+            <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
+            <typeparam name="TDbContext">The type of the <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/>.</typeparam>
+            <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
+        </member>
+    </members>
+</doc>

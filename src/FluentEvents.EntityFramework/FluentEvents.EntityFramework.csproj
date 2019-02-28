@@ -9,6 +9,10 @@
     <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>FluentEvents.EntityFramework.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="EntityFramework" version="6.2.0" />
   </ItemGroup>
