@@ -46,7 +46,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
         }
 
         [Test]
-        public void AttachTest()
+        public void AttachFromQueryResultTest()
         {
             TestEventArgs testEventArgs = null;
             m_TestEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
