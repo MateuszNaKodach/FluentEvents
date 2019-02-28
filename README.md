@@ -17,8 +17,13 @@ In this example, we are going to send an email when the "FriendRequestAccepted" 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddEventsContext<MyEventsContext>();
-    services.AddDbContextWithEntityEventsAttachedTo<MyDbContext, MyEventsContext>();
+    services.AddWithEventsAttachedTo<MyEventsContext>(() => {
+        services.AddDbContext<MyDbContext>();
+    });
+    
+    services.AddEventsContext<MyEventsContext>(options => {
+        options.AttachToDbContextEntities<MyDbContext>();
+    });
 }
 ```
 
