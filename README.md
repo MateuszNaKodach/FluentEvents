@@ -60,19 +60,19 @@ public class ExampleService
 ```csharp
 public class NotificationsService : IHostedService
 {
-    private readonly MyEventsContext m_EventsContext;
+    private readonly MyEventsContext m_MyEventsContext;
     private readonly IMailService m_MailService;
     private ISubscriptionsCancellationToken m_SubscriptionsCancellationToken;
 
-    public NotificationsService(MyEventsContext eventsContext, IMailService mailService)
+    public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        m_EventsContext = eventsContext;
+        m_MyEventsContext = myEventsContext;
         m_MailService = mailService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_SubscriptionsCancellationToken = m_EventsContext.SubscribeGloballyTo<User>(user =>
+        m_SubscriptionsCancellationToken = m_MyEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
@@ -82,7 +82,7 @@ public class NotificationsService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        m_EventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
+        m_MyEventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
         
         return Task.CompletedTask;
     }
