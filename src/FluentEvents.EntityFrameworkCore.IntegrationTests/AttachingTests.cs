@@ -25,9 +25,9 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 options.AttachToDbContextEntities<TestDbContext>();
             });
 
-            services.AddWithEventsAttachedTo<TestEventsContext>(trackedServices =>
+            services.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                trackedServices.AddDbContext<TestDbContext>(options =>
+                services.AddDbContext<TestDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("test");
                 });

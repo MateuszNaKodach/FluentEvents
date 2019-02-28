@@ -842,7 +842,7 @@
             </param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
-        <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Microsoft.Extensions.DependencyInjection.IServiceCollection})">
+        <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)">
             <summary>
                 This method adds multiple services to a <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> and makes sure that
                 they are attached to the <see cref="T:FluentEvents.EventsContext"/> when they are requested from
@@ -862,7 +862,7 @@
             </example>
             <typeparam name="TEventsContext">The <see cref="T:FluentEvents.EventsContext"/> where the services are attached.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
-            <param name="configurator">An action to add the services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="addServicesAction">An action to add the services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
         <member name="T:FluentEvents.Subscriptions.EventSourceTypeMismatchException">

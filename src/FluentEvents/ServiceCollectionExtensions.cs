@@ -74,19 +74,20 @@ namespace FluentEvents
         /// </example>
         /// <typeparam name="TEventsContext">The <see cref="EventsContext"/> where the services are attached.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to register with.</param>
-        /// <param name="configurator">An action to add the services to the <see cref="IServiceCollection"/>.</param>
+        /// <param name="addServicesAction">An action to add the services to the <see cref="IServiceCollection"/>.</param>
         /// <returns>The original <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddWithEventsAttachedTo<TEventsContext>(
             this IServiceCollection services,
-            Action<IServiceCollection> configurator
+            Action addServicesAction
         )
             where TEventsContext : EventsContext
         {
-            var trackedServices = new ServiceCollection();
-            configurator(trackedServices);
+            var originalServices = services.ToArray();
+            addServicesAction();
+            var addedServices = services.Where(x => originalServices.All(y => y != x)).ToArray();
 
-            foreach (var trackedService in trackedServices)
-                services.AddWithEventsAttachedTo<TEventsContext>(trackedService);
+            foreach (var addedService in addedServices)
+                services.AddWithEventsAttachedTo<TEventsContext>(addedService);
 
             return services;
         }

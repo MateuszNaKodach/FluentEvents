@@ -29,9 +29,9 @@ namespace FluentEvents.EntityFramework.IntegrationTests
 
             var connection = Effort.DbConnectionFactory.CreateTransient();
 
-            services.AddWithEventsAttachedTo<TestEventsContext>(trackedServices =>
+            services.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                trackedServices.AddScoped(x => new TestDbContext(connection));
+                services.AddScoped(x => new TestDbContext(connection));
             });
          
             m_ServiceProvider = services.BuildServiceProvider();
