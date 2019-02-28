@@ -17,14 +17,14 @@ In this example, we are going to send an email when the "FriendRequestAccepted" 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddEventsContext<SampleEventsContext>();
-    services.AddDbContextWithEntityEventsAttachedTo<DemoDbContext, SampleEventsContext>();
+    services.AddEventsContext<MyEventsContext>();
+    services.AddDbContextWithEntityEventsAttachedTo<MyDbContext, MyEventsContext>();
 }
 ```
 
 #### Create an EventsContext in a shared project and configure your event pipelines:
 ```csharp
-public class SampleEventsContext : EventsContext
+public class MyEventsContext : EventsContext
 {
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
@@ -40,16 +40,16 @@ public class SampleEventsContext : EventsContext
 ```csharp
 public class ExampleService 
 {    
-    private DemoDbContext m_DemoDbContext;
+    private MyDbContext m_MyDbContext;
     
-    public ExampleService(DemoDbContext demoDbContext) 
+    public ExampleService(MyDbContext myDbContext) 
     {
-        m_DemoDbContext = demoDbContext;
+        m_MyDbContext = myDbContext;
     }
 
     public async Task AcceptAllFriendRequests(int userId) 
     {
-        var user = await m_DemoDbContext.Users.FirstAsync(x => x.Id == userId);
+        var user = await m_MyDbContext.Users.FirstAsync(x => x.Id == userId);
         
         await user.AcceptAllFriendRequests();
     }
@@ -60,11 +60,11 @@ public class ExampleService
 ```csharp
 public class NotificationsService : IHostedService
 {
-    private readonly SampleEventsContext m_EventsContext;
+    private readonly MyEventsContext m_EventsContext;
     private readonly IMailService m_MailService;
     private ISubscriptionsCancellationToken m_SubscriptionsCancellationToken;
 
-    public NotificationsService(SampleEventsContext eventsContext, IMailService mailService)
+    public NotificationsService(MyEventsContext eventsContext, IMailService mailService)
     {
         m_EventsContext = eventsContext;
         m_MailService = mailService;
