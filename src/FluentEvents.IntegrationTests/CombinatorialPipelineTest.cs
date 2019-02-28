@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 namespace FluentEvents.IntegrationTests
 {
+    [TestFixture]
     public class CombinatorialPipelineTest
     {
         private readonly string m_TestValue = "TestValue";
