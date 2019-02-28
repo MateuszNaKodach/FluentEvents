@@ -769,6 +769,19 @@
         <member name="M:FluentEvents.Routing.ForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel,System.Object,FluentEvents.EventsScope)">
             <inheritdoc />
         </member>
+        <member name="T:FluentEvents.Routing.IAttachingInterceptor">
+            <summary>
+                This interface can be implemented to intercept every attaching made to the <see cref="T:FluentEvents.EventsContext"/>.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService,System.Object,FluentEvents.EventsScope)">
+            <summary>
+                This method can be used to handle complex attaching situations (For example attaching to the entities of an ORM).
+            </summary>
+            <param name="attachingService">The attaching service that invokes the interceptor.</param>
+            <param name="source">The events source being attached.</param>
+            <param name="eventsScope">The current <see cref="T:FluentEvents.EventsScope"/></param>
+        </member>
         <member name="T:FluentEvents.Routing.IAttachingService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
