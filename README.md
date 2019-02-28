@@ -13,7 +13,7 @@ Here is an example that uses the [Microsoft.Extensions.DependencyInjection](http
 
 In this example, we are going to send an email when the "FriendRequestAccepted" event is published.
 
-#### Add the events context to your services:
+#### Add the EventsContext and the DbContext to your services:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -27,7 +27,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-#### Create an EventsContext in a shared project and configure your event pipelines:
+#### Create an EventsContext and configure your event pipelines:
 ```csharp
 public class MyEventsContext : EventsContext
 {
