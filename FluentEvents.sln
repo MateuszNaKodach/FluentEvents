@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.SignalR"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.EntityFrameworkCore", "src\FluentEvents.EntityFrameworkCore\FluentEvents.EntityFrameworkCore.csproj", "{39AB0BB9-F4DC-4ECC-B5E1-6C6E89F4A5AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.EntityFrameworkCore.IntegrationTests", "src\FluentEvents.EntityFrameworkCore.IntegrationTests\FluentEvents.EntityFrameworkCore.IntegrationTests.csproj", "{03979680-498C-4557-B0E5-092EEA62540E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.EntityFrameworkCore.IntegrationTests", "src\FluentEvents.EntityFrameworkCore.IntegrationTests\FluentEvents.EntityFrameworkCore.IntegrationTests.csproj", "{03979680-498C-4557-B0E5-092EEA62540E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.IntegrationTests.Common", "src\FluentEvents.IntegrationTests.Common\FluentEvents.IntegrationTests.Common.csproj", "{66904ECA-72D3-47AA-9E14-181299347896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.IntegrationTests.Common", "src\FluentEvents.IntegrationTests.Common\FluentEvents.IntegrationTests.Common.csproj", "{66904ECA-72D3-47AA-9E14-181299347896}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.EntityFramework.IntegrationTests", "src\FluentEvents.EntityFramework.IntegrationTests\FluentEvents.EntityFramework.IntegrationTests.csproj", "{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{66904ECA-72D3-47AA-9E14-181299347896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66904ECA-72D3-47AA-9E14-181299347896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66904ECA-72D3-47AA-9E14-181299347896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
