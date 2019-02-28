@@ -9,7 +9,7 @@ Events can also be transmitted transparently to all the instances of your applic
 Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
 
 ## How do I get started?
-Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/EntityFramework) `DbContext`.
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) `DbContext`.
 
 In this example, we are going to send an email when the `FriendRequestAccepted` event is published.
 
