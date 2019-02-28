@@ -33,16 +33,16 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 });
             });
          
-            services.AddScoped<ScopedSubscribingService>();
-            services.AddSingleton<SingletonSubscribingService>();
             m_ServiceProvider = services.BuildServiceProvider();
 
-            var serviceScope = m_ServiceProvider.CreateScope();
-            m_TestEventsContext = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
-            m_TestDbContext = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
+            using (var serviceScope = m_ServiceProvider.CreateScope())
+            {
+                m_TestEventsContext = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
+                m_TestDbContext = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
 
-            m_TestDbContext.TestEntities.Add(new TestEntity());
-            m_TestDbContext.SaveChanges();
+                m_TestDbContext.TestEntities.Add(new TestEntity());
+                m_TestDbContext.SaveChanges();
+            }
         }
 
         [Test]
