@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FluentEvents.EntityFrameworkCore\FluentEvents.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\FluentEvents.EntityFrameworkCore\FluentEvents.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\FluentEvents.IntegrationTests.Common\FluentEvents.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
