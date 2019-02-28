@@ -56,25 +56,25 @@ namespace FluentEvents
         }
 
         /// <summary>
-        ///     This method adds multiple services to a <see cref="IServiceCollection"/> and makes sure that
-        ///     they are attached to the <see cref="EventsContext"/> when they are requested from
-        ///     the <see cref="IServiceProvider"/>.
+        ///     This method watches the services registered inside of the addServicesAction
+        ///     and makes sure that they are attached to the <see cref="EventsContext"/>
+        ///     when they are resolved by the <see cref="IServiceProvider"/>.
         /// </summary>
         /// <example>
         ///     <code>
         ///         public void ConfigureServices(IServiceCollection services)
         ///         {
         ///             services
-        ///                 .AddWithEventsAttachedTo&lt;MyEventsContext&gt;(trackedServices => {
-        ///                     trackedServices.AddScoped&lt;IMyService, MyService&gt;();
-        ///                     trackedServices.AddScoped&lt;IMyService2, MyService2&gt;();
+        ///                 .AddWithEventsAttachedTo&lt;MyEventsContext&gt;(() => {
+        ///                     services.AddScoped&lt;IMyService, MyService&gt;();
+        ///                     services.AddSingleton&lt;IMyService2, MyService2&gt;();
         ///                 });
         ///         }
         ///     </code>
         /// </example>
         /// <typeparam name="TEventsContext">The <see cref="EventsContext"/> where the services are attached.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to register with.</param>
-        /// <param name="addServicesAction">An action to add the services to the <see cref="IServiceCollection"/>.</param>
+        /// <param name="addServicesAction">An <see cref="Action"/> that add services to the <see cref="IServiceCollection"/>.</param>
         /// <returns>The original <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddWithEventsAttachedTo<TEventsContext>(
             this IServiceCollection services,

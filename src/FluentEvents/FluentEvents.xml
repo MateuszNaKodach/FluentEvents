@@ -857,25 +857,25 @@
         </member>
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)">
             <summary>
-                This method adds multiple services to a <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> and makes sure that
-                they are attached to the <see cref="T:FluentEvents.EventsContext"/> when they are requested from
-                the <see cref="T:System.IServiceProvider"/>.
+                This method watches the services registered inside of the addServicesAction
+                and makes sure that they are attached to the <see cref="T:FluentEvents.EventsContext"/>
+                when they are resolved by the <see cref="T:System.IServiceProvider"/>.
             </summary>
             <example>
                 <code>
                     public void ConfigureServices(IServiceCollection services)
                     {
                         services
-                            .AddWithEventsAttachedTo&lt;MyEventsContext&gt;(trackedServices => {
-                                trackedServices.AddScoped&lt;IMyService, MyService&gt;();
-                                trackedServices.AddScoped&lt;IMyService2, MyService2&gt;();
+                            .AddWithEventsAttachedTo&lt;MyEventsContext&gt;(() => {
+                                services.AddScoped&lt;IMyService, MyService&gt;();
+                                services.AddSingleton&lt;IMyService2, MyService2&gt;();
                             });
                     }
                 </code>
             </example>
             <typeparam name="TEventsContext">The <see cref="T:FluentEvents.EventsContext"/> where the services are attached.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
-            <param name="addServicesAction">An action to add the services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="addServicesAction">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
         <member name="T:FluentEvents.Subscriptions.EventSourceTypeMismatchException">
