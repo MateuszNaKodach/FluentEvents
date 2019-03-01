@@ -8,23 +8,28 @@ FluentEvents is an extensible framework that lets you persist and manage event s
 Events can also be transmitted transparently to all the instances of your application (using whatever protocol you like but at the moment only Azure Topics are supported). 
 Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
 
-### How do I get started?
-Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package to inject the EventsContext and the [FluentEvents.EntityFramework](https://www.nuget.org/packages/FluentEvents.EntityFramework/) package to automatically attach to the EventsContext every entity materialized from [EntityFramework](https://www.nuget.org/packages/EntityFramework) queries.
+## How do I get started?
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) `DbContext`.
 
-In this example, we are going to send an email when the "FriendRequestAccepted" event is published.
+In this example, we are going to send an email when the `FriendRequestAccepted` event is published.
 
-#### Add the events context to your services:
+#### Add the `EventsContext` and the `DbContext` to your services:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddEventsContext<SampleEventsContext>();
-    services.AddDbContextWithEntityEventsAttachedTo<DemoDbContext, SampleEventsContext>();
+    services.AddWithEventsAttachedTo<MyEventsContext>(() => {
+        services.AddDbContext<MyDbContext>();
+    });
+    
+    services.AddEventsContext<MyEventsContext>(options => {
+        options.AttachToDbContextEntities<MyDbContext>();
+    });
 }
 ```
 
-#### Create an EventsContext in a shared project and configure your event pipelines:
+#### Create an `EventsContext` and configure your event pipelines:
 ```csharp
-public class SampleEventsContext : EventsContext
+public class MyEventsContext : EventsContext
 {
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
@@ -36,20 +41,20 @@ public class SampleEventsContext : EventsContext
 }
 ```
 
-#### Raise the event (The entity is attached automatically to the EventsContext by the EntityFramework plugin):
+#### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
 ```csharp
 public class ExampleService 
 {    
-    private DemoDbContext m_DemoDbContext;
+    private MyDbContext m_MyDbContext;
     
-    public ExampleService(DemoDbContext demoDbContext) 
+    public ExampleService(MyDbContext myDbContext) 
     {
-        m_DemoDbContext = demoDbContext;
+        m_MyDbContext = myDbContext;
     }
 
     public async Task AcceptAllFriendRequests(int userId) 
     {
-        var user = await m_DemoDbContext.Users.FirstAsync(x => x.Id == userId);
+        var user = await m_MyDbContext.Users.FirstAsync(x => x.Id == userId);
         
         await user.AcceptAllFriendRequests();
     }
@@ -60,19 +65,19 @@ public class ExampleService
 ```csharp
 public class NotificationsService : IHostedService
 {
-    private readonly SampleEventsContext m_EventsContext;
+    private readonly MyEventsContext m_MyEventsContext;
     private readonly IMailService m_MailService;
     private ISubscriptionsCancellationToken m_SubscriptionsCancellationToken;
 
-    public NotificationsService(SampleEventsContext eventsContext, IMailService mailService)
+    public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        m_EventsContext = eventsContext;
+        m_MyEventsContext = myEventsContext;
         m_MailService = mailService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_SubscriptionsCancellationToken = m_EventsContext.SubscribeGloballyTo<User>(user =>
+        m_SubscriptionsCancellationToken = m_MyEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
@@ -82,7 +87,7 @@ public class NotificationsService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        m_EventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
+        m_MyEventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
         
         return Task.CompletedTask;
     }
@@ -95,6 +100,7 @@ public class NotificationsService : IHostedService
     }
 }
 ```
+## NuGet Packages
 
 | Package                            | Version                                                                                                                                           |
 |------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
