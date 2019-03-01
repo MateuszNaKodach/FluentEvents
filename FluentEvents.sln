@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.EntityFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.IntegrationTests.Common", "src\FluentEvents.IntegrationTests.Common\FluentEvents.IntegrationTests.Common.csproj", "{66904ECA-72D3-47AA-9E14-181299347896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.EntityFramework.IntegrationTests", "src\FluentEvents.EntityFramework.IntegrationTests\FluentEvents.EntityFramework.IntegrationTests.csproj", "{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.EntityFramework.IntegrationTests", "src\FluentEvents.EntityFramework.IntegrationTests\FluentEvents.EntityFramework.IntegrationTests.csproj", "{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.Azure.ServiceBus.IntegrationTests", "src\FluentEvents.Azure.ServiceBus.IntegrationTests\FluentEvents.Azure.ServiceBus.IntegrationTests.csproj", "{C83981A1-519E-4803-BB42-301DA98A23C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72A3D782-BF4C-442F-B958-C69F7D1F8A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83981A1-519E-4803-BB42-301DA98A23C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83981A1-519E-4803-BB42-301DA98A23C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83981A1-519E-4803-BB42-301DA98A23C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83981A1-519E-4803-BB42-301DA98A23C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
