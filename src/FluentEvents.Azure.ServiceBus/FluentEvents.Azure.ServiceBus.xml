@@ -143,6 +143,19 @@
                 An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.TopicEventReceiverConfig.ReceiveConnectionString" /> property is null.
             </summary>
         </member>
+        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException">
+            <inheritdoc />
+            <summary>
+                An exception thrown when the creation of an Azure Service Bus topic subscription fails.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException.#ctor(System.Exception)">
+            <inheritdoc />
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException" />
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.SubscriptionNameGeneratorIsNullException">
             <inheritdoc />
             <summary>
@@ -186,18 +199,6 @@
                 A <see cref="T:System.Func`1" /> that returns unique names for subscriptions.
             </summary>
             <remarks>The default implementations returns a GUID.</remarks>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.TopicEventReceiverStartException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when starting the Azure Service Bus topic event receiver.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.Receiving.TopicEventReceiverStartException.#ctor(System.Exception)">
-            <summary>
-                Creates a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.TopicEventReceiverStartException"/>.
-            </summary>
-            <param name="innerException">The inner exception.</param>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.TopicPathIsNullException">
             <inheritdoc />

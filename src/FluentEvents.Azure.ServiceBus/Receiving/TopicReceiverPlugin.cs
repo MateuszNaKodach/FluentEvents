@@ -28,6 +28,8 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             else
                 services.Configure<TopicEventReceiverConfig>(m_Configuration);
 
+            services.AddSingleton<ITopicSubscriptionsService, TopicSubscriptionsService>();
+            services.AddSingleton<ISubscriptionClientFactory, SubscriptionClientFactory>();
             services.AddSingleton<IEventReceiver, TopicEventReceiver>();
         }
     }
