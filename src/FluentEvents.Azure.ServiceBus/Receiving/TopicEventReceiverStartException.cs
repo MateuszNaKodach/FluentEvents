@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentEvents.Azure.ServiceBus
+namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     /// <inheritdoc />
     /// <summary>

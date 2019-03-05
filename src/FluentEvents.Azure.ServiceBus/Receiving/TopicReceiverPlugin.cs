@@ -4,19 +4,19 @@ using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FluentEvents.Azure.ServiceBus
+namespace FluentEvents.Azure.ServiceBus.Receiving
 {
-    internal class TopicSenderPlugin : IFluentEventsPlugin
+    internal class TopicReceiverPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration m_Configuration;
-        private readonly Action<TopicEventSenderConfig> m_ConfigureOptions;
+        private readonly Action<TopicEventReceiverConfig> m_ConfigureOptions;
 
-        public TopicSenderPlugin(Action<TopicEventSenderConfig> configureOptions)
+        public TopicReceiverPlugin(Action<TopicEventReceiverConfig> configureOptions)
         {
             m_ConfigureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
 
-        public TopicSenderPlugin(IConfiguration configuration)
+        public TopicReceiverPlugin(IConfiguration configuration)
         {
             m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -26,9 +26,9 @@ namespace FluentEvents.Azure.ServiceBus
             if (m_ConfigureOptions != null)
                 services.Configure(m_ConfigureOptions);
             else
-                services.Configure<TopicEventSenderConfig>(m_Configuration);
+                services.Configure<TopicEventReceiverConfig>(m_Configuration);
 
-            services.AddSingleton<IEventSender, TopicEventSender>();
+            services.AddSingleton<IEventReceiver, TopicEventReceiver>();
         }
     }
 }

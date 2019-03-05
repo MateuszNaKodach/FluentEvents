@@ -6,26 +6,24 @@ using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FluentEvents.Azure.ServiceBus
+namespace FluentEvents.Azure.ServiceBus.Sending
 {
     internal class TopicEventSender : IEventSender, IDisposable
     {
         private readonly ILogger<TopicEventSender> m_Logger;
         private readonly IEventsSerializationService m_EventsSerializationService;
-        private readonly TopicClient m_TopicClient;
+        private readonly ITopicClient m_TopicClient;
 
         public TopicEventSender(
             ILogger<TopicEventSender> logger,
             IOptions<TopicEventSenderConfig> config, 
-            IEventsSerializationService eventsSerializationService
+            IEventsSerializationService eventsSerializationService,
+            ITopicClientFactory topicClientFactory
         )
         {
-            if (config.Value.ConnectionString == null)
-                throw new ConnectionStringIsNullException();
-
             m_Logger = logger;
             m_EventsSerializationService = eventsSerializationService;
-            m_TopicClient = new TopicClient(new ServiceBusConnectionStringBuilder(config.Value.ConnectionString));
+            m_TopicClient = topicClientFactory.GetNew(config.Value.ConnectionString);
         }
 
         public async Task SendAsync(PipelineEvent pipelineEvent)

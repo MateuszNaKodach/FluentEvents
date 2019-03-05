@@ -1,5 +1,5 @@
 ﻿
-namespace FluentEvents.Azure.ServiceBus
+namespace FluentEvents.Azure.ServiceBus.Sending
 {
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events sender.

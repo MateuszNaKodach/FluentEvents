@@ -1,4 +1,4 @@
-﻿namespace FluentEvents.Azure.ServiceBus
+﻿namespace FluentEvents.Azure.ServiceBus.Sending
 {
     /// <inheritdoc />
     /// <summary>

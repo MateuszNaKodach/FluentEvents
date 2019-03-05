@@ -1,4 +1,5 @@
-﻿using FluentEvents.Pipelines.Publication;
+﻿using FluentEvents.Azure.ServiceBus.Sending;
+using FluentEvents.Pipelines.Publication;
 
 namespace FluentEvents.Azure.ServiceBus
 {

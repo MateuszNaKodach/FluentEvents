@@ -8,7 +8,7 @@ using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FluentEvents.Azure.ServiceBus
+namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     internal class TopicEventReceiver : IEventReceiver
     {

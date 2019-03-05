@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Azure.ServiceBus.Sending;
 
 namespace FluentEvents.Azure.ServiceBus
 {

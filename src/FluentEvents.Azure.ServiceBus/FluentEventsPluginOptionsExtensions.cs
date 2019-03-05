@@ -1,4 +1,6 @@
 ﻿using System;
+using FluentEvents.Azure.ServiceBus.Receiving;
+using FluentEvents.Azure.ServiceBus.Sending;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 
