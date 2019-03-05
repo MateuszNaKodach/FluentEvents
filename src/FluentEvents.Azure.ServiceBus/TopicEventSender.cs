@@ -20,6 +20,9 @@ namespace FluentEvents.Azure.ServiceBus
             IEventsSerializationService eventsSerializationService
         )
         {
+            if (config.Value.ConnectionString == null)
+                throw new ConnectionStringIsNullException();
+
             m_Logger = logger;
             m_EventsSerializationService = eventsSerializationService;
             m_TopicClient = new TopicClient(new ServiceBusConnectionStringBuilder(config.Value.ConnectionString));

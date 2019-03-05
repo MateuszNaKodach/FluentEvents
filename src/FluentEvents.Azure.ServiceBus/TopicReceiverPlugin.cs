@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    public class TopicReceiverPlugin : IFluentEventsPlugin
+    internal class TopicReceiverPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration m_Configuration;
         private readonly Action<TopicEventReceiverConfig> m_ConfigureOptions;

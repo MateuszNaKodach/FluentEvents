@@ -1,6 +1,10 @@
 ﻿namespace FluentEvents.Azure.ServiceBus
 {
-    public class SubscriptionNameGeneratorIsNullException : FluentEventsException
+    /// <inheritdoc />
+    /// <summary>
+    ///     An exception thrown when the <see cref="TopicEventReceiverConfig.SubscriptionNameGenerator" /> property is null.
+    /// </summary>
+    public class SubscriptionNameGeneratorIsNullException : FluentEventsServiceBusException
     {
     }
 }

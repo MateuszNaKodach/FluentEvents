@@ -1,6 +1,10 @@
 ﻿namespace FluentEvents.Azure.ServiceBus
 {
-    public class TopicPathIsNullException : FluentEventsException
+    /// <inheritdoc />
+    /// <summary>
+    ///     An exception thrown when the <see cref="TopicEventReceiverConfig.TopicPath" /> property is null.
+    /// </summary>
+    public class TopicPathIsNullException : FluentEventsServiceBusException
     {
     }
 }

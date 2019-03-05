@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    public class TopicEventReceiver : IEventReceiver
+    internal class TopicEventReceiver : IEventReceiver
     {
         private readonly TopicEventReceiverConfig m_Config;
         private readonly ILogger<TopicEventReceiver> m_Logger;
@@ -43,29 +43,39 @@ namespace FluentEvents.Azure.ServiceBus
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            var managementClient = new ManagementClient(m_Config.ManagementConnectionString);
-            var subscriptionName = m_Config.SubscriptionNameGenerator.Invoke();
-
-            await managementClient.CreateSubscriptionAsync(new SubscriptionDescription(m_Config.TopicPath, subscriptionName)
+            try
             {
-                AutoDeleteOnIdle = m_Config.SubscriptionsAutoDeleteOnIdleTimeout
-            }, cancellationToken);
+                var managementClient = new ManagementClient(m_Config.ManagementConnectionString);
+                var subscriptionName = m_Config.SubscriptionNameGenerator.Invoke();
 
-            m_SubscriptionClient = new SubscriptionClient(
-                new ServiceBusConnectionStringBuilder(m_Config.ReceiveConnectionString),
-                subscriptionName
-            );
+                await managementClient.CreateSubscriptionAsync(
+                    new SubscriptionDescription(m_Config.TopicPath, subscriptionName)
+                    {
+                        AutoDeleteOnIdle = m_Config.SubscriptionsAutoDeleteOnIdleTimeout
+                    },
+                    cancellationToken
+                );
 
-            var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
+                m_SubscriptionClient = new SubscriptionClient(
+                    new ServiceBusConnectionStringBuilder(m_Config.ReceiveConnectionString),
+                    subscriptionName
+                );
+
+                var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
+                {
+                    MaxConcurrentCalls = m_Config.MaxConcurrentMessages,
+                    AutoComplete = true
+                };
+
+                m_SubscriptionClient.RegisterMessageHandler(HandleMessageAsync, messageHandlerOptions);
+            }
+            catch (ServiceBusException e)
             {
-                MaxConcurrentCalls = m_Config.MaxConcurrentMessages,
-                AutoComplete = true
-            };
-
-            m_SubscriptionClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+                throw new TopicEventReceiverStartException(e);
+            }
         }
 
-        private async Task ProcessMessagesAsync(Message message, CancellationToken token)
+        private async Task HandleMessageAsync(Message message, CancellationToken token)
         {
             try
             {
