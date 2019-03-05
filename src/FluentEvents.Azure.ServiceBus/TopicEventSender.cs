@@ -8,11 +8,10 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    internal class TopicEventSender : ITopicEventSender, IDisposable
+    internal class TopicEventSender : IEventSender, IDisposable
     {
         private readonly ILogger<TopicEventSender> m_Logger;
         private readonly IEventsSerializationService m_EventsSerializationService;
-        private readonly ITopicEventSenderConfig m_Config;
         private readonly TopicClient m_TopicClient;
 
         public TopicEventSender(
@@ -23,8 +22,7 @@ namespace FluentEvents.Azure.ServiceBus
         {
             m_Logger = logger;
             m_EventsSerializationService = eventsSerializationService;
-            m_Config = config.Value;
-            m_TopicClient = new TopicClient(new ServiceBusConnectionStringBuilder(m_Config.ConnectionString));
+            m_TopicClient = new TopicClient(new ServiceBusConnectionStringBuilder(config.Value.ConnectionString));
         }
 
         public async Task SendAsync(PipelineEvent pipelineEvent)

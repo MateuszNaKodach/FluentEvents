@@ -28,8 +28,7 @@ namespace FluentEvents.Azure.ServiceBus
             else
                 services.Configure<TopicEventReceiverConfig>(m_Configuration);
 
-            services.AddSingleton<ITopicEventReceiver, TopicEventReceiver>();
-            services.AddSingleton<IEventReceiver>(x => x.GetRequiredService<ITopicEventReceiver>());
+            services.AddSingleton<IEventReceiver, TopicEventReceiver>();
         }
     }
 }

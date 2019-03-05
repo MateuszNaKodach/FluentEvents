@@ -10,9 +10,9 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    public class TopicEventReceiver : ITopicEventReceiver
+    public class TopicEventReceiver : IEventReceiver
     {
-        private readonly ITopicEventReceiverConfig m_Config;
+        private readonly TopicEventReceiverConfig m_Config;
         private readonly ILogger<TopicEventReceiver> m_Logger;
         private readonly IPublishingService m_PublishingService;
         private readonly IEventsSerializationService m_EventsSerializationService;

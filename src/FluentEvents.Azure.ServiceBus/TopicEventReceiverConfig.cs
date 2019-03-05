@@ -3,7 +3,7 @@ using System.Text;
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    public class TopicEventReceiverConfig : ITopicEventReceiverConfig
+    public class TopicEventReceiverConfig
     {
         public string TopicPath { get; set; }
         public string ManagementConnectionString { get; set; }
