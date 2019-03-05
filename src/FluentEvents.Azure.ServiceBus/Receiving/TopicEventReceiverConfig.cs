@@ -1,11 +1,12 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events receiver.
     /// </summary>
-    public class TopicEventReceiverConfig
+    public class TopicEventReceiverConfig : IValidableConfig
     {
         private string m_ManagementConnectionString;
         private string m_ReceiveConnectionString;
@@ -50,5 +51,17 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// </summary>
         /// <remarks>The default implementations returns a GUID.</remarks>
         public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
+
+        void IValidableConfig.Validate()
+        {
+            if (SubscriptionNameGenerator == null)
+                throw new SubscriptionNameGeneratorIsNullException();
+            if (ReceiveConnectionString == null)
+                throw new ReceiveConnectionStringIsNullException();
+            if (ManagementConnectionString == null)
+                throw new ManagementConnectionStringIsNullException();
+            if (TopicPath == null)
+                throw new TopicPathIsNullException();
+        }
     }
 }

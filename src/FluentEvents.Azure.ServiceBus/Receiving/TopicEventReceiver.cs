@@ -30,15 +30,6 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             ISubscriptionClientFactory subscriptionClientFactory
         )
         {
-            if (config.Value.SubscriptionNameGenerator == null)
-                throw new SubscriptionNameGeneratorIsNullException();
-            if (config.Value.ReceiveConnectionString == null)
-                throw new ReceiveConnectionStringIsNullException();
-            if (config.Value.ManagementConnectionString == null)
-                throw new ManagementConnectionStringIsNullException();
-            if (config.Value.TopicPath == null)
-                throw new TopicPathIsNullException();
-
             m_Config = config.Value;
             m_Logger = logger;
             m_PublishingService = publishingService;

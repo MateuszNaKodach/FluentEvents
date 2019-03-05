@@ -41,7 +41,7 @@ namespace FluentEvents.Transmission
         internal static void EventReceiverStopped(this ILogger logger, string eventReceiverTypeName)
             => m_EventReceiverStopped(logger, eventReceiverTypeName, null);
 
-        private static class EventIds
+        internal static class EventIds
         {
             internal static EventId EventReceiverStarting { get; } = new EventId(1, nameof(EventReceiverStarting));
             internal static EventId EventReceiverStarted { get; } = new EventId(2, nameof(EventReceiverStarted));

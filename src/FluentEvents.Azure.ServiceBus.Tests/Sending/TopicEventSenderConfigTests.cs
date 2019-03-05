@@ -1,8 +1,7 @@
-﻿using System;
-using FluentEvents.Azure.ServiceBus.Sending;
+﻿using FluentEvents.Azure.ServiceBus.Sending;
 using NUnit.Framework;
 
-namespace FluentEvents.Azure.ServiceBus.Tests
+namespace FluentEvents.Azure.ServiceBus.Tests.Sending
 {
     [TestFixture]
     public class TopicEventSenderConfigTests

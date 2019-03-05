@@ -6,9 +6,6 @@ namespace FluentEvents.Azure.ServiceBus.Sending
     {
         public ITopicClient GetNew(string connectionString)
         {
-            if (connectionString == null)
-                throw new ConnectionStringIsNullException();
-
             return new TopicClient(new ServiceBusConnectionStringBuilder(connectionString));
         }
     }

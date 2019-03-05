@@ -30,7 +30,7 @@ namespace FluentEvents.Subscriptions
                 null
             );
 
-        private static class EventIds
+        internal static class EventIds
         {
             public static EventId EventHandlerThrew { get; } = new EventId(1, nameof(EventHandlerThrew));
             public static EventId PublishingEvent { get; } = new EventId(2, nameof(PublishingEvent));

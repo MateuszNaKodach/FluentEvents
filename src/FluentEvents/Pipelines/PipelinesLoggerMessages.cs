@@ -20,7 +20,7 @@ namespace FluentEvents.Pipelines
                 null
             );
 
-        private static class EventIds
+        internal static class EventIds
         {
             public static EventId InvokingPipelineModule { get; } = new EventId(1, nameof(InvokingPipelineModule));
         }

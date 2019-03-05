@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
@@ -29,6 +30,7 @@ namespace FluentEvents.UnitTests
 
         private Mock<EventsScope> m_EventsScopeMock;
         private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
+        private Mock<IValidableConfig> m_ValidableConfigMock;
 
         [SetUp]
         public void SetUp()
@@ -43,6 +45,7 @@ namespace FluentEvents.UnitTests
             m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
             m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
+            m_ValidableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
 
             m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
@@ -65,13 +68,14 @@ namespace FluentEvents.UnitTests
             m_SourceModelsServiceMock.Verify();
             m_AttachingServiceMock.Verify();
             m_EventsQueuesServiceMock.Verify();
+            m_ValidableConfigMock.Verify();
         }
 
         [Test]
         public void Configure_ShouldOverrideOptionsAndServiceProvider()
         {
             SetUpServiceProviderAndServiceCollection();
-            SetUpGetBuilders();
+            SetUpBuilding();
 
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
 
@@ -85,7 +89,7 @@ namespace FluentEvents.UnitTests
         {
             SetUpServiceProviderAndServiceCollection();
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
-            SetUpGetBuilders();
+            SetUpBuilding();
 
             var isOnBuildingPipelinesCalled = false;
             m_EventsContext.OnBuildingPipelinesCalled += (sender, args) =>
@@ -209,7 +213,7 @@ namespace FluentEvents.UnitTests
             SetUpGetDependencies();
             m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
 
-            SetUpGetBuilders();
+            SetUpBuilding();
         }
 
         private void SetUpServiceProviderAndServiceCollection()
@@ -229,7 +233,7 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
         }
 
-        private void SetUpGetBuilders()
+        private void SetUpBuilding()
         {
             m_InternalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
@@ -248,6 +252,15 @@ namespace FluentEvents.UnitTests
                     m_InternalServiceProviderMock.Object,
                     m_SourceModelsServiceMock.Object
                 ))
+                .Verifiable();
+
+            m_ValidableConfigMock
+                .Setup(x => x.Validate())
+                .Verifiable();
+
+            m_InternalServiceProviderMock
+                .Setup(x => x.GetService(typeof(IEnumerable<IValidableConfig>)))
+                .Returns(new [] { m_ValidableConfigMock.Object })
                 .Verifiable();
         }
 

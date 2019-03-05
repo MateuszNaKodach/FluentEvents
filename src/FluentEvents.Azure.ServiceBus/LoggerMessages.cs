@@ -33,7 +33,7 @@ namespace FluentEvents.Azure.ServiceBus
         internal static void MessageSent(this ILogger logger, string messageId)
             => m_MessageSent(logger, messageId, null);
 
-        private static class EventIds
+        internal static class EventIds
         {
             public static EventId ServiceBusExceptionReceived { get; } = new EventId(1, nameof(ServiceBusExceptionReceived));
             public static EventId MessagesProcessingThrew { get; } = new EventId(2, nameof(MessagesProcessingThrew));

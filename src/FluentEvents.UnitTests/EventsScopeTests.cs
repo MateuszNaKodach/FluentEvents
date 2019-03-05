@@ -85,6 +85,11 @@ namespace FluentEvents.UnitTests
                 .Verifiable();
             
             serviceProviderMock
+                .Setup(x => x.GetService(typeof(IEnumerable<IValidableConfig>)))
+                .Returns(new IValidableConfig[0])
+                .Verifiable();
+
+            serviceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
                 .Returns(new SubscriptionsBuilder(eventsContextMock.Object, serviceProviderMock.Object, null, null))
                 .Verifiable();

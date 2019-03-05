@@ -1,8 +1,10 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Sending
 {
@@ -28,6 +30,9 @@ namespace FluentEvents.Azure.ServiceBus.Sending
             else
                 services.Configure<TopicEventSenderConfig>(m_Configuration);
 
+            services.AddSingleton<IValidableConfig>(x =>
+                x.GetRequiredService<IOptions<TopicEventSenderConfig>>().Value
+            );
             services.AddSingleton<ITopicClientFactory, TopicClientFactory>();
             services.AddSingleton<IEventSender, TopicEventSender>();
         }
