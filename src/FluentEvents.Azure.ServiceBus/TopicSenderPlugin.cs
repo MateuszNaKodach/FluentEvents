@@ -13,12 +13,12 @@ namespace FluentEvents.Azure.ServiceBus
 
         public TopicSenderPlugin(Action<TopicEventSenderConfig> configureOptions)
         {
-            m_ConfigureOptions = configureOptions;
+            m_ConfigureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
 
         public TopicSenderPlugin(IConfiguration configuration)
         {
-            m_Configuration = configuration;
+            m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public void ApplyServices(IServiceCollection services)
