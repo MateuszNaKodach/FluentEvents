@@ -1,7 +1,7 @@
 ﻿using FluentEvents.Azure.ServiceBus.Receiving;
 using NUnit.Framework;
 
-namespace FluentEvents.Azure.ServiceBus.Tests.Receiving
+namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 {
     [TestFixture]
     public class TopicEventReceiverConfigTests

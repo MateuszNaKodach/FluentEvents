@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.EntityFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.ServiceBus.IntegrationTests", "src\FluentEvents.Azure.ServiceBus.IntegrationTests\FluentEvents.Azure.ServiceBus.IntegrationTests.csproj", "{C83981A1-519E-4803-BB42-301DA98A23C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.Azure.ServiceBus.Tests", "src\FluentEvents.Azure.ServiceBus.Tests\FluentEvents.Azure.ServiceBus.Tests.csproj", "{DD7EB384-BCB0-439A-9B72-2B25A2A09EAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.Azure.ServiceBus.UnitTests", "src\FluentEvents.Azure.ServiceBus.UnitTests\FluentEvents.Azure.ServiceBus.UnitTests.csproj", "{DD7EB384-BCB0-439A-9B72-2B25A2A09EAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

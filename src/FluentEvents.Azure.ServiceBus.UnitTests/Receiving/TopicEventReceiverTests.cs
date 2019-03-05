@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentEvents.Azure.ServiceBus.Receiving;
+﻿using FluentEvents.Azure.ServiceBus.Receiving;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Logging;
@@ -9,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.Azure.ServiceBus.Tests.Receiving
+namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 {
     [TestFixture]
     public class TopicEventReceiverTests
