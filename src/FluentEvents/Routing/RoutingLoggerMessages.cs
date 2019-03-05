@@ -22,7 +22,7 @@ namespace FluentEvents.Routing
         internal static void EventRoutedToPipeline(this ILogger logger)
             => m_EventRoutedToPipeline(logger, null);
 
-        internal sealed class EventIds
+        private static class EventIds
         {
             public static EventId EventRoutedToPipeline { get; } = new EventId(1, nameof(EventRoutedToPipeline));
         }

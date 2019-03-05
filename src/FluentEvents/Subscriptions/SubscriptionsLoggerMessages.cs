@@ -9,7 +9,7 @@ namespace FluentEvents.Subscriptions
     {
         private static readonly Action<ILogger, Exception> m_EventHandlerThrew = LoggerMessage.Define(
             LogLevel.Error,
-            TransmissionLoggerMessages.EventIds.EventReceiverStarting,
+            EventIds.EventHandlerThrew,
             "An event handler threw an exception"
         );
 
@@ -30,7 +30,7 @@ namespace FluentEvents.Subscriptions
                 null
             );
 
-        internal sealed class EventIds
+        private static class EventIds
         {
             public static EventId EventHandlerThrew { get; } = new EventId(1, nameof(EventHandlerThrew));
             public static EventId PublishingEvent { get; } = new EventId(2, nameof(PublishingEvent));
