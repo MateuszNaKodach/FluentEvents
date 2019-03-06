@@ -167,7 +167,7 @@
             <summary>
                 A <see cref="T:System.Func`1" /> that returns unique names for subscriptions.
             </summary>
-            <remarks>The default implementations returns a GUID.</remarks>
+            <remarks>The default implementation returns a GUID.</remarks>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ManagementConnectionStringIsNullException">
             <inheritdoc />
