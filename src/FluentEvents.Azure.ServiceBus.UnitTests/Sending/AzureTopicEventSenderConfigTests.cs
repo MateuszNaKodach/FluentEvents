@@ -1,4 +1,5 @@
 ﻿using FluentEvents.Azure.ServiceBus.Sending;
+using FluentEvents.Infrastructure;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
@@ -37,6 +38,15 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
                     .Property(nameof(AzureTopicEventSenderConfig.ConnectionString))
                     .EqualTo(ValidConnectionString)
             );
+        }
+
+        [Test]
+        public void Validate_WhenConnectionStringIsNull_ShouldThrow()
+        {
+            Assert.That(() =>
+            {
+                ((IValidableConfig) m_AzureTopicEventSenderConfig).Validate(); 
+            }, Throws.TypeOf<ConnectionStringIsNullException>());
         }
     }
 }

@@ -10,6 +10,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     {
         private string m_ManagementConnectionString;
         private string m_ReceiveConnectionString;
+        private Func<string> m_SubscriptionNameGenerator = () => Guid.NewGuid().ToString();
 
         /// <summary>
         ///     Path of the Azure Service Bus topic relative to the namespace base address.
@@ -50,7 +51,11 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         ///     A <see cref="Func{TResult}" /> that returns unique names for subscriptions.
         /// </summary>
         /// <remarks>The default implementations returns a GUID.</remarks>
-        public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
+        public Func<string> SubscriptionNameGenerator
+        {
+            get => m_SubscriptionNameGenerator;
+            set => m_SubscriptionNameGenerator = value ?? throw new ArgumentNullException(nameof(value));
+        }
 
         void IValidableConfig.Validate()
         {

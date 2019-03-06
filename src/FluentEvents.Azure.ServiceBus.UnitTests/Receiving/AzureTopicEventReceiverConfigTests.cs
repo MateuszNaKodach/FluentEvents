@@ -1,4 +1,6 @@
-﻿using FluentEvents.Azure.ServiceBus.Receiving;
+﻿using System;
+using FluentEvents.Azure.ServiceBus.Receiving;
+using FluentEvents.Infrastructure;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
@@ -14,7 +16,36 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [SetUp]
         public void SetUp()
         {
+            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            {
+                ReceiveConnectionString = ValidConnectionString,
+                ManagementConnectionString = ValidConnectionString,
+                SubscriptionNameGenerator = () => "",
+                TopicPath = "TopicPath"
+            };
+        }
+
+        [Test]
+        public void SubscriptionNameGenerator_WhenNotSet_ShouldReturnGuidByDefault()
+        {
             m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig();
+
+            var subscriptionName = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator();
+
+            Assert.That(subscriptionName, Is.Not.Null);
+            Assert.That(Guid.TryParse(subscriptionName, out _), Is.True);
+        }
+
+        [Test]
+        public void SubscriptionNameGenerator_WhenSetToNull_ShouldThrow()
+        {
+            Assert.That(() =>
+            {
+                m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+                {
+                    SubscriptionNameGenerator = null
+                };
+            }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -59,6 +90,54 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
                     .Property(nameof(AzureTopicEventReceiverConfig.ReceiveConnectionString))
                     .EqualTo(ValidConnectionString)
             );
+        }
+
+        [Test]
+        public void Validate_WhenReceiveConnectionStringIsNull_ShouldThrow()
+        {
+            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            {
+                ManagementConnectionString = ValidConnectionString,
+                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
+                TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
+            };
+
+            Assert.That(() =>
+            {
+                ((IValidableConfig) m_AzureTopicEventReceiverConfig).Validate();
+            }, Throws.TypeOf<ReceiveConnectionStringIsNullException>());
+        }
+
+        [Test]
+        public void Validate_WhenManagementConnectionStringIsNull_ShouldThrow()
+        {
+            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            {
+                ReceiveConnectionString = ValidConnectionString,
+                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
+                TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
+            };
+
+            Assert.That(() =>
+            {
+                ((IValidableConfig)m_AzureTopicEventReceiverConfig).Validate();
+            }, Throws.TypeOf<ManagementConnectionStringIsNullException>());
+        }
+
+        [Test]
+        public void Validate_WhenTopicPathIsNull_ShouldThrow()
+        {
+            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            {
+                ManagementConnectionString = ValidConnectionString,
+                ReceiveConnectionString = ValidConnectionString,
+                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator
+            };
+
+            Assert.That(() =>
+            {
+                ((IValidableConfig)m_AzureTopicEventReceiverConfig).Validate();
+            }, Throws.TypeOf<TopicPathIsNullException>());
         }
     }
 }
