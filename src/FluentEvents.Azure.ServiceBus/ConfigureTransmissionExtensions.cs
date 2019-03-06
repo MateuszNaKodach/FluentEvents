@@ -6,7 +6,7 @@ namespace FluentEvents.Azure.ServiceBus
     /// <summary>
     ///     Extension methods for <see cref="IPublishTransmissionConfiguration"/>.
     /// </summary>
-    public static class PublishTransmissionConfigurationExtensions
+    public static class ConfigureTransmissionExtensions
     {
         /// <summary>
         ///     Publishes the event to different instances of the application

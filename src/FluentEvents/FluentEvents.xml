@@ -668,7 +668,7 @@
         </member>
         <member name="M:FluentEvents.Pipelines.Publication.IConfigureTransmission.With``1">
             <summary>
-                This method creates a <see cref="T:FluentEvents.Pipelines.Publication.PublishTransmissionConfiguration"/> with the specified sender type.
+                This method creates a <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/> with the specified sender type.
             </summary>
             <typeparam name="T">The type of the event sender.</typeparam>
             <returns>A configuration object with the specified sender type.</returns>

@@ -4,6 +4,30 @@
         <name>FluentEvents.Azure.ServiceBus</name>
     </assembly>
     <members>
+        <member name="T:FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions">
+            <summary>
+                Extension methods for <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions.WithAzureTopic(FluentEvents.Pipelines.Publication.IConfigureTransmission)">
+            <summary>
+                Publishes the event to different instances of the application
+                with an Azure Service Bus topic.
+            </summary>
+            <remarks>
+                This method can be used if the AzureTopicSender plugin is added to the <see cref="T:FluentEvents.EventsContext"/>.
+            </remarks>
+            <param name="configureTransmission">
+                The <see cref="T:FluentEvents.Pipelines.Publication.IConfigureTransmission"/> provided by the
+                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                method.
+            </param>
+            <returns>
+                The <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/> for the
+                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                method.
+            </returns>
+        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions">
             <summary>
                 Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
@@ -106,30 +130,6 @@
                 Creates a new <see cref="T:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException"/>
             </summary>
             <param name="innerException">The inner exception.</param>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.PublishTransmissionConfigurationExtensions">
-            <summary>
-                Extension methods for <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/>.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.PublishTransmissionConfigurationExtensions.WithAzureTopic(FluentEvents.Pipelines.Publication.IConfigureTransmission)">
-            <summary>
-                Publishes the event to different instances of the application
-                with an Azure Service Bus topic.
-            </summary>
-            <remarks>
-                This method can be used if the AzureTopicSender plugin is added to the <see cref="T:FluentEvents.EventsContext"/>.
-            </remarks>
-            <param name="configureTransmission">
-                The <see cref="T:FluentEvents.Pipelines.Publication.IConfigureTransmission"/> provided by the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
-                method.
-            </param>
-            <returns>
-                The <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/> for the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
-                method.
-            </returns>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig">
             <summary>
