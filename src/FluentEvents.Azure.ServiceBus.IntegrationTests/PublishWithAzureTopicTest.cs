@@ -27,8 +27,8 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 
             services.AddEventsContext<TestEventsContext>(options =>
             {
-                options.AddAzureTopicReceiver(configuration.GetSection("azureTopicReceiver"));
-                options.AddAzureTopicSender(configuration.GetSection("azureTopicSender"));
+                options.UseAzureTopicEventReceiver(configuration.GetSection("azureTopicReceiver"));
+                options.UseAzureTopicEventSender(configuration.GetSection("azureTopicSender"));
             });
 
             m_ServiceProvider = services.BuildServiceProvider();

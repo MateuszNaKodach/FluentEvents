@@ -4,16 +4,15 @@ using System.Threading.Tasks;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Receiving
 {
-    internal class TopicEventReceiver : IEventReceiver
+    internal class AzureTopicEventReceiver : IEventReceiver
     {
-        private readonly TopicEventReceiverConfig m_Config;
-        private readonly ILogger<TopicEventReceiver> m_Logger;
+        private readonly AzureTopicEventReceiverConfig m_Config;
+        private readonly ILogger<AzureTopicEventReceiver> m_Logger;
         private readonly IPublishingService m_PublishingService;
         private readonly IEventsSerializationService m_EventsSerializationService;
         private readonly ITopicSubscriptionsService m_TopicSubscriptionsService;
@@ -21,9 +20,9 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         private ISubscriptionClient m_SubscriptionClient;
 
-        public TopicEventReceiver(
-            ILogger<TopicEventReceiver> logger,
-            IOptions<TopicEventReceiverConfig> config,
+        public AzureTopicEventReceiver(
+            ILogger<AzureTopicEventReceiver> logger,
+            IOptions<AzureTopicEventReceiverConfig> config,
             IPublishingService publishingService,
             IEventsSerializationService eventsSerializationService,
             ITopicSubscriptionsService topicSubscriptionsService,

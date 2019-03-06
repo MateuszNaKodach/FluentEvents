@@ -8,15 +8,15 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Sending
 {
-    internal class TopicEventSender : IEventSender, IDisposable
+    internal class AzureTopicEventSender : IEventSender, IDisposable
     {
-        private readonly ILogger<TopicEventSender> m_Logger;
+        private readonly ILogger<AzureTopicEventSender> m_Logger;
         private readonly IEventsSerializationService m_EventsSerializationService;
         private readonly ITopicClient m_TopicClient;
 
-        public TopicEventSender(
-            ILogger<TopicEventSender> logger,
-            IOptions<TopicEventSenderConfig> config, 
+        public AzureTopicEventSender(
+            ILogger<AzureTopicEventSender> logger,
+            IOptions<AzureTopicEventSenderConfig> config, 
             IEventsSerializationService eventsSerializationService,
             ITopicClientFactory topicClientFactory
         )

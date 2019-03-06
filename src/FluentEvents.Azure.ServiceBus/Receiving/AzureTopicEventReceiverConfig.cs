@@ -6,7 +6,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events receiver.
     /// </summary>
-    public class TopicEventReceiverConfig : IValidableConfig
+    public class AzureTopicEventReceiverConfig : IValidableConfig
     {
         private string m_ManagementConnectionString;
         private string m_ReceiveConnectionString;

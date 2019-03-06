@@ -6,19 +6,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace FluentEvents.Azure.ServiceBus.Sending
+namespace FluentEvents.Azure.ServiceBus.Receiving
 {
-    internal class TopicSenderPlugin : IFluentEventsPlugin
+    internal class AzureTopicEventReceiverPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration m_Configuration;
-        private readonly Action<TopicEventSenderConfig> m_ConfigureOptions;
+        private readonly Action<AzureTopicEventReceiverConfig> m_ConfigureOptions;
 
-        public TopicSenderPlugin(Action<TopicEventSenderConfig> configureOptions)
+        public AzureTopicEventReceiverPlugin(Action<AzureTopicEventReceiverConfig> configureOptions)
         {
             m_ConfigureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
 
-        public TopicSenderPlugin(IConfiguration configuration)
+        public AzureTopicEventReceiverPlugin(IConfiguration configuration)
         {
             m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -28,13 +28,14 @@ namespace FluentEvents.Azure.ServiceBus.Sending
             if (m_ConfigureOptions != null)
                 services.Configure(m_ConfigureOptions);
             else
-                services.Configure<TopicEventSenderConfig>(m_Configuration);
+                services.Configure<AzureTopicEventReceiverConfig>(m_Configuration);
 
             services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<TopicEventSenderConfig>>().Value
+                x.GetRequiredService<IOptions<AzureTopicEventReceiverConfig>>().Value
             );
-            services.AddSingleton<ITopicClientFactory, TopicClientFactory>();
-            services.AddSingleton<IEventSender, TopicEventSender>();
+            services.AddSingleton<ITopicSubscriptionsService, TopicSubscriptionsService>();
+            services.AddSingleton<ISubscriptionClientFactory, SubscriptionClientFactory>();
+            services.AddSingleton<IEventReceiver, AzureTopicEventReceiver>();
         }
     }
 }

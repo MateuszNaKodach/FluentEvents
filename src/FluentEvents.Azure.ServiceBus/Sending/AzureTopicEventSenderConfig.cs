@@ -6,7 +6,7 @@ namespace FluentEvents.Azure.ServiceBus.Sending
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events sender.
     /// </summary>
-    public class TopicEventSenderConfig : IValidableConfig
+    public class AzureTopicEventSenderConfig : IValidableConfig
     {
         private string m_ConnectionString;
 

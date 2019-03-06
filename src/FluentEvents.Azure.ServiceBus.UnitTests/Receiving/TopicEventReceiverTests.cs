@@ -22,15 +22,15 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         private const string ReceiveConnectionString = "Endpoint=sb://sb.net/;SharedAccessKeyName=read;SharedAccessKey=0;EntityPath=0";
         private const string SubscriptionName = "SubscriptionName";
 
-        private TopicEventReceiverConfig m_Config;
+        private AzureTopicEventReceiverConfig m_Config;
 
-        private Mock<ILogger<TopicEventReceiver>> m_LoggerMock;
+        private Mock<ILogger<AzureTopicEventReceiver>> m_LoggerMock;
         private Mock<IPublishingService> m_PublishingServiceMock;
         private Mock<IEventsSerializationService> m_EventsSerializationServiceMock;
         private Mock<ITopicSubscriptionsService> m_TopicSubscriptionsServiceMock;
         private Mock<ISubscriptionClientFactory> m_SubscriptionClientFactoryMock;
 
-        private TopicEventReceiver m_TopicEventReceiver;
+        private AzureTopicEventReceiver m_AzureTopicEventReceiver;
         private Mock<ISubscriptionClient> m_SubscriptionClientMock;
         private Func<Message, CancellationToken, Task> m_MessageHandler;
         private MessageHandlerOptions m_MessageHandlerOptions;
@@ -38,7 +38,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [SetUp]
         public async Task SetUp()
         {
-            m_Config = new TopicEventReceiverConfig
+            m_Config = new AzureTopicEventReceiverConfig
             {
                 ReceiveConnectionString = ReceiveConnectionString,
                 ManagementConnectionString = ManagementConnectionString,
@@ -47,14 +47,14 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
                 SubscriptionNameGenerator = () => SubscriptionName,
                 MaxConcurrentMessages = 10
             };
-            m_LoggerMock = new Mock<ILogger<TopicEventReceiver>>(MockBehavior.Strict);
+            m_LoggerMock = new Mock<ILogger<AzureTopicEventReceiver>>(MockBehavior.Strict);
             m_PublishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
             m_EventsSerializationServiceMock = new Mock<IEventsSerializationService>(MockBehavior.Strict);
             m_TopicSubscriptionsServiceMock = new Mock<ITopicSubscriptionsService>(MockBehavior.Strict);
             m_SubscriptionClientFactoryMock = new Mock<ISubscriptionClientFactory>(MockBehavior.Strict);
             m_SubscriptionClientMock = new Mock<ISubscriptionClient>(MockBehavior.Strict);
 
-            m_TopicEventReceiver = new TopicEventReceiver(
+            m_AzureTopicEventReceiver = new AzureTopicEventReceiver(
                 m_LoggerMock.Object,
                 Options.Create(m_Config),
                 m_PublishingServiceMock.Object,
@@ -96,7 +96,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
                 })
                 .Verifiable();
 
-            await m_TopicEventReceiver.StartReceivingAsync(cts.Token);
+            await m_AzureTopicEventReceiver.StartReceivingAsync(cts.Token);
         }
 
         [TearDown]

@@ -29,7 +29,7 @@ namespace FluentEvents.Azure.ServiceBus
             this IConfigureTransmission configureTransmission
         )
         {
-            return configureTransmission.With<TopicEventSender>();
+            return configureTransmission.With<AzureTopicEventSender>();
         }
     }
 }
