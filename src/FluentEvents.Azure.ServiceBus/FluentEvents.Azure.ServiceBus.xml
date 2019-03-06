@@ -194,12 +194,6 @@
             </summary>
             <param name="innerException">The inner exception.</param>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.SubscriptionNameGeneratorIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.SubscriptionNameGenerator" /> property is null.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.TopicPathIsNullException">
             <inheritdoc />
             <summary>

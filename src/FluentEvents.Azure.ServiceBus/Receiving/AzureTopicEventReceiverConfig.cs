@@ -59,8 +59,6 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         void IValidableConfig.Validate()
         {
-            if (SubscriptionNameGenerator == null)
-                throw new SubscriptionNameGeneratorIsNullException();
             if (ReceiveConnectionString == null)
                 throw new ReceiveConnectionStringIsNullException();
             if (ManagementConnectionString == null)
