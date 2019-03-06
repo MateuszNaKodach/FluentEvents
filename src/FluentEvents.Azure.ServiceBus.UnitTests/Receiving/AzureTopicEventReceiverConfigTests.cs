@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 {
     [TestFixture]
-    public class TopicEventReceiverConfigTests
+    public class AzureTopicEventReceiverConfigTests
     {
         private const string InvalidConnectionString = "InvalidConnectionString";
         private const string ValidConnectionString = "Endpoint=sb://sbdomain.net/;SharedAccessKeyName=read;SharedAccessKey=123;EntityPath=123";

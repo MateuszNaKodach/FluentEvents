@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 {
     [TestFixture]
-    public class TopicEventReceiverTests
+    public class AzureTopicEventReceiverTests
     {
         private const string TopicPath = "TopicPath";
         private const string ManagementConnectionString = "Endpoint=sb://sb.net/;SharedAccessKeyName=management;SharedAccessKey=0;EntityPath=0";
