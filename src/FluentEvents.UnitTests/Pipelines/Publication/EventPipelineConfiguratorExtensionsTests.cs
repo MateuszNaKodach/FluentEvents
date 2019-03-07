@@ -74,6 +74,15 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         }
 
         [Test]
+        public void ThenIsPublishedToGlobalSubscriptions_WithNullArgs_ShouldThrow()
+        {
+            Assert.That(() =>
+            {
+                m_EventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(null);
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void ThenIsPublishedToGlobalSubscriptions_WithTransmissionConfiguration_ShouldAddPipelineModuleWithEventSender()
         {
             m_ServiceProviderMock

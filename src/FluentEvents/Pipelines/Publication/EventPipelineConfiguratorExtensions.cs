@@ -58,6 +58,9 @@ namespace FluentEvents.Pipelines.Publication
             where TSource : class
             where TEventArgs : class
         {
+            if (configurePublishTransmission == null)
+                throw new ArgumentNullException(nameof(configurePublishTransmission));
+
             var globalPublishingOptionsFactory = new ConfigureTransmission();
             var senderTypeConfiguration = configurePublishTransmission(globalPublishingOptionsFactory);
             var moduleConfig = new GlobalPublishPipelineModuleConfig
