@@ -39,6 +39,8 @@ namespace FluentEvents.Config
             where TSource : class
             where TEventArgs : class
         {
+            if (eventFieldName == null) throw new ArgumentNullException(nameof(eventFieldName));
+
             var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource));
             var eventField = sourceModel.GetOrCreateEventField(eventFieldName);
 

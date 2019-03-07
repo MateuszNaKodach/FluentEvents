@@ -63,6 +63,15 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
+        public void Event_WithNullEventName_ShouldThrow()
+        {
+            Assert.That(() =>
+            {
+                m_PipelinesBuilder.Event<TestSource, TestEventArgs>(null);
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void Event_WithInvalidEventArgsType_ShouldThrow()
         {
             m_SourceModelsServiceMock
