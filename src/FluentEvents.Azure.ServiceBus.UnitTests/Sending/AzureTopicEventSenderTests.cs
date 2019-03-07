@@ -88,5 +88,16 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
 
             await m_AzureTopicEventSender.SendAsync(m_PipelineEvent);
         }
+
+        [Test]
+        public void Dispose_ShouldCloseTopicClient()
+        {
+            m_TopicClientMock
+                .Setup(x => x.CloseAsync())
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            m_AzureTopicEventSender.Dispose();
+        }
     }
 }
