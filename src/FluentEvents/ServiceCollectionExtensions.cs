@@ -3,9 +3,8 @@ using System.Linq;
 using FluentEvents.Infrastructure;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace FluentEvents
 {
@@ -102,7 +101,7 @@ namespace FluentEvents
             if (serviceDescriptor.ServiceType.IsGenericTypeDefinition)
                 services.Add(serviceDescriptor);
             else
-                services.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
+                services.Replace(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
                 {
                     object service;
 

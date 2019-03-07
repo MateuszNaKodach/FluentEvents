@@ -142,7 +142,7 @@ namespace FluentEvents
         /// </summary>
         /// <param name="source">The event source.</param>
         /// <param name="eventsScope">The scope where the events should be queued and published.</param>
-        public void Attach(object source, EventsScope eventsScope)
+        public virtual void Attach(object source, EventsScope eventsScope)
             => Dependencies.AttachingService.Attach(source, eventsScope);
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace FluentEvents
         /// </summary>
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
-        public Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
+        public virtual Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null) 
             => Dependencies.EventsQueuesService.ProcessQueuedEventsAsync(eventsScope, queueName);
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace FluentEvents
         /// </summary>
         /// <param name="eventsScope">The scope of the queue.</param>
         /// <param name="queueName">The name of the queue.</param>
-        public void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
+        public virtual void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
             => Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
 
         /// <summary>
