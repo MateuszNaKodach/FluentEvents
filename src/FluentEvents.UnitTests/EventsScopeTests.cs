@@ -91,12 +91,12 @@ namespace FluentEvents.UnitTests
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(eventsContextMock.Object, serviceProviderMock.Object, null, null))
+                .Returns(new SubscriptionsBuilder(null, null))
                 .Verifiable();
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(new PipelinesBuilder(eventsContextMock.Object, serviceProviderMock.Object, null))
+                .Returns(new PipelinesBuilder(serviceProviderMock.Object, null))
                 .Verifiable();
 
             eventsContextMock.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);

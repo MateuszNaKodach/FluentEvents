@@ -9,38 +9,40 @@ namespace FluentEvents.Config
     ///     Provides a simple API surface for configuring an event.
     /// </summary>
     public class EventConfigurator<TSource, TEventArgs> 
-        : IInfrastructure<SourceModel>,
-            IInfrastructure<SourceModelEventField>,
-            IInfrastructure<EventsContext>
+        : IInfrastructure<IServiceProvider>,
+            IInfrastructure<SourceModel>,
+            IInfrastructure<SourceModelEventField>
         where TSource : class 
         where TEventArgs : class 
     {
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_ServiceProvider;
         SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
         SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
-        EventsContext IInfrastructure<EventsContext>.Instance => m_EventsContext;
 
+        private readonly IServiceProvider m_ServiceProvider;
         private readonly SourceModel m_SourceModel;
         private readonly SourceModelEventField m_SourceModelEventField;
-        private readonly EventsContext m_EventsContext;
 
         internal EventConfigurator(
+            IServiceProvider serviceProvider,
             SourceModel sourceModel,
-            SourceModelEventField sourceModelEventField,
-            EventsContext eventsContext
+            SourceModelEventField sourceModelEventField
         )
         {
             m_SourceModel = sourceModel;
             m_SourceModelEventField = sourceModelEventField;
-            m_EventsContext = eventsContext;
+            m_ServiceProvider = serviceProvider;
         }
 
         /// <summary>
         ///     This method creates a pipeline for the current event.
         /// </summary>
-        /// <returns>An <see cref="EventPipelineConfigurator{TSource,TEventArgs}"/> to configure the modules of the pipeline.</returns>
+        /// <returns>
+        ///     An <see cref="EventPipelineConfigurator{TSource,TEventArgs}"/> to configure the modules of the pipeline.
+        /// </returns>
         public EventPipelineConfigurator<TSource, TEventArgs> IsForwardedToPipeline()
         {
-            var pipeline = new Pipeline(m_EventsContext.Get<IServiceProvider>());
+            var pipeline = new Pipeline(m_ServiceProvider);
 
             m_SourceModelEventField.AddPipeline(pipeline);
 

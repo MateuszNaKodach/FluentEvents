@@ -24,16 +24,18 @@ namespace FluentEvents.Config
         ///     Subscribes a service to scoped events the first time a matching event is published. 
         /// </summary>
         /// <typeparam name="TSource">The type of the event source.</typeparam>
-        /// <param name="subscriptionCallback">
+        /// <param name="subscriptionAction">
         ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceConfigurator<TService> HasScopedSubscription<TSource>(
-            Action<TService, TSource> subscriptionCallback
+            Action<TService, TSource> subscriptionAction
         )
             where TSource : class
         {
-            m_ScopedSubscriptionsService.ConfigureScopedServiceSubscription(subscriptionCallback);
+            if (subscriptionAction == null) throw new ArgumentNullException(nameof(subscriptionAction));
+
+            m_ScopedSubscriptionsService.ConfigureScopedServiceSubscription(subscriptionAction);
             return this;
         }
 
@@ -41,16 +43,18 @@ namespace FluentEvents.Config
         ///     Subscribes a service to global events when the EventsContext is initialized. 
         /// </summary>
         /// <typeparam name="TSource">The type of the event source.</typeparam>
-        /// <param name="subscriptionCallback">
+        /// <param name="subscriptionAction">
         ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceConfigurator<TService> HasGlobalSubscription<TSource>(
-            Action<TService, TSource> subscriptionCallback
+            Action<TService, TSource> subscriptionAction
         )
             where TSource : class
         {
-            m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription(subscriptionCallback);
+            if (subscriptionAction == null) throw new ArgumentNullException(nameof(subscriptionAction));
+
+            m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription(subscriptionAction);
             return this;
         }
     }

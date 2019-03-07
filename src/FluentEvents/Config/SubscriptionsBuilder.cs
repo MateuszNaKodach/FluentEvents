@@ -1,12 +1,11 @@
-﻿using System;
-using FluentEvents.Subscriptions;
+﻿using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Config
 {
     /// <summary>
     ///     Provides a simple API surface to select a service and configure it fluently.
     /// </summary>
-    public class SubscriptionsBuilder : BuilderBase
+    public class SubscriptionsBuilder
     {
         private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
         private readonly IScopedSubscriptionsService m_ScopedSubscriptionsService;
@@ -16,12 +15,9 @@ namespace FluentEvents.Config
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public SubscriptionsBuilder(
-            EventsContext eventsContext,
-            IServiceProvider serviceProvider,
             IGlobalSubscriptionCollection globalSubscriptionCollection,
             IScopedSubscriptionsService scopedSubscriptionsService
         )
-            : base(eventsContext)
         {
             m_GlobalSubscriptionCollection = globalSubscriptionCollection;
             m_ScopedSubscriptionsService = scopedSubscriptionsService;

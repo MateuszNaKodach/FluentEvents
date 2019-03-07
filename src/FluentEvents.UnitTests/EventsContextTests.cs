@@ -237,10 +237,7 @@ namespace FluentEvents.UnitTests
         {
             m_InternalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(
-                    m_EventsContext,
-                    m_InternalServiceProviderMock.Object,
-                    m_GlobalSubscriptionCollectionMock.Object,
+                .Returns(new SubscriptionsBuilder(m_GlobalSubscriptionCollectionMock.Object,
                     m_ScopedSubscriptionsServiceMock.Object
                 ))
                 .Verifiable();
@@ -248,7 +245,6 @@ namespace FluentEvents.UnitTests
             m_InternalServiceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
                 .Returns(new PipelinesBuilder(
-                    m_EventsContext,
                     m_InternalServiceProviderMock.Object,
                     m_SourceModelsServiceMock.Object
                 ))

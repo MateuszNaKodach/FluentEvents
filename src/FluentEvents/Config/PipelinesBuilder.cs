@@ -6,8 +6,9 @@ namespace FluentEvents.Config
     /// <summary>
     ///     Provides a simple API surface to select an event and configure it fluently.
     /// </summary>
-    public class PipelinesBuilder : BuilderBase
+    public class PipelinesBuilder
     {
+        private readonly IServiceProvider m_ServiceProvider;
         private readonly ISourceModelsService m_SourceModelsService;
 
         /// <summary>
@@ -15,12 +16,11 @@ namespace FluentEvents.Config
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public PipelinesBuilder(
-            EventsContext eventsContext,
             IServiceProvider serviceProvider,
             ISourceModelsService sourceModelsService
         )
-            : base(eventsContext)
         {
+            m_ServiceProvider = serviceProvider;
             m_SourceModelsService = sourceModelsService;
         }
 
@@ -42,7 +42,10 @@ namespace FluentEvents.Config
             var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource));
             var eventField = sourceModel.GetOrCreateEventField(eventFieldName);
 
-            return new EventConfigurator<TSource, TEventArgs>(sourceModel, eventField, EventsContext);
+            if (eventField.EventArgsType != typeof(TEventArgs))
+                throw new EventArgsTypeMismatchException();
+
+            return new EventConfigurator<TSource, TEventArgs>(m_ServiceProvider, sourceModel, eventField);
         }
     }
 }

@@ -35,6 +35,11 @@ namespace FluentEvents.Model
         public ICollection<IPipeline> Pipelines { get; }
 
         /// <summary>
+        ///     The event args type of the represented event field.
+        /// </summary>
+        public Type EventArgsType => EventHandlerParameters[1].Type;
+
+        /// <summary>
         ///     The return type of the represented event field.
         /// </summary>
         public Type ReturnType { get; }

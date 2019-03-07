@@ -4,22 +4,9 @@
         <name>FluentEvents</name>
     </assembly>
     <members>
-        <member name="T:FluentEvents.Config.BuilderBase">
+        <member name="T:FluentEvents.Config.EventArgsTypeMismatchException">
             <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="P:FluentEvents.Config.BuilderBase.EventsContext">
-            <summary>
-                This API supports the FluentEvents Core infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Config.BuilderBase.#ctor(FluentEvents.EventsContext)">
-            <summary>
-                This API supports the FluentEvents Core infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
+                An exception throw when configuring an event by specifying the wrong type of the event args.
             </summary>
         </member>
         <member name="T:FluentEvents.Config.EventConfigurator`2">
@@ -31,7 +18,9 @@
             <summary>
                 This method creates a pipeline for the current event.
             </summary>
-            <returns>An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.</returns>
+            <returns>
+                An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.
+            </returns>
         </member>
         <member name="T:FluentEvents.Config.EventPipelineConfigurator`2">
             <summary>
@@ -45,13 +34,13 @@
             <param name="pipeline">The pipeline to configure.</param>
             <param name="eventConfigurator">The event configurator.</param>
         </member>
-        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Model.SourceModel,FluentEvents.Model.SourceModelEventField,FluentEvents.EventsContext,FluentEvents.Pipelines.Pipeline)">
+        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Model.SourceModel,FluentEvents.Model.SourceModelEventField,System.IServiceProvider,FluentEvents.Pipelines.Pipeline)">
             <summary>
                 Allows to create an instance without passing an <see cref="T:FluentEvents.Config.EventConfigurator`2"/>
             </summary>
             <param name="sourceModel">The source model.</param>
             <param name="sourceModelEventField">The source model event field.</param>
-            <param name="eventsContext">The events context.</param>
+            <param name="serviceProvider">The events context.</param>
             <param name="pipeline">The pipeline to configure.</param>
         </member>
         <member name="T:FluentEvents.Config.PipelinesBuilder">
@@ -59,7 +48,7 @@
                 Provides a simple API surface to select an event and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.PipelinesBuilder.#ctor(FluentEvents.EventsContext,System.IServiceProvider,FluentEvents.Model.ISourceModelsService)">
+        <member name="M:FluentEvents.Config.PipelinesBuilder.#ctor(System.IServiceProvider,FluentEvents.Model.ISourceModelsService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -86,7 +75,7 @@
                 Subscribes a service to scoped events the first time a matching event is published. 
             </summary>
             <typeparam name="TSource">The type of the event source.</typeparam>
-            <param name="subscriptionCallback">
+            <param name="subscriptionAction">
                 The method that will be called to make the subscriptions to the source's events.
             </param>
             <returns>The configuration object to add more subscriptions.</returns>
@@ -96,7 +85,7 @@
                 Subscribes a service to global events when the EventsContext is initialized. 
             </summary>
             <typeparam name="TSource">The type of the event source.</typeparam>
-            <param name="subscriptionCallback">
+            <param name="subscriptionAction">
                 The method that will be called to make the subscriptions to the source's events.
             </param>
             <returns>The configuration object to add more subscriptions.</returns>
@@ -106,7 +95,7 @@
                 Provides a simple API surface to select a service and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.EventsContext,System.IServiceProvider,FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.IScopedSubscriptionsService)">
+        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.IScopedSubscriptionsService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -415,6 +404,11 @@
         <member name="P:FluentEvents.Model.SourceModelEventField.Pipelines">
             <summary>
                 A collection of the configured pipelines for this event field.
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Model.SourceModelEventField.EventArgsType">
+            <summary>
+                The event args type of the represented event field.
             </summary>
         </member>
         <member name="P:FluentEvents.Model.SourceModelEventField.ReturnType">

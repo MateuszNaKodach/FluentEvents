@@ -64,7 +64,8 @@ namespace FluentEvents.Pipelines.Queues
         {
             if (queueName != null)
             {
-                var eventsQueueNamesService = eventPipelineConfigurator.Get<EventsContext>().Get<IServiceProvider>()
+                var eventsQueueNamesService = eventPipelineConfigurator
+                    .Get<IServiceProvider>()
                     .GetRequiredService<IEventsQueueNamesService>();
 
                 eventsQueueNamesService.RegisterQueueNameIfNotExists(queueName);
