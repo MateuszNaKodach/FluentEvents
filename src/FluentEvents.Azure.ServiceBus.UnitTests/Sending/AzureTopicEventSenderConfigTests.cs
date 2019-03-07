@@ -7,9 +7,6 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class AzureTopicEventSenderConfigTests
     {
-        private const string InvalidConnectionString = "InvalidConnectionString";
-        private const string ValidConnectionString = "Endpoint=sb://sbdomain.net/;SharedAccessKeyName=read;SharedAccessKey=123;EntityPath=123";
-
         private AzureTopicEventSenderConfig m_AzureTopicEventSenderConfig;
 
         [SetUp]
@@ -23,20 +20,20 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventSenderConfig.ConnectionString = InvalidConnectionString;
+                m_AzureTopicEventSenderConfig.ConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventSenderConfig.ConnectionString = ValidConnectionString;
+            m_AzureTopicEventSenderConfig.ConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
                 m_AzureTopicEventSenderConfig,
                 Has
                     .Property(nameof(AzureTopicEventSenderConfig.ConnectionString))
-                    .EqualTo(ValidConnectionString)
+                    .EqualTo(Constants.ValidConnectionString)
             );
         }
 

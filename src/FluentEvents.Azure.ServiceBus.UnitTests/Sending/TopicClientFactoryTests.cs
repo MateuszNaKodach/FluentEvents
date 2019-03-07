@@ -10,8 +10,6 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class TopicClientFactoryTests
     {
-        private const string ValidConnectionString = "Endpoint=sb://sbdomain.net/;SharedAccessKeyName=read;SharedAccessKey=123;EntityPath=123";
-
         private TopicClientFactory m_TopicClientFactory;
 
         [SetUp]
@@ -23,7 +21,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         [Test]
         public void GetNew_ShouldReturnTopicClient()
         {
-            var topicClient = m_TopicClientFactory.GetNew(ValidConnectionString);
+            var topicClient = m_TopicClientFactory.GetNew(Constants.ValidConnectionString);
 
             Assert.That(topicClient, Is.TypeOf<TopicClient>());
         }

@@ -8,9 +8,6 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
     [TestFixture]
     public class AzureTopicEventReceiverConfigTests
     {
-        private const string InvalidConnectionString = "InvalidConnectionString";
-        private const string ValidConnectionString = "Endpoint=sb://sbdomain.net/;SharedAccessKeyName=read;SharedAccessKey=123;EntityPath=123";
-
         private AzureTopicEventReceiverConfig m_AzureTopicEventReceiverConfig;
 
         [SetUp]
@@ -18,8 +15,8 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
-                ReceiveConnectionString = ValidConnectionString,
-                ManagementConnectionString = ValidConnectionString,
+                ReceiveConnectionString = Constants.ValidConnectionString,
+                ManagementConnectionString = Constants.ValidConnectionString,
                 SubscriptionNameGenerator = () => "",
                 TopicPath = "TopicPath"
             };
@@ -53,20 +50,20 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventReceiverConfig.ManagementConnectionString = InvalidConnectionString;
+                m_AzureTopicEventReceiverConfig.ManagementConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ManagementConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventReceiverConfig.ManagementConnectionString = ValidConnectionString;
+            m_AzureTopicEventReceiverConfig.ManagementConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
                 m_AzureTopicEventReceiverConfig,
                 Has
                     .Property(nameof(AzureTopicEventReceiverConfig.ManagementConnectionString))
-                    .EqualTo(ValidConnectionString)
+                    .EqualTo(Constants.ValidConnectionString)
             );
         }
 
@@ -75,20 +72,20 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventReceiverConfig.ReceiveConnectionString = InvalidConnectionString;
+                m_AzureTopicEventReceiverConfig.ReceiveConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ReceiveConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventReceiverConfig.ReceiveConnectionString = ValidConnectionString;
+            m_AzureTopicEventReceiverConfig.ReceiveConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
                 m_AzureTopicEventReceiverConfig,
                 Has
                     .Property(nameof(AzureTopicEventReceiverConfig.ReceiveConnectionString))
-                    .EqualTo(ValidConnectionString)
+                    .EqualTo(Constants.ValidConnectionString)
             );
         }
 
@@ -97,7 +94,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
-                ManagementConnectionString = ValidConnectionString,
+                ManagementConnectionString = Constants.ValidConnectionString,
                 SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
                 TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
             };
@@ -113,7 +110,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
-                ReceiveConnectionString = ValidConnectionString,
+                ReceiveConnectionString = Constants.ValidConnectionString,
                 SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
                 TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
             };
@@ -129,8 +126,8 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
-                ManagementConnectionString = ValidConnectionString,
-                ReceiveConnectionString = ValidConnectionString,
+                ManagementConnectionString = Constants.ValidConnectionString,
+                ReceiveConnectionString = Constants.ValidConnectionString,
                 SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator
             };
 

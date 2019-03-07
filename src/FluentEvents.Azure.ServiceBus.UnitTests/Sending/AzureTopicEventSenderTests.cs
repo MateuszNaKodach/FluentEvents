@@ -14,8 +14,6 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class AzureTopicEventSenderTests
     {
-        private const string ValidConnectionString = "Endpoint=sb://sbdomain.net/;SharedAccessKeyName=read;SharedAccessKey=123;EntityPath=123";
-
         private Mock<ILogger<AzureTopicEventSender>> m_LoggerMock;
         private Mock<IEventsSerializationService> m_EventsSerializationServiceMock;
         private Mock<ITopicClientFactory> m_TopicClientFactoryMock;
@@ -32,7 +30,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
             m_EventsSerializationServiceMock = new Mock<IEventsSerializationService>(MockBehavior.Strict);
             m_TopicClientFactoryMock = new Mock<ITopicClientFactory>(MockBehavior.Strict);
             m_TopicClientFactoryMock
-                .Setup(x => x.GetNew(ValidConnectionString))
+                .Setup(x => x.GetNew(Constants.ValidConnectionString))
                 .Returns(m_TopicClientMock.Object)
                 .Verifiable();
 
@@ -40,7 +38,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
                 m_LoggerMock.Object,
                 Options.Create(new AzureTopicEventSenderConfig
                 {
-                    ConnectionString = ValidConnectionString
+                    ConnectionString = Constants.ValidConnectionString
                 }),
                 m_EventsSerializationServiceMock.Object,
                 m_TopicClientFactoryMock.Object
