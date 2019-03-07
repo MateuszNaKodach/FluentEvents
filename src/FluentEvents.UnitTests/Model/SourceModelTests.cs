@@ -1,5 +1,4 @@
-﻿using System;
-using FluentEvents.Model;
+﻿using FluentEvents.Model;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -46,22 +45,17 @@ namespace FluentEvents.UnitTests.Model
 
         private class TestSourceWithInvalidArgs
         {
-            public event EventHandlerWithInvalidArgs<TestArgs> EventWithArgs;
+            public event EventHandlerWithInvalidArgs<TestEventArgs> EventWithArgs;
         }
 
         private delegate object EventHandlerWithInvalidReturnType<in TEventArgs>(object sender, TEventArgs e);
 
         private class TestSourceWithInvalidReturnType
         {
-            public event EventHandlerWithInvalidReturnType<TestArgs> EventWithArgs;
+            public event EventHandlerWithInvalidReturnType<TestEventArgs> EventWithArgs;
         }
 
-        private class TestSource
-        {
-            public event EventHandler<TestArgs> EventWithArgs;
-        }
-
-        private class TestArgs
+        private class TestEventArgs
         {
             public int Prop { get; set; }
         }
