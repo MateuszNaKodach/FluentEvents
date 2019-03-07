@@ -230,7 +230,7 @@ namespace FluentEvents.IntegrationTests
                 where TArgs : class
             {
                 if (m_Parameters.IsQueued)
-                    pipelineConfigurator.ThenIsQueuedToDefaultQueue();
+                    pipelineConfigurator.ThenIsQueuedTo("DefaultQueue");
 
                 switch (m_Parameters.PublicationType)
                 {

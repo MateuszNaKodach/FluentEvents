@@ -24,6 +24,7 @@ namespace FluentEvents.Pipelines.Queues
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
+        [Obsolete]
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsQueuedToDefaultQueue<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator
         )
