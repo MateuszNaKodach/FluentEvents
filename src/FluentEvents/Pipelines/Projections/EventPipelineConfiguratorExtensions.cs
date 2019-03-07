@@ -61,7 +61,7 @@ namespace FluentEvents.Pipelines.Projections
             );
 
             eventPipelineConfigurator
-                .Get<Pipeline>()
+                .Get<IPipeline>()
                 .AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
                     projectionPipelineModuleConfig
                 );
@@ -70,7 +70,7 @@ namespace FluentEvents.Pipelines.Projections
                 projectedSourceModel,
                 projectedEventField,
                 eventPipelineConfigurator.Get<IServiceProvider>(),
-                eventPipelineConfigurator.Get<Pipeline>()
+                eventPipelineConfigurator.Get<IPipeline>()
             );
         }
     }

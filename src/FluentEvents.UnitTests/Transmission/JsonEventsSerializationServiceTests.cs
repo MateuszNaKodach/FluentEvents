@@ -61,12 +61,12 @@ namespace FluentEvents.UnitTests.Transmission
             );
         }
 
-        public class TestSender
+        private class TestSender
         {
             public int Property1 { get; set; }
         }
 
-        public class TestEventArgs
+        private class TestEventArgs
         {
             public int Property1 { get; set; }
         }

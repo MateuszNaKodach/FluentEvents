@@ -72,7 +72,7 @@ namespace FluentEvents.Pipelines.Queues
             }
 
             eventPipelineConfigurator
-                .Get<Pipeline>()
+                .Get<IPipeline>()
                 .AddModule<EnqueuePipelineModule, EnqueuePipelineModuleConfig>(
                     new EnqueuePipelineModuleConfig
                     {

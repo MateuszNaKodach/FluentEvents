@@ -39,7 +39,7 @@ namespace FluentEvents.UnitTests.Config
                 m_EventConfigurator
             );
 
-            var pipeline = eventPipelineConfigurator.Get<Pipeline>();
+            var pipeline = eventPipelineConfigurator.Get<IPipeline>();
             var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             var sourceModel = eventPipelineConfigurator.Get<SourceModel>();
             var sourceModelEventField = eventPipelineConfigurator.Get<SourceModelEventField>();
@@ -60,7 +60,7 @@ namespace FluentEvents.UnitTests.Config
                 m_Pipeline
             );
 
-            var pipeline = eventPipelineConfigurator.Get<Pipeline>();
+            var pipeline = eventPipelineConfigurator.Get<IPipeline>();
             var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             var sourceModel = eventPipelineConfigurator.Get<SourceModel>();
             var sourceModelEventField = eventPipelineConfigurator.Get<SourceModelEventField>();

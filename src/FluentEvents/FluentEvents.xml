@@ -27,14 +27,14 @@
                 Provides a simple API surface for configuring an event pipeline.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Pipelines.Pipeline,FluentEvents.Config.EventConfigurator{`0,`1})">
+        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Pipelines.IPipeline,FluentEvents.Config.EventConfigurator{`0,`1})">
             <summary>
                 Creates an instance by taking dependencies from an <see cref="T:FluentEvents.Config.EventConfigurator`2"/>
             </summary>
             <param name="pipeline">The pipeline to configure.</param>
             <param name="eventConfigurator">The event configurator.</param>
         </member>
-        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Model.SourceModel,FluentEvents.Model.SourceModelEventField,System.IServiceProvider,FluentEvents.Pipelines.Pipeline)">
+        <member name="M:FluentEvents.Config.EventPipelineConfigurator`2.#ctor(FluentEvents.Model.SourceModel,FluentEvents.Model.SourceModelEventField,System.IServiceProvider,FluentEvents.Pipelines.IPipeline)">
             <summary>
                 Allows to create an instance without passing an <see cref="T:FluentEvents.Config.EventConfigurator`2"/>
             </summary>
@@ -481,6 +481,12 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="M:FluentEvents.Pipelines.IPipeline.AddModule``2(``1)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Pipelines.IPipelineModule`1">
             <summary>
                 Represents a module for event pipelines.
@@ -653,6 +659,11 @@
             <summary>
                 An exception thrown when the configured <see cref="T:FluentEvents.Transmission.IEventSender"/>
                 wasn't registered in the internal <see cref="T:System.IServiceProvider"/>.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Pipelines.Publication.EventTransmissionPluginIsNotConfiguredException">
+            <summary>
+                An exception thrown when the transmission plugin is not configured in the <see cref="T:FluentEvents.EventsContextOptions"/>.
             </summary>
         </member>
         <member name="T:FluentEvents.Pipelines.Publication.IConfigureTransmission">

@@ -12,19 +12,19 @@ namespace FluentEvents.Config
         : IInfrastructure<IServiceProvider>,
             IInfrastructure<SourceModel>,
             IInfrastructure<SourceModelEventField>,
-            IInfrastructure<Pipeline>
+            IInfrastructure<IPipeline>
         where TSource : class
         where TEventArgs : class
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_ServiceProvider;
         SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
         SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
-        Pipeline IInfrastructure<Pipeline>.Instance => m_Pipeline;
+        IPipeline IInfrastructure<IPipeline>.Instance => m_Pipeline;
 
         private readonly IServiceProvider m_ServiceProvider;
         private readonly SourceModel m_SourceModel;
         private readonly SourceModelEventField m_SourceModelEventField;
-        private readonly Pipeline m_Pipeline;
+        private readonly IPipeline m_Pipeline;
 
         /// <summary>
         ///     Creates an instance by taking dependencies from an <see cref="EventConfigurator{TSource,TEventArgs}"/>
@@ -32,7 +32,7 @@ namespace FluentEvents.Config
         /// <param name="pipeline">The pipeline to configure.</param>
         /// <param name="eventConfigurator">The event configurator.</param>
         public EventPipelineConfigurator(
-            Pipeline pipeline,
+            IPipeline pipeline,
             EventConfigurator<TSource, TEventArgs> eventConfigurator
         )
         {
@@ -53,7 +53,7 @@ namespace FluentEvents.Config
             SourceModel sourceModel,
             SourceModelEventField sourceModelEventField,
             IServiceProvider serviceProvider,
-            Pipeline pipeline
+            IPipeline pipeline
         )
         {
             m_SourceModel = sourceModel;

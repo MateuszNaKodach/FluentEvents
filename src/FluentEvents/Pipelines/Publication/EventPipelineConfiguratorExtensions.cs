@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
+using FluentEvents.Transmission;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Pipelines.Publication
 {
@@ -25,7 +29,7 @@ namespace FluentEvents.Pipelines.Publication
             where TEventArgs : class
         {
             eventPipelineConfigurator
-                .Get<Pipeline>()
+                .Get<IPipeline>()
                 .AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
                     new ScopedPublishPipelineModuleConfig()
                 );
@@ -61,8 +65,19 @@ namespace FluentEvents.Pipelines.Publication
                 SenderType = senderTypeConfiguration.SenderType
             };
 
+            if (moduleConfig.SenderType != null)
+            {
+                var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
+                var eventSenderExists = serviceProvider
+                    .GetServices<IEventSender>()
+                    .Any(x => x.GetType() == moduleConfig.SenderType);
+
+                if (!eventSenderExists)
+                    throw new EventTransmissionPluginIsNotConfiguredException();
+            }
+
             eventPipelineConfigurator
-                .Get<Pipeline>()
+                .Get<IPipeline>()
                 .AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                     moduleConfig
                 );

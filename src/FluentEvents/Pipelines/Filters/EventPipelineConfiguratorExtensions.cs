@@ -32,7 +32,7 @@ namespace FluentEvents.Pipelines.Filters
             where TSource : class 
             where TEventArgs : class
         {
-            eventPipelineConfigurator.Get<Pipeline>()
+            eventPipelineConfigurator.Get<IPipeline>()
                 .AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
                     new FilterPipelineModuleConfig((sender, args) => filter((TSource) sender, (TEventArgs) args))
                 );
