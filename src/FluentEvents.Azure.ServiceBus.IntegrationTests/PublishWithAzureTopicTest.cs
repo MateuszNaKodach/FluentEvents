@@ -23,6 +23,9 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 .AddUserSecrets<PublishWithAzureTopicTest>()
                 .Build();
 
+            if (string.IsNullOrEmpty(configuration["azureTopicSender:connectionString"]))
+                Assert.Ignore("Azure Service Bus settings not found in user secrets.");
+
             var services = new ServiceCollection();
 
             services.AddEventsContext<TestEventsContext>(options =>
@@ -38,7 +41,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         }
 
         [Test]
-        public async Task Works()
+        public async Task EventShouldBePublishedWithAzureServiceBusTopic()
         {
             await m_TestEventsContext.StartEventReceivers();
 
