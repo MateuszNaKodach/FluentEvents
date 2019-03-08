@@ -45,28 +45,22 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         {
             await m_TestEventsContext.StartEventReceivers();
 
-            TestEventArgs testEventArgs = null;
+            object receivedSender = null;
+            TestEventArgs receivedEventArgs = null;
             m_TestEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
-                testEntity.Test += (sender, args) => { testEventArgs = args; };
+                testEntity.Test += (sender, args) =>
+                {
+                    receivedSender = sender;
+                    receivedEventArgs = args;
+                };
             });
 
-            var entity = new TestEntity();
-            m_TestEventsContext.Attach(entity, m_EventsScope);
+            TestUtils.AttachAndRaiseEvent(m_TestEventsContext, m_EventsScope);
 
-            entity.RaiseEvent("");
+            await Watcher.WaitUntilAsync(() => receivedEventArgs != null);
 
-            var waitMilliseconds = 20000;
-            var checksCount = 20;
-            for (var i = 0; i < checksCount; i++)
-            {
-                await Task.Delay(waitMilliseconds / checksCount);
-
-                if (testEventArgs != null)
-                    break;
-            }
-
-            Assert.That(testEventArgs, Is.Not.Null);
+            TestUtils.AssertThatEventIsPublishedProperly(receivedSender, receivedEventArgs);
         }
 
         private class TestEventsContext : EventsContext

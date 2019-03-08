@@ -35,16 +35,6 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 
             var hubUrl = $"{configuration["azureSignalRService:hubUrl"]}client/?hub={HubName}";
 
-            var accessTokensService = new AccessTokensService();
-            var accessToken = accessTokensService.GenerateAccessToken(connectionString, hubUrl);
-
-            m_HubConnection = new HubConnectionBuilder()
-                .WithUrl(hubUrl, options =>
-                {
-                    options.AccessTokenProvider = () => Task.FromResult(accessToken);
-                })
-                .Build();
-
             var services = new ServiceCollection();
 
             services.AddEventsContext<TestEventsContext>(options =>
@@ -57,34 +47,37 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             m_TestEventsContext = m_ServiceProvider.GetRequiredService<TestEventsContext>();
             m_EventsScope = m_ServiceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
 
+            await SetUpHubConnection(connectionString, hubUrl);
+        }
+
+        private async Task SetUpHubConnection(string connectionString, string hubUrl)
+        {
+            var accessTokensService = new AccessTokensService();
+            var accessToken = accessTokensService.GenerateAccessToken(connectionString, hubUrl);
+
+            m_HubConnection = new HubConnectionBuilder()
+                .WithUrl(hubUrl, options => { options.AccessTokenProvider = () => Task.FromResult(accessToken); })
+                .Build();
+
             await m_HubConnection.StartAsync();
         }
 
         [Test]
         public async Task Works()
         {
-            TestEventArgs testEventArgs = null;
-            m_HubConnection.On<TestEntity, TestEventArgs>(HubMethodName, (testEntity, eventArgs) =>
+            TestEntity receivedSender = null;
+            TestEventArgs receivedEventArgs = null;
+            m_HubConnection.On<TestEntity, TestEventArgs>(HubMethodName, (sender, eventArgs) =>
             {
-                testEventArgs = eventArgs;
+                receivedSender = sender;
+                receivedEventArgs = eventArgs;
             });
 
-            var entity = new TestEntity();
-            m_TestEventsContext.Attach(entity, m_EventsScope);
+            TestUtils.AttachAndRaiseEvent(m_TestEventsContext, m_EventsScope);
 
-            entity.RaiseEvent("");
+            await Watcher.WaitUntilAsync(() => receivedEventArgs != null);
 
-            var waitMilliseconds = 20000;
-            var checksCount = 20;
-            for (var i = 0; i < checksCount; i++)
-            {
-                await Task.Delay(waitMilliseconds / checksCount);
-
-                if (testEventArgs != null)
-                    break;
-            }
-
-            Assert.That(testEventArgs, Is.Not.Null);
+            TestUtils.AssertThatEventIsPublishedProperly(receivedSender, receivedEventArgs);
         }
 
         private class TestEventsContext : EventsContext
