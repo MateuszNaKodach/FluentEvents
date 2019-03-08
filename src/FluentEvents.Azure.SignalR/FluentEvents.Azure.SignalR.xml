@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FluentEvents.Azure.SignalR</name>
+    </assembly>
+    <members>
+        <member name="T:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig">
+            <inheritdoc />
+        </member>
+        <member name="P:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig.ConnectionString">
+            <inheritdoc />
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.AzureSignalRPublishingFailedException">
+            <summary>
+                An exception thrown when a request to an Azure SignalR Service API fails.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.IAzureSignalRClientConfig">
+            <summary>
+                The configuration of the Azure SignalR Service plugin.
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Azure.SignalR.Client.IAzureSignalRClientConfig.ConnectionString">
+            <summary>
+                The connection string of the Azure SignalR Service.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions">
+            <summary>
+                Extensions for <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/>
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAllAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String)">
+            <summary>
+                Adds a module to the current pipeline that publishes the event to all the users connected to
+                the configured Azure SignalR Service.
+            </summary>
+            <typeparam name="TSource">The type that publishes the event.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args.</typeparam>
+            <param name="eventPipelineConfigurator">
+                The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
+            </param>
+            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubMethodName">The SignalR hub method name.</param>
+            <returns>
+                The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String,System.Func{``0,``1,System.String[]})">
+            <summary>
+                Adds a module to the current pipeline that publishes the event to some users connected to
+                the configured Azure SignalR Service.
+            </summary>
+            <typeparam name="TSource">The type that publishes the event.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args.</typeparam>
+            <param name="eventPipelineConfigurator">
+                The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
+            </param>
+            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubMethodName">The SignalR hub method name.</param>
+            <param name="userIdsProviderAction">
+                A <see cref="T:System.Func`1"/> that returns the ids of the users that should receive the event.
+            </param>
+            <returns>
+                The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRGroups``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String,System.Func{``0,``1,System.String[]})">
+            <summary>
+                Adds a module to the current pipeline that publishes the event to some groups connected to
+                the configured Azure SignalR Service.
+            </summary>
+            <typeparam name="TSource">The type that publishes the event.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args.</typeparam>
+            <param name="eventPipelineConfigurator">
+                The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
+            </param>
+            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubMethodName">The SignalR hub method name.</param>
+            <param name="groupIdsProviderAction">
+                A <see cref="T:System.Func`1"/> that returns the ids of the groups that should receive the event.
+            </param>
+            <returns>
+                The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions">
+            <summary>
+                Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalR(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig})">
+            <summary>
+                Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
+            </summary>
+            <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
+            <param name="configureAction">
+                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig"/> for
+                the topic sender plugin.
+            </param>
+            <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalR(FluentEvents.Plugins.IFluentEventsPluginOptions,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+                Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
+            </summary>
+            <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
+            <param name="configuration">
+                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig"/> type.
+            </param>
+            <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
+        </member>
+    </members>
+</doc>

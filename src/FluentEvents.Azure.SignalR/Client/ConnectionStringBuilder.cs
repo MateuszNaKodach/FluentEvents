@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FluentEvents.Azure.SignalR
+namespace FluentEvents.Azure.SignalR.Client
 {
     internal class ConnectionStringBuilder : IConnectionStringBuilder
     {

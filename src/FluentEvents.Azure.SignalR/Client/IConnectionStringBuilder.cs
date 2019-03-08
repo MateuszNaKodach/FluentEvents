@@ -1,4 +1,4 @@
-﻿namespace FluentEvents.Azure.SignalR
+﻿namespace FluentEvents.Azure.SignalR.Client
 {
     internal interface IConnectionStringBuilder
     {

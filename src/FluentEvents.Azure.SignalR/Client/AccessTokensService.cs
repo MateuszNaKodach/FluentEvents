@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FluentEvents.Azure.SignalR
+namespace FluentEvents.Azure.SignalR.Client
 {
     internal class AccessTokensService : IAccessTokensService
     {
@@ -17,14 +17,11 @@ namespace FluentEvents.Azure.SignalR
             m_ServerName = GenerateServerName();
         }
 
-        private string GenerateServerName()
-        {
-            return $"{Environment.MachineName}_{Guid.NewGuid():N}";
-        }
+        private string GenerateServerName() => $"{Environment.MachineName}_{Guid.NewGuid():N}";
 
         public string GenerateAccessToken(ConnectionString connectionString, string audience, TimeSpan? lifetime = null)
         {
-            IEnumerable<Claim> claims = new[]
+            var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, m_ServerName)
             };

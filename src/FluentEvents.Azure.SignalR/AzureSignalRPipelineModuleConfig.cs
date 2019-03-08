@@ -4,9 +4,9 @@ namespace FluentEvents.Azure.SignalR
 {
     internal class AzureSignalRPipelineModuleConfig
     {
-        public PublicationMethod PublicationMethod { get; }
-        public string HubName { get; }
-        public string HubMethodName { get; }
-        public Func<object, object, string[]> SubjectIdsProvider { get; }
+        public PublicationMethod PublicationMethod { get; set; }
+        public string HubName { get; set; }
+        public string HubMethodName { get; set; }
+        public Func<object, object, string[]> ReceiverIdsProviderAction { get; set; }
     }
 }

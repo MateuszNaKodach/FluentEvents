@@ -4,6 +4,6 @@
     {
         User,
         Group,
-        Broadcast,
+        Broadcast
     }
 }

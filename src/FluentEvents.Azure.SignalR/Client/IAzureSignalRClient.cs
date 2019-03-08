@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FluentEvents.Azure.SignalR
+namespace FluentEvents.Azure.SignalR.Client
 {
     internal interface IAzureSignalRClient
     {
@@ -8,7 +8,7 @@ namespace FluentEvents.Azure.SignalR
             PublicationMethod publicationMethod,
             string hubName,
             string hubMethodName,
-            string[] subjectIds,
+            string[] receiverIds,
             object eventSender,
             object eventArgs
         );

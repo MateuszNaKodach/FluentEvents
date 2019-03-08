@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Azure.SignalR.Client;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Azure.SignalR
@@ -22,7 +23,7 @@ namespace FluentEvents.Azure.SignalR
                 config.PublicationMethod,
                 config.HubName,
                 config.HubMethodName,
-                config.SubjectIdsProvider(
+                config.ReceiverIdsProviderAction?.Invoke(
                     pipelineContext.PipelineEvent.OriginalSender,
                     pipelineContext.PipelineEvent.OriginalEventArgs
                 ),
