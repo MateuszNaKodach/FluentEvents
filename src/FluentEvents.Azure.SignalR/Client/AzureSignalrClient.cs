@@ -7,6 +7,8 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal class AzureSignalRClient : IAzureSignalRClient
     {
+        private static readonly string[] NullReceiver = {null};
+
         private readonly HttpClient m_HttpClient;
         private readonly IUrlProvider m_UrlProvider;
         private readonly IHttpRequestFactory m_HttpRequestFactory;
@@ -36,7 +38,7 @@ namespace FluentEvents.Azure.SignalR.Client
             object eventArgs
         )
         {
-            foreach (var receiverId in receiverIds)
+            foreach (var receiverId in receiverIds ?? NullReceiver)
             {
                 var url = m_UrlProvider.GetUrl(
                     m_ConnectionString.Endpoint,

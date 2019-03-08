@@ -1,8 +1,10 @@
 ﻿using System;
 using FluentEvents.Azure.SignalR.Client;
+using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.SignalR
 {
@@ -40,8 +42,12 @@ namespace FluentEvents.Azure.SignalR
             var httpClientBuilder = services.AddHttpClient<IAzureSignalRClient, AzureSignalRClient>();
             m_HttpClientBuilderAction?.Invoke(httpClientBuilder);
 
+            services.AddSingleton<IValidableConfig>(x =>
+                x.GetRequiredService<IOptions<AzureSignalRClientConfig>>().Value
+            );
             services.AddSingleton<AzureSignalRPipelineModule>();            
             services.AddSingleton<IUrlProvider, UrlProvider>();
+            services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             services.AddSingleton<IHttpRequestFactory, HttpRequestFactory>();
             services.AddSingleton<IAccessTokensService, AccessTokensService>();
         }
