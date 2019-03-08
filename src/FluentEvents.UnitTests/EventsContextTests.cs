@@ -85,6 +85,22 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
+        [Sequential]
+        public void Configure_WithNullArgs_ShouldThrow(
+            [Values(false, true)] bool areOptionsNull, 
+            [Values(true, false)] bool isServiceCollectionNull
+        )
+        {
+            Assert.That(() =>
+            {
+                m_EventsContext.Configure(
+                    areOptionsNull ? null : m_EventsContextOptions,
+                    isServiceCollectionNull ? null : m_InternalServiceCollectionMock.Object
+                );
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void Instance_OnFirstCall_ShouldCallBuilders()
         {
             SetUpServiceProviderAndServiceCollection();
