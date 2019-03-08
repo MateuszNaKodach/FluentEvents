@@ -17,7 +17,6 @@ namespace FluentEvents.Azure.SignalR.Client
 
         public AzureSignalRClient(
             IOptions<AzureSignalRClientConfig> config,
-            IConnectionStringBuilder connectionStringBuilder,
             HttpClient httpClient,
             IUrlProvider urlProvider,
             IHttpRequestFactory httpRequestFactory
@@ -26,7 +25,7 @@ namespace FluentEvents.Azure.SignalR.Client
             m_HttpClient = httpClient;
             m_HttpRequestFactory = httpRequestFactory;
             m_UrlProvider = urlProvider;
-            m_ConnectionString = connectionStringBuilder.ParseConnectionString(config.Value.ConnectionString);
+            m_ConnectionString = config.Value.ConnectionString;
         }
 
         public async Task SendEventAsync(

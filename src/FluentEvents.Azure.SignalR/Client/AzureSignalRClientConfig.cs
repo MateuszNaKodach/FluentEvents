@@ -1,13 +1,22 @@
-﻿using System;
-using FluentEvents.Infrastructure;
+﻿using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Azure.SignalR.Client
 {
-    /// <inheritdoc cref="IAzureSignalRClientConfig" />
-    public class AzureSignalRClientConfig : IAzureSignalRClientConfig, IValidableConfig
+    /// <summary>
+    ///     The configuration of the Azure SignalR Service plugin.
+    /// </summary>
+    public class AzureSignalRClientConfig : IValidableConfig
     {
-        /// <inheritdoc />
-        public string ConnectionString { get; set; }
+        private string m_ConnectionString;
+
+        /// <summary>
+        ///     The connection string of the Azure SignalR Service.
+        /// </summary>
+        public string ConnectionString
+        {
+            get => m_ConnectionString;
+            set => m_ConnectionString = ConnectionStringValidator.Validate(value);
+        }
 
         void IValidableConfig.Validate()
         {

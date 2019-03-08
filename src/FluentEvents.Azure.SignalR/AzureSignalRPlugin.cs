@@ -47,7 +47,6 @@ namespace FluentEvents.Azure.SignalR
             );
             services.AddSingleton<AzureSignalRPipelineModule>();            
             services.AddSingleton<IUrlProvider, UrlProvider>();
-            services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             services.AddSingleton<IHttpRequestFactory, HttpRequestFactory>();
             services.AddSingleton<IAccessTokensService, AccessTokensService>();
         }

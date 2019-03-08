@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentEvents.Azure.SignalR.Client;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
-using FluentEvents.Pipelines.Publication;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,11 +33,10 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             if (string.IsNullOrEmpty(connectionString))
                 Assert.Ignore("Azure SignalR Service settings not found in user secrets.");
 
-            var hubUrl = configuration["azureSignalRService:hubUrl"] + "client/?hub=" + HubName;
+            var hubUrl = $"{configuration["azureSignalRService:hubUrl"]}client/?hub={HubName}";
 
             var accessTokensService = new AccessTokensService();
-            var connectionString2 = new ConnectionStringBuilder().ParseConnectionString(connectionString);
-            var accessToken = accessTokensService.GenerateAccessToken(connectionString2, hubUrl);
+            var accessToken = accessTokensService.GenerateAccessToken(connectionString, hubUrl);
 
             m_HubConnection = new HubConnectionBuilder()
                 .WithUrl(hubUrl, options =>

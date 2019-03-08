@@ -5,29 +5,35 @@
     </assembly>
     <members>
         <member name="T:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig">
-            <inheritdoc cref="T:FluentEvents.Azure.SignalR.Client.IAzureSignalRClientConfig" />
+            <summary>
+                The configuration of the Azure SignalR Service plugin.
+            </summary>
         </member>
         <member name="P:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig.ConnectionString">
-            <inheritdoc />
+            <summary>
+                The connection string of the Azure SignalR Service.
+            </summary>
         </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.AzureSignalRPublishingFailedException">
             <summary>
                 An exception thrown when a request to an Azure SignalR Service API fails.
             </summary>
         </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringHasMissingPropertiesException">
+            <inheritdoc />
+            <summary>
+                An exception thrown when parsing a connection string with missing properties.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringHasDuplicatedPropertiesException">
+            <inheritdoc />
+            <summary>
+                An exception thrown when parsing a connection string with duplicated properties.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringIsNullException">
             <summary>
                 An exception thrown when <see cref="P:FluentEvents.Azure.SignalR.Client.AzureSignalRClientConfig.ConnectionString"/> is null.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Azure.SignalR.Client.IAzureSignalRClientConfig">
-            <summary>
-                The configuration of the Azure SignalR Service plugin.
-            </summary>
-        </member>
-        <member name="P:FluentEvents.Azure.SignalR.Client.IAzureSignalRClientConfig.ConnectionString">
-            <summary>
-                The connection string of the Azure SignalR Service.
             </summary>
         </member>
         <member name="T:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions">
