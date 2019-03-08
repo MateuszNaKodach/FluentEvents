@@ -16,7 +16,7 @@ namespace FluentEvents.Azure.SignalR.Client
         private readonly ConnectionString m_ConnectionString;
 
         public AzureSignalRClient(
-            IOptions<AzureSignalRClientConfig> config,
+            IOptions<AzureSignalRServiceConfig> config,
             HttpClient httpClient,
             IUrlProvider urlProvider,
             IHttpRequestFactory httpRequestFactory

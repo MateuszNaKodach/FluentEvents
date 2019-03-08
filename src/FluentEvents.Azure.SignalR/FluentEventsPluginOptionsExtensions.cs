@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using FluentEvents.Azure.SignalR.Client;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ namespace FluentEvents.Azure.SignalR
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureAction">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRClientConfig"/> for
+        ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceConfig"/> for
         ///     the topic sender plugin.
         /// </param>
         /// <param name="httpClientBuilderAction">
@@ -25,9 +24,9 @@ namespace FluentEvents.Azure.SignalR
         ///     the Azure SignalR Service.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalR(
+        public static IFluentEventsPluginOptions UseAzureSignalRService(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureSignalRClientConfig> configureAction,
+            Action<AzureSignalRServiceConfig> configureAction,
             Action<IHttpClientBuilder> httpClientBuilderAction = null
         )
         {
@@ -40,14 +39,14 @@ namespace FluentEvents.Azure.SignalR
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureSignalRClientConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceConfig"/> type.
         /// </param>
         /// <param name="httpClientBuilderAction">
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
         ///     the Azure SignalR Service.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalR(
+        public static IFluentEventsPluginOptions UseAzureSignalRService(
             this IFluentEventsPluginOptions pluginOptions,
             IConfiguration configuration,
             Action<IHttpClientBuilder> httpClientBuilderAction = null

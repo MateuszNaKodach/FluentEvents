@@ -49,7 +49,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 
             services.AddEventsContext<TestEventsContext>(options =>
             {
-                options.UseAzureSignalR(configuration.GetSection("azureSignalRService"));
+                options.UseAzureSignalRService(configuration.GetSection("azureSignalRService"));
             });
 
             m_ServiceProvider = services.BuildServiceProvider();

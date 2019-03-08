@@ -11,11 +11,11 @@ namespace FluentEvents.Azure.SignalR
     internal class AzureSignalRPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration m_Configuration;
-        private readonly Action<AzureSignalRClientConfig> m_ConfigureOptions;
+        private readonly Action<AzureSignalRServiceConfig> m_ConfigureOptions;
         private readonly Action<IHttpClientBuilder> m_HttpClientBuilderAction;
 
         public AzureSignalRPlugin(
-            Action<AzureSignalRClientConfig> configureAction,
+            Action<AzureSignalRServiceConfig> configureAction,
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
@@ -37,13 +37,13 @@ namespace FluentEvents.Azure.SignalR
             if (m_ConfigureOptions != null)
                 services.Configure(m_ConfigureOptions);
             else
-                services.Configure<AzureSignalRClientConfig>(m_Configuration);
+                services.Configure<AzureSignalRServiceConfig>(m_Configuration);
 
             var httpClientBuilder = services.AddHttpClient<IAzureSignalRClient, AzureSignalRClient>();
             m_HttpClientBuilderAction?.Invoke(httpClientBuilder);
 
             services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureSignalRClientConfig>>().Value
+                x.GetRequiredService<IOptions<AzureSignalRServiceConfig>>().Value
             );
             services.AddSingleton<AzureSignalRPipelineModule>();            
             services.AddSingleton<IUrlProvider, UrlProvider>();

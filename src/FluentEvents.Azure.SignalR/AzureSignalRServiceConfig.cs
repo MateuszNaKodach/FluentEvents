@@ -1,11 +1,12 @@
-﻿using FluentEvents.Infrastructure;
+﻿using FluentEvents.Azure.SignalR.Client;
+using FluentEvents.Infrastructure;
 
-namespace FluentEvents.Azure.SignalR.Client
+namespace FluentEvents.Azure.SignalR
 {
     /// <summary>
     ///     The configuration of the Azure SignalR Service plugin.
     /// </summary>
-    public class AzureSignalRClientConfig : IValidableConfig
+    public class AzureSignalRServiceConfig : IValidableConfig
     {
         private string m_ConnectionString;
 
