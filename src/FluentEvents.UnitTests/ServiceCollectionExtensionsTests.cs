@@ -85,6 +85,19 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
+        public void AddWithEventsAttachedTo_WithGenericTypeDefinition_ShouldNotReplaceServiceDescriptor()
+        {
+            var serviceDescriptor = new ServiceDescriptor(typeof(TestService3<>), new TestService3<object>());
+
+            m_ServiceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
+            {
+                m_ServiceCollection.Add(serviceDescriptor);
+            });
+
+            Assert.That(m_ServiceCollection, Has.One.Items.EqualTo(serviceDescriptor));
+        }
+
+        [Test]
         public void AddWithEventsAttachedTo_ShouldReplaceOnlyCorrectServiceDescriptorsWithCustomFactory(
             [Values] ServiceLifetime serviceLifetime
         )
@@ -148,6 +161,7 @@ namespace FluentEvents.UnitTests
         private class TestService0 { }
         private class TestService1 { }
         private class TestService2 { }
+        private class TestService3<T> { }
 
         public class TestEventsContext : EventsContext
         {

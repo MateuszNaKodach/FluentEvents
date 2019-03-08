@@ -98,9 +98,7 @@ namespace FluentEvents
         )
             where TEventsContext : EventsContext
         {
-            if (serviceDescriptor.ServiceType.IsGenericTypeDefinition)
-                services.Add(serviceDescriptor);
-            else
+            if (!serviceDescriptor.ServiceType.IsGenericTypeDefinition)
                 services.Replace(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
                 {
                     object service;
