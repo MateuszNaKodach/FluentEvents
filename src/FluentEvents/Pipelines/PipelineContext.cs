@@ -17,9 +17,18 @@ namespace FluentEvents.Pipelines
         /// </summary>
         public IServiceProvider ServiceProvider { get; }
 
-        internal EventsScope EventsScope { get; }
+        /// <summary>
+        ///     The current events scope.
+        /// </summary>
+        public EventsScope EventsScope { get; }
 
-        internal PipelineContext(PipelineEvent pipelineEvent, EventsScope eventsScope, IServiceProvider serviceProvider)
+        /// <summary>
+        ///     Creates a new instance of a <see cref="PipelineContext"/>.
+        /// </summary>
+        /// <param name="pipelineEvent">The event being processed.</param>
+        /// <param name="eventsScope">The current events scope.</param>
+        /// <param name="serviceProvider">The internal service provider.</param>
+        public PipelineContext(PipelineEvent pipelineEvent, EventsScope eventsScope, IServiceProvider serviceProvider)
         {
             PipelineEvent = pipelineEvent ?? throw new ArgumentNullException(nameof(pipelineEvent));
             EventsScope = eventsScope ?? throw new ArgumentNullException(nameof(eventsScope));

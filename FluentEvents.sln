@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.ServiceB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.ServiceBus.UnitTests", "src\FluentEvents.Azure.ServiceBus.UnitTests\FluentEvents.Azure.ServiceBus.UnitTests.csproj", "{DD7EB384-BCB0-439A-9B72-2B25A2A09EAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.Azure.SignalR.IntegrationTests", "src\FluentEvents.Azure.SignalR.IntegrationTests\FluentEvents.Azure.SignalR.IntegrationTests.csproj", "{A2FEFFCB-7873-4C6D-B4EE-3F2CC2F7D1F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentEvents.Azure.SignalR.IntegrationTests", "src\FluentEvents.Azure.SignalR.IntegrationTests\FluentEvents.Azure.SignalR.IntegrationTests.csproj", "{A2FEFFCB-7873-4C6D-B4EE-3F2CC2F7D1F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentEvents.Azure.SignalR.UnitTests", "src\FluentEvents.Azure.SignalR.UnitTests\FluentEvents.Azure.SignalR.UnitTests.csproj", "{FE6ED493-7162-4733-82DA-07596CE170A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{A2FEFFCB-7873-4C6D-B4EE-3F2CC2F7D1F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2FEFFCB-7873-4C6D-B4EE-3F2CC2F7D1F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2FEFFCB-7873-4C6D-B4EE-3F2CC2F7D1F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE6ED493-7162-4733-82DA-07596CE170A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE6ED493-7162-4733-82DA-07596CE170A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE6ED493-7162-4733-82DA-07596CE170A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE6ED493-7162-4733-82DA-07596CE170A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

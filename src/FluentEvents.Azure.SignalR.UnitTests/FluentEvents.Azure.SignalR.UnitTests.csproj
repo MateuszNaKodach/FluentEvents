@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentEvents.Azure.ServiceBus\FluentEvents.Azure.ServiceBus.csproj" />
+    <ProjectReference Include="..\FluentEvents.Azure.SignalR\FluentEvents.Azure.SignalR.csproj" />
   </ItemGroup>
 
 </Project>

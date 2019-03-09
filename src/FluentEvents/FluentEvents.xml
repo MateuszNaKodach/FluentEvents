@@ -542,6 +542,19 @@
                 The internal service provider.
             </summary>
         </member>
+        <member name="P:FluentEvents.Pipelines.PipelineContext.EventsScope">
+            <summary>
+                The current events scope.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Pipelines.PipelineContext.#ctor(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope,System.IServiceProvider)">
+            <summary>
+                Creates a new instance of a <see cref="T:FluentEvents.Pipelines.PipelineContext"/>.
+            </summary>
+            <param name="pipelineEvent">The event being processed.</param>
+            <param name="eventsScope">The current events scope.</param>
+            <param name="serviceProvider">The internal service provider.</param>
+        </member>
         <member name="T:FluentEvents.Pipelines.PipelineEvent">
             <summary>
                 Represents an event.
