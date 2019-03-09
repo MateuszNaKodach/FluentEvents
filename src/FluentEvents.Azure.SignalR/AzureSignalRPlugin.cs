@@ -11,7 +11,7 @@ namespace FluentEvents.Azure.SignalR
     internal class AzureSignalRPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration m_Configuration;
-        private readonly Action<AzureSignalRServiceConfig> m_ConfigureOptions;
+        private readonly Action<AzureSignalRServiceConfig> m_ConfigureAction;
         private readonly Action<IHttpClientBuilder> m_HttpClientBuilderAction;
 
         public AzureSignalRPlugin(
@@ -19,23 +19,23 @@ namespace FluentEvents.Azure.SignalR
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
-            m_ConfigureOptions = configureAction ?? throw new ArgumentNullException(nameof(configureAction));
+            m_ConfigureAction = configureAction ?? throw new ArgumentNullException(nameof(configureAction));
             m_HttpClientBuilderAction = httpClientBuilderAction;
         }
 
         public AzureSignalRPlugin(
-            IConfiguration configureOptions,
+            IConfiguration configuration,
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
-            m_Configuration = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
+            m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             m_HttpClientBuilderAction = httpClientBuilderAction;
         }
 
         public void ApplyServices(IServiceCollection services)
         {
-            if (m_ConfigureOptions != null)
-                services.Configure(m_ConfigureOptions);
+            if (m_ConfigureAction != null)
+                services.Configure(m_ConfigureAction);
             else
                 services.Configure<AzureSignalRServiceConfig>(m_Configuration);
 
