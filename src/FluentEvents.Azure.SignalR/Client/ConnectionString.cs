@@ -31,6 +31,9 @@ namespace FluentEvents.Azure.SignalR.Client
 
         internal static ConnectionString Parse(string connectionString)
         {
+            if (connectionString == null)
+                throw new ConnectionStringIsNullException();
+
             var properties = connectionString.Split(PropertySeparator, StringSplitOptions.RemoveEmptyEntries);
             if (properties.Length > 1)
             {
