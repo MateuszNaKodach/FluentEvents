@@ -22,7 +22,11 @@ namespace FluentEvents.Model
 
         private readonly IList<SourceModelEventField> m_EventFields;
 
-        internal SourceModel(Type clrType)
+        /// <summary>
+        ///     Creates a new instance of a <see cref="SourceModel"/>.
+        /// </summary>
+        /// <param name="clrType"></param>
+        public SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             m_EventFields = new List<SourceModelEventField>();

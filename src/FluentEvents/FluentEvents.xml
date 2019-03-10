@@ -369,6 +369,12 @@
                 The list of the event fields present on the <see cref="P:FluentEvents.Model.SourceModel.ClrType"/> and created on this model.
             </summary>
         </member>
+        <member name="M:FluentEvents.Model.SourceModel.#ctor(System.Type)">
+            <summary>
+                Creates a new instance of a <see cref="T:FluentEvents.Model.SourceModel"/>.
+            </summary>
+            <param name="clrType"></param>
+        </member>
         <member name="M:FluentEvents.Model.SourceModel.GetOrCreateEventField(System.String)">
             <summary>
                 Gets or creates an event field if present on the <see cref="P:FluentEvents.Model.SourceModel.ClrType"/>.

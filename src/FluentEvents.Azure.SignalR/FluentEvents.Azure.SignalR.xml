@@ -52,12 +52,12 @@
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
             </param>
             <param name="hubName">The SignalR hub name.</param>
-            <param name="hubMethodName">The SignalR hub method name.</param>
+            <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String,System.Func{``0,``1,System.String[]})">
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
             <summary>
                 Adds a module to the current pipeline that publishes the event to some users connected to
                 the configured Azure SignalR Service.
@@ -67,16 +67,16 @@
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
             </param>
-            <param name="hubName">The SignalR hub name.</param>
-            <param name="hubMethodName">The SignalR hub method name.</param>
             <param name="userIdsProviderAction">
                 A <see cref="T:System.Func`1"/> that returns the ids of the users that should receive the event.
             </param>
+            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRGroups``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String,System.Func{``0,``1,System.String[]})">
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRGroups``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
             <summary>
                 Adds a module to the current pipeline that publishes the event to some groups connected to
                 the configured Azure SignalR Service.
@@ -86,11 +86,11 @@
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
             </param>
-            <param name="hubName">The SignalR hub name.</param>
-            <param name="hubMethodName">The SignalR hub method name.</param>
             <param name="groupIdsProviderAction">
                 A <see cref="T:System.Func`1"/> that returns the ids of the groups that should receive the event.
             </param>
+            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
