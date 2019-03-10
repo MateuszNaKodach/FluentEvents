@@ -29,7 +29,7 @@ namespace FluentEvents.Azure.SignalR.Client
             return connectionString.ToString();
         }
 
-        internal static ConnectionString Parse(string connectionString)
+        private static ConnectionString Parse(string connectionString)
         {
             if (connectionString == null)
                 throw new ConnectionStringIsNullException();
@@ -58,36 +58,17 @@ namespace FluentEvents.Azure.SignalR.Client
             throw new ConnectionStringHasMissingPropertiesException(EndpointProperty, AccessKeyProperty);
         }
 
+        public static string Validate(string connectionString)
+        {
+            Parse(connectionString);
+
+            return connectionString;
+        }
+
         public override string ToString()
         {
             return $"{nameof(Endpoint)}{KeyValueSeparator}{Endpoint}{PropertySeparator}" +
                    $"{nameof(AccessKey)}{KeyValueSeparator}{AccessKey}{PropertySeparator}";
-        }
-    }
-
-    /// <inheritdoc />
-    /// <summary>
-    ///     An exception thrown when parsing a connection string with missing properties.
-    /// </summary>
-    public class ConnectionStringHasMissingPropertiesException : FluentEventsException
-    {
-        internal ConnectionStringHasMissingPropertiesException(string endpointProperty, string accessKeyProperty)
-            : base($"Connection string missing required properties {endpointProperty} and {accessKeyProperty}.")
-        {
-            
-        }
-    }
-
-    /// <inheritdoc />
-    /// <summary>
-    ///     An exception thrown when parsing a connection string with duplicated properties.
-    /// </summary>
-    public class ConnectionStringHasDuplicatedPropertiesException : FluentEventsException
-    {
-        internal ConnectionStringHasDuplicatedPropertiesException(string key)
-            : base($"Duplicate properties found in connection string: {key}.")
-        {
-            
         }
     }
 }

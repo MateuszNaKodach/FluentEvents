@@ -16,7 +16,7 @@ namespace FluentEvents.Azure.SignalR
         public string ConnectionString
         {
             get => m_ConnectionString;
-            set => m_ConnectionString = ConnectionStringValidator.Validate(value);
+            set => m_ConnectionString = Client.ConnectionString.Validate(value);
         }
 
         void IValidableConfig.Validate()
