@@ -28,6 +28,6 @@ namespace FluentEvents.Azure.SignalR.Client
         private string GetSendToUserUrl(string endpoint, string hubName, string userId) => $"{GetBaseUrl(endpoint, hubName)}/user/{userId}";
         private string GetSendToGroupUrl(string endpoint, string hubName, string group) => $"{GetBaseUrl(endpoint, hubName)}/group/{group}";
         private string GetBroadcastUrl(string endpoint, string hubName) => $"{GetBaseUrl(endpoint, hubName)}";
-        private string GetBaseUrl(string endpoint, string hubName) => $"{endpoint}/api/v1/hubs/{hubName.ToLower()}";
+        private string GetBaseUrl(string endpoint, string hubName) => $"{endpoint.TrimEnd('/')}/api/v1/hubs/{hubName.ToLower()}";
     }
 }
