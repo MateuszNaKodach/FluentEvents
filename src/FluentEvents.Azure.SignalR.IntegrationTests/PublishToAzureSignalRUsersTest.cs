@@ -8,7 +8,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 {
     [TestFixture]
     public class PublishToAzureSignalRUsersTest 
-        : PublishToAzureSignalRTestBase<PublishToAzureSignalRUsersTest.UsersEventsContext>
+        : PublishToAzureSignalRTestBase<PublishToAzureSignalRUsersTest.TestEventsContext>
     {
         [Test]
         public async Task Test()
@@ -27,7 +27,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             Assert.That(ReceivedEventsCount, Is.EqualTo(2));
         }
 
-        public class UsersEventsContext : EventsContext
+        public class TestEventsContext : EventsContext
         {
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {

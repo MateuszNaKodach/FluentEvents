@@ -15,25 +15,22 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         protected static readonly string UserId1 = Guid.NewGuid().ToString();
         protected static readonly string UserId2 = Guid.NewGuid().ToString();
         protected static readonly string UserId3 = Guid.NewGuid().ToString();
-        private int m_ReceivedEventsCount;
 
         protected const string HubName = "testHub";
         protected const string HubMethodName = "testHubMethod";
 
         private protected ConnectionString ConnectionString { get; private set; }
 
-        protected IServiceProvider Provider { get; private set; }
+        protected TEventsContext EventsContext { get; private set; }
         protected EventsScope Scope { get; private set; }
         protected HubConnection HubConnection1 { get; private set; }
         protected HubConnection HubConnection2 { get; private set; }
         protected HubConnection HubConnection3 { get; private set; }
 
-        protected TEventsContext EventsContext { get; private set; }
+        protected int ReceivedEventsCount => m_ReceivedEventsCount;
 
-        protected int ReceivedEventsCount
-        {
-            get => m_ReceivedEventsCount;
-        }
+        private int m_ReceivedEventsCount;
+        private IServiceProvider m_ServiceProvider;
 
         [SetUp]
         public async Task SetUp()
@@ -53,11 +50,11 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 
             AddEventsContext<TEventsContext>(services, configuration);
 
-            Provider = services.BuildServiceProvider();
+            m_ServiceProvider = services.BuildServiceProvider();
 
-            EventsContext = Provider.GetRequiredService<TEventsContext>();
+            EventsContext = m_ServiceProvider.GetRequiredService<TEventsContext>();
 
-            Scope = Provider.CreateScope().ServiceProvider.GetService<EventsScope>();
+            Scope = m_ServiceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
 
             HubConnection1 = await SetUpHubConnection(ConnectionString, hubUrl, UserId1);
             HubConnection2 = await SetUpHubConnection(ConnectionString, hubUrl, UserId2);
