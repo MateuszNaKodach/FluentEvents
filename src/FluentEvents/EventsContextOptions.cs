@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentEvents.Plugins;
 
 namespace FluentEvents
@@ -19,6 +21,13 @@ namespace FluentEvents
             m_Plugins = new List<IFluentEventsPlugin>();
         }
 
-        void IFluentEventsPluginOptions.AddPlugin(IFluentEventsPlugin plugin) => m_Plugins.Add(plugin);
+        void IFluentEventsPluginOptions.AddPlugin(IFluentEventsPlugin plugin)
+        {
+            if (plugin == null) throw new ArgumentNullException(nameof(plugin));
+            if (m_Plugins.Any(x => x.GetType() == plugin.GetType()))
+                throw new DuplicatePluginException();
+
+            m_Plugins.Add(plugin);
+        }
     }
 }
