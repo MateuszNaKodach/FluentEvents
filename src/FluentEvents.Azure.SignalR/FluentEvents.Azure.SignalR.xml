@@ -19,22 +19,33 @@
                 An exception thrown when a request to an Azure SignalR Service API fails.
             </summary>
         </member>
-        <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringHasMissingPropertiesException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when parsing a connection string with missing properties.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringHasDuplicatedPropertiesException">
             <inheritdoc />
             <summary>
                 An exception thrown when parsing a connection string with duplicated properties.
             </summary>
         </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringHasMissingPropertiesException">
+            <inheritdoc />
+            <summary>
+                An exception thrown when parsing a connection string with missing properties.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringIsNullException">
             <summary>
                 An exception thrown when <see cref="P:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig.ConnectionString"/> is null.
             </summary>
+        </member>
+        <member name="T:FluentEvents.Azure.SignalR.Client.InvalidConnectionStringAccessKeyException">
+            <summary>
+                An exception throw then generating an Azure SignalR Service access token with an invalid access key.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.Client.InvalidConnectionStringAccessKeyException.#ctor(System.Exception)">
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.Azure.SignalR.Client.InvalidConnectionStringAccessKeyException"/>.
+            </summary>
+            <param name="innerException">The inner exception.</param>
         </member>
         <member name="T:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions">
             <summary>

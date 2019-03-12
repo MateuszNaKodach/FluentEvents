@@ -31,7 +31,7 @@ namespace FluentEvents.Azure.SignalR.Client
 
         private string GenerateAccessTokenInternal(
             ConnectionString connectionString,
-            string audience, 
+            string audience,
             IEnumerable<Claim> claims,
             TimeSpan lifetime
         )
@@ -41,15 +41,23 @@ namespace FluentEvents.Azure.SignalR.Client
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(connectionString.AccessKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = m_JwtTokenHandler.CreateJwtSecurityToken(
-                issuer: null,
-                audience: audience,
-                subject: claims == null ? null : new ClaimsIdentity(claims),
-                expires: expire,
-                signingCredentials: credentials
-            );
+            JwtSecurityToken jwtSecurityToken;
+            try
+            {
+                jwtSecurityToken = m_JwtTokenHandler.CreateJwtSecurityToken(
+                    issuer: null,
+                    audience: audience,
+                    subject: claims == null ? null : new ClaimsIdentity(claims),
+                    expires: expire,
+                    signingCredentials: credentials
+                );
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                throw new InvalidConnectionStringAccessKeyException(e);
+            }
 
-            return m_JwtTokenHandler.WriteToken(token);
+            return m_JwtTokenHandler.WriteToken(jwtSecurityToken);
         }
     }
 }
