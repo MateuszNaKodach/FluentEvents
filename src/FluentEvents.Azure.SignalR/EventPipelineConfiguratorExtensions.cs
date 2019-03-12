@@ -20,14 +20,14 @@ namespace FluentEvents.Azure.SignalR
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
         /// </param>
-        /// <param name="hubName">The SignalR hub name.</param>
+        /// <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
         /// <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAllAzureSignalRUsers<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
-            string hubName,
+            string hubName = null,
             string hubMethodName = null
         )
             where TSource : class
@@ -50,7 +50,7 @@ namespace FluentEvents.Azure.SignalR
         /// <param name="userIdsProviderAction">
         ///     A <see cref="Func{TResult}"/> that returns the ids of the users that should receive the event.
         /// </param>
-        /// <param name="hubName">The SignalR hub name.</param>
+        /// <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
         /// <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
@@ -58,7 +58,7 @@ namespace FluentEvents.Azure.SignalR
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAzureSignalRUsers<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, string[]> userIdsProviderAction,
-            string hubName,
+            string hubName = null,
             string hubMethodName = null
         )
             where TSource : class
@@ -81,7 +81,7 @@ namespace FluentEvents.Azure.SignalR
         /// <param name="groupIdsProviderAction">
         ///     A <see cref="Func{TResult}"/> that returns the ids of the groups that should receive the event.
         /// </param>
-        /// <param name="hubName">The SignalR hub name.</param>
+        /// <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
         /// <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
@@ -89,7 +89,7 @@ namespace FluentEvents.Azure.SignalR
         public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAzureSignalRGroups<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, string[]> groupIdsProviderAction,
-            string hubName,
+            string hubName = null,
             string hubMethodName = null
         )
             where TSource : class
@@ -110,6 +110,9 @@ namespace FluentEvents.Azure.SignalR
             where TSource : class 
             where TEventArgs : class
         {
+            if (hubName == null)
+                hubName = ((IInfrastructure<SourceModel>) eventPipelineConfigurator).Instance.ClrType.Name + "Hub";
+
             if (hubMethodName == null)
                 hubMethodName = ((IInfrastructure<SourceModelEventField>) eventPipelineConfigurator).Instance.Name;
 

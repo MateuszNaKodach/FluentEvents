@@ -37,6 +37,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
         [Test]
         public void ThenIsPublishedToAllAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
+            [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
         {
@@ -46,18 +47,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 .Callback<AzureSignalRPipelineModuleConfig>(x => config = x)
                 .Verifiable();
 
+            var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAllAzureSignalRUsers(HubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsPublishedToAllAzureSignalRUsers(hubName, hubMethodName);
 
-            var expectedHubMethodName = isHubMethodNameNull ? nameof(TestEntity.TestEvent) : HubMethodName;
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubMethodName)).EqualTo(expectedHubMethodName)
-            );
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubName)).EqualTo(HubName)
-            );
+            AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
                 config,
                 Has.Property(nameof(AzureSignalRPipelineModuleConfig.PublicationMethod)).EqualTo(PublicationMethod.Broadcast)
@@ -70,6 +64,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
         [Test]
         public void ThenIsPublishedToAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
+            [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
         {
@@ -81,18 +76,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             string[] UserIdsProviderAction(TestEntity source, TestEventArgs args) => new[] {""};
 
+            var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRUsers(UserIdsProviderAction, HubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRUsers(UserIdsProviderAction, hubName, hubMethodName);
 
-            var expectedHubMethodName = isHubMethodNameNull ? nameof(TestEntity.TestEvent) : HubMethodName;
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubMethodName)).EqualTo(expectedHubMethodName)
-            );
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubName)).EqualTo(HubName)
-            );
+            AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
                 config,
                 Has.Property(nameof(AzureSignalRPipelineModuleConfig.PublicationMethod)).EqualTo(PublicationMethod.User)
@@ -105,6 +93,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
         [Test]
         public void ThenIsPublishedToAzureSignalRGroups_ShouldAddAzureSignalRPipelineModule(
+            [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
         {
@@ -116,18 +105,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             string[] GroupIdsProviderAction(TestEntity source, TestEventArgs args) => new[] { "" };
 
+            var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRGroups(GroupIdsProviderAction, HubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRGroups(GroupIdsProviderAction, hubName, hubMethodName);
 
-            var expectedHubMethodName = isHubMethodNameNull ? nameof(TestEntity.TestEvent) : HubMethodName;
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubMethodName)).EqualTo(expectedHubMethodName)
-            );
-            Assert.That(
-                config,
-                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubName)).EqualTo(HubName)
-            );
+            AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
                 config,
                 Has.Property(nameof(AzureSignalRPipelineModuleConfig.PublicationMethod)).EqualTo(PublicationMethod.Group)
@@ -135,6 +117,22 @@ namespace FluentEvents.Azure.SignalR.UnitTests
             Assert.That(
                 config,
                 Has.Property(nameof(AzureSignalRPipelineModuleConfig.ReceiverIdsProviderAction)).Not.Null
+            );
+        }
+
+        private static void AssertThatHubNameAndHubMethodNamesAreCorrect(bool isHubNameNull, bool isHubMethodNameNull,
+            AzureSignalRPipelineModuleConfig config)
+        {
+            var expectedHubName = isHubNameNull ? nameof(TestEntity) + "Hub" : HubName;
+            var expectedHubMethodName = isHubMethodNameNull ? nameof(TestEntity.TestEvent) : HubMethodName;
+
+            Assert.That(
+                config,
+                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubMethodName)).EqualTo(expectedHubMethodName)
+            );
+            Assert.That(
+                config,
+                Has.Property(nameof(AzureSignalRPipelineModuleConfig.HubName)).EqualTo(expectedHubName)
             );
         }
 

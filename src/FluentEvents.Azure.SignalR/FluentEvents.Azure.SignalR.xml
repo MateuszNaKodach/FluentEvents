@@ -62,7 +62,7 @@
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
             </param>
-            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
             <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
@@ -81,7 +81,7 @@
             <param name="userIdsProviderAction">
                 A <see cref="T:System.Func`1"/> that returns the ids of the users that should receive the event.
             </param>
-            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
             <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
@@ -100,7 +100,7 @@
             <param name="groupIdsProviderAction">
                 A <see cref="T:System.Func`1"/> that returns the ids of the groups that should receive the event.
             </param>
-            <param name="hubName">The SignalR hub name.</param>
+            <param name="hubName">The SignalR hub name. The default value is the entity name with the "Hub" suffix (Eg. TSourceHub).</param>
             <param name="hubMethodName">The SignalR hub method name. The default value is the current event field name.</param>
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
