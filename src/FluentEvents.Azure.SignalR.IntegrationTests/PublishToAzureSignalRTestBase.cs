@@ -47,7 +47,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             if (string.IsNullOrEmpty(ConnectionString))
                 Assert.Ignore("Azure SignalR Service settings not found in user secrets.");
 
-            var hubUrl = $"{configuration["azureSignalRService:hubUrl"]}client/?hub={HubName}";
+            var hubUrl = $"{ConnectionString.Endpoint.TrimEnd('/')}/client/?hub={HubName}";
 
             var services = new ServiceCollection();
 
