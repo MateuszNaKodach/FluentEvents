@@ -120,8 +120,9 @@ namespace FluentEvents.Azure.SignalR
                         PublicationMethod = publicationMethod,
                         HubMethodName = hubMethodName,
                         HubName = hubName,
-                        ReceiverIdsProviderAction = (sender, args) =>
-                            receiverIdsProviderAction((TSource) sender, (TEventArgs) args)
+                        ReceiverIdsProviderAction = receiverIdsProviderAction == null 
+                            ? (Func<object, object, string[]>)null 
+                            : (sender, args) => receiverIdsProviderAction((TSource) sender, (TEventArgs) args)
                     }
                 );
         }
