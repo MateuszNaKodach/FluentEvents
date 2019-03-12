@@ -37,7 +37,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         {
             var accessToken = "accessToken";
             m_AccessTokensServiceMock
-                .Setup(x => x.GenerateAccessToken(m_ConnectionString, m_Url, null))
+                .Setup(x => x.GenerateAccessToken(m_ConnectionString, m_Url, null, null))
                 .Returns(accessToken)
                 .Verifiable();
 

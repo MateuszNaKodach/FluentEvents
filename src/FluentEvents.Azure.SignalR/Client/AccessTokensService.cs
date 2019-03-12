@@ -19,11 +19,16 @@ namespace FluentEvents.Azure.SignalR.Client
 
         private string GenerateServerName() => $"{Environment.MachineName}_{Guid.NewGuid():N}";
 
-        public string GenerateAccessToken(ConnectionString connectionString, string audience, TimeSpan? lifetime = null)
+        public string GenerateAccessToken(
+            ConnectionString connectionString, 
+            string audience, 
+            string nameIdentifier = null,
+            TimeSpan? lifetime = null
+        )
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, m_ServerName)
+                new Claim(ClaimTypes.NameIdentifier, nameIdentifier ?? m_ServerName)
             };
 
             return GenerateAccessTokenInternal(connectionString, audience, claims, lifetime ?? TimeSpan.FromHours(1));

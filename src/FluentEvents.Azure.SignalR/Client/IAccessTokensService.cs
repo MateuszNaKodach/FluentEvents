@@ -4,6 +4,11 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal interface IAccessTokensService
     {
-        string GenerateAccessToken(ConnectionString connectionString, string audience, TimeSpan? lifetime = null);
+        string GenerateAccessToken(
+            ConnectionString connectionString,
+            string audience,
+            string nameIdentifier = null,
+            TimeSpan? lifetime = null
+        );
     }
 }

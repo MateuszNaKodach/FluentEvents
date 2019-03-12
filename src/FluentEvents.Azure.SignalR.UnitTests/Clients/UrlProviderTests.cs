@@ -39,7 +39,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         {
             var url = m_UrlProvider.GetUrl(Endpoint, PublicationMethod.User, HubName, ReceiverId);
 
-            Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/user/{ReceiverId}"));
+            Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/users/{ReceiverId}"));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         {
             var url = m_UrlProvider.GetUrl(Endpoint, PublicationMethod.Group, HubName, ReceiverId);
 
-            Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/group/{ReceiverId}"));
+            Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/groups/{ReceiverId}"));
         }
     }
 }
