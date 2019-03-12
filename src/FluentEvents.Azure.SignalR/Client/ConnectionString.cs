@@ -13,7 +13,7 @@ namespace FluentEvents.Azure.SignalR.Client
         public string Endpoint { get; }
         public string AccessKey { get; }
 
-        private ConnectionString(string endpoint, string accessKey)
+        internal ConnectionString(string endpoint, string accessKey)
         {
             Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             AccessKey = accessKey ?? throw new ArgumentNullException(nameof(accessKey));
@@ -67,8 +67,8 @@ namespace FluentEvents.Azure.SignalR.Client
 
         public override string ToString()
         {
-            return $"{nameof(Endpoint)}{KeyValueSeparator}{Endpoint}{PropertySeparator}" +
-                   $"{nameof(AccessKey)}{KeyValueSeparator}{AccessKey}{PropertySeparator}";
+            return $"{nameof(Endpoint)}{new string(KeyValueSeparator)}{Endpoint}{new string(PropertySeparator)}" +
+                   $"{nameof(AccessKey)}{new string(KeyValueSeparator)}{AccessKey}{new string(PropertySeparator)}";
         }
     }
 }
