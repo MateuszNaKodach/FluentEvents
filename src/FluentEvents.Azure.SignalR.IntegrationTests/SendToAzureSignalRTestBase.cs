@@ -39,10 +39,12 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                 .AddUserSecrets<SendToAllAzureSignalRUsersTest>()
                 .Build();
 
-            ConnectionString = configuration["azureSignalRService:connectionString"];
+            var configConnectionString = configuration["azureSignalRService:connectionString"];
 
-            if (string.IsNullOrEmpty(ConnectionString))
+            if (string.IsNullOrEmpty(configConnectionString))
                 Assert.Ignore("Azure SignalR Service settings not found in user secrets.");
+
+            ConnectionString = configConnectionString;
 
             var hubUrl = $"{ConnectionString.Endpoint.TrimEnd('/')}/client/?hub={HubName}";
 
