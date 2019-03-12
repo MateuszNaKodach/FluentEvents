@@ -12,22 +12,22 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 {
     public class PublishToAzureSignalRTestBase<TEventsContext> where TEventsContext : EventsContext
     {
-        protected static readonly string UserId1 = Guid.NewGuid().ToString();
-        protected static readonly string UserId2 = Guid.NewGuid().ToString();
-        protected static readonly string UserId3 = Guid.NewGuid().ToString();
+        private protected static readonly string UserId1 = Guid.NewGuid().ToString();
+        private protected static readonly string UserId2 = Guid.NewGuid().ToString();
+        private protected static readonly string UserId3 = Guid.NewGuid().ToString();
 
-        protected const string HubName = "testHub";
-        protected const string HubMethodName = "testHubMethod";
+        private protected const string HubName = "testHub";
+        private protected const string HubMethodName = "testHubMethod";
 
         private protected ConnectionString ConnectionString { get; private set; }
 
-        protected TEventsContext EventsContext { get; private set; }
-        protected EventsScope Scope { get; private set; }
-        protected HubConnection HubConnection1 { get; private set; }
-        protected HubConnection HubConnection2 { get; private set; }
-        protected HubConnection HubConnection3 { get; private set; }
+        private protected TEventsContext EventsContext { get; private set; }
+        private protected EventsScope Scope { get; private set; }
+        private protected HubConnection HubConnection1 { get; private set; }
+        private protected HubConnection HubConnection2 { get; private set; }
+        private protected HubConnection HubConnection3 { get; private set; }
 
-        protected int ReceivedEventsCount => m_ReceivedEventsCount;
+        private protected int ReceivedEventsCount => m_ReceivedEventsCount;
 
         private int m_ReceivedEventsCount;
         private IServiceProvider m_ServiceProvider;
