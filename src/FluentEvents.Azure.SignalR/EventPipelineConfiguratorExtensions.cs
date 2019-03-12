@@ -25,7 +25,7 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAllAzureSignalRUsers<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsSentToAllAzureSignalRUsers<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             string hubName = null,
             string hubMethodName = null
@@ -55,7 +55,7 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAzureSignalRUsers<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsSentToAzureSignalRUsers<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, string[]> userIdsProviderAction,
             string hubName = null,
@@ -86,7 +86,7 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsPublishedToAzureSignalRGroups<TSource, TEventArgs>(
+        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsSentToAzureSignalRGroups<TSource, TEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TEventArgs, string[]> groupIdsProviderAction,
             string hubName = null,

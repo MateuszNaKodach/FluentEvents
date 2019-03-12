@@ -7,8 +7,8 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.SignalR.IntegrationTests
 {
     [TestFixture]
-    public class PublishToAllAzureSignalRUsersTest 
-        : PublishToAzureSignalRTestBase<PublishToAllAzureSignalRUsersTest.TestEventsContext>
+    public class SendToAllAzureSignalRUsersTest 
+        : SendToAzureSignalRTestBase<SendToAllAzureSignalRUsersTest.TestEventsContext>
     {
         [Test]
         public async Task Test()
@@ -34,7 +34,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsPublishedToAllAzureSignalRUsers(HubName, HubMethodName);
+                    .ThenIsSentToAllAzureSignalRUsers(HubName, HubMethodName);
             }
         }
     }

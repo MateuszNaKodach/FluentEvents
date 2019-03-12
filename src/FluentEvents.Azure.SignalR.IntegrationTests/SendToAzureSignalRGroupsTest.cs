@@ -12,8 +12,8 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.SignalR.IntegrationTests
 {
     [TestFixture]
-    public class PublishToAzureSignalRGroupsTest 
-        : PublishToAzureSignalRTestBase<PublishToAzureSignalRGroupsTest.TestEventsContext>
+    public class SendToAzureSignalRGroupsTest 
+        : SendToAzureSignalRTestBase<SendToAzureSignalRGroupsTest.TestEventsContext>
     {
         private static readonly string GroupId1 = Guid.NewGuid().ToString();
         private static readonly string GroupId2 = Guid.NewGuid().ToString();
@@ -66,7 +66,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsPublishedToAzureSignalRGroups((sender, args) => new[] { GroupId1 }, HubName, HubMethodName);
+                    .ThenIsSentToAzureSignalRGroups((sender, args) => new[] { GroupId1 }, HubName, HubMethodName);
             }
         }
     }

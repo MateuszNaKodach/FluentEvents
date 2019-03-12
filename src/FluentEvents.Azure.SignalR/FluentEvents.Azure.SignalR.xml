@@ -52,7 +52,7 @@
                 Extensions for <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/>
             </summary>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAllAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String)">
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAllAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String,System.String)">
             <summary>
                 Adds a module to the current pipeline that publishes the event to all the users connected to
                 the configured Azure SignalR Service.
@@ -68,7 +68,7 @@
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAzureSignalRUsers``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
             <summary>
                 Adds a module to the current pipeline that publishes the event to some users connected to
                 the configured Azure SignalR Service.
@@ -87,7 +87,7 @@
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsPublishedToAzureSignalRGroups``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
+        <member name="M:FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAzureSignalRGroups``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{``0,``1,System.String[]},System.String,System.String)">
             <summary>
                 Adds a module to the current pipeline that publishes the event to some groups connected to
                 the configured Azure SignalR Service.

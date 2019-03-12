@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace FluentEvents.Azure.SignalR.IntegrationTests
 {
-    public class PublishToAzureSignalRTestBase<TEventsContext> where TEventsContext : EventsContext
+    public class SendToAzureSignalRTestBase<TEventsContext> where TEventsContext : EventsContext
     {
         private protected static readonly string UserId1 = Guid.NewGuid().ToString();
         private protected static readonly string UserId2 = Guid.NewGuid().ToString();
@@ -36,7 +36,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         public async Task SetUp()
         {
             var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<PublishToAllAzureSignalRUsersTest>()
+                .AddUserSecrets<SendToAllAzureSignalRUsersTest>()
                 .Build();
 
             ConnectionString = configuration["azureSignalRService:connectionString"];

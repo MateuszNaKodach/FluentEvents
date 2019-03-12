@@ -36,7 +36,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         }
 
         [Test]
-        public void ThenIsPublishedToAllAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
+        public void ThenIsSentToAllAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
             [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
@@ -49,7 +49,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAllAzureSignalRUsers(hubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsSentToAllAzureSignalRUsers(hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
@@ -63,7 +63,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         }
 
         [Test]
-        public void ThenIsPublishedToAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
+        public void ThenIsSentToAzureSignalRUsers_ShouldAddAzureSignalRPipelineModule(
             [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
@@ -78,7 +78,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRUsers(UserIdsProviderAction, hubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsSentToAzureSignalRUsers(UserIdsProviderAction, hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
@@ -92,7 +92,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         }
 
         [Test]
-        public void ThenIsPublishedToAzureSignalRGroups_ShouldAddAzureSignalRPipelineModule(
+        public void ThenIsSentToAzureSignalRGroups_ShouldAddAzureSignalRPipelineModule(
             [Values] bool isHubNameNull,
             [Values] bool isHubMethodNameNull
         )
@@ -107,7 +107,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsPublishedToAzureSignalRGroups(GroupIdsProviderAction, hubName, hubMethodName);
+            m_EventPipelineConfigurator.ThenIsSentToAzureSignalRGroups(GroupIdsProviderAction, hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
