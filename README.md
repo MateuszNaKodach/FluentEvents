@@ -11,8 +11,6 @@ FluentEvents is a framework that lets you persist and manage event subscriptions
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
 - Publish events to global subscriptions transparently to every instance of your application using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
 
-Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
-
 ## How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) `DbContext`.
 
