@@ -20,6 +20,8 @@ In this example, we are going to send an email when the `FriendRequestAccepted` 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
+    services.AddSingleton<MyService>();
+    
     services.AddWithEventsAttachedTo<MyEventsContext>(() => {
         services.AddDbContext<MyDbContext>();
     });
@@ -46,11 +48,11 @@ public class MyEventsContext : EventsContext
 
 #### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
 ```csharp
-public class ExampleService 
+public class MyService 
 {    
     private MyDbContext _myDbContext;
     
-    public ExampleService(MyDbContext myDbContext) 
+    public MyService(MyDbContext myDbContext) 
     {
         _myDbContext = myDbContext;
     }
