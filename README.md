@@ -48,16 +48,16 @@ public class MyEventsContext : EventsContext
 ```csharp
 public class ExampleService 
 {    
-    private MyDbContext m_MyDbContext;
+    private MyDbContext _myDbContext;
     
     public ExampleService(MyDbContext myDbContext) 
     {
-        m_MyDbContext = myDbContext;
+        _myDbContext = myDbContext;
     }
 
     public async Task AcceptAllFriendRequests(int userId) 
     {
-        var user = await m_MyDbContext.Users.FirstAsync(x => x.Id == userId);
+        var user = await _myDbContext.Users.FirstAsync(x => x.Id == userId);
         
         await user.AcceptAllFriendRequests();
     }
@@ -68,19 +68,19 @@ public class ExampleService
 ```csharp
 public class NotificationsService : IHostedService
 {
-    private readonly MyEventsContext m_MyEventsContext;
-    private readonly IMailService m_MailService;
-    private ISubscriptionsCancellationToken m_SubscriptionsCancellationToken;
+    private readonly MyEventsContext _myEventsContext;
+    private readonly IMailService _mailService;
+    private ISubscriptionsCancellationToken _subscriptionsCancellationToken;
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        m_MyEventsContext = myEventsContext;
-        m_MailService = mailService;
+        _myEventsContext = myEventsContext;
+        _mailService = mailService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        m_SubscriptionsCancellationToken = m_MyEventsContext.SubscribeGloballyTo<User>(user =>
+        _subscriptionsCancellationToken = _myEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
@@ -90,7 +90,7 @@ public class NotificationsService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        m_MyEventsContext.CancelGlobalSubscription(m_SubscriptionsCancellationToken);
+        _myEventsContext.CancelGlobalSubscription(_subscriptionsCancellationToken);
         
         return Task.CompletedTask;
     }
@@ -99,7 +99,7 @@ public class NotificationsService : IHostedService
     {
         var user = (User)sender;
 
-        await m_MailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
+        await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
 ```
