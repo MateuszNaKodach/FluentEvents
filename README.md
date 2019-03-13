@@ -12,7 +12,7 @@ FluentEvents is a framework that lets you persist and manage event subscriptions
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) transparently to every instance of your application using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
 
 ## How do I get started?
-Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `EventsContext` every entity tracked by an [EntityFramework](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) `DbContext`.
+Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `MyEventsContext` every entity tracked by the `MyDbContext`.
 
 In this example, we are going to send an email when the `FriendRequestAccepted` event is published.
 
