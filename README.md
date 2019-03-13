@@ -3,7 +3,7 @@
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) 
 
 ## What is FluentEvents?
-FluentEvents is a framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs making even simpler to add real-time web functionality to your applications..
+FluentEvents is a framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs making even simpler to add real-time functionality to your applications.
 
 ### FluentEvents can:
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
