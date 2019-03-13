@@ -97,7 +97,7 @@ public class NotificationsService : IHostedService
 
     private async Task UserOnFriendRequestAccepted(object sender, FriendRequestAcceptedEventArgs e)
     {
-        var user = (User)sender;
+        var user = (User) sender;
 
         await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
