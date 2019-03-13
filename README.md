@@ -3,9 +3,9 @@
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) 
 
 ## What is FluentEvents?
-FluentEvents is an extensible framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs.
+FluentEvents is a framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs.
 
-Events can also be transmitted transparently to all the instances of your application (using whatever protocol you like but at the moment only Azure Topics are supported). 
+Events can invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods and can also be transmitted transparently to all the instances of your application (using whatever protocol you like but at the moment only Azure Topics are supported). 
 Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
 
 ## How do I get started?
