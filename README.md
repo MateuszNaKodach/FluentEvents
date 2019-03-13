@@ -6,9 +6,10 @@
 FluentEvents is a framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs.
 
 ### FluentEvents can:
-- Publish events to scoped/global subscriptions.
+- Publish events to global subscriptions.
+- Publish events to scoped subscriptions.
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
-- Publish events transparently to all the instances of your application with Azure Topics. 
+- Publish events to global subscriptions transparently to all the instances of your application with Azure Topics. 
 
 Events transmission is particularly useful when you want to send a push notification on a web application with multiple instances or background workers.
 
