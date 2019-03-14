@@ -6,6 +6,7 @@
 FluentEvents is an event aggregation framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs making even simpler to add real-time functionality to your applications.
 
 ### FluentEvents can:
+- Generalize events using projections.
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
