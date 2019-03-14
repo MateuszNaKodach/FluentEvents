@@ -31,19 +31,24 @@ namespace FluentEvents.Pipelines.Projections
         /// <param name="eventArgsConverter">
         ///     A <see cref="Func{TEventArgs, TToEventArgs}"/> that takes the event args as input and returns a new object.
         /// </param>
+        /// <param name="eventFieldName">The name of the event field on the projection object (The default is the name of the event being configured).</param>
         /// <returns>
         ///     A new <see cref="EventPipelineConfigurator{TToSource, TToEventArgs}"/> instance so that multiple calls can be chained.
         /// </returns>
         public static EventPipelineConfigurator<TToSource, TToEventArgs> ThenIsProjected<TSource, TToSource, TEventArgs, TToEventArgs>(
             this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
             Func<TSource, TToSource> senderConverter,
-            Func<TEventArgs, TToEventArgs> eventArgsConverter
+            Func<TEventArgs, TToEventArgs> eventArgsConverter,
+            string eventFieldName = null
         )
             where TSource : class
             where TEventArgs : class
             where TToSource : class
             where TToEventArgs : class
         {
+            if (senderConverter == null) throw new ArgumentNullException(nameof(senderConverter));
+            if (eventArgsConverter == null) throw new ArgumentNullException(nameof(eventArgsConverter));
+            
             var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             var sourceModelsService = serviceProvider.GetRequiredService<ISourceModelsService>();
 
@@ -52,7 +57,7 @@ namespace FluentEvents.Pipelines.Projections
             );
 
             var projectedEventField = projectedSourceModel.GetOrCreateEventField(
-                eventPipelineConfigurator.Get<SourceModelEventField>().Name
+                eventFieldName ?? eventPipelineConfigurator.Get<SourceModelEventField>().Name
             );
 
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
