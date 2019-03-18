@@ -109,11 +109,6 @@
             <typeparam name="TService">The type of the service.</typeparam>
             <returns>The configuration object for the specified service.</returns>
         </member>
-        <member name="T:FluentEvents.DuplicatePluginException">
-            <summary>
-                An exception thrown when adding the same plugin twice.
-            </summary>
-        </member>
         <member name="T:FluentEvents.EventsContext">
             <summary>
                 The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
@@ -750,6 +745,11 @@
             <returns>
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
+        </member>
+        <member name="T:FluentEvents.Plugins.DuplicatePluginException">
+            <summary>
+                An exception thrown when adding the same plugin twice.
+            </summary>
         </member>
         <member name="T:FluentEvents.Plugins.IFluentEventsPlugin">
             <summary>
