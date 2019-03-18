@@ -1,4 +1,4 @@
-﻿namespace FluentEvents
+﻿namespace FluentEvents.Plugins
 {
     /// <summary>
     ///     An exception thrown when adding the same plugin twice.
