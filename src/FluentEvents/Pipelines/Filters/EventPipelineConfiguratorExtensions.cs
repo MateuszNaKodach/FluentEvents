@@ -32,6 +32,8 @@ namespace FluentEvents.Pipelines.Filters
             where TSource : class 
             where TEventArgs : class
         {
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+
             eventPipelineConfigurator.Get<IPipeline>()
                 .AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
                     new FilterPipelineModuleConfig((sender, args) => filter((TSource) sender, (TEventArgs) args))

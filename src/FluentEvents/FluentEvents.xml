@@ -608,7 +608,7 @@
                 Extension methods for adding a projection to a pipeline.
             </summary>
         </member>
-        <member name="M:FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions.ThenIsProjected``4(FluentEvents.Config.EventPipelineConfigurator{``0,``2},System.Func{``0,``1},System.Func{``2,``3})">
+        <member name="M:FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions.ThenIsProjected``4(FluentEvents.Config.EventPipelineConfigurator{``0,``2},System.Func{``0,``1},System.Func{``2,``3},System.String)">
             <summary>
                 Adds a module to the current pipeline that replaces the event sender and the event args with a projection.
             </summary>
@@ -629,6 +629,7 @@
             <param name="eventArgsConverter">
                 A <see cref="T:System.Func`2"/> that takes the event args as input and returns a new object.
             </param>
+            <param name="eventFieldName">The name of the event field on the projection object (The default is the name of the event being configured).</param>
             <returns>
                 A new <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
