@@ -6,10 +6,16 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/luca-esse/FluentEvents/blob/master/LICENSE</PackageLicenseUrl>
     <Description>FluentEvents is an event aggregation framework that lets you persist and manage event subscriptions when using Dependency Injection and ORMs</Description>
-    <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/luca-esse/FluentEvents</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageTags>EventAggregator;Events;Aggregation;Publish;Subscribe;Async</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>FluentEvents.xml</DocumentationFile>
   </PropertyGroup>
