@@ -8,7 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>EventAggregator;Events;Aggregation;Publish;Subscribe;Async</PackageTags>
+    <PackageTags>EventAggregator;Event;Aggregation;Publish;Subscribe;Async</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

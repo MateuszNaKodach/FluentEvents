@@ -3,11 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <Description>A FluentEvents plugin for invoking SignalR hub methods when events are raised.</Description>
+    <RepositoryUrl>https://github.com/luca-esse/FluentEvents</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/luca-esse/FluentEvents/blob/master/LICENSE</PackageLicenseUrl>
-    <Description>A FluentEvents plugin that links events to Azure SignalR Service hub methods.</Description>
-    <PackageProjectUrl>https://github.com/luca-esse/FluentEvents</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageTags>EventAggregator;Azure;SignalR</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>FluentEvents.Azure.SignalR.xml</DocumentationFile>
