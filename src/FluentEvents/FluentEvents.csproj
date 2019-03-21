@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
    
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
