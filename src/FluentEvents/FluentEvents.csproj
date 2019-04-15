@@ -9,7 +9,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>EventAggregator;Event;Aggregation;Publish;Subscribe;Async</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents/icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>

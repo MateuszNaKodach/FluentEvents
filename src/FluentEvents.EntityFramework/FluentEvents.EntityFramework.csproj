@@ -9,7 +9,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>EventAggregator;EntityFramework</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents.EntityFramework/icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>

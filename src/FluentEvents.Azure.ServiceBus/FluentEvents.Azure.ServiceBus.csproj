@@ -9,7 +9,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>EventAggregator;Azure;AzureServiceBus</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents.Azure.ServiceBus/icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
