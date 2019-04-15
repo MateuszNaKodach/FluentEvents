@@ -1,4 +1,4 @@
-# FluentEvents
+# ![Logo](icon.png) FluentEvents
 
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) 
 
