@@ -40,7 +40,8 @@ namespace FluentEvents.UnitTests.Subscriptions
             }
 
             var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
-                m_ConcreteSourceModel,
+                m_ConcreteSourceModel.ClrType,
+                m_ConcreteSourceModel.EventFields.Select(x => x.FieldInfo),
                 x => SubscriptionAction((ConcreteSource) x)
             ).ToArray();
 
@@ -67,7 +68,8 @@ namespace FluentEvents.UnitTests.Subscriptions
             }
 
             var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
-                m_AbstractSourceModel,
+                m_AbstractSourceModel.ClrType,
+                m_AbstractSourceModel.EventFields.Select(x => x.FieldInfo),
                 x => SubscriptionAction((AbstractSource)x)
             ).ToArray();
 

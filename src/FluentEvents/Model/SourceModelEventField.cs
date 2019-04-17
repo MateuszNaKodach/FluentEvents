@@ -50,22 +50,19 @@ namespace FluentEvents.Model
         public bool IsAsync => ReturnType == typeof(Task);
 
         internal IReadOnlyList<ParameterExpression> EventHandlerParameters { get; }
-
-        private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
-
-        internal SourceModelEventField(Type clrType, EventInfo eventInfo)
+        
+        internal SourceModelEventField(FieldInfo fieldInfo, EventInfo eventInfo)
         {
-            EventInfo = eventInfo ?? throw new ArgumentNullException(nameof(eventInfo));
-            FieldInfo = GetEventFieldInfo(clrType, EventInfo);
-            ReturnType = FieldInfo.FieldType.GetMethod(nameof(Func<object>.Invoke)).ReturnType;
+            FieldInfo = fieldInfo ?? throw new ArgumentNullException(nameof(fieldInfo));
+            EventInfo = eventInfo;
+            ReturnType = GetInvokeMethod(fieldInfo).ReturnType;
             
             if (ReturnType != typeof(void) && ReturnType != typeof(Task))
                 throw new InvalidEventHandlerReturnTypeException();
 
             Pipelines = new List<IPipeline>();
 
-            EventHandlerParameters = eventInfo.EventHandlerType
-                .GetMethod(nameof(EventHandler.Invoke))
+            EventHandlerParameters = GetInvokeMethod(fieldInfo)
                 .GetParameters()
                 .Select(parameter => Expression.Parameter(parameter.ParameterType))
                 .ToArray();
@@ -74,14 +71,10 @@ namespace FluentEvents.Model
                 throw new InvalidEventHandlerArgsException();
         }
 
-        private static FieldInfo GetEventFieldInfo(Type type, EventInfo eventInfo)
+        private static MethodInfo GetInvokeMethod(FieldInfo fieldInfo)
         {
-            var eventFieldInfo = type.GetFieldFromBaseTypesInclusive(eventInfo.Name, HandlerFieldsBindingFlags);
-
-            if (eventFieldInfo == null)
-                throw new EventFieldNotFoundException();
-
-            return eventFieldInfo;
+            return fieldInfo.FieldType
+                .GetMethod(nameof(EventHandler.Invoke));
         }
 
         /// <summary>

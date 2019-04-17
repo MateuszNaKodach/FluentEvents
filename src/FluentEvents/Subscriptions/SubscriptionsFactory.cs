@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentEvents.Config;
 using FluentEvents.Model;
 
@@ -30,7 +31,8 @@ namespace FluentEvents.Subscriptions
 
             var subscription = new Subscription(sourceType);
             var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
-                sourceModel, 
+                sourceModel.ClrType,
+                sourceModel.EventFields.Select(x => x.FieldInfo),
                 x => subscriptionAction((TSource)x)
             );
 

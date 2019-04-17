@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using FluentEvents.Utils;
 
 namespace FluentEvents.Model
 {
@@ -16,11 +18,17 @@ namespace FluentEvents.Model
         public Type ClrType { get; }
 
         /// <summary>
+        ///     The list of the fields present on the <see cref="ClrType"/>.
+        /// </summary>
+        public FieldInfo[] ClrTypeFieldInfos { get; }
+
+        /// <summary>
         ///     The list of the event fields present on the <see cref="ClrType"/> and created on this model.
         /// </summary>
         public IEnumerable<SourceModelEventField> EventFields => m_EventFields;
 
         private readonly IList<SourceModelEventField> m_EventFields;
+        private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
 
         /// <summary>
         ///     Creates a new instance of a <see cref="SourceModel"/>.
@@ -29,6 +37,7 @@ namespace FluentEvents.Model
         public SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
+            ClrTypeFieldInfos = ClrType.GetEvents().Select(x => GetEventFieldInfo(clrType, x)).ToArray();
             m_EventFields = new List<SourceModelEventField>();
         }
 
@@ -41,11 +50,12 @@ namespace FluentEvents.Model
             var eventField = m_EventFields.FirstOrDefault(x => x.Name == name);
             if (eventField == null)
             {
-                var eventInfo = ClrType.GetEvents().FirstOrDefault(x => x.Name == name);
-                if (eventInfo == null)
+                var fieldInfo = ClrTypeFieldInfos.FirstOrDefault(x => x.Name == name);
+                if (fieldInfo == null)
                     throw new EventFieldNotFoundException();
 
-                eventField = new SourceModelEventField(ClrType, eventInfo);
+                var eventInfo = ClrType.GetEvent(fieldInfo.Name);
+                eventField = new SourceModelEventField(fieldInfo, eventInfo);
                 m_EventFields.Add(eventField);
             }
 
@@ -64,7 +74,7 @@ namespace FluentEvents.Model
             var invokeMethodInfo = typeof(T).GetMethod(nameof(Action.Invoke));
 
             var handler = Expression.Lambda(
-                    eventField.EventInfo.EventHandlerType,
+                    eventField.FieldInfo.FieldType,
                     Expression.Call(
                         Expression.Constant(handlerAction),
                         invokeMethodInfo,
@@ -75,6 +85,16 @@ namespace FluentEvents.Model
                 .Compile();
 
             return handler;
+        }
+
+        private static FieldInfo GetEventFieldInfo(Type type, MemberInfo eventInfo)
+        {
+            var eventFieldInfo = type.GetFieldFromBaseTypesInclusive(eventInfo.Name, HandlerFieldsBindingFlags);
+
+            if (eventFieldInfo == null)
+                throw new EventFieldNotFoundException();
+
+            return eventFieldInfo;
         }
     }
 }

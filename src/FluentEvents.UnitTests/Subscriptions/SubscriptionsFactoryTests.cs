@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using Moq;
@@ -46,7 +48,11 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Verifiable();
 
             m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(
+                    m_SourceModel.ClrType, 
+                    It.Is<IEnumerable<FieldInfo>>(y => y.SequenceEqual(m_SourceModel.EventFields.Select(z => z.FieldInfo))), 
+                    It.IsAny<Action<object>>())
+                )
                 .Returns(new List<SubscribedHandler>())
                 .Verifiable();
 

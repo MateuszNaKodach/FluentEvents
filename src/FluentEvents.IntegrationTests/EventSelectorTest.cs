@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
-using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using NUnit.Framework;
 namespace FluentEvents.IntegrationTests
 {
     [TestFixture]
-    public class UnknownEventSenderTest
+    public class EventSelectorTest
     {
         private TestEventsContext m_TestEventsContext;
         private EventsScope m_EventsScope;
@@ -29,32 +30,31 @@ namespace FluentEvents.IntegrationTests
         [Test]
         public void WhenEventSenderIsNotRegistered_OnBuildingPipelines_ShouldThrow()
         {
-            Assert.That(() =>
+            object receivedSender = null;
+            TestEventArgs receivedEventArgs = null;
+            m_TestEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
-                m_TestEventsContext.Attach(new TestEntity(), m_EventsScope);
-            }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());
+                testEntity.Test += (sender, args) =>
+                {
+                    receivedSender = sender;
+                    receivedEventArgs = args;
+                };
+            });
+
+            TestUtils.AttachAndRaiseEvent(m_TestEventsContext, m_EventsScope);
+
+            TestUtils.AssertThatEventIsPublishedProperly(receivedSender, receivedEventArgs);
         }
 
         private class TestEventsContext : EventsContext
         {
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
-                var pipelineBuilder = pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline();
-
-                pipelineBuilder.ThenIsPublishedToGlobalSubscriptions(x => new PublishTransmissionConfiguration(typeof(object)));
+                pipelinesBuilder
+                    .Event<TestEntity, TestEventArgs>((source, eventHandler) => source.Test += eventHandler)
+                    .IsForwardedToPipeline()
+                    .ThenIsPublishedToGlobalSubscriptions();
             }
-        }
-
-        private class TestPipelineModule : IPipelineModule<TestPipelineModuleConfig>
-        {
-            public Task InvokeAsync(TestPipelineModuleConfig config, PipelineContext pipelineContext, NextModuleDelegate invokeNextModule) 
-                => Task.CompletedTask;
-        }
-
-        private class TestPipelineModuleConfig
-        {
         }
     }
 }

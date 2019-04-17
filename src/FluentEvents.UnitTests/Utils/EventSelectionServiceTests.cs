@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
@@ -42,8 +44,8 @@ namespace FluentEvents.UnitTests.Utils
         {
             Action<object> subscriptionAction = null;
             m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, It.IsAny<Action<object>>()))
-                .Callback<SourceModel, Action<object>>((_, action) => subscriptionAction = action)
+                .Setup(x => x.GetSubscribedHandlers(m_SourceModel.ClrType, m_SourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
 
@@ -64,8 +66,8 @@ namespace FluentEvents.UnitTests.Utils
         {
             Action<object> subscriptionAction = null;
             m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel, It.IsAny<Action<object>>()))
-                .Callback<SourceModel, Action<object>>((_, action) => subscriptionAction = action)
+                .Setup(x => x.GetSubscribedHandlers(m_SourceModel.ClrType, m_SourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
@@ -85,7 +87,7 @@ namespace FluentEvents.UnitTests.Utils
         private static TestCaseData[] InvalidSelectionActions => new[]
         {
             new TestCaseData(new Action<TestSource, dynamic>((source, eventHandler) => eventHandler.Invalid())),
-            new TestCaseData(new Action<TestSource, dynamic>((source, eventHandler) => ((TestSource)eventHandler).Equals(null)))
+            new TestCaseData(new Action<TestSource, dynamic>((source, eventHandler) => ((TestSource)eventHandler).Equals(0)))
         };
 
         public class TestSource
