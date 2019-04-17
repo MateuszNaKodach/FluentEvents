@@ -1,18 +1,18 @@
-# FluentEvents
+### ![Logo](icon.png) FluentEvents
 
-[![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) 
+[![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) [![NuGet](https://img.shields.io/nuget/v/FluentEvents.svg)](https://www.nuget.org/packages/FluentEvents/)
 
-## What is FluentEvents?
+### What is FluentEvents?
 FluentEvents is an event aggregation framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
 
-### FluentEvents can:
+#### FluentEvents can:
 - Generalize events using projections.
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) to every instance of your application using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/) transparently. 
 
-## How do I get started?
+### How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach to the `MyEventsContext` every entity tracked by the `MyDbContext`.
 
 In this example, we are going to send an email when the `FriendRequestAccepted` event is published.
@@ -67,7 +67,7 @@ public class MyService
 }
 ```
 
-#### Handle your event:
+#### Subscribe and hndle the event:
 ```csharp
 public class NotificationsService : IHostedService
 {
@@ -106,7 +106,7 @@ public class NotificationsService : IHostedService
     }
 }
 ```
-## NuGet Packages
+### NuGet Packages
 
 | Package                            | Version                                                                                                                                           |
 |------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
