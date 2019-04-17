@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentEvents.Config;
+﻿using FluentEvents.Config;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
