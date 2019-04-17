@@ -48,6 +48,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         {
             m_ServiceProviderMock.Verify();
             m_SourceModelsServiceMock.Verify();
+            m_EventSelectionServiceMock.Verify();
             m_PipelineMock.Verify();
         }
 
