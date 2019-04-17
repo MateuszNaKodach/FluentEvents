@@ -93,7 +93,7 @@ public class NotificationsService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _myEventsContext.CancelGlobalSubscription(_subscriptionsCancellationToken);
+        _myEventsContext.Unsubscribe(_subscriptionsCancellationToken);
         
         return Task.CompletedTask;
     }
