@@ -96,7 +96,7 @@ namespace FluentEvents.UnitTests
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(new PipelinesBuilder(serviceProviderMock.Object, null))
+                .Returns(new PipelinesBuilder(serviceProviderMock.Object, null, null))
                 .Verifiable();
 
             eventsContextMock.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);

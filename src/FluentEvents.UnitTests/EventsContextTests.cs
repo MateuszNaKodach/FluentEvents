@@ -9,6 +9,7 @@ using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
+using FluentEvents.Utils;
 using Moq;
 using NUnit.Framework;
 
@@ -31,6 +32,7 @@ namespace FluentEvents.UnitTests
         private Mock<EventsScope> m_EventsScopeMock;
         private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
         private Mock<IValidableConfig> m_ValidableConfigMock;
+        private Mock<IEventSelectionService> m_EventSelectionServiceMock;
 
         [SetUp]
         public void SetUp()
@@ -46,6 +48,7 @@ namespace FluentEvents.UnitTests
             m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
             m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
             m_ValidableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
+            m_EventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
 
             m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
@@ -69,6 +72,7 @@ namespace FluentEvents.UnitTests
             m_AttachingServiceMock.Verify();
             m_EventsQueuesServiceMock.Verify();
             m_ValidableConfigMock.Verify();
+            m_EventSelectionServiceMock.Verify();
         }
 
         [Test]
@@ -262,7 +266,8 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
                 .Returns(new PipelinesBuilder(
                     m_InternalServiceProviderMock.Object,
-                    m_SourceModelsServiceMock.Object
+                    m_SourceModelsServiceMock.Object,
+                    m_EventSelectionServiceMock.Object
                 ))
                 .Verifiable();
 

@@ -43,12 +43,22 @@
             <param name="serviceProvider">The events context.</param>
             <param name="pipeline">The pipeline to configure.</param>
         </member>
+        <member name="T:FluentEvents.Config.MoreThanOneEventSelectedException">
+            <summary>
+                An exception thrown when selecting more than one event in a selection <see cref="T:System.Action"/>.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Config.NoEventsSelectedException">
+            <summary>
+                An exception thrown when the event selection action doesn't subscribes correctly the dynamic object.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Config.PipelinesBuilder">
             <summary>
                 Provides a simple API surface to select an event and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.PipelinesBuilder.#ctor(System.IServiceProvider,FluentEvents.Model.ISourceModelsService)">
+        <member name="M:FluentEvents.Config.PipelinesBuilder.#ctor(System.IServiceProvider,FluentEvents.Model.ISourceModelsService,FluentEvents.Utils.IEventSelectionService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -56,13 +66,31 @@
         </member>
         <member name="M:FluentEvents.Config.PipelinesBuilder.Event``2(System.String)">
             <summary>
-                Registers an entity and an event as part of the model and returns an object that can be used to
+                Registers a source and an event as part of the model and returns an object that can be used to
                 configure how the event is handled. This method can be called multiple times for the same event to
                 configure multiple pipelines.
             </summary>
             <typeparam name="TSource">The type of the event source.</typeparam>
             <typeparam name="TEventArgs">The type of the event args.</typeparam>
             <param name="eventFieldName">The name of the event field.</param>
+            <returns>The configuration object for the specified event.</returns>
+        </member>
+        <member name="M:FluentEvents.Config.PipelinesBuilder.Event``2(System.Action{``0,System.Object})">
+            <summary>
+                Registers a source and an event as part of the model and returns an object that can be used to
+                configure how the event is handled. This method can be called multiple times for the same event to
+                configure multiple pipelines.
+            </summary>
+            <typeparam name="TSource">The type of the event source.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args.</typeparam>
+            <param name="eventSelectionAction">
+                This parameter accepts an <see cref="T:System.Action`2"/> that subscribes the dynamic object
+                supplied in the second <see cref="T:System.Action`2"/> parameter to the event being selected.
+                Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
+            </param>
+            <example>
+                Event&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+            </example>
             <returns>The configuration object for the specified event.</returns>
         </member>
         <member name="T:FluentEvents.Config.ServiceConfigurator`1">
@@ -1261,6 +1289,35 @@
         </member>
         <member name="M:FluentEvents.Transmission.JsonEventsSerializationService.DeserializeEvent(System.Byte[])">
             <inheritdoc />
+        </member>
+        <member name="T:FluentEvents.Utils.EventSelectionService">
+            <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.Utils.EventSelectionService.#ctor(FluentEvents.Subscriptions.ISubscriptionScanService)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Utils.EventSelectionService.GetSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:FluentEvents.Utils.IEventSelectionService">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Utils.IEventSelectionService.GetSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Utils.InvalidEventSelectionException">
+            <summary>
+                An exception thrown when using the dynamic object in ways that differ from using it as an event handler. 
+            </summary>
         </member>
     </members>
 </doc>

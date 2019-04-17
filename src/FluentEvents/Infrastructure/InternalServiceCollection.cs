@@ -11,6 +11,7 @@ using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
+using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -60,6 +61,7 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<IEventReceiversService, EventReceiversService>();
             services.AddSingleton<IAttachingService, AttachingService>();
             services.AddSingleton<ISubscriptionsMatchingService, SubscriptionsMatchingService>();
+            services.AddSingleton<IEventSelectionService, EventSelectionService>();
             services.AddSingleton<EnqueuePipelineModule>();
             services.AddSingleton<FilterPipelineModule>();
             services.AddSingleton<GlobalPublishPipelineModule>();
