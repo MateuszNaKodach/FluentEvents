@@ -248,6 +248,12 @@
                 <see cref="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.
             </returns>
         </member>
+        <member name="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+            <summary>
+                Cancels a global subscription.
+            </summary>
+            <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
+        </member>
         <member name="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
             <summary>
                 Cancels a global subscription.

@@ -214,7 +214,7 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void CancelGlobalSubscription_ShouldRemoveFromGlobalSubscriptionCollection()
+        public void Unsubscribe_ShouldRemoveFromGlobalSubscriptionCollection()
         {
             ConfigureEventsContext();
 
@@ -224,7 +224,7 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.RemoveGlobalScopeSubscription(subscription))
                 .Verifiable();
 
-            m_EventsContext.CancelGlobalSubscriptions(subscription);
+            m_EventsContext.Unsubscribe(subscription);
         }
         
         private void ConfigureEventsContext()
