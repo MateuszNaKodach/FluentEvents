@@ -3,7 +3,7 @@
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) [![NuGet](https://img.shields.io/nuget/v/FluentEvents.svg)](https://www.nuget.org/packages/FluentEvents/)
 
 ### What is FluentEvents?
-FluentEvents is an event aggregation framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
+FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
 
 #### FluentEvents can:
 - Generalize events using projections.
