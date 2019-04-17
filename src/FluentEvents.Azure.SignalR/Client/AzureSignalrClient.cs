@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -55,9 +56,17 @@ namespace FluentEvents.Azure.SignalR.Client
                 );
 
                 var response = await m_HttpClient.SendAsync(request);
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new AzureSignalRPublishingFailedException(e);
+                }
 
                 if (response.StatusCode != HttpStatusCode.Accepted)
-                    throw new AzureSignalRPublishingFailedException();
+                    throw new AzureSignalRPublishingFailedException(response.StatusCode);
             }
         }
     }

@@ -106,6 +106,36 @@
                 The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
+        <member name="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException">
+            <inheritdoc />
+            <summary>
+                An exception thrown by the FluentEvents.Azure.SignalR plugin.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor">
+            <inheritdoc />
+            <summary>
+                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.String)">
+            <inheritdoc />
+            <summary>
+                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+            <summary>
+                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc />
+            <summary>
+                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions">
             <summary>
                 Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
