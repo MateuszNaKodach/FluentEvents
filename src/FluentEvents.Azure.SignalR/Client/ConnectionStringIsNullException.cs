@@ -3,7 +3,7 @@
     /// <summary>
     ///     An exception thrown when <see cref="AzureSignalRServiceConfig.ConnectionString"/> is null.
     /// </summary>
-    public class ConnectionStringIsNullException : FluentEventsException
+    public class ConnectionStringIsNullException : FluentEventsAzureSignalRException
     {
         internal ConnectionStringIsNullException()
             : base("The connection string is null")

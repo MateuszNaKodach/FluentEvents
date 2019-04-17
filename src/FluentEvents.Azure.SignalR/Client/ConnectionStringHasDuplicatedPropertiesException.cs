@@ -4,7 +4,7 @@
     /// <summary>
     ///     An exception thrown when parsing a connection string with duplicated properties.
     /// </summary>
-    public class ConnectionStringHasDuplicatedPropertiesException : FluentEventsException
+    public class ConnectionStringHasDuplicatedPropertiesException : FluentEventsAzureSignalRException
     {
         internal ConnectionStringHasDuplicatedPropertiesException(string key)
             : base($"Duplicate properties found in connection string: {key}.")
