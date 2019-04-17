@@ -40,7 +40,7 @@ public class MyEventsContext : EventsContext
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
         pipelinesBuilder
-            .Event<User, FriendRequestAcceptedEventArgs>(nameof(User.FriendRequestAccepted))
+            .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h))
             .IsForwardedToPipeline()
             .ThenIsPublishedToGlobalSubscriptions();
     }
