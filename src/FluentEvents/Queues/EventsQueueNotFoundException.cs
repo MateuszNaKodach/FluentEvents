@@ -5,5 +5,9 @@
     /// </summary>
     public class EventsQueueNotFoundException : FluentEventsException
     {
+        internal EventsQueueNotFoundException()
+            : base("No queue was found with the specified name.")
+        {
+        }
     }
 }

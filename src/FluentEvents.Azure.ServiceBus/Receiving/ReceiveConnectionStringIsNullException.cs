@@ -6,5 +6,9 @@
     /// </summary>
     public class ReceiveConnectionStringIsNullException : FluentEventsServiceBusException
     {
+        internal ReceiveConnectionStringIsNullException()
+            : base("The receive connection string is null.")
+        {
+        }
     }
 }

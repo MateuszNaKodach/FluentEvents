@@ -6,5 +6,9 @@
     /// </summary>
     public class EventFieldNotFoundException : FluentEventsException
     {
+        internal EventFieldNotFoundException() 
+            : base("No public event fields found with the specified name.")
+        {
+        }
     }
 }

@@ -5,5 +5,10 @@
     /// </summary>
     public class EventTransmissionPluginIsNotConfiguredException : FluentEventsException
     {
+        internal EventTransmissionPluginIsNotConfiguredException()
+            : base($"The transmission plugin is not configured in the {nameof(EventsContextOptions)}")
+        {
+            
+        }
     }
 }

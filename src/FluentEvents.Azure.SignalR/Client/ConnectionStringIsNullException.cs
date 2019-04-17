@@ -5,5 +5,9 @@
     /// </summary>
     public class ConnectionStringIsNullException : FluentEventsException
     {
+        internal ConnectionStringIsNullException()
+            : base("The connection string is null")
+        {
+        }
     }
 }

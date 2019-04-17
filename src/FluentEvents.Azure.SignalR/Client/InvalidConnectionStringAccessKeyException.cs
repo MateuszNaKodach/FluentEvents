@@ -11,8 +11,8 @@ namespace FluentEvents.Azure.SignalR.Client
         ///     Creates a new instance of <see cref="InvalidConnectionStringAccessKeyException"/>.
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
-        public InvalidConnectionStringAccessKeyException(Exception innerException) 
-            : base(null, innerException)
+        internal InvalidConnectionStringAccessKeyException(Exception innerException) 
+            : base("The connection string access key is invalid.", innerException)
         {
             
         }

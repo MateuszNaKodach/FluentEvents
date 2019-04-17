@@ -14,6 +14,8 @@ namespace FluentEvents.Subscriptions
         public Type ServiceType { get; }
 
         internal SubscribingServiceNotFoundException(Type serviceType)
+            : base($"The service {serviceType.FullName} can't be subscribed to events because " +
+                   $"it cannot be resolved by the service provider.")
         {
             ServiceType = serviceType;
         }

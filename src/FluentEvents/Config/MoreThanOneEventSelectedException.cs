@@ -7,5 +7,10 @@ namespace FluentEvents.Config
     /// </summary>
     public class MoreThanOneEventSelectedException : FluentEventsException
     {
+        internal MoreThanOneEventSelectedException()
+            : base("More than one event selected." +
+                   " The dynamic object provided in the selection action can only be subscribed once.")
+        {
+        }
     }
 }

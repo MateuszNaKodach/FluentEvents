@@ -7,7 +7,9 @@ namespace FluentEvents.Utils
     /// </summary>
     public class InvalidEventSelectionException : FluentEventsException
     {
-        internal InvalidEventSelectionException(Exception innerException) : base("", innerException)
+        internal InvalidEventSelectionException(Exception innerException) 
+            : base("The event selection action is invalid." +
+                   " The provided dynamic object can only be used as an event handler", innerException)
         {
         }
     }

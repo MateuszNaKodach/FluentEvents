@@ -9,5 +9,9 @@ namespace FluentEvents.Pipelines.Publication
     /// </summary>
     public class EventSenderNotFoundException : FluentEventsException
     {
+        internal EventSenderNotFoundException()
+            : base($"The configured event sender wasn't registered in the internal {nameof(IServiceProvider)}")
+        {
+        }
     }
 }

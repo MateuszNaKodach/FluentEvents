@@ -8,5 +8,10 @@ namespace FluentEvents.Pipelines
     /// </summary>
     public class PipelineModuleNotFoundException : FluentEventsException
     {
+        internal PipelineModuleNotFoundException()
+            : base($"Pipeline module not found. Please check if the required plugin is configured in the {nameof(EventsContextOptions)}")
+        {
+            
+        }
     }
 }

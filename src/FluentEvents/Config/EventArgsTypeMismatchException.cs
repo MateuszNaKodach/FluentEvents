@@ -5,5 +5,9 @@
     /// </summary>
     public class EventArgsTypeMismatchException : FluentEventsException
     {
+        internal EventArgsTypeMismatchException()
+            : base("The specified event args type is different from the event args type of the event being selected.")
+        {
+        }
     }
 }

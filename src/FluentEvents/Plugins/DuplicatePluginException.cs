@@ -5,5 +5,10 @@
     /// </summary>
     public class DuplicatePluginException : FluentEventsException
     {
+        internal DuplicatePluginException() 
+            : base("The plugin being added was already configured.")
+        {
+            
+        }
     }
 }

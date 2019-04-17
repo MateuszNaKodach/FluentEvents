@@ -5,5 +5,9 @@
     /// </summary>
     public class AzureSignalRPublishingFailedException : FluentEventsException
     {
+        internal AzureSignalRPublishingFailedException()
+            : base("Failed to send a request to the Azure SignalR Service API")
+        {
+        }
     }
 }

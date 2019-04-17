@@ -6,5 +6,10 @@
     /// </summary>
     public class EventSourceTypeMismatchException : FluentEventsException
     {
+        internal EventSourceTypeMismatchException() 
+            : base($"The event source type doesn't match the {nameof(Subscription)}.{nameof(Subscription.SourceType)}")
+        {
+            
+        }
     }
 }

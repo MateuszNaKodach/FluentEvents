@@ -6,5 +6,10 @@
     /// </summary>
     public class SourceDoesNotMatchModelTypeException : FluentEventsException
     {
+        internal SourceDoesNotMatchModelTypeException()
+            : base($"The event source type doesn't match the {nameof(SourceModel)}.{nameof(SourceModel.ClrType)}")
+        {
+            
+        }
     }
 }

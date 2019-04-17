@@ -7,7 +7,7 @@
     public class ConnectionStringHasMissingPropertiesException : FluentEventsException
     {
         internal ConnectionStringHasMissingPropertiesException(string endpointProperty, string accessKeyProperty)
-            : base($"Connection string missing required properties {endpointProperty} and {accessKeyProperty}.")
+            : base($"The connection string has missing required properties {endpointProperty} and {accessKeyProperty}.")
         {
             
         }

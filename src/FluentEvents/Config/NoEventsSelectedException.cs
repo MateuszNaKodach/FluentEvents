@@ -5,5 +5,10 @@
     /// </summary>
     public class NoEventsSelectedException : FluentEventsException
     {
+        internal NoEventsSelectedException()
+            : base("The event selection action doesn't subscribe the provided dynamic object to any event.")
+        {
+            
+        }
     }
 }

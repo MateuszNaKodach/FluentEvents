@@ -6,5 +6,10 @@
     /// </summary>
     public class TopicPathIsNullException : FluentEventsServiceBusException
     {
+        internal TopicPathIsNullException()
+            : base("The topic path is null")
+        {
+            
+        }
     }
 }

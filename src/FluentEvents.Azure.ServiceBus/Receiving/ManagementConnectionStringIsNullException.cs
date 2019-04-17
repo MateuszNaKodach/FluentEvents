@@ -6,5 +6,9 @@
     /// </summary>
     public class ManagementConnectionStringIsNullException : FluentEventsServiceBusException
     {
+        internal ManagementConnectionStringIsNullException()
+            : base("The management connection string is null.")
+        {
+        }
     }
 }

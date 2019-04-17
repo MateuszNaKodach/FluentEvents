@@ -6,5 +6,10 @@
     /// </summary>
     public class InvalidEventHandlerArgsException : FluentEventsException
     {
+        internal InvalidEventHandlerArgsException()
+            : base("The signature of the event handler should have 2 parameters.")
+        {
+            
+        }
     }
 }

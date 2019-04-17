@@ -8,5 +8,10 @@ namespace FluentEvents.Model
     /// </summary>
     public class InvalidEventHandlerReturnTypeException : FluentEventsException
     {
+        internal InvalidEventHandlerReturnTypeException() 
+            : base("The event handler return type is different from Task or void.")
+        {
+            
+        }
     }
 }
