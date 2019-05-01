@@ -14,22 +14,22 @@ namespace FluentEvents.UnitTests.Utils
     [TestFixture]
     public class EventSelectionServiceTests
     {
-        private SourceModel m_SourceModel;
-        private Mock<ISubscriptionScanService> m_SubscriptionScanServiceMock;
-        private EventSelectionService m_EventSelectionService;
+        private SourceModel _sourceModel;
+        private Mock<ISubscriptionScanService> _subscriptionScanServiceMock;
+        private EventSelectionService _eventSelectionService;
 
         [SetUp]
         public void SetUp()
         {
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_SubscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
-            m_EventSelectionService = new EventSelectionService(m_SubscriptionScanServiceMock.Object);
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _subscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
+            _eventSelectionService = new EventSelectionService(_subscriptionScanServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_SubscriptionScanServiceMock.Verify();
+            _subscriptionScanServiceMock.Verify();
         }
 
         [Test]
@@ -43,14 +43,14 @@ namespace FluentEvents.UnitTests.Utils
         )
         {
             Action<object> subscriptionAction = null;
-            m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel.ClrType, m_SourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
 
-            m_EventSelectionService.GetSelectedEvent<TestSource>(
-                m_SourceModel,
+            _eventSelectionService.GetSelectedEvent<TestSource>(
+                _sourceModel,
                 (source, eventHandler) => source.TestEvent1 += (dynamic)eventHandler
             );
 
@@ -65,14 +65,14 @@ namespace FluentEvents.UnitTests.Utils
         public void GetSelectedEvent_WithInvalidSelectionAction_ShouldThrow(Action<TestSource, dynamic> selectionAction)
         {
             Action<object> subscriptionAction = null;
-            m_SubscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(m_SourceModel.ClrType, m_SourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
-            m_EventSelectionService.GetSelectedEvent(
-                m_SourceModel,
+            _eventSelectionService.GetSelectedEvent(
+                _sourceModel,
                 selectionAction
             );
 

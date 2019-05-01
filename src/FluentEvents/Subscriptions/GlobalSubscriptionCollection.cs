@@ -8,10 +8,10 @@ namespace FluentEvents.Subscriptions
     /// <inheritdoc />
     public class GlobalSubscriptionCollection : IGlobalSubscriptionCollection
     {
-        private readonly ConcurrentDictionary<Subscription, bool> m_GlobalScopeSubscriptions;
-        private readonly ConcurrentQueue<ISubscriptionCreationTask> m_SubscriptionCreationTasks;
-        private readonly ISubscriptionsFactory m_SubscriptionsFactory;
-        private readonly IAppServiceProvider m_AppServiceProvider;
+        private readonly ConcurrentDictionary<Subscription, bool> _globalScopeSubscriptions;
+        private readonly ConcurrentQueue<ISubscriptionCreationTask> _subscriptionCreationTasks;
+        private readonly ISubscriptionsFactory _subscriptionsFactory;
+        private readonly IAppServiceProvider _appServiceProvider;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -19,39 +19,39 @@ namespace FluentEvents.Subscriptions
         /// </summary>
         public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IAppServiceProvider appServiceProvider)
         {
-            m_GlobalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
-            m_SubscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
-            m_SubscriptionsFactory = subscriptionsFactory;
-            m_AppServiceProvider = appServiceProvider;
+            _globalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
+            _subscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
+            _subscriptionsFactory = subscriptionsFactory;
+            _appServiceProvider = appServiceProvider;
         }
 
         /// <inheritdoc />
         public Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction)
         {
-            var subscription = m_SubscriptionsFactory.CreateSubscription(subscriptionAction);
-            m_GlobalScopeSubscriptions.TryAdd(subscription, true);
+            var subscription = _subscriptionsFactory.CreateSubscription(subscriptionAction);
+            _globalScopeSubscriptions.TryAdd(subscription, true);
             return subscription;
         }
 
         /// <inheritdoc />
         public void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
         {
-            m_SubscriptionCreationTasks.Enqueue(
-                new SubscriptionCreationTask<TService, TSource>(subscriptionAction, m_SubscriptionsFactory)
+            _subscriptionCreationTasks.Enqueue(
+                new SubscriptionCreationTask<TService, TSource>(subscriptionAction, _subscriptionsFactory)
             );
         }
 
         /// <inheritdoc />
         public void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription) 
-            => m_GlobalScopeSubscriptions.TryRemove((Subscription)subscription, out _);
+            => _globalScopeSubscriptions.TryRemove((Subscription)subscription, out _);
 
         /// <inheritdoc />
         public IEnumerable<Subscription> GetGlobalScopeSubscriptions()
         {
-            while (m_SubscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
-                m_GlobalScopeSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(m_AppServiceProvider), true);
+            while (_subscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
+                _globalScopeSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(_appServiceProvider), true);
 
-            return m_GlobalScopeSubscriptions.Keys;
+            return _globalScopeSubscriptions.Keys;
         }
     }
 }

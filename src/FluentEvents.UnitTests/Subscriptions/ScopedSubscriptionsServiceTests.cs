@@ -9,31 +9,31 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class ScopedSubscriptionsServiceTests
     {
-        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
-        private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
+        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
 
-        private ScopedSubscriptionsService m_ScopedSubscriptionsService;
+        private ScopedSubscriptionsService _scopedSubscriptionsService;
 
         [SetUp]
         public void SetUp()
         {
-            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
-            m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
 
-            m_ScopedSubscriptionsService = new ScopedSubscriptionsService(m_SubscriptionsFactoryMock.Object);
+            _scopedSubscriptionsService = new ScopedSubscriptionsService(_subscriptionsFactoryMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_SubscriptionsFactoryMock.Verify();
-            m_AppServiceProviderMock.Verify();
+            _subscriptionsFactoryMock.Verify();
+            _appServiceProviderMock.Verify();
         }
 
         [Test]
         public void ConfigureScopedServiceSubscription_ShouldAddCreationTask()
         {
-            m_ScopedSubscriptionsService.ConfigureScopedServiceSubscription<object, object>((service, source) => { });
+            _scopedSubscriptionsService.ConfigureScopedServiceSubscription<object, object>((service, source) => { });
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var subscription = new Subscription(typeof(object));
 
-            m_SubscriptionsFactoryMock
+            _subscriptionsFactoryMock
                 .Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()))
                 .Callback<Action<object>>(x => x.Invoke(new object()))
                 .Returns(subscription)
@@ -53,17 +53,17 @@ namespace FluentEvents.UnitTests.Subscriptions
             Service1 subscribedService1 = null;
             Service2 subscribedService2 = null;
 
-            m_ScopedSubscriptionsService.ConfigureScopedServiceSubscription<Service1, object>((service, source) =>
+            _scopedSubscriptionsService.ConfigureScopedServiceSubscription<Service1, object>((service, source) =>
             {
                 subscribedService1 = service;
             });
 
-            m_ScopedSubscriptionsService.ConfigureScopedServiceSubscription<Service2, object>((service, source) =>
+            _scopedSubscriptionsService.ConfigureScopedServiceSubscription<Service2, object>((service, source) =>
             {
                 subscribedService2 = service;
             });
 
-            var subscriptions = m_ScopedSubscriptionsService.SubscribeServices(m_AppServiceProviderMock.Object);
+            var subscriptions = _scopedSubscriptionsService.SubscribeServices(_appServiceProviderMock.Object);
 
             Assert.That(subscriptions, Has.Exactly(2).Items);
             Assert.That(subscribedService1, Is.EqualTo(service1));
@@ -72,7 +72,7 @@ namespace FluentEvents.UnitTests.Subscriptions
 
         private T SetUpServiceProviderService<T>(T service)
         {
-            m_AppServiceProviderMock
+            _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(T)))
                 .Returns(service)
                 .Verifiable();

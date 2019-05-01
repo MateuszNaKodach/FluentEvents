@@ -10,9 +10,9 @@ namespace FluentEvents.Config
     /// </summary>
     public class PipelinesBuilder
     {
-        private readonly IServiceProvider m_ServiceProvider;
-        private readonly ISourceModelsService m_SourceModelsService;
-        private readonly IEventSelectionService m_EventSelectionService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ISourceModelsService _sourceModelsService;
+        private readonly IEventSelectionService _eventSelectionService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -24,9 +24,9 @@ namespace FluentEvents.Config
             IEventSelectionService eventSelectionService
         )
         {
-            m_ServiceProvider = serviceProvider;
-            m_SourceModelsService = sourceModelsService;
-            m_EventSelectionService = eventSelectionService;
+            _serviceProvider = serviceProvider;
+            _sourceModelsService = sourceModelsService;
+            _eventSelectionService = eventSelectionService;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace FluentEvents.Config
         {
             if (eventFieldName == null) throw new ArgumentNullException(nameof(eventFieldName));
 
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource));
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(TSource));
 
             return Event<TSource, TEventArgs>(sourceModel, eventFieldName);
         }
@@ -75,8 +75,8 @@ namespace FluentEvents.Config
         {
             if (eventSelectionAction == null) throw new ArgumentNullException(nameof(eventSelectionAction));
 
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(TSource));
-            var eventFieldNames = m_EventSelectionService.GetSelectedEvent(sourceModel, eventSelectionAction);
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(TSource));
+            var eventFieldNames = _eventSelectionService.GetSelectedEvent(sourceModel, eventSelectionAction);
 
             if (eventFieldNames.Count() > 1)
                 throw new MoreThanOneEventSelectedException();
@@ -100,7 +100,7 @@ namespace FluentEvents.Config
             if (eventField.EventArgsType != typeof(TEventArgs))
                 throw new EventArgsTypeMismatchException();
 
-            return new EventConfigurator<TSource, TEventArgs>(m_ServiceProvider, sourceModel, eventField);
+            return new EventConfigurator<TSource, TEventArgs>(_serviceProvider, sourceModel, eventField);
         }
     }
 }

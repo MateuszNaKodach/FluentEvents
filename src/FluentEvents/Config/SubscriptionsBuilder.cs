@@ -7,8 +7,8 @@ namespace FluentEvents.Config
     /// </summary>
     public class SubscriptionsBuilder
     {
-        private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
-        private readonly IScopedSubscriptionsService m_ScopedSubscriptionsService;
+        private readonly IGlobalSubscriptionCollection _globalSubscriptionCollection;
+        private readonly IScopedSubscriptionsService _scopedSubscriptionsService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -19,8 +19,8 @@ namespace FluentEvents.Config
             IScopedSubscriptionsService scopedSubscriptionsService
         )
         {
-            m_GlobalSubscriptionCollection = globalSubscriptionCollection;
-            m_ScopedSubscriptionsService = scopedSubscriptionsService;
+            _globalSubscriptionCollection = globalSubscriptionCollection;
+            _scopedSubscriptionsService = scopedSubscriptionsService;
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace FluentEvents.Config
             where TService : class
         {
             return new ServiceConfigurator<TService>(
-                m_ScopedSubscriptionsService,
-                m_GlobalSubscriptionCollection
+                _scopedSubscriptionsService,
+                _globalSubscriptionCollection
             );
         }
     }

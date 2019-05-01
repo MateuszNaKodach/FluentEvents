@@ -10,22 +10,22 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
     [TestFixture]
     public class ScopedPublishPipelineModuleTests : PipelineModuleTestBase
     {
-        private Mock<IPublishingService> m_PublishingServiceMock;
-        private ScopedPublishPipelineModule m_ScopedPublishPipelineModule;
-        private ScopedPublishPipelineModuleConfig m_ScopedPublishPipelineModuleConfig;
+        private Mock<IPublishingService> _publishingServiceMock;
+        private ScopedPublishPipelineModule _scopedPublishPipelineModule;
+        private ScopedPublishPipelineModuleConfig _scopedPublishPipelineModuleConfig;
 
         [SetUp]
         public void SetUp()
         {
-            m_PublishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
-            m_ScopedPublishPipelineModuleConfig = new ScopedPublishPipelineModuleConfig();
-            m_ScopedPublishPipelineModule = new ScopedPublishPipelineModule(m_PublishingServiceMock.Object);
+            _publishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
+            _scopedPublishPipelineModuleConfig = new ScopedPublishPipelineModuleConfig();
+            _scopedPublishPipelineModule = new ScopedPublishPipelineModule(_publishingServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_PublishingServiceMock.Verify();
+            _publishingServiceMock.Verify();
         }
 
         [Test]
@@ -44,12 +44,12 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 return Task.CompletedTask;
             }
 
-            m_PublishingServiceMock
+            _publishingServiceMock
                 .Setup(x => x.PublishEventToScopedSubscriptionsAsync(pipelineContext.PipelineEvent, EventsScope))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_ScopedPublishPipelineModule.InvokeAsync(m_ScopedPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _scopedPublishPipelineModule.InvokeAsync(_scopedPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));

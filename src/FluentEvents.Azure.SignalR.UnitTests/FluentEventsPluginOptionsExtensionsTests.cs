@@ -11,18 +11,18 @@ namespace FluentEvents.Azure.SignalR.UnitTests
     [TestFixture]
     public class FluentEventsPluginOptionsExtensionsTests
     {
-        private Mock<IFluentEventsPluginOptions> m_FluentEventsPluginOptionsMock;
+        private Mock<IFluentEventsPluginOptions> _fluentEventsPluginOptionsMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_FluentEventsPluginOptionsMock = new Mock<IFluentEventsPluginOptions>(MockBehavior.Strict);
+            _fluentEventsPluginOptionsMock = new Mock<IFluentEventsPluginOptions>(MockBehavior.Strict);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_FluentEventsPluginOptionsMock.Verify();
+            _fluentEventsPluginOptionsMock.Verify();
         }
 
         [Test]
@@ -32,11 +32,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 ? (Action<IHttpClientBuilder>) null
                 : builder => { };
 
-            m_FluentEventsPluginOptionsMock
+            _fluentEventsPluginOptionsMock
                 .Setup(x => x.AddPlugin(It.IsAny<AzureSignalRPlugin>()))
                 .Verifiable();
 
-            m_FluentEventsPluginOptionsMock.Object.UseAzureSignalRService(options => { }, httpClientBuilderAction);
+            _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService(options => { }, httpClientBuilderAction);
         }
 
         [Test]
@@ -46,11 +46,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 ? (Action<IHttpClientBuilder>)null
                 : builder => { };
 
-            m_FluentEventsPluginOptionsMock
+            _fluentEventsPluginOptionsMock
                 .Setup(x => x.AddPlugin(It.IsAny<AzureSignalRPlugin>()))
                 .Verifiable();
 
-            m_FluentEventsPluginOptionsMock.Object.UseAzureSignalRService(
+            _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService(
                 new ConfigurationRoot(new List<IConfigurationProvider>()),
                 httpClientBuilderAction
             );
@@ -61,7 +61,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         {
             Assert.That(() =>
             {
-                m_FluentEventsPluginOptionsMock.Object.UseAzureSignalRService((Action<AzureSignalRServiceConfig>)null);
+                _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService((Action<AzureSignalRServiceConfig>)null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -70,7 +70,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         {
             Assert.That(() =>
             {
-                m_FluentEventsPluginOptionsMock.Object.UseAzureSignalRService((IConfiguration)null);
+                _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService((IConfiguration)null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
     }

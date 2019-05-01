@@ -8,8 +8,8 @@ namespace FluentEvents.Subscriptions
     /// <inheritdoc />
     public class SubscriptionsFactory : ISubscriptionsFactory
     {
-        private readonly ISourceModelsService m_SourceModelsService;
-        private readonly ISubscriptionScanService m_SubscriptionScanService;
+        private readonly ISourceModelsService _sourceModelsService;
+        private readonly ISubscriptionScanService _subscriptionScanService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -17,20 +17,20 @@ namespace FluentEvents.Subscriptions
         /// </summary>
         public SubscriptionsFactory(ISourceModelsService sourceModelsService, ISubscriptionScanService subscriptionScanService)
         {
-            m_SourceModelsService = sourceModelsService;
-            m_SubscriptionScanService = subscriptionScanService;
+            _sourceModelsService = sourceModelsService;
+            _subscriptionScanService = subscriptionScanService;
         }
 
         /// <inheritdoc />
         public Subscription CreateSubscription<TSource>(Action<TSource> subscriptionAction)
         {
             var sourceType = typeof(TSource);
-            var sourceModel = m_SourceModelsService.GetSourceModel(sourceType);
+            var sourceModel = _sourceModelsService.GetSourceModel(sourceType);
             if (sourceModel == null)
                 throw new SourceIsNotConfiguredException(sourceType);
 
             var subscription = new Subscription(sourceType);
-            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
+            var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
                 sourceModel.EventFields.Select(x => x.FieldInfo),
                 x => subscriptionAction((TSource)x)

@@ -8,15 +8,15 @@ namespace FluentEvents.Azure.ServiceBus.Sending
     /// </summary>
     public class AzureTopicEventSenderConfig : IValidableConfig
     {
-        private string m_ConnectionString;
+        private string _connectionString;
 
         /// <summary>
         ///     An Azure Service Bus topic connection string for sending messages. 
         /// </summary>
         public string ConnectionString
         {
-            get => m_ConnectionString;
-            set => m_ConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
+            get => _connectionString;
+            set => _connectionString = ConnectionStringValidator.ValidateOrThrow(value);
         }
 
         void IValidableConfig.Validate()

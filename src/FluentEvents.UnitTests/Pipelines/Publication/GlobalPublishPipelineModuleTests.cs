@@ -11,31 +11,31 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
     [TestFixture]
     public class GlobalPublishPipelineModuleTests : PipelineModuleTestBase
     {
-        private GlobalPublishPipelineModuleConfig m_GlobalPublishPipelineModuleConfig;
-        private GlobalPublishPipelineModule m_GlobalPublishPipelineModule;
-        private Mock<IPublishingService> m_PublishingServiceMock;
-        private Mock<IEventSender1> m_EventSender1Mock;
-        private Mock<IEventSender2> m_EventSender2Mock;
+        private GlobalPublishPipelineModuleConfig _globalPublishPipelineModuleConfig;
+        private GlobalPublishPipelineModule _globalPublishPipelineModule;
+        private Mock<IPublishingService> _publishingServiceMock;
+        private Mock<IEventSender1> _eventSender1Mock;
+        private Mock<IEventSender2> _eventSender2Mock;
 
         [SetUp]
         public void SetUp()
         {
-            m_PublishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
-            m_EventSender1Mock = new Mock<IEventSender1>(MockBehavior.Strict);
-            m_EventSender2Mock = new Mock<IEventSender2>(MockBehavior.Strict);
-            m_GlobalPublishPipelineModule = new GlobalPublishPipelineModule(
-                m_PublishingServiceMock.Object,
-                new IEventSender[] { m_EventSender1Mock.Object, m_EventSender2Mock.Object }
+            _publishingServiceMock = new Mock<IPublishingService>(MockBehavior.Strict);
+            _eventSender1Mock = new Mock<IEventSender1>(MockBehavior.Strict);
+            _eventSender2Mock = new Mock<IEventSender2>(MockBehavior.Strict);
+            _globalPublishPipelineModule = new GlobalPublishPipelineModule(
+                _publishingServiceMock.Object,
+                new IEventSender[] { _eventSender1Mock.Object, _eventSender2Mock.Object }
             );
-            m_GlobalPublishPipelineModuleConfig = new GlobalPublishPipelineModuleConfig();
+            _globalPublishPipelineModuleConfig = new GlobalPublishPipelineModuleConfig();
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_PublishingServiceMock.Verify();
-            m_EventSender1Mock.Verify();
-            m_EventSender2Mock.Verify();
+            _publishingServiceMock.Verify();
+            _eventSender1Mock.Verify();
+            _eventSender2Mock.Verify();
         }
 
         [Test]
@@ -57,12 +57,12 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 return Task.CompletedTask;
             }
 
-            m_PublishingServiceMock
+            _publishingServiceMock
                 .Setup(x => x.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _globalPublishPipelineModule.InvokeAsync(_globalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
@@ -74,7 +74,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             var testSender = new TestSender();
             var testEventArgs = new TestEventArgs();
 
-            m_GlobalPublishPipelineModuleConfig.SenderType = m_EventSender1Mock.Object.GetType();
+            _globalPublishPipelineModuleConfig.SenderType = _eventSender1Mock.Object.GetType();
 
             var pipelineContext = CreatePipelineContext(
                 testSender,
@@ -89,12 +89,12 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 return Task.CompletedTask;
             }
 
-            m_EventSender1Mock
+            _eventSender1Mock
                 .Setup(x => x.SendAsync(pipelineContext.PipelineEvent))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _globalPublishPipelineModule.InvokeAsync(_globalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
@@ -106,7 +106,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             var testSender = new TestSender();
             var testEventArgs = new TestEventArgs();
 
-            m_GlobalPublishPipelineModuleConfig.SenderType = typeof(object);
+            _globalPublishPipelineModuleConfig.SenderType = typeof(object);
 
             var pipelineContext = CreatePipelineContext(
                 testSender,
@@ -117,7 +117,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             Assert.That(async () =>
             {
-                await m_GlobalPublishPipelineModule.InvokeAsync(m_GlobalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
+                await _globalPublishPipelineModule.InvokeAsync(_globalPublishPipelineModuleConfig, pipelineContext, InvokeNextModule);
             }, Throws.TypeOf<EventSenderNotFoundException>());
         }
 

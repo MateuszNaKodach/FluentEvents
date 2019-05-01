@@ -5,41 +5,41 @@ namespace FluentEvents.Transmission
 {
     internal static class TransmissionLoggerMessages
     {
-        private static readonly Action<ILogger, string, Exception> m_EventReceiverStarting = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _eventReceiverStarting = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.EventReceiverStarting,
             "Starting {eventReceiverTypeName} event receiver"
         );
 
         internal static void EventReceiverStarting(this ILogger logger, string eventReceiverTypeName)
-            => m_EventReceiverStarting(logger, eventReceiverTypeName, null);
+            => _eventReceiverStarting(logger, eventReceiverTypeName, null);
 
-        private static readonly Action<ILogger, string, Exception> m_EventReceiverStarted = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _eventReceiverStarted = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.EventReceiverStarted,
             "Started {eventReceiverTypeName} event receiver"
         );
 
         internal static void EventReceiverStarted(this ILogger logger, string eventReceiverTypeName)
-            => m_EventReceiverStarted(logger, eventReceiverTypeName, null);
+            => _eventReceiverStarted(logger, eventReceiverTypeName, null);
 
-        private static readonly Action<ILogger, string, Exception> m_EventReceiverStopping = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _eventReceiverStopping = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.EventReceiverStopping,
             "Stopping {eventReceiverTypeName} event receiver"
         );
 
         internal static void EventReceiverStopping(this ILogger logger, string eventReceiverTypeName)
-            => m_EventReceiverStopping(logger, eventReceiverTypeName, null);
+            => _eventReceiverStopping(logger, eventReceiverTypeName, null);
 
-        private static readonly Action<ILogger, string, Exception> m_EventReceiverStopped = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _eventReceiverStopped = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.EventReceiverStopped,
             "Stopped {eventReceiverTypeName} event receiver"
         );
 
         internal static void EventReceiverStopped(this ILogger logger, string eventReceiverTypeName)
-            => m_EventReceiverStopped(logger, eventReceiverTypeName, null);
+            => _eventReceiverStopped(logger, eventReceiverTypeName, null);
 
         internal static class EventIds
         {

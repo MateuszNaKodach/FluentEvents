@@ -5,8 +5,8 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal class ConnectionString
     {
-        private static readonly char[] PropertySeparator = { ';' };
-        private static readonly char[] KeyValueSeparator = { '=' };
+        private static readonly char[] _propertySeparator = { ';' };
+        private static readonly char[] _keyValueSeparator = { '=' };
         private const string EndpointProperty = "endpoint";
         private const string AccessKeyProperty = "accesskey";
 
@@ -34,13 +34,13 @@ namespace FluentEvents.Azure.SignalR.Client
             if (connectionString == null)
                 throw new ConnectionStringIsNullException();
 
-            var properties = connectionString.Split(PropertySeparator, StringSplitOptions.RemoveEmptyEntries);
+            var properties = connectionString.Split(_propertySeparator, StringSplitOptions.RemoveEmptyEntries);
             if (properties.Length > 1)
             {
                 var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var property in properties)
                 {
-                    var kvp = property.Split(KeyValueSeparator, 2);
+                    var kvp = property.Split(_keyValueSeparator, 2);
                     if (kvp.Length != 2) continue;
 
                     var key = kvp[0].Trim();
@@ -67,8 +67,8 @@ namespace FluentEvents.Azure.SignalR.Client
 
         public override string ToString()
         {
-            return $"{nameof(Endpoint)}{new string(KeyValueSeparator)}{Endpoint}{new string(PropertySeparator)}" +
-                   $"{nameof(AccessKey)}{new string(KeyValueSeparator)}{AccessKey}{new string(PropertySeparator)}";
+            return $"{nameof(Endpoint)}{new string(_keyValueSeparator)}{Endpoint}{new string(_propertySeparator)}" +
+                   $"{nameof(AccessKey)}{new string(_keyValueSeparator)}{AccessKey}{new string(_propertySeparator)}";
         }
     }
 }

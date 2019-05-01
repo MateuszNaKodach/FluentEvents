@@ -4,13 +4,13 @@ namespace FluentEvents.Infrastructure
 {
     internal class AppServiceProvider : IAppServiceProvider
     {
-        private readonly IServiceProvider m_ServiceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public AppServiceProvider(IServiceProvider serviceProvider)
         {
-            m_ServiceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
         }
 
-        public object GetService(Type serviceType) => m_ServiceProvider.GetService(serviceType);
+        public object GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
     }
 }

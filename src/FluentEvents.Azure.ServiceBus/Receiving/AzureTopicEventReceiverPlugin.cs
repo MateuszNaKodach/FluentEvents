@@ -10,25 +10,25 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     internal class AzureTopicEventReceiverPlugin : IFluentEventsPlugin
     {
-        private readonly IConfiguration m_Configuration;
-        private readonly Action<AzureTopicEventReceiverConfig> m_ConfigureOptions;
+        private readonly IConfiguration _configuration;
+        private readonly Action<AzureTopicEventReceiverConfig> _configureOptions;
 
         public AzureTopicEventReceiverPlugin(Action<AzureTopicEventReceiverConfig> configureOptions)
         {
-            m_ConfigureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
+            _configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
 
         public AzureTopicEventReceiverPlugin(IConfiguration configuration)
         {
-            m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public void ApplyServices(IServiceCollection services)
         {
-            if (m_ConfigureOptions != null)
-                services.Configure(m_ConfigureOptions);
+            if (_configureOptions != null)
+                services.Configure(_configureOptions);
             else
-                services.Configure<AzureTopicEventReceiverConfig>(m_Configuration);
+                services.Configure<AzureTopicEventReceiverConfig>(_configuration);
 
             services.AddSingleton<IValidableConfig>(x =>
                 x.GetRequiredService<IOptions<AzureTopicEventReceiverConfig>>().Value

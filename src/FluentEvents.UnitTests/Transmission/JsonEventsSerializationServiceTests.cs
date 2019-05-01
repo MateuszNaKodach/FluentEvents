@@ -7,57 +7,57 @@ namespace FluentEvents.UnitTests.Transmission
     [TestFixture]
     public class JsonEventsSerializationServiceTests
     {
-        private JsonEventsSerializationService m_JsonEventsSerializationService;
-        private PipelineEvent m_PipelineEvent;
-        private TestSender m_OriginalSender;
-        private TestEventArgs m_OriginalEventArgs;
+        private JsonEventsSerializationService _jsonEventsSerializationService;
+        private PipelineEvent _pipelineEvent;
+        private TestSender _originalSender;
+        private TestEventArgs _originalEventArgs;
 
         [SetUp]
         public void SetUp()
         {
-            m_OriginalSender = new TestSender
+            _originalSender = new TestSender
             {
                 Property1 = 10
             };
-            m_OriginalEventArgs = new TestEventArgs
+            _originalEventArgs = new TestEventArgs
             {
                 Property1 = 20
             };
-            m_PipelineEvent = new PipelineEvent(
+            _pipelineEvent = new PipelineEvent(
                 typeof(TestSender),
                 "f",
-                m_OriginalSender,
-                m_OriginalEventArgs
+                _originalSender,
+                _originalEventArgs
             );
 
-            m_JsonEventsSerializationService = new JsonEventsSerializationService();
+            _jsonEventsSerializationService = new JsonEventsSerializationService();
         }
 
         [Test]
         public void SerializeEvent_ShouldProduceJsonDeserializableWith_DeserializeEvent()
         {
-            var json = m_JsonEventsSerializationService.SerializeEvent(m_PipelineEvent);
+            var json = _jsonEventsSerializationService.SerializeEvent(_pipelineEvent);
 
-            var deserializedPipelineEvent = m_JsonEventsSerializationService.DeserializeEvent(json);
+            var deserializedPipelineEvent = _jsonEventsSerializationService.DeserializeEvent(json);
 
             Assert.That(
                 deserializedPipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalEventFieldName))
-                    .EqualTo(m_PipelineEvent.OriginalEventFieldName)
+                    .EqualTo(_pipelineEvent.OriginalEventFieldName)
             );
 
             Assert.That(
                 deserializedPipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalSender))
                     .With.Property(nameof(TestSender.Property1))
-                    .EqualTo(m_OriginalSender.Property1)
+                    .EqualTo(_originalSender.Property1)
             );
 
             Assert.That(
                 deserializedPipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalEventArgs))
                     .With.Property(nameof(TestSender.Property1))
-                    .EqualTo(m_OriginalEventArgs.Property1)
+                    .EqualTo(_originalEventArgs.Property1)
             );
         }
 

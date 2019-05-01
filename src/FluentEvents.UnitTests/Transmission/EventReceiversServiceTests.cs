@@ -11,30 +11,30 @@ namespace FluentEvents.UnitTests.Transmission
     [TestFixture]
     public class EventReceiversServiceTests
     {
-        private Mock<IEventReceiver> m_EventReceiverMock1;
-        private Mock<IEventReceiver> m_EventReceiverMock2;
-        private Mock<ILogger<EventReceiversService>> m_LoggerMock;
+        private Mock<IEventReceiver> _eventReceiverMock1;
+        private Mock<IEventReceiver> _eventReceiverMock2;
+        private Mock<ILogger<EventReceiversService>> _loggerMock;
 
-        private EventReceiversService m_EventReceiversService;
+        private EventReceiversService _eventReceiversService;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventReceiverMock1 = new Mock<IEventReceiver>(MockBehavior.Strict);
-            m_EventReceiverMock2 = new Mock<IEventReceiver>(MockBehavior.Strict);
-            m_LoggerMock = new Mock<ILogger<EventReceiversService>>(MockBehavior.Strict);
+            _eventReceiverMock1 = new Mock<IEventReceiver>(MockBehavior.Strict);
+            _eventReceiverMock2 = new Mock<IEventReceiver>(MockBehavior.Strict);
+            _loggerMock = new Mock<ILogger<EventReceiversService>>(MockBehavior.Strict);
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Information))
                 .Returns(true)
                 .Verifiable();
             
-            m_EventReceiversService = new EventReceiversService(
-                m_LoggerMock.Object,
+            _eventReceiversService = new EventReceiversService(
+                _loggerMock.Object,
                 new[]
                 {
-                    m_EventReceiverMock1.Object,
-                    m_EventReceiverMock2.Object,
+                    _eventReceiverMock1.Object,
+                    _eventReceiverMock2.Object,
                 }
             );
         }
@@ -42,9 +42,9 @@ namespace FluentEvents.UnitTests.Transmission
         [TearDown]
         public void TearDown()
         {
-            m_EventReceiverMock1.Verify();
-            m_EventReceiverMock2.Verify();
-            m_LoggerMock.Verify();
+            _eventReceiverMock1.Verify();
+            _eventReceiverMock2.Verify();
+            _loggerMock.Verify();
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace FluentEvents.UnitTests.Transmission
             var cancellationTokenSource = new CancellationTokenSource();
             var token = cancellationTokenSource.Token;
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     TransmissionLoggerMessages.EventIds.EventReceiverStarting,
@@ -63,17 +63,17 @@ namespace FluentEvents.UnitTests.Transmission
                 ))
                 .Verifiable();
 
-            m_EventReceiverMock1
+            _eventReceiverMock1
                 .Setup(x => x.StartReceivingAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_EventReceiverMock2
+            _eventReceiverMock2
                 .Setup(x => x.StartReceivingAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     TransmissionLoggerMessages.EventIds.EventReceiverStarted,
@@ -83,7 +83,7 @@ namespace FluentEvents.UnitTests.Transmission
                 ))
                 .Verifiable();
 
-            await m_EventReceiversService.StartReceiversAsync(token);
+            await _eventReceiversService.StartReceiversAsync(token);
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace FluentEvents.UnitTests.Transmission
             var cancellationTokenSource = new CancellationTokenSource();
             var token = cancellationTokenSource.Token;
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     TransmissionLoggerMessages.EventIds.EventReceiverStopping,
@@ -102,17 +102,17 @@ namespace FluentEvents.UnitTests.Transmission
                 ))
                 .Verifiable();
 
-            m_EventReceiverMock1
+            _eventReceiverMock1
                 .Setup(x => x.StopReceivingAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_EventReceiverMock2
+            _eventReceiverMock2
                 .Setup(x => x.StopReceivingAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     TransmissionLoggerMessages.EventIds.EventReceiverStopped,
@@ -122,7 +122,7 @@ namespace FluentEvents.UnitTests.Transmission
                 ))
                 .Verifiable();
 
-            await m_EventReceiversService.StopReceiversAsync(token);
+            await _eventReceiversService.StopReceiversAsync(token);
         }
     }
 }

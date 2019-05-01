@@ -6,14 +6,14 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelTests
     {
-        private SourceModel m_SourceModelWithInvalidArgs;
-        private SourceModel m_SourceModelWithInvalidReturnType;
+        private SourceModel _sourceModelWithInvalidArgs;
+        private SourceModel _sourceModelWithInvalidReturnType;
 
         [SetUp]
         public void SetUp()
         {
-            m_SourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs));
-            m_SourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType));
+            _sourceModelWithInvalidArgs = new SourceModel(typeof(TestSourceWithInvalidArgs));
+            _sourceModelWithInvalidReturnType = new SourceModel(typeof(TestSourceWithInvalidReturnType));
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace FluentEvents.UnitTests.Model
             Assert.That(
                 () =>
                 {
-                    m_SourceModelWithInvalidArgs.GetOrCreateEventField(
+                    _sourceModelWithInvalidArgs.GetOrCreateEventField(
                         nameof(TestSourceWithInvalidArgs.EventWithArgs)
                     );
                 },
@@ -35,7 +35,7 @@ namespace FluentEvents.UnitTests.Model
             Assert.That(
                 () =>
                 {
-                    m_SourceModelWithInvalidReturnType.GetOrCreateEventField(
+                    _sourceModelWithInvalidReturnType.GetOrCreateEventField(
                         nameof(TestSourceWithInvalidReturnType.EventWithArgs)
                     );
                 }, Throws.TypeOf<InvalidEventHandlerReturnTypeException>());

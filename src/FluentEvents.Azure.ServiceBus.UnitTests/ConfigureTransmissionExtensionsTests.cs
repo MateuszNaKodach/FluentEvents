@@ -8,18 +8,18 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
     [TestFixture]
     public class ConfigureTransmissionExtensionsTests
     {
-        private Mock<IConfigureTransmission> m_ConfigureTransmissionMock;
+        private Mock<IConfigureTransmission> _configureTransmissionMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_ConfigureTransmissionMock = new Mock<IConfigureTransmission>(MockBehavior.Strict);
+            _configureTransmissionMock = new Mock<IConfigureTransmission>(MockBehavior.Strict);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_ConfigureTransmissionMock.Verify();
+            _configureTransmissionMock.Verify();
         }
 
         [Test]
@@ -27,12 +27,12 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
         {
             var publishTransmissionConfiguration = new Mock<IPublishTransmissionConfiguration>(MockBehavior.Strict);
 
-            m_ConfigureTransmissionMock
+            _configureTransmissionMock
                 .Setup(x => x.With<AzureTopicEventSender>())
                 .Returns(publishTransmissionConfiguration.Object)
                 .Verifiable();
 
-            var returnedPublishTransmissionConfiguration = m_ConfigureTransmissionMock.Object.WithAzureTopic();
+            var returnedPublishTransmissionConfiguration = _configureTransmissionMock.Object.WithAzureTopic();
 
             Assert.That(publishTransmissionConfiguration.Object, Is.EqualTo(returnedPublishTransmissionConfiguration));
         }

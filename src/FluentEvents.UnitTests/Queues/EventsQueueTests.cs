@@ -8,15 +8,15 @@ namespace FluentEvents.UnitTests.Queues
     [TestFixture]
     public class EventsQueueTests
     {
-        private string EventsQueueName = nameof(EventsQueueName);
-        private EventsQueue m_EventsQueue;
-        private QueuedPipelineEvent m_QueuedPipelineEvent;
+        private string _eventsQueueName = nameof(_eventsQueueName);
+        private EventsQueue _eventsQueue;
+        private QueuedPipelineEvent _queuedPipelineEvent;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsQueue = new EventsQueue(EventsQueueName);
-            m_QueuedPipelineEvent = new QueuedPipelineEvent();
+            _eventsQueue = new EventsQueue(_eventsQueueName);
+            _queuedPipelineEvent = new QueuedPipelineEvent();
         }
 
         [Test]
@@ -34,28 +34,28 @@ namespace FluentEvents.UnitTests.Queues
         {
             Assert.That(() =>
             {
-                m_EventsQueue.Enqueue(null);
+                _eventsQueue.Enqueue(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public void Enqueue_ShouldEnqueue()
         {
-            m_EventsQueue.Enqueue(m_QueuedPipelineEvent);
+            _eventsQueue.Enqueue(_queuedPipelineEvent);
 
-            var dequeuedEvents = m_EventsQueue.DequeueAll().ToArray();
+            var dequeuedEvents = _eventsQueue.DequeueAll().ToArray();
             Assert.That(dequeuedEvents, Has.Exactly(1).Items);
-            Assert.That(dequeuedEvents, Has.Exactly(1).Items.EqualTo(m_QueuedPipelineEvent));
+            Assert.That(dequeuedEvents, Has.Exactly(1).Items.EqualTo(_queuedPipelineEvent));
         }
 
         [Test]
         public void DiscardQueuedEvents_ShouldClearQueue()
         {
-            m_EventsQueue.Enqueue(m_QueuedPipelineEvent);
+            _eventsQueue.Enqueue(_queuedPipelineEvent);
 
-            m_EventsQueue.DiscardQueuedEvents();
+            _eventsQueue.DiscardQueuedEvents();
 
-            var dequeuedEvents = m_EventsQueue.DequeueAll().ToArray();
+            var dequeuedEvents = _eventsQueue.DequeueAll().ToArray();
             Assert.That(dequeuedEvents, Has.Exactly(0).Items);
         }
 
@@ -64,9 +64,9 @@ namespace FluentEvents.UnitTests.Queues
         {
             var queuedEventsCount = 4;
             for (var i = 0; i < queuedEventsCount; i++)
-                m_EventsQueue.Enqueue(m_QueuedPipelineEvent);
+                _eventsQueue.Enqueue(_queuedPipelineEvent);
 
-            var dequeuedEvents = m_EventsQueue.DequeueAll().ToArray();
+            var dequeuedEvents = _eventsQueue.DequeueAll().ToArray();
             Assert.That(dequeuedEvents, Has.Exactly(queuedEventsCount).Items);
         }
     }

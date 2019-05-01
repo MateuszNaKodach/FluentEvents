@@ -9,13 +9,13 @@ namespace FluentEvents.Pipelines.Publication
 {
     internal class GlobalPublishPipelineModule : IPipelineModule<GlobalPublishPipelineModuleConfig>
     {
-        private readonly IPublishingService m_PublishingService;
-        private readonly Dictionary<Type, IEventSender> m_EventSenders;
+        private readonly IPublishingService _publishingService;
+        private readonly Dictionary<Type, IEventSender> _eventSenders;
 
         public GlobalPublishPipelineModule(IPublishingService publishingService, IEnumerable<IEventSender> eventSenders)
         {
-            m_PublishingService = publishingService;
-            m_EventSenders = eventSenders.ToDictionary(x => x.GetType(), x => x);
+            _publishingService = publishingService;
+            _eventSenders = eventSenders.ToDictionary(x => x.GetType(), x => x);
         }
 
         public async Task InvokeAsync(
@@ -25,12 +25,12 @@ namespace FluentEvents.Pipelines.Publication
         )
         {
             if (config.SenderType != null)
-                if (m_EventSenders.TryGetValue(config.SenderType, out var eventSender))
+                if (_eventSenders.TryGetValue(config.SenderType, out var eventSender))
                     await eventSender.SendAsync(pipelineContext.PipelineEvent);
                 else
                     throw new EventSenderNotFoundException();
             else
-                await m_PublishingService.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent);
+                await _publishingService.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent);
 
             await invokeNextModule(pipelineContext);
         }

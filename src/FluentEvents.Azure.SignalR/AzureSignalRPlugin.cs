@@ -10,17 +10,17 @@ namespace FluentEvents.Azure.SignalR
 {
     internal class AzureSignalRPlugin : IFluentEventsPlugin
     {
-        private readonly IConfiguration m_Configuration;
-        private readonly Action<AzureSignalRServiceConfig> m_ConfigureAction;
-        private readonly Action<IHttpClientBuilder> m_HttpClientBuilderAction;
+        private readonly IConfiguration _configuration;
+        private readonly Action<AzureSignalRServiceConfig> _configureAction;
+        private readonly Action<IHttpClientBuilder> _httpClientBuilderAction;
 
         public AzureSignalRPlugin(
             Action<AzureSignalRServiceConfig> configureAction,
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
-            m_ConfigureAction = configureAction ?? throw new ArgumentNullException(nameof(configureAction));
-            m_HttpClientBuilderAction = httpClientBuilderAction;
+            _configureAction = configureAction ?? throw new ArgumentNullException(nameof(configureAction));
+            _httpClientBuilderAction = httpClientBuilderAction;
         }
 
         public AzureSignalRPlugin(
@@ -28,19 +28,19 @@ namespace FluentEvents.Azure.SignalR
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
-            m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            m_HttpClientBuilderAction = httpClientBuilderAction;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _httpClientBuilderAction = httpClientBuilderAction;
         }
 
         public void ApplyServices(IServiceCollection services)
         {
-            if (m_ConfigureAction != null)
-                services.Configure(m_ConfigureAction);
+            if (_configureAction != null)
+                services.Configure(_configureAction);
             else
-                services.Configure<AzureSignalRServiceConfig>(m_Configuration);
+                services.Configure<AzureSignalRServiceConfig>(_configuration);
 
             var httpClientBuilder = services.AddHttpClient<IAzureSignalRClient, AzureSignalRClient>();
-            m_HttpClientBuilderAction?.Invoke(httpClientBuilder);
+            _httpClientBuilderAction?.Invoke(httpClientBuilder);
 
             services.AddSingleton<IValidableConfig>(x =>
                 x.GetRequiredService<IOptions<AzureSignalRServiceConfig>>().Value

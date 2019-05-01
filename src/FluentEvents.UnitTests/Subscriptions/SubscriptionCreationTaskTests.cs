@@ -9,46 +9,46 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionCreationTaskTests
     {
-        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
-        private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
-        private Subscription m_Subscription;
+        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
+        private Subscription _subscription;
 
-        private ISubscriptionCreationTask m_SubscriptionCreationTask;
+        private ISubscriptionCreationTask _subscriptionCreationTask;
 
         [SetUp]
         public void SetUp()
         {
-            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
-            m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
-            m_Subscription = new Subscription(typeof(object));
+            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
+            _subscription = new Subscription(typeof(object));
 
-            m_SubscriptionCreationTask = new SubscriptionCreationTask<TestService, object>(
+            _subscriptionCreationTask = new SubscriptionCreationTask<TestService, object>(
                 (o, o1) => { },
-                m_SubscriptionsFactoryMock.Object
+                _subscriptionsFactoryMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_AppServiceProviderMock.Verify();
-            m_SubscriptionsFactoryMock.Verify();
+            _appServiceProviderMock.Verify();
+            _subscriptionsFactoryMock.Verify();
         }
 
         [Test]
         public void CreateSubscription_ShouldGetServiceAndCreateSubscription()
         {
-            m_AppServiceProviderMock
+            _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(new TestService())
                 .Verifiable();
 
-            m_SubscriptionsFactoryMock
+            _subscriptionsFactoryMock
                 .Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()))
-                .Returns(m_Subscription)
+                .Returns(_subscription)
                 .Verifiable();
 
-            var subscription = m_SubscriptionCreationTask.CreateSubscription(m_AppServiceProviderMock.Object);
+            var subscription = _subscriptionCreationTask.CreateSubscription(_appServiceProviderMock.Object);
 
             Assert.That(subscription, Is.Not.Null);
         }
@@ -56,14 +56,14 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void CreateSubscription_WhenServiceIsNotFound_ShouldThrow()
         {
-            m_AppServiceProviderMock
+            _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(null)
                 .Verifiable();
 
             Assert.That(() =>
             {
-                m_SubscriptionCreationTask.CreateSubscription(m_AppServiceProviderMock.Object);
+                _subscriptionCreationTask.CreateSubscription(_appServiceProviderMock.Object);
             }, Throws.TypeOf<SubscribingServiceNotFoundException>());
         }
 

@@ -13,41 +13,41 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
     [TestFixture]
     public class EventPipelineConfiguratorExtensionsTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IEventSelectionService> m_EventSelectionServiceMock;
-        private SourceModel m_SourceModel;
-        private SourceModel m_ProjectedSourceModel;
-        private SourceModelEventField m_SourceModelEventField;
-        private Mock<IPipeline> m_PipelineMock;
-        private EventPipelineConfigurator<TestSource, TestEventArgs> m_EventPipelineConfigurator;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
+        private Mock<IEventSelectionService> _eventSelectionServiceMock;
+        private SourceModel _sourceModel;
+        private SourceModel _projectedSourceModel;
+        private SourceModelEventField _sourceModelEventField;
+        private Mock<IPipeline> _pipelineMock;
+        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_EventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_ProjectedSourceModel = new SourceModel(typeof(ProjectedTestSource));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _eventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _projectedSourceModel = new SourceModel(typeof(ProjectedTestSource));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            m_EventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                m_SourceModel,
-                m_SourceModelEventField,
-                m_ServiceProviderMock.Object,
-                m_PipelineMock.Object
+            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
+                _sourceModel,
+                _sourceModelEventField,
+                _serviceProviderMock.Object,
+                _pipelineMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_ServiceProviderMock.Verify();
-            m_SourceModelsServiceMock.Verify();
-            m_EventSelectionServiceMock.Verify();
-            m_PipelineMock.Verify();
+            _serviceProviderMock.Verify();
+            _sourceModelsServiceMock.Verify();
+            _eventSelectionServiceMock.Verify();
+            _pipelineMock.Verify();
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             SetUpSourceModelsService();
             SetUpPipeline();
 
-            var newEventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsProjected(
+            var newEventPipelineConfigurator = _eventPipelineConfigurator.ThenIsProjected(
                 x => new ProjectedTestSource(),
                 x => new ProjectedTestEventArgs(),
                 isEventFieldNameNull ? null : nameof(ProjectedTestSource.TestEvent2)
@@ -75,19 +75,19 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             SetUpSourceModelsService();
             SetUpPipeline();
 
-            m_ServiceProviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IEventSelectionService)))
-                .Returns(m_EventSelectionServiceMock.Object)
+                .Returns(_eventSelectionServiceMock.Object)
                 .Verifiable();
             
             Action<ProjectedTestSource, dynamic> selectionAction = (x, y) => { };
 
-            m_EventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvent(m_ProjectedSourceModel, selectionAction))
+            _eventSelectionServiceMock
+                .Setup(x => x.GetSelectedEvent(_projectedSourceModel, selectionAction))
                 .Returns(new [] { nameof(ProjectedTestSource.TestEvent2) })
                 .Verifiable();
 
-            var newEventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsProjected(
+            var newEventPipelineConfigurator = _eventPipelineConfigurator.ThenIsProjected(
                 x => new ProjectedTestSource(),
                 x => new ProjectedTestEventArgs(),
                 selectionAction
@@ -104,7 +104,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
 
             Assert.That(() =>
             {
-                m_EventPipelineConfigurator.ThenIsProjected(
+                _eventPipelineConfigurator.ThenIsProjected(
                     x => new ProjectedTestSource(),
                     x => new ProjectedTestEventArgs(),
                     "invalid"
@@ -121,7 +121,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         {
             Assert.That(() =>
             {
-                m_EventPipelineConfigurator.ThenIsProjected(
+                _eventPipelineConfigurator.ThenIsProjected(
                     isSenderConverterNull ? (Func<TestSource, ProjectedTestSource>)null : x => new ProjectedTestSource(),
                     isEventArgsConverterNull ? (Func<TestEventArgs, ProjectedTestEventArgs>)null : x => new ProjectedTestEventArgs()
                 );
@@ -130,9 +130,9 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
 
         private void SetUpServiceProvider()
         {
-            m_ServiceProviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(ISourceModelsService)))
-                .Returns(m_SourceModelsServiceMock.Object)
+                .Returns(_sourceModelsServiceMock.Object)
                 .Verifiable();
         }
 
@@ -144,14 +144,14 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 newEventPipelineConfigurator,
                 Is.TypeOf<EventPipelineConfigurator<ProjectedTestSource, ProjectedTestEventArgs>>()
             );
-            Assert.That(newEventPipelineConfigurator.Get<SourceModel>(), Is.EqualTo(m_ProjectedSourceModel));
-            Assert.That(newEventPipelineConfigurator.Get<IServiceProvider>(), Is.EqualTo(m_ServiceProviderMock.Object));
-            Assert.That(newEventPipelineConfigurator.Get<IPipeline>(), Is.EqualTo(m_PipelineMock.Object));
+            Assert.That(newEventPipelineConfigurator.Get<SourceModel>(), Is.EqualTo(_projectedSourceModel));
+            Assert.That(newEventPipelineConfigurator.Get<IServiceProvider>(), Is.EqualTo(_serviceProviderMock.Object));
+            Assert.That(newEventPipelineConfigurator.Get<IPipeline>(), Is.EqualTo(_pipelineMock.Object));
         }
 
         private void SetUpPipeline()
         {
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x =>
                     x.AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
                         It.IsAny<ProjectionPipelineModuleConfig>()
@@ -162,9 +162,9 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
 
         private void SetUpSourceModelsService()
         {
-            m_SourceModelsServiceMock
+            _sourceModelsServiceMock
                 .Setup(x => x.GetOrCreateSourceModel(typeof(ProjectedTestSource)))
-                .Returns(m_ProjectedSourceModel)
+                .Returns(_projectedSourceModel)
                 .Verifiable();
         }
 

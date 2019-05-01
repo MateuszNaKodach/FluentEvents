@@ -16,32 +16,32 @@ namespace FluentEvents
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => InternalServiceProvider;
 
-        private EventsContextOptions m_Options;
-        private IInternalServiceCollection m_InternalServices;
+        private EventsContextOptions _options;
+        private IInternalServiceCollection _internalServices;
 
-        private IServiceProvider m_InternalServiceProvider;
-        private IEventsContextDependencies m_Dependencies;
+        private IServiceProvider _internalServiceProvider;
+        private IEventsContextDependencies _dependencies;
 
-        internal bool IsInitializing => m_InternalServiceProvider != null && m_Dependencies == null;
+        internal bool IsInitializing => _internalServiceProvider != null && _dependencies == null;
 
         private IServiceProvider InternalServiceProvider
         {
             get
             {
-                if (m_InternalServiceProvider == null)
+                if (_internalServiceProvider == null)
                 {
-                    OnConfiguring(m_Options);
-                    m_InternalServiceProvider = m_InternalServices.BuildServiceProvider(this, m_Options);
+                    OnConfiguring(_options);
+                    _internalServiceProvider = _internalServices.BuildServiceProvider(this, _options);
                     Build();
                 }
 
-                return m_InternalServiceProvider;
+                return _internalServiceProvider;
             }
         }
 
         private IEventsContextDependencies Dependencies =>
-            m_Dependencies ??
-            (m_Dependencies = InternalServiceProvider.GetRequiredService<IEventsContextDependencies>());
+            _dependencies ??
+            (_dependencies = InternalServiceProvider.GetRequiredService<IEventsContextDependencies>());
 
         /// <summary>
         ///     This constructor can be used when the <see cref="EventsContext" /> is configured with
@@ -59,10 +59,10 @@ namespace FluentEvents
         /// </summary>
         protected EventsContext(EventsContextOptions options)
         {
-            m_Options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
 
             var emptyAppServiceProvider = new ServiceCollection().BuildServiceProvider();
-            m_InternalServices = new InternalServiceCollection(new AppServiceProvider(emptyAppServiceProvider));
+            _internalServices = new InternalServiceCollection(new AppServiceProvider(emptyAppServiceProvider));
         }
 
         internal void Configure(
@@ -73,8 +73,8 @@ namespace FluentEvents
             if (options == null) throw new ArgumentNullException(nameof(options));
             if (internalServices == null) throw new ArgumentNullException(nameof(internalServices));
 
-            m_Options = options;
-            m_InternalServices = internalServices;
+            _options = options;
+            _internalServices = internalServices;
         }
 
         private void Build()

@@ -12,79 +12,79 @@ namespace FluentEvents.UnitTests.Routing
     [TestFixture]
     public class RoutingServiceTests
     {
-        private Mock<ILogger<RoutingService>> m_LoggerMock;
-        private Mock<IDisposable> m_LoggerScopeMock;
-        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IPipeline> m_PipelineMock;
+        private Mock<ILogger<RoutingService>> _loggerMock;
+        private Mock<IDisposable> _loggerScopeMock;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
+        private Mock<IPipeline> _pipelineMock;
 
-        private EventsScope m_EventsScope;
-        private RoutingService m_RoutingService;
-        private PipelineEvent m_PipelineEvent;
-        private SourceModel m_SourceModel;
-        private SourceModelEventField m_SourceModelEventField;
+        private EventsScope _eventsScope;
+        private RoutingService _routingService;
+        private PipelineEvent _pipelineEvent;
+        private SourceModel _sourceModel;
+        private SourceModelEventField _sourceModelEventField;
 
-        private readonly string m_EventFieldName = nameof(TestSource.TestEvent);
+        private readonly string _eventFieldName = nameof(TestSource.TestEvent);
 
         [SetUp]
         public void SetUp()
         {
-            m_LoggerMock = new Mock<ILogger<RoutingService>>(MockBehavior.Strict);
-            m_LoggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
-            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _loggerMock = new Mock<ILogger<RoutingService>>(MockBehavior.Strict);
+            _loggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            m_EventsScope = new EventsScope();
-            m_RoutingService = new RoutingService(
-                m_LoggerMock.Object,
-                m_SourceModelsServiceMock.Object
+            _eventsScope = new EventsScope();
+            _routingService = new RoutingService(
+                _loggerMock.Object,
+                _sourceModelsServiceMock.Object
             );
-            m_PipelineEvent = new PipelineEvent(
+            _pipelineEvent = new PipelineEvent(
                 typeof(TestSource),
-                m_EventFieldName,
+                _eventFieldName,
                 new TestSource(),
                 new TestEventArgs()
             );
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(m_EventFieldName);
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(_eventFieldName);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_LoggerMock.Verify();
-            m_LoggerScopeMock.Verify();
-            m_SourceModelsServiceMock.Verify();
-            m_PipelineMock.Verify();
+            _loggerMock.Verify();
+            _loggerScopeMock.Verify();
+            _sourceModelsServiceMock.Verify();
+            _pipelineMock.Verify();
         }
 
         [Test]
         public async Task RouteEventAsync_ShouldProcessEvent()
         {
-            m_PipelineMock
-                .Setup(x => x.ProcessEventAsync(m_PipelineEvent, m_EventsScope))
+            _pipelineMock
+                .Setup(x => x.ProcessEventAsync(_pipelineEvent, _eventsScope))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_SourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(m_PipelineEvent.OriginalSender.GetType()))
-                .Returns(m_SourceModel)
+            _sourceModelsServiceMock
+                .Setup(x => x.GetSourceModel(_pipelineEvent.OriginalSender.GetType()))
+                .Returns(_sourceModel)
                 .Verifiable();
 
-            m_LoggerScopeMock
+            _loggerScopeMock
                 .Setup(x => x.Dispose())
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.BeginScope(It.IsAny<object>()))
-                .Returns(m_LoggerScopeMock.Object)
+                .Returns(_loggerScopeMock.Object)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Information))
                 .Returns(true)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     RoutingLoggerMessages.EventIds.EventRoutedToPipeline,
@@ -94,9 +94,9 @@ namespace FluentEvents.UnitTests.Routing
                 ))
                 .Verifiable();
 
-            m_SourceModelEventField.AddPipeline(m_PipelineMock.Object);
+            _sourceModelEventField.AddPipeline(_pipelineMock.Object);
 
-            await m_RoutingService.RouteEventAsync(m_PipelineEvent, m_EventsScope);
+            await _routingService.RouteEventAsync(_pipelineEvent, _eventsScope);
         }
 
         private class TestSource

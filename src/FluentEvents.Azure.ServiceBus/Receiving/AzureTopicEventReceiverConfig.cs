@@ -8,9 +8,9 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     /// </summary>
     public class AzureTopicEventReceiverConfig : IValidableConfig
     {
-        private string m_ManagementConnectionString;
-        private string m_ReceiveConnectionString;
-        private Func<string> m_SubscriptionNameGenerator = () => Guid.NewGuid().ToString();
+        private string _managementConnectionString;
+        private string _receiveConnectionString;
+        private Func<string> _subscriptionNameGenerator = () => Guid.NewGuid().ToString();
 
         /// <summary>
         ///     Path of the Azure Service Bus topic relative to the namespace base address.
@@ -22,8 +22,8 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// </summary>
         public string ManagementConnectionString
         {
-            get => m_ManagementConnectionString;
-            set => m_ManagementConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
+            get => _managementConnectionString;
+            set => _managementConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// </summary>
         public string ReceiveConnectionString
         {
-            get => m_ReceiveConnectionString;
-            set => m_ReceiveConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
+            get => _receiveConnectionString;
+            set => _receiveConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// <remarks>The default implementation returns a GUID.</remarks>
         public Func<string> SubscriptionNameGenerator
         {
-            get => m_SubscriptionNameGenerator;
-            set => m_SubscriptionNameGenerator = value ?? throw new ArgumentNullException(nameof(value));
+            get => _subscriptionNameGenerator;
+            set => _subscriptionNameGenerator = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         void IValidableConfig.Validate()

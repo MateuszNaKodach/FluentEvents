@@ -8,14 +8,14 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
     [TestFixture]
     public class FilterPipelineModuleTests : PipelineModuleTestBase
     {
-        private FilterPipelineModule m_FilterPipelineModule;
-        private FilterPipelineModuleConfig m_FilterPipelineModuleConfig;
+        private FilterPipelineModule _filterPipelineModule;
+        private FilterPipelineModuleConfig _filterPipelineModuleConfig;
 
         [SetUp]
         public void SetUp()
         {
-            m_FilterPipelineModule = new FilterPipelineModule();
-            m_FilterPipelineModuleConfig = new FilterPipelineModuleConfig((sender, args) => ((TestSender)sender).IsValid);
+            _filterPipelineModule = new FilterPipelineModule();
+            _filterPipelineModuleConfig = new FilterPipelineModuleConfig((sender, args) => ((TestSender)sender).IsValid);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 return Task.CompletedTask;
             }
 
-            await m_FilterPipelineModule.InvokeAsync(m_FilterPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _filterPipelineModule.InvokeAsync(_filterPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(isInvoked, Is.False);
         }
@@ -61,7 +61,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 return Task.CompletedTask;
             }
 
-            await m_FilterPipelineModule.InvokeAsync(m_FilterPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _filterPipelineModule.InvokeAsync(_filterPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));

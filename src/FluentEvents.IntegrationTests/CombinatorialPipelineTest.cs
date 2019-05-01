@@ -14,19 +14,19 @@ namespace FluentEvents.IntegrationTests
     [TestFixture]
     public class CombinatorialPipelineTest
     {
-        private readonly string m_TestValue = "TestValue";
+        private readonly string _testValue = "TestValue";
 
-        private TestEventsContext m_Context;
-        private TestEntity m_Entity;
-        private SubscribingService m_ScopedSubscribingService;
-        private SubscribingService m_SingletonSubscribingService;
-        private IServiceProvider m_ServiceProvider;
-        private EventsScope m_Scope;
+        private TestEventsContext _context;
+        private TestEntity _entity;
+        private SubscribingService _scopedSubscribingService;
+        private SubscribingService _singletonSubscribingService;
+        private IServiceProvider _serviceProvider;
+        private EventsScope _scope;
 
-        private ProjectedTestEntity m_ProjectedTestEntity;
-        private ProjectedEventArgs m_ProjectedEventArgs;
-        private TestEntity m_TestEntity;
-        private TestEventArgs m_TestEventArgs;
+        private ProjectedTestEntity _projectedTestEntity;
+        private ProjectedEventArgs _projectedEventArgs;
+        private TestEntity _testEntity;
+        private TestEventArgs _testEventArgs;
 
         private void SetUpContext(TestRunParameters testRunParameters)
         {
@@ -38,17 +38,17 @@ namespace FluentEvents.IntegrationTests
 
             services.AddScoped<ScopedSubscribingService>();
             services.AddSingleton<SingletonSubscribingService>();
-            m_ServiceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
-            m_Entity = new TestEntity();
+            _entity = new TestEntity();
 
-            var serviceScope = m_ServiceProvider.CreateScope();
-            m_ScopedSubscribingService = serviceScope.ServiceProvider.GetRequiredService<ScopedSubscribingService>();
-            m_SingletonSubscribingService = serviceScope.ServiceProvider.GetRequiredService<SingletonSubscribingService>();
-            m_Context = m_ServiceProvider.GetRequiredService<TestEventsContext>();
-            m_Scope = serviceScope.ServiceProvider.GetRequiredService<EventsScope>();
+            var serviceScope = _serviceProvider.CreateScope();
+            _scopedSubscribingService = serviceScope.ServiceProvider.GetRequiredService<ScopedSubscribingService>();
+            _singletonSubscribingService = serviceScope.ServiceProvider.GetRequiredService<SingletonSubscribingService>();
+            _context = _serviceProvider.GetRequiredService<TestEventsContext>();
+            _scope = serviceScope.ServiceProvider.GetRequiredService<EventsScope>();
 
-            m_Context.Attach(m_Entity, m_Scope);
+            _context.Attach(_entity, _scope);
         }
 
         [Test]
@@ -76,21 +76,21 @@ namespace FluentEvents.IntegrationTests
                 SetUpManualGlobalSubscription(isAsync, isProjected);
 
             if (isAsync)
-                await m_Entity.RaiseAsyncEvent(m_TestValue);
+                await _entity.RaiseAsyncEvent(_testValue);
             else
-                m_Entity.RaiseEvent(m_TestValue);
+                _entity.RaiseEvent(_testValue);
 
             if (isQueued)
-                await m_Context.ProcessQueuedEventsAsync(m_Scope);
+                await _context.ProcessQueuedEventsAsync(_scope);
 
             var service = publicationType == PublicationType.Scoped
-                ? m_ScopedSubscribingService
-                : m_SingletonSubscribingService;
+                ? _scopedSubscribingService
+                : _singletonSubscribingService;
 
             if (publicationType == PublicationType.GlobalWithManualSubscription)
             {
-                Assert.That(isProjected ? (object)m_ProjectedTestEntity : m_TestEntity, Is.Not.Null);
-                Assert.That(isProjected ? (object)m_ProjectedEventArgs : m_TestEventArgs, Is.Not.Null);
+                Assert.That(isProjected ? (object)_projectedTestEntity : _testEntity, Is.Not.Null);
+                Assert.That(isProjected ? (object)_projectedEventArgs : _testEventArgs, Is.Not.Null);
             }
             else
             {
@@ -108,37 +108,37 @@ namespace FluentEvents.IntegrationTests
         )
         {
             if (isProjected)
-                m_Context.SubscribeGloballyTo<ProjectedTestEntity>(x =>
+                _context.SubscribeGloballyTo<ProjectedTestEntity>(x =>
                 {
                     if (isAsync)
                         x.AsyncTest += (sender, args) =>
                         {
-                            m_ProjectedTestEntity = (ProjectedTestEntity) sender;
-                            m_ProjectedEventArgs = args;
+                            _projectedTestEntity = (ProjectedTestEntity) sender;
+                            _projectedEventArgs = args;
                             return Task.CompletedTask;
                         };
                     else
                         x.Test += (sender, args) =>
                         {
-                            m_ProjectedTestEntity = (ProjectedTestEntity) sender;
-                            m_ProjectedEventArgs = args;
+                            _projectedTestEntity = (ProjectedTestEntity) sender;
+                            _projectedEventArgs = args;
                         };
                 });
             else
-                m_Context.SubscribeGloballyTo<TestEntity>(x =>
+                _context.SubscribeGloballyTo<TestEntity>(x =>
                 {
                     if (isAsync)
                         x.AsyncTest += (sender, args) =>
                         {
-                            m_TestEntity = (TestEntity) sender;
-                            m_TestEventArgs = args;
+                            _testEntity = (TestEntity) sender;
+                            _testEventArgs = args;
                             return Task.CompletedTask;
                         };
                     else
                         x.Test += (sender, args) =>
                         {
-                            m_TestEntity = (TestEntity) sender;
-                            m_TestEventArgs = args;
+                            _testEntity = (TestEntity) sender;
+                            _testEventArgs = args;
                         };
                 });
         }
@@ -161,16 +161,16 @@ namespace FluentEvents.IntegrationTests
 
         private sealed class TestEventsContext : EventsContext
         {
-            private readonly TestRunParameters m_Parameters;
+            private readonly TestRunParameters _parameters;
 
             public TestEventsContext(TestRunParameters parameters)
             {
-                m_Parameters = parameters;
+                _parameters = parameters;
             }
 
             protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
             {
-                if (m_Parameters.PublicationType == PublicationType.GlobalWithManualSubscription)
+                if (_parameters.PublicationType == PublicationType.GlobalWithManualSubscription)
                     return;
 
                 subscriptionsBuilder
@@ -183,7 +183,7 @@ namespace FluentEvents.IntegrationTests
                     .HasGlobalSubscription<TestEntity>((service, entity) => service.Subscribe(entity))
                     .HasGlobalSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
 
-                if (!m_Parameters.IsProjected)
+                if (!_parameters.IsProjected)
                     return;
 
                 subscriptionsBuilder
@@ -199,16 +199,16 @@ namespace FluentEvents.IntegrationTests
 
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
-                var eventFieldName = m_Parameters.IsAsync ? nameof(TestEntity.AsyncTest) : nameof(TestEntity.Test);
+                var eventFieldName = _parameters.IsAsync ? nameof(TestEntity.AsyncTest) : nameof(TestEntity.Test);
 
                 var pipelineConfigurator = pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(eventFieldName)
                     .IsForwardedToPipeline();
 
-                if (m_Parameters.IsFiltered)
+                if (_parameters.IsFiltered)
                     pipelineConfigurator.ThenIsFiltered((sender, args) => true);
 
-                if (m_Parameters.IsProjected)
+                if (_parameters.IsProjected)
                 {
                     var pipelineConfiguratorWithProjection = pipelineConfigurator.ThenIsProjected(
                         sender => new ProjectedTestEntity(),
@@ -229,10 +229,10 @@ namespace FluentEvents.IntegrationTests
                 where TSender : class
                 where TArgs : class
             {
-                if (m_Parameters.IsQueued)
+                if (_parameters.IsQueued)
                     pipelineConfigurator.ThenIsQueuedTo("DefaultQueue");
 
-                switch (m_Parameters.PublicationType)
+                switch (_parameters.PublicationType)
                 {
                     case PublicationType.GlobalWithServiceSubscription:
                     case PublicationType.GlobalWithManualSubscription:

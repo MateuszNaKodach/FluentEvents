@@ -12,7 +12,7 @@ namespace FluentEvents.Utils
     /// <inheritdoc />
     public class EventSelectionService : IEventSelectionService
     {
-        private readonly ISubscriptionScanService m_SubscriptionScanService;
+        private readonly ISubscriptionScanService _subscriptionScanService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -20,7 +20,7 @@ namespace FluentEvents.Utils
         /// </summary>
         public EventSelectionService(ISubscriptionScanService subscriptionScanService)
         {
-            m_SubscriptionScanService = subscriptionScanService;
+            _subscriptionScanService = subscriptionScanService;
         }
 
         /// <inheritdoc />
@@ -41,7 +41,7 @@ namespace FluentEvents.Utils
                 }
             }
 
-            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
+            var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
                 sourceModel.ClrTypeFieldInfos,
                 WrappingSubscriptionToDynamicAction

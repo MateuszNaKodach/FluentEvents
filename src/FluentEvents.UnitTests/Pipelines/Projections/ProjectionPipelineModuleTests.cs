@@ -9,28 +9,28 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
     [TestFixture]
     public class ProjectionPipelineModuleTests : PipelineModuleTestBase
     {
-        private ProjectionPipelineModule m_ProjectionPipelineModule;
-        private ProjectionPipelineModuleConfig m_ProjectionPipelineModuleConfig;
-        private Mock<IEventsSenderProjection> m_EventSenderProjectionMock;
-        private Mock<IEventArgsProjection> m_EventArgsProjectionMock;
+        private ProjectionPipelineModule _projectionPipelineModule;
+        private ProjectionPipelineModuleConfig _projectionPipelineModuleConfig;
+        private Mock<IEventsSenderProjection> _eventSenderProjectionMock;
+        private Mock<IEventArgsProjection> _eventArgsProjectionMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventSenderProjectionMock = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
-            m_EventArgsProjectionMock = new Mock<IEventArgsProjection>(MockBehavior.Strict);
-            m_ProjectionPipelineModule = new ProjectionPipelineModule();
-            m_ProjectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
-                m_EventSenderProjectionMock.Object,
-                m_EventArgsProjectionMock.Object
+            _eventSenderProjectionMock = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
+            _eventArgsProjectionMock = new Mock<IEventArgsProjection>(MockBehavior.Strict);
+            _projectionPipelineModule = new ProjectionPipelineModule();
+            _projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
+                _eventSenderProjectionMock.Object,
+                _eventArgsProjectionMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_EventSenderProjectionMock.Verify();
-            m_EventArgsProjectionMock.Verify();
+            _eventSenderProjectionMock.Verify();
+            _eventArgsProjectionMock.Verify();
         }
 
         [Test]
@@ -46,12 +46,12 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 testEventArgs
             );
 
-            m_EventSenderProjectionMock
+            _eventSenderProjectionMock
                 .Setup(x => x.Convert(testSender))
                 .Returns(projectedTestSender)
                 .Verifiable();
 
-            m_EventArgsProjectionMock
+            _eventArgsProjectionMock
                 .Setup(x => x.Convert(testEventArgs))
                 .Returns(projectedTestEventArgs)
                 .Verifiable();
@@ -64,7 +64,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 return Task.CompletedTask;
             }
 
-            await m_ProjectionPipelineModule.InvokeAsync(m_ProjectionPipelineModuleConfig, pipelineContext, InvokeNextModule);
+            await _projectionPipelineModule.InvokeAsync(_projectionPipelineModuleConfig, pipelineContext, InvokeNextModule);
 
             Assert.That(nextModuleContext, Is.Not.Null);
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));

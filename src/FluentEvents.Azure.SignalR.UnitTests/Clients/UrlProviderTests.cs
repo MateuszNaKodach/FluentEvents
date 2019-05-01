@@ -10,18 +10,18 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         private const string HubName = nameof(HubName);
         private const string ReceiverId = nameof(ReceiverId);
 
-        private UrlProvider m_UrlProvider;
+        private UrlProvider _urlProvider;
 
         [SetUp]
         public void SetUp()
         {
-            m_UrlProvider = new UrlProvider();
+            _urlProvider = new UrlProvider();
         }
 
         [Test]
         public void GetUrl_ShouldTrimEndpointSlash()
         {
-            var url = m_UrlProvider.GetUrl(Endpoint + "/", PublicationMethod.Broadcast, HubName, null);
+            var url = _urlProvider.GetUrl(Endpoint + "/", PublicationMethod.Broadcast, HubName, null);
 
             Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}"));
         }
@@ -29,7 +29,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         [Test]
         public void GetUrl_WithPublicationTypeBroadcast_ShouldReturnCorrectUrl()
         {
-            var url = m_UrlProvider.GetUrl(Endpoint, PublicationMethod.Broadcast, HubName, null);
+            var url = _urlProvider.GetUrl(Endpoint, PublicationMethod.Broadcast, HubName, null);
             
             Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}"));
         }
@@ -37,7 +37,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         [Test]
         public void GetUrl_WithPublicationTypeUser_ShouldReturnCorrectUrl()
         {
-            var url = m_UrlProvider.GetUrl(Endpoint, PublicationMethod.User, HubName, ReceiverId);
+            var url = _urlProvider.GetUrl(Endpoint, PublicationMethod.User, HubName, ReceiverId);
 
             Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/users/{ReceiverId}"));
         }
@@ -45,7 +45,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         [Test]
         public void GetUrl_WithPublicationTypeGroup_ShouldReturnCorrectUrl()
         {
-            var url = m_UrlProvider.GetUrl(Endpoint, PublicationMethod.Group, HubName, ReceiverId);
+            var url = _urlProvider.GetUrl(Endpoint, PublicationMethod.Group, HubName, ReceiverId);
 
             Assert.That(url, Is.EqualTo(Endpoint + $"/api/v1/hubs/{HubName.ToLower()}/groups/{ReceiverId}"));
         }

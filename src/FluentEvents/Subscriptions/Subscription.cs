@@ -15,17 +15,17 @@ namespace FluentEvents.Subscriptions
     public class Subscription : ISubscriptionsCancellationToken
     {
         internal Type SourceType { get; }
-        private readonly ConcurrentDictionary<string, Delegate> m_EventHandlers;
+        private readonly ConcurrentDictionary<string, Delegate> _eventHandlers;
 
         internal Subscription(Type sourceType)
         {
             SourceType = sourceType ?? throw new ArgumentNullException(nameof(sourceType));
-            m_EventHandlers = new ConcurrentDictionary<string, Delegate>();
+            _eventHandlers = new ConcurrentDictionary<string, Delegate>();
         }
 
         internal void AddHandler(string eventName, Delegate eventsHandler)
         {
-            m_EventHandlers.AddOrUpdate(eventName, eventsHandler, (s, d) => Delegate.Combine(eventsHandler, d));
+            _eventHandlers.AddOrUpdate(eventName, eventsHandler, (s, d) => Delegate.Combine(eventsHandler, d));
         }
 
         internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
@@ -34,7 +34,7 @@ namespace FluentEvents.Subscriptions
             if (!SourceType.IsInstanceOfType(pipelineEvent.OriginalSender))
                 throw new EventSourceTypeMismatchException();
 
-            if (m_EventHandlers.TryGetValue(pipelineEvent.OriginalEventFieldName, out var eventDelegate))
+            if (_eventHandlers.TryGetValue(pipelineEvent.OriginalEventFieldName, out var eventDelegate))
             {
                 var exceptions = new List<TargetInvocationException>();
                 var invocationList = eventDelegate.GetInvocationList();

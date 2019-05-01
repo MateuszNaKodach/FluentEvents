@@ -8,7 +8,7 @@ namespace FluentEvents.Model
     /// <inheritdoc />
     public class SourceModelsService : ISourceModelsService
     {
-        private readonly ConcurrentDictionary<Type, SourceModel> m_SourceModels;
+        private readonly ConcurrentDictionary<Type, SourceModel> _sourceModels;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -16,26 +16,26 @@ namespace FluentEvents.Model
         /// </summary>
         public SourceModelsService()
         {
-            m_SourceModels = new ConcurrentDictionary<Type, SourceModel>();
+            _sourceModels = new ConcurrentDictionary<Type, SourceModel>();
         }
 
         /// <inheritdoc />
         public SourceModel GetSourceModel(Type crlType)
         {
-            m_SourceModels.TryGetValue(crlType, out var sourceModel);
+            _sourceModels.TryGetValue(crlType, out var sourceModel);
             return sourceModel;
         }
 
         /// <inheritdoc />
         public SourceModel GetOrCreateSourceModel(Type clrType)
         {
-            return m_SourceModels.GetOrAdd(clrType, new SourceModel(clrType));
+            return _sourceModels.GetOrAdd(clrType, new SourceModel(clrType));
         }
 
         /// <inheritdoc />
         public IEnumerable<SourceModel> GetSourceModels()
         {
-            return m_SourceModels.Values.ToList();
+            return _sourceModels.Values.ToList();
         }
     }
 }

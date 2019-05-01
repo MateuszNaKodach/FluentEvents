@@ -11,45 +11,45 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
     [TestFixture]
     public class EventPipelineConfiguratorExtensionsTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IPipeline> m_PipelineMock;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
+        private Mock<IPipeline> _pipelineMock;
 
-        private SourceModel m_SourceModel;
-        private SourceModelEventField m_SourceModelEventField;
+        private SourceModel _sourceModel;
+        private SourceModelEventField _sourceModelEventField;
 
-        private EventPipelineConfigurator<TestSource, TestEventArgs> m_EventPipelineConfigurator;
+        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
 
-            m_EventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                m_SourceModel,
-                m_SourceModelEventField,
-                m_ServiceProviderMock.Object,
-                m_PipelineMock.Object
+            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
+                _sourceModel,
+                _sourceModelEventField,
+                _serviceProviderMock.Object,
+                _pipelineMock.Object
             );
         }
 
         [Test]
         public void ThenIsFiltered_ShouldAddPipelineModule()
         {
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x =>
                     x.AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
                         It.IsAny<FilterPipelineModuleConfig>()))
                 .Verifiable();
 
-            var eventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsFiltered((x, y) => true);
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered((x, y) => true);
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(m_EventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
         }
 
         [Test]
@@ -57,16 +57,16 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         {
             Assert.That(() =>
             {
-                m_EventPipelineConfigurator.ThenIsFiltered(null);
+                _eventPipelineConfigurator.ThenIsFiltered(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_ServiceProviderMock.Verify();
-            m_SourceModelsServiceMock.Verify();
-            m_PipelineMock.Verify();
+            _serviceProviderMock.Verify();
+            _sourceModelsServiceMock.Verify();
+            _pipelineMock.Verify();
         }
 
         private class TestSource

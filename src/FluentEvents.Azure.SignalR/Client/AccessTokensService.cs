@@ -9,12 +9,12 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal class AccessTokensService : IAccessTokensService
     {
-        private readonly JwtSecurityTokenHandler m_JwtTokenHandler = new JwtSecurityTokenHandler();
-        private readonly string m_ServerName;
+        private readonly JwtSecurityTokenHandler _jwtTokenHandler = new JwtSecurityTokenHandler();
+        private readonly string _serverName;
 
         public AccessTokensService()
         {
-            m_ServerName = GenerateServerName();
+            _serverName = GenerateServerName();
         }
 
         private string GenerateServerName() => $"{Environment.MachineName}_{Guid.NewGuid():N}";
@@ -28,7 +28,7 @@ namespace FluentEvents.Azure.SignalR.Client
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, nameIdentifier ?? m_ServerName)
+                new Claim(ClaimTypes.NameIdentifier, nameIdentifier ?? _serverName)
             };
 
             return GenerateAccessTokenInternal(connectionString, audience, claims, lifetime ?? TimeSpan.FromHours(1));
@@ -49,7 +49,7 @@ namespace FluentEvents.Azure.SignalR.Client
             JwtSecurityToken jwtSecurityToken;
             try
             {
-                jwtSecurityToken = m_JwtTokenHandler.CreateJwtSecurityToken(
+                jwtSecurityToken = _jwtTokenHandler.CreateJwtSecurityToken(
                     issuer: null,
                     audience: audience,
                     subject: claims == null ? null : new ClaimsIdentity(claims),
@@ -62,7 +62,7 @@ namespace FluentEvents.Azure.SignalR.Client
                 throw new InvalidConnectionStringAccessKeyException(e);
             }
 
-            return m_JwtTokenHandler.WriteToken(jwtSecurityToken);
+            return _jwtTokenHandler.WriteToken(jwtSecurityToken);
         }
     }
 }

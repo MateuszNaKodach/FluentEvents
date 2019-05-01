@@ -12,9 +12,9 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
     [TestFixture]
     public class PublishWithAzureTopicTest
     {
-        private TestEventsContext m_TestEventsContext;
-        private IServiceProvider m_ServiceProvider;
-        private EventsScope m_EventsScope;
+        private TestEventsContext _testEventsContext;
+        private IServiceProvider _serviceProvider;
+        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -34,20 +34,20 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 options.UseAzureTopicEventSender(configuration.GetSection("azureTopicSender"));
             });
 
-            m_ServiceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
-            m_TestEventsContext = m_ServiceProvider.GetRequiredService<TestEventsContext>();
-            m_EventsScope = m_ServiceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
+            _testEventsContext = _serviceProvider.GetRequiredService<TestEventsContext>();
+            _eventsScope = _serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
         }
 
         [Test]
         public async Task EventShouldBePublishedWithAzureServiceBusTopic()
         {
-            await m_TestEventsContext.StartEventReceivers();
+            await _testEventsContext.StartEventReceivers();
 
             object receivedSender = null;
             TestEventArgs receivedEventArgs = null;
-            m_TestEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
+            _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
@@ -56,7 +56,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 };
             });
 
-            TestUtils.AttachAndRaiseEvent(m_TestEventsContext, m_EventsScope);
+            TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
 
             await Watcher.WaitUntilAsync(() => receivedEventArgs != null);
 

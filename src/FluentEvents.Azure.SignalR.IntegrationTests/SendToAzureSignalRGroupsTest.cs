@@ -15,15 +15,15 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
     public class SendToAzureSignalRGroupsTest 
         : SendToAzureSignalRTestBase<SendToAzureSignalRGroupsTest.TestEventsContext>
     {
-        private static readonly string GroupId1 = Guid.NewGuid().ToString();
-        private static readonly string GroupId2 = Guid.NewGuid().ToString();
+        private static readonly string _groupId1 = Guid.NewGuid().ToString();
+        private static readonly string _groupId2 = Guid.NewGuid().ToString();
 
         [SetUp]
         public async Task SetUpGroups()
         {
-            await SetUpGroupAsync(UserId1, GroupId1);
-            await SetUpGroupAsync(UserId2, GroupId1);
-            await SetUpGroupAsync(UserId3, GroupId2);
+            await SetUpGroupAsync(UserId1, _groupId1);
+            await SetUpGroupAsync(UserId2, _groupId1);
+            await SetUpGroupAsync(UserId3, _groupId2);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsForwardedToPipeline()
-                    .ThenIsSentToAzureSignalRGroups((sender, args) => new[] { GroupId1 }, HubName, HubMethodName);
+                    .ThenIsSentToAzureSignalRGroups((sender, args) => new[] { _groupId1 }, HubName, HubMethodName);
             }
         }
     }

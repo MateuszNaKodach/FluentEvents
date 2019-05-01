@@ -10,40 +10,40 @@ namespace FluentEvents.Azure.SignalR.UnitTests
     [TestFixture]
     public class AzureSignalRPipelineModuleTests
     {
-        private static readonly string[] ReceiverIds = {"1", "2"};
+        private static readonly string[] _receiverIds = {"1", "2"};
 
-        private Mock<IAzureSignalRClient> m_AzureSignalRClientMock;
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private Mock<IServiceProvider> m_AppServiceProviderMock;
-        private Mock<EventsContext> m_EventsContextMock;
+        private Mock<IAzureSignalRClient> _azureSignalRClientMock;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private Mock<IServiceProvider> _appServiceProviderMock;
+        private Mock<EventsContext> _eventsContextMock;
 
-        private AzureSignalRPipelineModuleConfig m_AzureSignalRPipelineModuleConfig;
-        private EventsScope m_EventsScope;
-        private PipelineEvent m_PipelineEvent;
-        private PipelineContext m_PipelineContext;
+        private AzureSignalRPipelineModuleConfig _azureSignalRPipelineModuleConfig;
+        private EventsScope _eventsScope;
+        private PipelineEvent _pipelineEvent;
+        private PipelineContext _pipelineContext;
 
-        private AzureSignalRPipelineModule m_AzureSignalRPipelineModule;
+        private AzureSignalRPipelineModule _azureSignalRPipelineModule;
 
         [SetUp]
         public void SetUp()
         {
-            m_AzureSignalRClientMock = new Mock<IAzureSignalRClient>(MockBehavior.Strict);
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_AppServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
+            _azureSignalRClientMock = new Mock<IAzureSignalRClient>(MockBehavior.Strict);
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
 
-            m_AzureSignalRPipelineModuleConfig = new AzureSignalRPipelineModuleConfig
+            _azureSignalRPipelineModuleConfig = new AzureSignalRPipelineModuleConfig
             {
                 HubMethodName = nameof(AzureSignalRPipelineModuleConfig.HubMethodName),
                 HubName = nameof(AzureSignalRPipelineModuleConfig.HubName),
                 PublicationMethod = PublicationMethod.User,
-                ReceiverIdsProviderAction = (o, o1) => ReceiverIds
+                ReceiverIdsProviderAction = (o, o1) => _receiverIds
             };
-            m_EventsScope = new EventsScope(new []{m_EventsContextMock.Object}, m_AppServiceProviderMock.Object);
-            m_PipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
-            m_PipelineContext = new PipelineContext(m_PipelineEvent, m_EventsScope, m_ServiceProviderMock.Object);
+            _eventsScope = new EventsScope(new []{_eventsContextMock.Object}, _appServiceProviderMock.Object);
+            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
 
-            m_AzureSignalRPipelineModule = new AzureSignalRPipelineModule(m_AzureSignalRClientMock.Object);
+            _azureSignalRPipelineModule = new AzureSignalRPipelineModule(_azureSignalRClientMock.Object);
         }
 
         [Test]
@@ -52,25 +52,25 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         )
         {
             if (isReceiverIdsProviderActionNull)
-                m_AzureSignalRPipelineModuleConfig.ReceiverIdsProviderAction = null;
+                _azureSignalRPipelineModuleConfig.ReceiverIdsProviderAction = null;
 
-            m_AzureSignalRClientMock
+            _azureSignalRClientMock
                 .Setup(x => x.SendEventAsync(
-                    m_AzureSignalRPipelineModuleConfig.PublicationMethod,
-                    m_AzureSignalRPipelineModuleConfig.HubName,
-                    m_AzureSignalRPipelineModuleConfig.HubMethodName,
-                    isReceiverIdsProviderActionNull ? null : ReceiverIds,
-                    m_PipelineEvent.OriginalSender,
-                    m_PipelineEvent.OriginalEventArgs)
+                    _azureSignalRPipelineModuleConfig.PublicationMethod,
+                    _azureSignalRPipelineModuleConfig.HubName,
+                    _azureSignalRPipelineModuleConfig.HubMethodName,
+                    isReceiverIdsProviderActionNull ? null : _receiverIds,
+                    _pipelineEvent.OriginalSender,
+                    _pipelineEvent.OriginalEventArgs)
                 )
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
             var isNextModuleInvoked = false;
 
-            await m_AzureSignalRPipelineModule.InvokeAsync(
-                m_AzureSignalRPipelineModuleConfig,
-                m_PipelineContext,
+            await _azureSignalRPipelineModule.InvokeAsync(
+                _azureSignalRPipelineModuleConfig,
+                _pipelineContext,
                 context =>
                 {
                     isNextModuleInvoked = true;

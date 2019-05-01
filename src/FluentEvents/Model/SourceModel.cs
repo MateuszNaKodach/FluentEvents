@@ -25,9 +25,9 @@ namespace FluentEvents.Model
         /// <summary>
         ///     The list of the event fields present on the <see cref="ClrType"/> and created on this model.
         /// </summary>
-        public IEnumerable<SourceModelEventField> EventFields => m_EventFields;
+        public IEnumerable<SourceModelEventField> EventFields => _eventFields;
 
-        private readonly IList<SourceModelEventField> m_EventFields;
+        private readonly IList<SourceModelEventField> _eventFields;
         private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace FluentEvents.Model
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             ClrTypeFieldInfos = ClrType.GetEvents().Select(x => GetEventFieldInfo(clrType, x)).ToArray();
-            m_EventFields = new List<SourceModelEventField>();
+            _eventFields = new List<SourceModelEventField>();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace FluentEvents.Model
         /// <param name="name">The name of the event field.</param>
         public SourceModelEventField GetOrCreateEventField(string name)
         {
-            var eventField = m_EventFields.FirstOrDefault(x => x.Name == name);
+            var eventField = _eventFields.FirstOrDefault(x => x.Name == name);
             if (eventField == null)
             {
                 var fieldInfo = ClrTypeFieldInfos.FirstOrDefault(x => x.Name == name);
@@ -56,7 +56,7 @@ namespace FluentEvents.Model
 
                 var eventInfo = ClrType.GetEvent(fieldInfo.Name);
                 eventField = new SourceModelEventField(fieldInfo, eventInfo);
-                m_EventFields.Add(eventField);
+                _eventFields.Add(eventField);
             }
 
             return eventField;
@@ -67,7 +67,7 @@ namespace FluentEvents.Model
         /// </summary>
         /// <param name="name">The name of the event field.</param>
         public SourceModelEventField GetEventField(string name)
-            => m_EventFields.FirstOrDefault(x => x.Name == name);
+            => _eventFields.FirstOrDefault(x => x.Name == name);
 
         internal Delegate CreateEventHandler<T>(SourceModelEventField eventField, T handlerAction)
         {

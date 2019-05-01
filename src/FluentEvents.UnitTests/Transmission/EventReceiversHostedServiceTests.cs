@@ -9,22 +9,22 @@ namespace FluentEvents.UnitTests.Transmission
     [TestFixture]
     public class EventReceiversHostedServiceTests
     {
-        private Mock<IEventReceiversService> m_EventReceiversServiceMock;
+        private Mock<IEventReceiversService> _eventReceiversServiceMock;
 
-        private EventReceiversHostedService m_EventReceiversHostedService;
+        private EventReceiversHostedService _eventReceiversHostedService;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
+            _eventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
 
-            m_EventReceiversHostedService = new EventReceiversHostedService(m_EventReceiversServiceMock.Object);
+            _eventReceiversHostedService = new EventReceiversHostedService(_eventReceiversServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_EventReceiversServiceMock.Verify();
+            _eventReceiversServiceMock.Verify();
         }
 
         [Test]
@@ -33,12 +33,12 @@ namespace FluentEvents.UnitTests.Transmission
             var cancellationTokenSource = new CancellationTokenSource();
             var token = cancellationTokenSource.Token;
 
-            m_EventReceiversServiceMock
+            _eventReceiversServiceMock
                 .Setup(x => x.StartReceiversAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_EventReceiversHostedService.StartAsync(token);
+            await _eventReceiversHostedService.StartAsync(token);
         }
 
         [Test]
@@ -47,12 +47,12 @@ namespace FluentEvents.UnitTests.Transmission
             var cancellationTokenSource = new CancellationTokenSource();
             var token = cancellationTokenSource.Token;
 
-            m_EventReceiversServiceMock
+            _eventReceiversServiceMock
                 .Setup(x => x.StopReceiversAsync(token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_EventReceiversHostedService.StopAsync(token);
+            await _eventReceiversHostedService.StopAsync(token);
         }
     }
 }

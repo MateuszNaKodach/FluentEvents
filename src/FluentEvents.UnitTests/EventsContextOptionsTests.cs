@@ -8,12 +8,12 @@ namespace FluentEvents.UnitTests
     [TestFixture]
     public class EventsContextOptionsTests
     {
-        private EventsContextOptions m_EventsContextOptions;
+        private EventsContextOptions _eventsContextOptions;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextOptions = new EventsContextOptions();
+            _eventsContextOptions = new EventsContextOptions();
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace FluentEvents.UnitTests
         {
             Assert.That(() =>
             {
-                ((IFluentEventsPluginOptions) m_EventsContextOptions).AddPlugin(null);
+                ((IFluentEventsPluginOptions) _eventsContextOptions).AddPlugin(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -33,8 +33,8 @@ namespace FluentEvents.UnitTests
 
             Assert.That(() =>
             {
-                ((IFluentEventsPluginOptions)m_EventsContextOptions).AddPlugin(plugin1);
-                ((IFluentEventsPluginOptions)m_EventsContextOptions).AddPlugin(plugin2);
+                ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin1);
+                ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin2);
             }, Throws.TypeOf<DuplicatePluginException>());
         }
 
@@ -43,9 +43,9 @@ namespace FluentEvents.UnitTests
         {
             var plugin = new TestPlugin<object>();
 
-            ((IFluentEventsPluginOptions)m_EventsContextOptions).AddPlugin(plugin);
+            ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin);
 
-            Assert.That(((IFluentEventsPluginOptions) m_EventsContextOptions).Plugins, Has.One.Items.EqualTo(plugin));
+            Assert.That(((IFluentEventsPluginOptions) _eventsContextOptions).Plugins, Has.One.Items.EqualTo(plugin));
         }
 
         private class TestPlugin<T> : IFluentEventsPlugin

@@ -10,9 +10,9 @@ namespace FluentEvents.Azure.ServiceBus.Sending
 {
     internal class AzureTopicEventSender : IEventSender, IDisposable
     {
-        private readonly ILogger<AzureTopicEventSender> m_Logger;
-        private readonly IEventsSerializationService m_EventsSerializationService;
-        private readonly ITopicClient m_TopicClient;
+        private readonly ILogger<AzureTopicEventSender> _logger;
+        private readonly IEventsSerializationService _eventsSerializationService;
+        private readonly ITopicClient _topicClient;
 
         public AzureTopicEventSender(
             ILogger<AzureTopicEventSender> logger,
@@ -21,27 +21,27 @@ namespace FluentEvents.Azure.ServiceBus.Sending
             ITopicClientFactory topicClientFactory
         )
         {
-            m_Logger = logger;
-            m_EventsSerializationService = eventsSerializationService;
-            m_TopicClient = topicClientFactory.GetNew(config.Value.ConnectionString);
+            _logger = logger;
+            _eventsSerializationService = eventsSerializationService;
+            _topicClient = topicClientFactory.GetNew(config.Value.ConnectionString);
         }
 
         public async Task SendAsync(PipelineEvent pipelineEvent)
         {
-            var serializedEvent = m_EventsSerializationService.SerializeEvent(pipelineEvent);
+            var serializedEvent = _eventsSerializationService.SerializeEvent(pipelineEvent);
             var message = new Message(serializedEvent)
             {
                 MessageId = Guid.NewGuid().ToString()
             };
 
-            await m_TopicClient.SendAsync(message);
+            await _topicClient.SendAsync(message);
 
-            m_Logger.MessageSent(message.MessageId);
+            _logger.MessageSent(message.MessageId);
         }
 
         public void Dispose()
         {
-            m_TopicClient.CloseAsync().GetAwaiter().GetResult();
+            _topicClient.CloseAsync().GetAwaiter().GetResult();
         }
     }
 }
