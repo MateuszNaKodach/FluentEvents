@@ -63,7 +63,6 @@ public async Task AcceptAllFriendRequests(int userId)
 public class NotificationsService
 {
     private readonly IMailService _mailService;
-    private ISubscriptionsCancellationToken _subscriptionsCancellationToken;
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
