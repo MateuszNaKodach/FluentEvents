@@ -32,7 +32,7 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void Ctor_WithEventConfigurator_ShouldGetPropertiesFromEventConfigurator()
+        public void Ctor_WithEventConfigurator_ShouldInheritPropertyValuesFromEventConfigurator()
         {
             var eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
                 _pipeline,
@@ -51,7 +51,7 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void Ctor_WithSingleParameters_ShouldCreateCustomInstance()
+        public void Ctor_WithAllParameters_ShouldSetPropertiesFromParameters()
         {
             var eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
                 _sourceModel,
