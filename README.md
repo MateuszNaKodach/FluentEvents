@@ -50,21 +50,11 @@ public class MyEventsContext : EventsContext
 
 #### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
 ```csharp
-public class MyService 
-{    
-    private MyDbContext _myDbContext;
-    
-    public MyService(MyDbContext myDbContext) 
-    {
-        _myDbContext = myDbContext;
-    }
+public async Task AcceptAllFriendRequests(int userId) 
+{
+    var user = await _myDbContext.Users.FirstAsync(x => x.Id == userId);
 
-    public async Task AcceptAllFriendRequests(int userId) 
-    {
-        var user = await _myDbContext.Users.FirstAsync(x => x.Id == userId);
-        
-        await user.AcceptAllFriendRequests();
-    }
+    await user.AcceptAllFriendRequests();
 }
 ```
 
