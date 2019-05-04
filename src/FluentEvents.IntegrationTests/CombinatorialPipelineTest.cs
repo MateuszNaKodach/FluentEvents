@@ -75,15 +75,12 @@ namespace FluentEvents.IntegrationTests
             if (publicationType == PublicationType.GlobalWithManualSubscription)
                 SetUpManualGlobalSubscription(isAsync, isProjected);
 
-            if (isAsync)
-                await _entity.RaiseAsyncEvent(_testValue);
-            else
-                _entity.RaiseEvent(_testValue);
+            await RaiseEvent(isAsync);
 
             if (isQueued)
                 await _context.ProcessQueuedEventsAsync(_scope);
 
-            var service = publicationType == PublicationType.Scoped
+            var subscribingService = publicationType == PublicationType.Scoped
                 ? _scopedSubscribingService
                 : _singletonSubscribingService;
 
@@ -94,12 +91,20 @@ namespace FluentEvents.IntegrationTests
             }
             else
             {
-                Assert.That(service,
+                Assert.That(subscribingService,
                     isProjected
                         ? Has.Property(nameof(SubscribingService.ProjectedEventArgs)).Not.Null
                         : Has.Property(nameof(SubscribingService.EventArgs)).Not.Null
                 );
             }
+        }
+
+        private async Task RaiseEvent(bool isAsync)
+        {
+            if (isAsync)
+                await _entity.RaiseAsyncEvent(_testValue);
+            else
+                _entity.RaiseEvent(_testValue);
         }
 
         private void SetUpManualGlobalSubscription(
