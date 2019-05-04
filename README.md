@@ -10,7 +10,7 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
-- Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) to every instance of your application transparently using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
+- Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) on every instance of your application transparently using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
 
 ### How do I get started?
 Here is an example that uses the [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection) package and the [FluentEvents.EntityFrameworkCore](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) package to automatically attach every entity tracked by EF.
