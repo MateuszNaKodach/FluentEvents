@@ -67,7 +67,7 @@ public class MyService
 }
 ```
 
-#### Subscribe and hndle the event:
+#### Subscribe and handle the event:
 ```csharp
 public class NotificationsService : IHostedService
 {
