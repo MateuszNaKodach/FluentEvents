@@ -6,6 +6,7 @@
 FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
 
 #### FluentEvents can:
+- Simplify domain events pattern implementation allowing to create a fully encapsulated domain model
 - Generalize events using projections.
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
