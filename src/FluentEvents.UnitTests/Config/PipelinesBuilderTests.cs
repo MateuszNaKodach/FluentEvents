@@ -34,7 +34,7 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void Event_WithEventName_ShouldCreateSourceModelAndSourceModelEventFieldAndReturnEventConfigurator()
+        public void EventWithEventNameShouldCreateSourceModelAndSourceModelEventFieldAndReturnEventConfigurator()
         {
             _sourceModelsServiceMock
                 .Setup(x => x.GetOrCreateSourceModel(typeof(TestSource)))
@@ -47,7 +47,7 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void Event_WithEventSelector_ShouldCreateSourceModelAndSourceModelEventFieldAndReturnEventConfigurator()
+        public void Event_WithEventSelector_ShouldCreateSourceModelWithEventFieldAndReturnEventConfigurator()
         {
             _sourceModelsServiceMock
                 .Setup(x => x.GetOrCreateSourceModel(typeof(TestSource)))
