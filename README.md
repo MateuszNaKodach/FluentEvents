@@ -60,33 +60,19 @@ public async Task AcceptAllFriendRequests(int userId)
 
 #### Subscribe and handle the event:
 ```csharp
-public class NotificationsService : IHostedService
+public class NotificationsService
 {
-    private readonly MyEventsContext _myEventsContext;
     private readonly IMailService _mailService;
     private ISubscriptionsCancellationToken _subscriptionsCancellationToken;
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        _myEventsContext = myEventsContext;
         _mailService = mailService;
-    }
-
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
+        
         _subscriptionsCancellationToken = _myEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
-
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _myEventsContext.Unsubscribe(_subscriptionsCancellationToken);
-        
-        return Task.CompletedTask;
     }
 
     private async Task UserOnFriendRequestAccepted(object sender, FriendRequestAcceptedEventArgs e)
