@@ -67,12 +67,12 @@ public class NotificationsService
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        _mailService = mailService;
-        
         _subscriptionsCancellationToken = _myEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
+        
+        _mailService = mailService;
     }
 
     private async Task UserOnFriendRequestAccepted(object sender, FriendRequestAcceptedEventArgs e)
