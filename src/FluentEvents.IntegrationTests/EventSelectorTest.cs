@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentEvents.Config;
+﻿using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using Microsoft.Extensions.DependencyInjection;
