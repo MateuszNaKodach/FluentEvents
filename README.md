@@ -48,17 +48,7 @@ public class MyEventsContext : EventsContext
 }
 ```
 
-#### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
-```csharp
-public async Task AcceptAllFriendRequests(int userId) 
-{
-    var user = await _myDbContext.Users.FirstAsync(x => x.Id == userId);
-
-    await user.AcceptAllFriendRequests();
-}
-```
-
-#### Subscribe and handle the event:
+#### Subscribe to the event:
 ```csharp
 public class NotificationsService
 {
@@ -81,6 +71,16 @@ public class NotificationsService
         await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
+
+#### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
+```csharp
+public async Task AcceptAllFriendRequests(int userId) 
+{
+    var user = await _myDbContext.Users.FirstAsync(x => x.Id == userId);
+
+    await user.AcceptAllFriendRequests();
+}
+```
 ```
 ### NuGet Packages
 
