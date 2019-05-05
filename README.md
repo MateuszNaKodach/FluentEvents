@@ -71,6 +71,7 @@ public class NotificationsService
         await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
+```
 
 #### Raise the event (The entity is attached automatically to the `EventsContext` by the EntityFramework plugin):
 ```csharp
@@ -81,7 +82,7 @@ public async Task AcceptAllFriendRequests(int userId)
     await user.AcceptAllFriendRequests();
 }
 ```
-```
+
 ### NuGet Packages
 
 | Package                            | Version                                                                                                                                           |
