@@ -66,7 +66,7 @@ public class NotificationsService
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        _myEventsContext.SubscribeGloballyTo<User>(user =>
+        myEventsContext.SubscribeGloballyTo<User>(user =>
         {
             user.FriendRequestAccepted += UserOnFriendRequestAccepted;
         });
