@@ -33,7 +33,7 @@ namespace FluentEvents.UnitTests.Utils
         }
 
         [Test]
-        public void GetSelectedEvent_WithValidSelectionAction_ShouldAddDynamicHandlerToInvocationList(
+        public void GetSelectedEvents_WithValidSelectionAction_ShouldAddDynamicHandlerToInvocationList(
             [Values(
                 nameof(TestSource.TestEvent1),
                 nameof(TestSource.TestEvent2),
@@ -49,7 +49,7 @@ namespace FluentEvents.UnitTests.Utils
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
 
-            _eventSelectionService.GetSelectedEvent<TestSource>(
+            _eventSelectionService.GetSelectedEvents<TestSource>(
                 _sourceModel,
                 (source, eventHandler) => source.TestEvent1 += (dynamic)eventHandler
             );
@@ -62,7 +62,7 @@ namespace FluentEvents.UnitTests.Utils
 
         [Test]
         [TestCaseSource(nameof(InvalidSelectionActions))]
-        public void GetSelectedEvent_WithInvalidSelectionAction_ShouldThrow(Action<TestSource, dynamic> selectionAction)
+        public void GetSelectedEvents_WithInvalidSelectionAction_ShouldThrow(Action<TestSource, dynamic> selectionAction)
         {
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
@@ -71,7 +71,7 @@ namespace FluentEvents.UnitTests.Utils
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
-            _eventSelectionService.GetSelectedEvent(
+            _eventSelectionService.GetSelectedEvents(
                 _sourceModel,
                 selectionAction
             );

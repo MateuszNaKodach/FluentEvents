@@ -83,7 +83,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             Action<ProjectedTestSource, dynamic> selectionAction = (x, y) => { };
 
             _eventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvent(_projectedSourceModel, selectionAction))
+                .Setup(x => x.GetSelectedEvents(_projectedSourceModel, selectionAction))
                 .Returns(new [] { nameof(ProjectedTestSource.TestEvent2) })
                 .Verifiable();
 

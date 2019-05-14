@@ -118,7 +118,7 @@ namespace FluentEvents.Pipelines.Projections
                 typeof(TToSource)
             );
 
-            var eventFieldNames = eventSelectionService.GetSelectedEvent(projectedSourceModel, eventSelectionAction);
+            var eventFieldNames = eventSelectionService.GetSelectedEvents(projectedSourceModel, eventSelectionAction);
 
             if (eventFieldNames.Count() > 1)
                 throw new MoreThanOneEventSelectedException();

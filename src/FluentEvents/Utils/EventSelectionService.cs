@@ -24,7 +24,7 @@ namespace FluentEvents.Utils
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetSelectedEvent<TSource>(
+        public IEnumerable<string> GetSelectedEvents<TSource>(
             SourceModel sourceModel,
             Action<TSource, object> subscriptionToDynamicAction
         )
