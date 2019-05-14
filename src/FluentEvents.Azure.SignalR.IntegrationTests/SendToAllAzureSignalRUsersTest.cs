@@ -33,7 +33,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsSentToAllAzureSignalRUsers(HubName, HubMethodName);
             }
         }

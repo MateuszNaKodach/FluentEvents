@@ -41,7 +41,7 @@ namespace FluentEvents.IntegrationTests
             {
                 var pipelineBuilder = pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline();
+                    .IsWatched();
 
                 var pipeline = pipelineBuilder.Get<IPipeline>();
 

@@ -71,7 +71,7 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }
@@ -83,7 +83,7 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }

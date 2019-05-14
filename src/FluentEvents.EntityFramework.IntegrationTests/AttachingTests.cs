@@ -83,7 +83,7 @@ namespace FluentEvents.EntityFramework.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }

@@ -208,7 +208,7 @@ namespace FluentEvents.IntegrationTests
 
                 var pipelineConfigurator = pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(eventFieldName)
-                    .IsForwardedToPipeline();
+                    .IsWatched();
 
                 if (_parameters.IsFiltered)
                     pipelineConfigurator.ThenIsFiltered((sender, args) => true);

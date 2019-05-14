@@ -32,9 +32,9 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void IsForwardedToPipeline_ShouldAddPipelineAndReturnEventPipelineConfigurator()
+        public void IsWatched_ShouldAddPipelineAndReturnEventPipelineConfigurator()
         {
-            var eventPipelineConfigurator = _eventConfigurator.IsForwardedToPipeline();
+            var eventPipelineConfigurator = _eventConfigurator.IsWatched();
             var pipeline = eventPipelineConfigurator.Get<IPipeline>();
             var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             var sourceModel = eventPipelineConfigurator.Get<SourceModel>();

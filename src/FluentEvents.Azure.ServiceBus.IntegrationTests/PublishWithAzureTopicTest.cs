@@ -69,7 +69,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
             }
         }

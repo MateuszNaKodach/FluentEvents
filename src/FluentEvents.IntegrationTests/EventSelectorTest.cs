@@ -49,7 +49,7 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>((source, eventHandler) => source.Test += eventHandler)
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }

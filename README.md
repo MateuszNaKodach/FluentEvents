@@ -42,7 +42,7 @@ public class MyEventsContext : EventsContext
     {
         pipelinesBuilder
             .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h))
-            .IsForwardedToPipeline()
+            .IsWatched()
             .ThenIsPublishedToGlobalSubscriptions();
     }
 }

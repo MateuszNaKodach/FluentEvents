@@ -65,7 +65,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsSentToAzureSignalRGroups((sender, args) => new[] { _groupId1 }, HubName, HubMethodName);
             }
         }
