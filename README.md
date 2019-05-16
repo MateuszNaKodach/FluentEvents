@@ -21,19 +21,19 @@ public class NotificationsService
 
     public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
     {
-        myEventsContext.SubscribeGloballyTo<User>(user =>
+        myEventsContext.SubscribeGloballyTo<Order>(order =>
         {
-            user.FriendRequestAccepted += UserOnFriendRequestAccepted;
+            order.Shipped += OrderOnShipped;
         });
         
         _mailService = mailService;
     }
 
-    private async Task UserOnFriendRequestAccepted(object sender, FriendRequestAcceptedEventArgs e)
+    private async Task OrderOnShipped(object sender, OrderShippedEventArgs e)
     {
-        var user = (User) sender;
+        var order = (Order) order;
 
-        await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
+        await _mailService.SendOrderShippedEmail(order.Buyer.EmailAddress, order.Code);
     }
 }
 ```
