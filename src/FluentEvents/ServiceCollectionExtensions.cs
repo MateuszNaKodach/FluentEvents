@@ -49,7 +49,14 @@ namespace FluentEvents
             });
 
             services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
-            services.AddSingleton<IHostedService, EventReceiversHostedService>();
+            services.AddSingleton<IHostedService>(x =>
+            {
+                var eventReceiversService = x.GetRequiredService<T>()
+                    .Get<IServiceProvider>()
+                    .GetRequiredService<IEventReceiversService>();
+
+                return new EventReceiversHostedService(eventReceiversService);
+            });
         
             return services;
         }
