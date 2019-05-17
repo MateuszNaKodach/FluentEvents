@@ -9,7 +9,7 @@ namespace FluentEvents.Transmission
     /// <inheritdoc />
     public class JsonEventsSerializationService : IEventsSerializationService
     {
-        private readonly JsonSerializerSettings m_SerializerSettings;
+        private readonly JsonSerializerSettings _serializerSettings;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -17,7 +17,7 @@ namespace FluentEvents.Transmission
         /// </summary>
         public JsonEventsSerializationService()
         {
-            m_SerializerSettings = new JsonSerializerSettings
+            _serializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
                 ContractResolver = new CustomResolver(),
@@ -29,7 +29,7 @@ namespace FluentEvents.Transmission
         /// <inheritdoc />
         public byte[] SerializeEvent(PipelineEvent pipelineEvent)
         {
-            var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, m_SerializerSettings);
+            var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, _serializerSettings);
             return Encoding.UTF8.GetBytes(data);
         }
 
@@ -37,7 +37,7 @@ namespace FluentEvents.Transmission
         public PipelineEvent DeserializeEvent(byte[] eventData)
         {
             var stringData = Encoding.UTF8.GetString(eventData);
-            return (PipelineEvent) JsonConvert.DeserializeObject(stringData, m_SerializerSettings);
+            return (PipelineEvent) JsonConvert.DeserializeObject(stringData, _serializerSettings);
         }
 
         private class CustomResolver : DefaultContractResolver

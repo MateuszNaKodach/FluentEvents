@@ -13,70 +13,70 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelEventFieldTests
     {
-        private Mock<IPipeline> m_PipelineMock;
-        private SourceModel m_SourceModel;
-        private SourceModelEventField m_SourceModelEventField;
-        private SourceModelEventField m_AsyncSourceModelEventField;
-        private SourceModelEventField m_InheritedSourceModelEventField;
+        private Mock<IPipeline> _pipelineMock;
+        private SourceModel _sourceModel;
+        private SourceModelEventField _sourceModelEventField;
+        private SourceModelEventField _asyncSourceModelEventField;
+        private SourceModelEventField _inheritedSourceModelEventField;
 
         [SetUp]
         public void SetUp()
         {
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
-            m_SourceModel = new SourceModel(typeof(TestModel));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));
-            m_AsyncSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.AsyncTestEvent));
-            m_InheritedSourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _sourceModel = new SourceModel(typeof(TestModel));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));
+            _asyncSourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.AsyncTestEvent));
+            _inheritedSourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_PipelineMock.Verify();
+            _pipelineMock.Verify();
         }
 
         private SourceModelEventField GetSourceModelEventField(string name)
         {
             switch (name)
             {
-                case nameof(m_SourceModelEventField):
-                    return m_SourceModelEventField;
-                case nameof(m_AsyncSourceModelEventField):
-                    return m_AsyncSourceModelEventField;
-                case nameof(m_InheritedSourceModelEventField):
-                    return m_InheritedSourceModelEventField;
+                case nameof(_sourceModelEventField):
+                    return _sourceModelEventField;
+                case nameof(_asyncSourceModelEventField):
+                    return _asyncSourceModelEventField;
+                case nameof(_inheritedSourceModelEventField):
+                    return _inheritedSourceModelEventField;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(name));
             }
         }
 
-        [TestCase(nameof(m_SourceModelEventField))]
-        [TestCase(nameof(m_AsyncSourceModelEventField))]
-        [TestCase(nameof(m_InheritedSourceModelEventField))]
+        [TestCase(nameof(_sourceModelEventField))]
+        [TestCase(nameof(_asyncSourceModelEventField))]
+        [TestCase(nameof(_inheritedSourceModelEventField))]
         public void IsAsync_ShouldReturnTrueWhenReturnTypeIsTask(string eventFieldName)
         {
             var eventField = GetSourceModelEventField(eventFieldName);
-            var isAsyncField = eventFieldName == nameof(m_AsyncSourceModelEventField);
+            var isAsyncField = eventFieldName == nameof(_asyncSourceModelEventField);
 
             Assert.That(eventField, Has.Property(nameof(SourceModelEventField.IsAsync)).EqualTo(isAsyncField));
         }
 
-        [TestCase(nameof(m_SourceModelEventField))]
-        [TestCase(nameof(m_AsyncSourceModelEventField))]
-        [TestCase(nameof(m_InheritedSourceModelEventField))]
+        [TestCase(nameof(_sourceModelEventField))]
+        [TestCase(nameof(_asyncSourceModelEventField))]
+        [TestCase(nameof(_inheritedSourceModelEventField))]
         public void ReturnType_ShouldReturnFieldReturnType(string eventFieldName)
         {
             var eventField = GetSourceModelEventField(eventFieldName);
 
-            var isAsyncField = eventFieldName == nameof(m_AsyncSourceModelEventField);
+            var isAsyncField = eventFieldName == nameof(_asyncSourceModelEventField);
             var expectedReturnType = isAsyncField ? typeof(Task) : typeof(void);
 
             Assert.That(eventField, Has.Property(nameof(SourceModelEventField.ReturnType)).EqualTo(expectedReturnType));
         }
 
-        [TestCase(nameof(m_SourceModelEventField))]
-        [TestCase(nameof(m_AsyncSourceModelEventField))]
-        [TestCase(nameof(m_InheritedSourceModelEventField))]
+        [TestCase(nameof(_sourceModelEventField))]
+        [TestCase(nameof(_asyncSourceModelEventField))]
+        [TestCase(nameof(_inheritedSourceModelEventField))]
         public void EventHandlerParameters_ShouldReturnFieldEventHandlerParameters(string eventFieldName)
         {
             var eventField = GetSourceModelEventField(eventFieldName);
@@ -102,7 +102,7 @@ namespace FluentEvents.UnitTests.Model
             var expectedEventInfo = typeof(TestModel).GetEvent(nameof(TestModel.TestEvent));
 
             Assert.That(
-                m_SourceModelEventField,
+                _sourceModelEventField,
                 Has.Property(nameof(SourceModelEventField.EventInfo)).EqualTo(expectedEventInfo)
             );
         }
@@ -115,7 +115,7 @@ namespace FluentEvents.UnitTests.Model
             var expectedFieldInfo = typeof(TestModel).GetField(nameof(TestModel.TestEvent), bindingFlags);
 
             Assert.That(
-                m_SourceModelEventField,
+                _sourceModelEventField,
                 Has.Property(nameof(SourceModelEventField.FieldInfo)).EqualTo(expectedFieldInfo)
             );
         }
@@ -127,7 +127,7 @@ namespace FluentEvents.UnitTests.Model
             var expectedFieldInfo = typeof(TestModel).GetField(nameof(TestModel.TestEvent), bindingFlags);
 
             Assert.That(
-                m_SourceModelEventField,
+                _sourceModelEventField,
                 Has.Property(nameof(SourceModelEventField.Name)).EqualTo(expectedFieldInfo.Name)
             );
         }
@@ -135,9 +135,9 @@ namespace FluentEvents.UnitTests.Model
         [Test]
         public void AddPipeline_ShouldAddNewPipeline([Values(null, "q")] string queueName)
         {
-            var pipeline = m_SourceModelEventField.AddPipeline(m_PipelineMock.Object);
+            var pipeline = _sourceModelEventField.AddPipeline(_pipelineMock.Object);
 
-            Assert.That(m_SourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
+            Assert.That(_sourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
         }
 
         private class TestModel : TestModelBase

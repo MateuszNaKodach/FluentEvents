@@ -13,25 +13,25 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         private const string HubName = nameof(HubName);
         private const string HubMethodName = nameof(HubMethodName);
 
-        private Mock<IPipeline> m_PipelineMock;
-        private SourceModel m_SourceModel;
-        private SourceModelEventField m_SourceModelEventField;
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private EventPipelineConfigurator<TestEntity, TestEventArgs> m_EventPipelineConfigurator;
+        private Mock<IPipeline> _pipelineMock;
+        private SourceModel _sourceModel;
+        private SourceModelEventField _sourceModelEventField;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private EventPipelineConfigurator<TestEntity, TestEventArgs> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
-            m_SourceModel = new SourceModel(typeof(TestEntity));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestEntity.TestEvent));
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _sourceModel = new SourceModel(typeof(TestEntity));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestEntity.TestEvent));
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             
-            m_EventPipelineConfigurator = new EventPipelineConfigurator<TestEntity, TestEventArgs>(
-                m_SourceModel,
-                m_SourceModelEventField,
-                m_ServiceProviderMock.Object,
-                m_PipelineMock.Object
+            _eventPipelineConfigurator = new EventPipelineConfigurator<TestEntity, TestEventArgs>(
+                _sourceModel,
+                _sourceModelEventField,
+                _serviceProviderMock.Object,
+                _pipelineMock.Object
             );
         }
 
@@ -42,14 +42,14 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         )
         {
             AzureSignalRPipelineModuleConfig config = null;
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<AzureSignalRPipelineModule, AzureSignalRPipelineModuleConfig>(It.IsAny<AzureSignalRPipelineModuleConfig>()))
                 .Callback<AzureSignalRPipelineModuleConfig>(x => config = x)
                 .Verifiable();
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsSentToAllAzureSignalRUsers(hubName, hubMethodName);
+            _eventPipelineConfigurator.ThenIsSentToAllAzureSignalRUsers(hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
@@ -69,7 +69,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         )
         {
             AzureSignalRPipelineModuleConfig config = null;
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<AzureSignalRPipelineModule, AzureSignalRPipelineModuleConfig>(It.IsAny<AzureSignalRPipelineModuleConfig>()))
                 .Callback<AzureSignalRPipelineModuleConfig>(x => config = x)
                 .Verifiable();
@@ -78,7 +78,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsSentToAzureSignalRUsers(UserIdsProviderAction, hubName, hubMethodName);
+            _eventPipelineConfigurator.ThenIsSentToAzureSignalRUsers(UserIdsProviderAction, hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(
@@ -98,7 +98,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         )
         {
             AzureSignalRPipelineModuleConfig config = null;
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<AzureSignalRPipelineModule, AzureSignalRPipelineModuleConfig>(It.IsAny<AzureSignalRPipelineModuleConfig>()))
                 .Callback<AzureSignalRPipelineModuleConfig>(x => config = x)
                 .Verifiable();
@@ -107,7 +107,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
             var hubName = isHubNameNull ? null : HubName;
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            m_EventPipelineConfigurator.ThenIsSentToAzureSignalRGroups(GroupIdsProviderAction, hubName, hubMethodName);
+            _eventPipelineConfigurator.ThenIsSentToAzureSignalRGroups(GroupIdsProviderAction, hubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubNameNull, isHubMethodNameNull, config);
             Assert.That(

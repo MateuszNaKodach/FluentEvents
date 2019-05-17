@@ -11,9 +11,9 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
     [TestFixture]
     public class AttachingTests
     {
-        private TestEventsContext m_TestEventsContext;
-        private TestDbContext m_TestDbContext;
-        private ServiceProvider m_ServiceProvider;
+        private TestEventsContext _testEventsContext;
+        private TestDbContext _testDbContext;
+        private ServiceProvider _serviceProvider;
 
         [SetUp]
         public void SetUp()
@@ -33,15 +33,15 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 });
             });
          
-            m_ServiceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
-            using (var serviceScope = m_ServiceProvider.CreateScope())
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
-                m_TestEventsContext = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
-                m_TestDbContext = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
+                _testEventsContext = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
+                _testDbContext = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
 
-                m_TestDbContext.TestEntities.Add(new TestEntity());
-                m_TestDbContext.SaveChanges();
+                _testDbContext.TestEntities.Add(new TestEntity());
+                _testDbContext.SaveChanges();
             }
         }
 
@@ -49,7 +49,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
         public void AttachFromQueryResultTest()
         {
             TestEventArgs testEventArgs = null;
-            m_TestEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
+            _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
@@ -57,7 +57,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 };
             });
 
-            using (var serviceScope = m_ServiceProvider.CreateScope())
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
                 var testDbContext = serviceScope.ServiceProvider.GetService<TestDbContext>();
                 var testEntity = testDbContext.TestEntities.First();
@@ -84,7 +84,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }

@@ -14,63 +14,63 @@ namespace FluentEvents.UnitTests
     [TestFixture]
     public class EventsScopeTests
     {
-        private Mock<EventsContext> m_EventsContextMock1;
-        private Mock<EventsContext> m_EventsContextMock2;
-        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
-        private Mock<IInternalServiceCollection> m_InternalServiceCollectionMock1;
-        private Mock<IInternalServiceCollection> m_InternalServiceCollectionMock2;
-        private Mock<IServiceProvider> m_InternalServiceProviderMock1;
-        private Mock<IServiceProvider> m_InternalServiceProviderMock2;
-        private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock1;
-        private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock2;
+        private Mock<EventsContext> _eventsContextMock1;
+        private Mock<EventsContext> _eventsContextMock2;
+        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<IInternalServiceCollection> _internalServiceCollectionMock1;
+        private Mock<IInternalServiceCollection> _internalServiceCollectionMock2;
+        private Mock<IServiceProvider> _internalServiceProviderMock1;
+        private Mock<IServiceProvider> _internalServiceProviderMock2;
+        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock1;
+        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock2;
 
-        private EventsContext[] m_EventsContexts;
-        private EventsScope m_EventsScope;
-        private Mock<IEventsQueueCollection> m_EventsQueueCollectionMock;
+        private EventsContext[] _eventsContexts;
+        private EventsScope _eventsScope;
+        private Mock<IEventsQueueCollection> _eventsQueueCollectionMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContextMock1 = new Mock<EventsContext>();
-            m_EventsContextMock2 = new Mock<EventsContext>();
-            m_EventsQueueCollectionMock = new Mock<IEventsQueueCollection>(MockBehavior.Strict);
-            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
-            m_InternalServiceCollectionMock1 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
-            m_InternalServiceCollectionMock2 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
-            m_InternalServiceProviderMock1 = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_InternalServiceProviderMock2 = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_ScopedSubscriptionsServiceMock1 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            m_ScopedSubscriptionsServiceMock2 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
+            _eventsContextMock1 = new Mock<EventsContext>();
+            _eventsContextMock2 = new Mock<EventsContext>();
+            _eventsQueueCollectionMock = new Mock<IEventsQueueCollection>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _internalServiceCollectionMock1 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
+            _internalServiceCollectionMock2 = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
+            _internalServiceProviderMock1 = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _internalServiceProviderMock2 = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _scopedSubscriptionsServiceMock1 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
+            _scopedSubscriptionsServiceMock2 = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
             
-            SetUpEventsContext(m_EventsContextMock1, m_InternalServiceCollectionMock1, m_InternalServiceProviderMock1);
-            SetUpEventsContext(m_EventsContextMock2, m_InternalServiceCollectionMock2, m_InternalServiceProviderMock2);
+            SetUpEventsContext(_eventsContextMock1, _internalServiceCollectionMock1, _internalServiceProviderMock1);
+            SetUpEventsContext(_eventsContextMock2, _internalServiceCollectionMock2, _internalServiceProviderMock2);
 
-            m_EventsContexts = new[]
+            _eventsContexts = new[]
             {
-                m_EventsContextMock1.Object,
-                m_EventsContextMock2.Object
+                _eventsContextMock1.Object,
+                _eventsContextMock2.Object
             };
 
-            m_EventsScope = new EventsScope(
-                m_EventsContexts,
-                m_AppServiceProviderMock.Object,
-                m_EventsQueueCollectionMock.Object
+            _eventsScope = new EventsScope(
+                _eventsContexts,
+                _appServiceProviderMock.Object,
+                _eventsQueueCollectionMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_EventsContextMock1.Verify();
-            m_EventsContextMock2.Verify();
-            m_EventsQueueCollectionMock.Verify();
-            m_AppServiceProviderMock.Verify();
-            m_InternalServiceCollectionMock1.Verify();
-            m_InternalServiceCollectionMock2.Verify();
-            m_InternalServiceProviderMock1.Verify();
-            m_InternalServiceProviderMock2.Verify();
-            m_ScopedSubscriptionsServiceMock1.Verify();
-            m_ScopedSubscriptionsServiceMock2.Verify();
+            _eventsContextMock1.Verify();
+            _eventsContextMock2.Verify();
+            _eventsQueueCollectionMock.Verify();
+            _appServiceProviderMock.Verify();
+            _internalServiceCollectionMock1.Verify();
+            _internalServiceCollectionMock2.Verify();
+            _internalServiceProviderMock1.Verify();
+            _internalServiceProviderMock2.Verify();
+            _scopedSubscriptionsServiceMock1.Verify();
+            _scopedSubscriptionsServiceMock2.Verify();
         }
 
         private static void SetUpEventsContext(
@@ -107,7 +107,7 @@ namespace FluentEvents.UnitTests
         {
             var allSubscriptions = SetUpSubscriptionsCreation().ToArray();
 
-            var createdSubscriptions = m_EventsScope.GetSubscriptions().ToArray();
+            var createdSubscriptions = _eventsScope.GetSubscriptions().ToArray();
 
             Assert.That(createdSubscriptions, Is.EquivalentTo(allSubscriptions));
         }
@@ -117,9 +117,9 @@ namespace FluentEvents.UnitTests
         {
             var allSubscriptions = SetUpSubscriptionsCreation().ToArray();
 
-            var createdSubscriptions = m_EventsScope.GetSubscriptions().ToArray();
+            var createdSubscriptions = _eventsScope.GetSubscriptions().ToArray();
 
-            var storedSubscriptions = m_EventsScope.GetSubscriptions().ToArray();
+            var storedSubscriptions = _eventsScope.GetSubscriptions().ToArray();
             
             Assert.That(createdSubscriptions, Is.EquivalentTo(allSubscriptions));
             Assert.That(storedSubscriptions, Is.EquivalentTo(createdSubscriptions));
@@ -131,23 +131,23 @@ namespace FluentEvents.UnitTests
             var scopedSubscriptionsFactory2Subscriptions = new[] { new Subscription(typeof(object)) };
             var allSubscriptions = scopedSubscriptionsFactory1Subscriptions.Concat(scopedSubscriptionsFactory2Subscriptions);
             
-            m_InternalServiceProviderMock1
+            _internalServiceProviderMock1
                 .Setup(x => x.GetService(typeof(IScopedSubscriptionsService)))
-                .Returns(m_ScopedSubscriptionsServiceMock1.Object)
+                .Returns(_scopedSubscriptionsServiceMock1.Object)
                 .Verifiable();
 
-            m_ScopedSubscriptionsServiceMock1
-                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
+            _scopedSubscriptionsServiceMock1
+                .Setup(x => x.SubscribeServices(_appServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory1Subscriptions)
                 .Verifiable();
             
-            m_InternalServiceProviderMock2
+            _internalServiceProviderMock2
                 .Setup(x => x.GetService(typeof(IScopedSubscriptionsService)))
-                .Returns(m_ScopedSubscriptionsServiceMock2.Object)
+                .Returns(_scopedSubscriptionsServiceMock2.Object)
                 .Verifiable();
 
-            m_ScopedSubscriptionsServiceMock2
-                .Setup(x => x.SubscribeServices(m_AppServiceProviderMock.Object))
+            _scopedSubscriptionsServiceMock2
+                .Setup(x => x.SubscribeServices(_appServiceProviderMock.Object))
                 .Returns(scopedSubscriptionsFactory2Subscriptions)
                 .Verifiable();
 

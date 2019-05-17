@@ -14,6 +14,14 @@
                 Provides a simple API surface for configuring an event.
             </summary>
         </member>
+        <member name="M:FluentEvents.Config.EventConfigurator`2.IsWatched">
+            <summary>
+                This method creates a pipeline for the current event.
+            </summary>
+            <returns>
+                An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.
+            </returns>
+        </member>
         <member name="M:FluentEvents.Config.EventConfigurator`2.IsForwardedToPipeline">
             <summary>
                 This method creates a pipeline for the current event.
@@ -668,6 +676,43 @@
                 A new <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
             </returns>
         </member>
+        <member name="M:FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions.ThenIsProjected``4(FluentEvents.Config.EventPipelineConfigurator{``0,``2},System.Func{``0,``1},System.Func{``2,``3},System.Action{``1,System.Object})">
+            <summary>
+                Adds a module to the current pipeline that replaces the event sender and the event args with a projection.
+            </summary>
+            <remarks>
+                Projections are useful when an event needs to be serialized in order to reduce
+                the size and the complexity of the serialization output.
+            </remarks>
+            <typeparam name="TSource">The type of the event source.</typeparam>
+            <typeparam name="TToSource">The type of the projected event source.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args.</typeparam>
+            <typeparam name="TToEventArgs">The type of the projected event args.</typeparam>
+            <param name="eventPipelineConfigurator">
+                The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
+            </param>
+            <param name="senderConverter">
+                A <see cref="T:System.Func`2"/> that takes the event source as input and returns a new object.
+            </param>
+            <param name="eventArgsConverter">
+                A <see cref="T:System.Func`2"/> that takes the event args as input and returns a new object.
+            </param>
+            <param name="eventSelectionAction">
+                This parameter accepts an <see cref="T:System.Action`2"/> that subscribes the dynamic object
+                supplied in the second <see cref="T:System.Action`2"/> parameter to the event being selected.
+                Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
+            </param>
+            <example>
+                ThenIsProjected(
+                    source =&gt; new SourceProjection(),
+                    eventArgs =&gt; new EventArgsProjection(),
+                    (source, eventHandler) =&gt; source.MyEvent += eventHandler
+                )
+            </example>
+            <returns>
+                A new <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
         <member name="T:FluentEvents.Pipelines.Publication.ConfigureTransmission">
             <inheritdoc />
         </member>
@@ -1310,7 +1355,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Utils.EventSelectionService.GetSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Utils.EventSelectionService.GetSelectedEvents``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Utils.IEventSelectionService">
@@ -1319,7 +1364,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Utils.IEventSelectionService.GetSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Utils.IEventSelectionService.GetSelectedEvents``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

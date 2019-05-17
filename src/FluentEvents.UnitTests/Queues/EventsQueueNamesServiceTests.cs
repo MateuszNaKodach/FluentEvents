@@ -9,21 +9,21 @@ namespace FluentEvents.UnitTests.Queues
     {
         private const string QueueName = nameof(QueueName);
 
-        private EventsQueueNamesService m_EventsQueueNamesService;
+        private EventsQueueNamesService _eventsQueueNamesService;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsQueueNamesService = new EventsQueueNamesService();
+            _eventsQueueNamesService = new EventsQueueNamesService();
         }
 
         [Test]
         public void RegisterQueueNameIfNotExists_ShouldAddNameOnce()
         {
-            m_EventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
-            m_EventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
+            _eventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
+            _eventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
 
-            var exists = m_EventsQueueNamesService.IsQueueNameExisting(QueueName);
+            var exists = _eventsQueueNamesService.IsQueueNameExisting(QueueName);
 
             Assert.That(exists, Is.True);
         }
@@ -33,14 +33,14 @@ namespace FluentEvents.UnitTests.Queues
         {
             Assert.That(() =>
             {
-                m_EventsQueueNamesService.RegisterQueueNameIfNotExists(null);
+                _eventsQueueNamesService.RegisterQueueNameIfNotExists(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public void IsQueueNameExisting_WhenQueueIsNotRegistered_ShouldReturnFalse()
         {
-            var exists = m_EventsQueueNamesService.IsQueueNameExisting(QueueName);
+            var exists = _eventsQueueNamesService.IsQueueNameExisting(QueueName);
 
             Assert.That(exists, Is.False);
         }
@@ -48,9 +48,9 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void IsQueueNameExisting_WhenQueueIsRegistered_ShouldReturnTrue()
         {
-            m_EventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
+            _eventsQueueNamesService.RegisterQueueNameIfNotExists(QueueName);
 
-            var exists = m_EventsQueueNamesService.IsQueueNameExisting(QueueName);
+            var exists = _eventsQueueNamesService.IsQueueNameExisting(QueueName);
 
             Assert.That(exists, Is.True);
         }

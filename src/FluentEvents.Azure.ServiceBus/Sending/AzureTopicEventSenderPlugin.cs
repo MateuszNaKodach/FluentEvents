@@ -10,25 +10,25 @@ namespace FluentEvents.Azure.ServiceBus.Sending
 {
     internal class AzureTopicEventSenderPlugin : IFluentEventsPlugin
     {
-        private readonly IConfiguration m_Configuration;
-        private readonly Action<AzureTopicEventSenderConfig> m_ConfigureOptions;
+        private readonly IConfiguration _configuration;
+        private readonly Action<AzureTopicEventSenderConfig> _configureOptions;
 
         public AzureTopicEventSenderPlugin(Action<AzureTopicEventSenderConfig> configureOptions)
         {
-            m_ConfigureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
+            _configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
 
         public AzureTopicEventSenderPlugin(IConfiguration configuration)
         {
-            m_Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public void ApplyServices(IServiceCollection services)
         {
-            if (m_ConfigureOptions != null)
-                services.Configure(m_ConfigureOptions);
+            if (_configureOptions != null)
+                services.Configure(_configureOptions);
             else
-                services.Configure<AzureTopicEventSenderConfig>(m_Configuration);
+                services.Configure<AzureTopicEventSenderConfig>(_configuration);
 
             services.AddSingleton<IValidableConfig>(x =>
                 x.GetRequiredService<IOptions<AzureTopicEventSenderConfig>>().Value

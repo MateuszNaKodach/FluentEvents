@@ -20,17 +20,17 @@ namespace FluentEvents.Infrastructure
 {
     internal class InternalServiceCollection : IInternalServiceCollection
     {
-        private readonly IAppServiceProvider m_AppServiceProvider;
+        private readonly IAppServiceProvider _appServiceProvider;
 
         public InternalServiceCollection(IAppServiceProvider appServiceProvider)
         {
-            m_AppServiceProvider = appServiceProvider;
+            _appServiceProvider = appServiceProvider;
         }
 
         public IServiceProvider BuildServiceProvider(EventsContext eventsContext, IFluentEventsPluginOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
-                x => m_AppServiceProvider.GetService<ILoggerFactory>() ??
+                x => _appServiceProvider.GetService<ILoggerFactory>() ??
                      new LoggerFactory(x.GetService<IEnumerable<ILoggerProvider>>());
 
             var services = new ServiceCollection();
@@ -41,7 +41,7 @@ namespace FluentEvents.Infrastructure
                 ServiceLifetime.Singleton
             ));
 
-            services.AddSingleton(m_AppServiceProvider);
+            services.AddSingleton(_appServiceProvider);
             services.AddSingleton(eventsContext);
             services.AddSingleton<EventsQueuesContext>();
             services.AddSingleton<PipelinesBuilder>();

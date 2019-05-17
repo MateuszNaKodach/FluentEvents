@@ -12,48 +12,48 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     [TestFixture]
     public class HttpRequestFactoryTests
     {
-        private readonly string m_HubMethodName = nameof(m_HubMethodName);
-        private string m_Url = "http://endpoint/";
-        private readonly ConnectionString m_ConnectionString = "Endpoint=123;AccessKey=123;";
+        private readonly string _hubMethodName = nameof(_hubMethodName);
+        private string _url = "http://endpoint/";
+        private readonly ConnectionString _connectionString = "Endpoint=123;AccessKey=123;";
 
-        private Mock<IAccessTokensService> m_AccessTokensServiceMock;
-        private object m_EventSender;
-        private object m_EventArgs;
+        private Mock<IAccessTokensService> _accessTokensServiceMock;
+        private object _eventSender;
+        private object _eventArgs;
 
-        private HttpRequestFactory m_HttpRequestFactory;
+        private HttpRequestFactory _httpRequestFactory;
 
         [SetUp]
         public void SetUp()
         {
-            m_AccessTokensServiceMock = new Mock<IAccessTokensService>(MockBehavior.Strict);
-            m_EventSender = new object();
-            m_EventArgs = new object();
+            _accessTokensServiceMock = new Mock<IAccessTokensService>(MockBehavior.Strict);
+            _eventSender = new object();
+            _eventArgs = new object();
 
-            m_HttpRequestFactory = new HttpRequestFactory(m_AccessTokensServiceMock.Object);
+            _httpRequestFactory = new HttpRequestFactory(_accessTokensServiceMock.Object);
         }
 
         [Test]
         public async Task CreateHttpRequest_ShouldCreateHttpRequest()
         {
             var accessToken = "accessToken";
-            m_AccessTokensServiceMock
-                .Setup(x => x.GenerateAccessToken(m_ConnectionString, m_Url, null, null))
+            _accessTokensServiceMock
+                .Setup(x => x.GenerateAccessToken(_connectionString, _url, null, null))
                 .Returns(accessToken)
                 .Verifiable();
 
-            var httpRequest = m_HttpRequestFactory.CreateHttpRequest(
-                m_ConnectionString,
-                m_HubMethodName,
-                m_EventSender,
-                m_EventArgs,
-                m_Url
+            var httpRequest = _httpRequestFactory.CreateHttpRequest(
+                _connectionString,
+                _hubMethodName,
+                _eventSender,
+                _eventArgs,
+                _url
             );
 
             Assert.That(httpRequest, Is.Not.Null);
             Assert.That(httpRequest, Has.Property(nameof(HttpRequestMessage.Method)).EqualTo(HttpMethod.Post));
             Assert.That(
                 httpRequest,
-                Has.Property(nameof(HttpRequestMessage.RequestUri)).Property(nameof(Uri.AbsoluteUri)).EqualTo(m_Url)
+                Has.Property(nameof(HttpRequestMessage.RequestUri)).Property(nameof(Uri.AbsoluteUri)).EqualTo(_url)
             );
 
             AssertThatHasHeader(httpRequest, "Authorization", "Bearer " + accessToken);
@@ -63,7 +63,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
 
             var jObject = JObject.Parse(content);
 
-            Assert.That(jObject["Target"].Value<string>(), Is.EqualTo(m_HubMethodName));
+            Assert.That(jObject["Target"].Value<string>(), Is.EqualTo(_hubMethodName));
             Assert.That(jObject["Arguments"], Is.Not.Null);
         }
 

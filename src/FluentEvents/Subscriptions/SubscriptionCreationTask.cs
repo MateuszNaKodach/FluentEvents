@@ -6,16 +6,16 @@ namespace FluentEvents.Subscriptions
 {
     internal class SubscriptionCreationTask<TService, TSource> : ISubscriptionCreationTask
     {
-        private readonly Action<TService, TSource> m_SubscriptionAction;
-        private readonly ISubscriptionsFactory m_SubscriptionsFactory;
+        private readonly Action<TService, TSource> _subscriptionAction;
+        private readonly ISubscriptionsFactory _subscriptionsFactory;
 
         public SubscriptionCreationTask(
             Action<TService, TSource> subscriptionAction,
             ISubscriptionsFactory subscriptionsFactory
         )
         {
-            m_SubscriptionAction = subscriptionAction;
-            m_SubscriptionsFactory = subscriptionsFactory;
+            _subscriptionAction = subscriptionAction;
+            _subscriptionsFactory = subscriptionsFactory;
         }
 
         public virtual Subscription CreateSubscription(IAppServiceProvider appServiceProvider)
@@ -24,7 +24,7 @@ namespace FluentEvents.Subscriptions
             if (service == null)
                 throw new SubscribingServiceNotFoundException(typeof(TService));
 
-            return m_SubscriptionsFactory.CreateSubscription<TSource>(x => m_SubscriptionAction(service, x));
+            return _subscriptionsFactory.CreateSubscription<TSource>(x => _subscriptionAction(service, x));
         }
     }
 }

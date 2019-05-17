@@ -9,28 +9,28 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class GlobalSubscriptionCollectionTests
     {
-        private Mock<IAppServiceProvider> m_AppServiceProviderMock;
-        private Mock<ISubscriptionsFactory> m_SubscriptionsFactoryMock;
+        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
 
-        private GlobalSubscriptionCollection m_GlobalSubscriptionCollection;
+        private GlobalSubscriptionCollection _globalSubscriptionCollection;
 
         [SetUp]
         public void SetUp()
         {
-            m_SubscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
-            m_AppServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
 
-            m_GlobalSubscriptionCollection = new GlobalSubscriptionCollection(
-                m_SubscriptionsFactoryMock.Object,
-                m_AppServiceProviderMock.Object
+            _globalSubscriptionCollection = new GlobalSubscriptionCollection(
+                _subscriptionsFactoryMock.Object,
+                _appServiceProviderMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_SubscriptionsFactoryMock.Verify();
-            m_AppServiceProviderMock.Verify();
+            _subscriptionsFactoryMock.Verify();
+            _appServiceProviderMock.Verify();
         }
 
         [Test]
@@ -38,18 +38,18 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
-            var returnedSubscription = m_GlobalSubscriptionCollection
+            var returnedSubscription = _globalSubscriptionCollection
                 .AddGlobalScopeSubscription(action);
 
             Assert.That(subscription, Is.EqualTo(returnedSubscription));
-            Assert.That(m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items);
-            Assert.That(m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
+            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items);
+            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
         }
 
         [Test]
         public void AddGlobalScopeServiceSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription<object, object>((x, y) => { });
+            _globalSubscriptionCollection.AddGlobalScopeServiceSubscription<object, object>((x, y) => { });
         }
 
         [Test]
@@ -57,29 +57,29 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
-            m_GlobalSubscriptionCollection
+            _globalSubscriptionCollection
                 .AddGlobalScopeSubscription(action);
 
-            m_GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
+            _globalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
 
-            Assert.That(m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions(), Is.Empty);
+            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Is.Empty);
         }
 
         [Test]
         public void GetGlobalScopeSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
         {
-            m_GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription<TestService, object>((x, y) => {});
+            _globalSubscriptionCollection.AddGlobalScopeServiceSubscription<TestService, object>((x, y) => {});
             SetUpSubscriptionsFactory(false);
 
-            m_AppServiceProviderMock
+            _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(new TestService())
                 .Verifiable();
 
-            var subscriptions = m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions();
+            var subscriptions = _globalSubscriptionCollection.GetGlobalScopeSubscriptions();
             Assert.That(subscriptions, Has.One.Items);
 
-            var secondCallSubscriptions = m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions();
+            var secondCallSubscriptions = _globalSubscriptionCollection.GetGlobalScopeSubscriptions();
             Assert.That(secondCallSubscriptions, Has.One.Items);
         }
 
@@ -88,8 +88,8 @@ namespace FluentEvents.UnitTests.Subscriptions
             Action<object> action = x => { };
             var subscription = new Subscription(typeof(object));
             var setup = isActionMatchable 
-                    ? m_SubscriptionsFactoryMock.Setup(x => x.CreateSubscription(action))
-                    : m_SubscriptionsFactoryMock.Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()));
+                    ? _subscriptionsFactoryMock.Setup(x => x.CreateSubscription(action))
+                    : _subscriptionsFactoryMock.Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()));
 
             setup
                 .Returns(subscription)

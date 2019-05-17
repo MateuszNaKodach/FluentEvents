@@ -13,15 +13,15 @@ namespace FluentEvents.Pipelines
     /// </summary>
     public class Pipeline : IPipeline
     {
-        private readonly IServiceProvider m_InternalServiceProvider;
-        private readonly ICollection<ModuleProxy> m_ModuleProxies;
-        private NextModuleDelegate m_NextModule;
+        private readonly IServiceProvider _internalServiceProvider;
+        private readonly ICollection<ModuleProxy> _moduleProxies;
+        private NextModuleDelegate _nextModule;
 
         internal Pipeline(IServiceProvider internalServiceProvider)
         {
-            m_InternalServiceProvider = internalServiceProvider;
-            m_ModuleProxies = new List<ModuleProxy>();
-            m_NextModule = null;
+            _internalServiceProvider = internalServiceProvider;
+            _moduleProxies = new List<ModuleProxy>();
+            _nextModule = null;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace FluentEvents.Pipelines
             if (moduleConfig == null)
                 throw new ArgumentNullException(nameof(moduleConfig));
 
-            m_ModuleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
+            _moduleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
         }
 
         /// <inheritdoc />
@@ -44,13 +44,13 @@ namespace FluentEvents.Pipelines
             EventsScope eventsScope
         )
         {
-            var pipeline = m_NextModule ?? (m_NextModule = Build());
-            await pipeline(new PipelineContext(pipelineEvent, eventsScope, m_InternalServiceProvider));
+            var pipeline = _nextModule ?? (_nextModule = Build());
+            await pipeline(new PipelineContext(pipelineEvent, eventsScope, _internalServiceProvider));
         }
 
         private NextModuleDelegate Build()
         {
-            var stack = new Stack<ModuleProxy>(m_ModuleProxies.Reverse());
+            var stack = new Stack<ModuleProxy>(_moduleProxies.Reverse());
             var next = GetNextModuleDelegate(stack);
             return next;
         }
@@ -90,11 +90,11 @@ namespace FluentEvents.Pipelines
 
         private class ModuleProxy<TConfig> : ModuleProxy
         {
-            private readonly TConfig m_Config;
+            private readonly TConfig _config;
 
             public ModuleProxy(Type type, TConfig config) : base(type)
             {
-                m_Config = config;
+                _config = config;
             }
 
             public override Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next)
@@ -103,7 +103,7 @@ namespace FluentEvents.Pipelines
                 if (module == null)
                     throw new PipelineModuleNotFoundException();
 
-                return module.InvokeAsync(m_Config, pipelineContext, next);
+                return module.InvokeAsync(_config, pipelineContext, next);
             }
         }
     }

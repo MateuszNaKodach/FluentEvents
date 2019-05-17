@@ -12,20 +12,20 @@ namespace FluentEvents.IntegrationTests
     {
         private const string QueueName = nameof(QueueName);
 
-        private TestEventsContext1 m_TestEventsContext1;
-        private TestEventsContext2 m_TestEventsContext2;
+        private TestEventsContext1 _testEventsContext1;
+        private TestEventsContext2 _testEventsContext2;
 
-        private EventsScope m_EventsScope;
+        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
         {
             var appServiceProvider = new ServiceCollection().BuildServiceProvider();
-            m_TestEventsContext1 = new TestEventsContext1();
-            m_TestEventsContext2 = new TestEventsContext2();
+            _testEventsContext1 = new TestEventsContext1();
+            _testEventsContext2 = new TestEventsContext2();
 
-            m_EventsScope = new EventsScope(
-                new EventsContext[] {m_TestEventsContext1, m_TestEventsContext2},
+            _eventsScope = new EventsScope(
+                new EventsContext[] {_testEventsContext1, _testEventsContext2},
                 appServiceProvider
             );
         }
@@ -35,7 +35,7 @@ namespace FluentEvents.IntegrationTests
         {
             object eventsContext1Sender = null;
             TestEventArgs eventsContext1EventArgs = null;
-            m_TestEventsContext1.SubscribeGloballyTo<TestEntity>(testEntity =>
+            _testEventsContext1.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
@@ -46,7 +46,7 @@ namespace FluentEvents.IntegrationTests
 
             object eventsContext2Sender = null;
             TestEventArgs eventsContext2EventArgs = null;
-            m_TestEventsContext2.SubscribeGloballyTo<TestEntity>(testEntity =>
+            _testEventsContext2.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
@@ -55,10 +55,10 @@ namespace FluentEvents.IntegrationTests
                 };
             });
 
-            TestUtils.AttachAndRaiseEvent(m_TestEventsContext1, m_EventsScope);
-            TestUtils.AttachAndRaiseEvent(m_TestEventsContext2, m_EventsScope);
+            TestUtils.AttachAndRaiseEvent(_testEventsContext1, _eventsScope);
+            TestUtils.AttachAndRaiseEvent(_testEventsContext2, _eventsScope);
 
-            m_TestEventsContext1.ProcessQueuedEventsAsync(m_EventsScope, QueueName);
+            _testEventsContext1.ProcessQueuedEventsAsync(_eventsScope, QueueName);
 
             TestUtils.AssertThatEventIsPublishedProperly(eventsContext1Sender, eventsContext1EventArgs);
             Assert.That(eventsContext2Sender, Is.Null);
@@ -71,7 +71,7 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }
@@ -83,7 +83,7 @@ namespace FluentEvents.IntegrationTests
             {
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline()
+                    .IsWatched()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }

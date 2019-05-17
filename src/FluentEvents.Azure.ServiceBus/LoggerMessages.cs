@@ -6,32 +6,32 @@ namespace FluentEvents.Azure.ServiceBus
 {
     internal static class LoggerMessages
     {
-        private static readonly Action<ILogger, ExceptionReceivedContext, Exception> m_ServiceBusExceptionReceived = LoggerMessage.Define<ExceptionReceivedContext>(
+        private static readonly Action<ILogger, ExceptionReceivedContext, Exception> _serviceBusExceptionReceived = LoggerMessage.Define<ExceptionReceivedContext>(
             LogLevel.Error,
             EventIds.ServiceBusExceptionReceived,
             "Exception received from service bus (Context: {context})"
         );
 
         internal static void ServiceBusExceptionReceived(this ILogger logger, Exception exception, ExceptionReceivedContext exceptionReceivedContext)
-            => m_ServiceBusExceptionReceived(logger, exceptionReceivedContext, exception);
+            => _serviceBusExceptionReceived(logger, exceptionReceivedContext, exception);
         
-        private static readonly Action<ILogger, string, Exception> m_MessagesProcessingThrew = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _messagesProcessingThrew = LoggerMessage.Define<string>(
             LogLevel.Error,
             EventIds.MessagesProcessingThrew,
             "Exception threw while processing a message with id: {messageId}"
         );
 
         internal static void MessagesProcessingThrew(this ILogger logger, Exception exception, string messageId)
-            => m_MessagesProcessingThrew(logger, messageId, exception);
+            => _messagesProcessingThrew(logger, messageId, exception);
 
-        private static readonly Action<ILogger, string, Exception> m_MessageSent = LoggerMessage.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _messageSent = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.MessageSent,
             "Sent a message with id: {messageId}"
         );
 
         internal static void MessageSent(this ILogger logger, string messageId)
-            => m_MessageSent(logger, messageId, null);
+            => _messageSent(logger, messageId, null);
 
         internal static class EventIds
         {

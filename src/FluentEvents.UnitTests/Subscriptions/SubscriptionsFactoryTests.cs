@@ -12,51 +12,51 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionsFactoryTests
     {
-        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<ISubscriptionScanService> m_SubscriptionScanServiceMock;
-        private SourceModel m_SourceModel;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
+        private Mock<ISubscriptionScanService> _subscriptionScanServiceMock;
+        private SourceModel _sourceModel;
 
-        private SubscriptionsFactory m_SubscriptionsFactory;
+        private SubscriptionsFactory _subscriptionsFactory;
 
         [SetUp]
         public void SetUp()
         {
-            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_SubscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
-            m_SourceModel = new SourceModel(typeof(EventsSource));
-            m_SourceModel.GetOrCreateEventField(nameof(EventsSource.TestEvent));
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _subscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
+            _sourceModel = new SourceModel(typeof(EventsSource));
+            _sourceModel.GetOrCreateEventField(nameof(EventsSource.TestEvent));
 
-            m_SubscriptionsFactory = new SubscriptionsFactory(
-                m_SourceModelsServiceMock.Object,
-                m_SubscriptionScanServiceMock.Object
+            _subscriptionsFactory = new SubscriptionsFactory(
+                _sourceModelsServiceMock.Object,
+                _subscriptionScanServiceMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_SourceModelsServiceMock.Verify();
-            m_SubscriptionScanServiceMock.Verify();
+            _sourceModelsServiceMock.Verify();
+            _subscriptionScanServiceMock.Verify();
         }
 
         [Test]
         public void CreateSubscription_ShouldScanSubscribedHandlersAndReturnNewSubscription()
         {
-            m_SourceModelsServiceMock
+            _sourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(EventsSource)))
-                .Returns(m_SourceModel)
+                .Returns(_sourceModel)
                 .Verifiable();
 
-            m_SubscriptionScanServiceMock
+            _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(
-                    m_SourceModel.ClrType, 
-                    It.Is<IEnumerable<FieldInfo>>(y => y.SequenceEqual(m_SourceModel.EventFields.Select(z => z.FieldInfo))), 
+                    _sourceModel.ClrType, 
+                    It.Is<IEnumerable<FieldInfo>>(y => y.SequenceEqual(_sourceModel.EventFields.Select(z => z.FieldInfo))), 
                     It.IsAny<Action<object>>())
                 )
                 .Returns(new List<SubscribedHandler>())
                 .Verifiable();
 
-            m_SubscriptionsFactory.CreateSubscription<EventsSource>(x => { });
+            _subscriptionsFactory.CreateSubscription<EventsSource>(x => { });
         }
 
         private class EventsSource

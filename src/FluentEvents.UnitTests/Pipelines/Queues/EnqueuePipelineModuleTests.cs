@@ -13,29 +13,29 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
     {
         private const string QueueName = nameof(QueueName);
 
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
-        private EnqueuePipelineModuleConfig m_EnqueuePipelineModuleConfig;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
+        private EnqueuePipelineModuleConfig _enqueuePipelineModuleConfig;
 
-        private EnqueuePipelineModule m_EnqueuePipelineModule;
-        private PipelineEvent m_PipelineEvent;
-        private PipelineContext m_PipelineContext;
-        private EventsScope m_EventsScope;
+        private EnqueuePipelineModule _enqueuePipelineModule;
+        private PipelineEvent _pipelineEvent;
+        private PipelineContext _pipelineContext;
+        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
-            m_EnqueuePipelineModuleConfig = new EnqueuePipelineModuleConfig
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
+            _enqueuePipelineModuleConfig = new EnqueuePipelineModuleConfig
             {
                 QueueName = QueueName
             };
-            m_PipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
-            m_EventsScope = new EventsScope();
-            m_PipelineContext = new PipelineContext(m_PipelineEvent, m_EventsScope, m_ServiceProviderMock.Object);
+            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _eventsScope = new EventsScope();
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
 
-            m_EnqueuePipelineModule = new EnqueuePipelineModule(m_EventsQueuesServiceMock.Object);
+            _enqueuePipelineModule = new EnqueuePipelineModule(_eventsQueuesServiceMock.Object);
         }
 
         [Test]
@@ -43,13 +43,13 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         {
             var isNextInvoked = false;
 
-            m_EventsQueuesServiceMock
-                .Setup(x => x.EnqueueEvent(m_EventsScope, m_PipelineEvent, QueueName, It.IsAny<Func<Task>>()))
+            _eventsQueuesServiceMock
+                .Setup(x => x.EnqueueEvent(_eventsScope, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
                 .Verifiable();
 
-            await m_EnqueuePipelineModule.InvokeAsync(
-                m_EnqueuePipelineModuleConfig,
-                m_PipelineContext,
+            await _enqueuePipelineModule.InvokeAsync(
+                _enqueuePipelineModuleConfig,
+                _pipelineContext,
                 context =>
                 {
                     isNextInvoked = true;

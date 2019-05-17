@@ -11,41 +11,41 @@ namespace FluentEvents.UnitTests
     [TestFixture]
     public class ServiceCollectionExtensionsTests
     {
-        private IServiceCollection m_ServiceCollection;
+        private IServiceCollection _serviceCollection;
 
         [SetUp]
         public void SetUp()
         {
-            m_ServiceCollection = new ServiceCollection();
+            _serviceCollection = new ServiceCollection();
         }
 
         [Test]
         public void AddEventsContext_ShouldInvokeOptionsActionAndAddServices()
         {
             var isOptionsActionInvoked = false;
-            var serviceCollection = m_ServiceCollection.AddEventsContext<TestEventsContext>(options =>
+            var serviceCollection = _serviceCollection.AddEventsContext<TestEventsContext>(options =>
             {
                 isOptionsActionInvoked = true;
             });
 
             Assert.That(isOptionsActionInvoked, Is.True);
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsScope))
             );
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsContext))
             );
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(TestEventsContext))
             );
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(IHostedService))
             );
-            Assert.That(serviceCollection, Is.EqualTo(m_ServiceCollection));
+            Assert.That(serviceCollection, Is.EqualTo(_serviceCollection));
         }
 
         [Test]
@@ -69,12 +69,12 @@ namespace FluentEvents.UnitTests
                 .Returns(eventsScope)
                 .Verifiable();
 
-            m_ServiceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
+            _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                m_ServiceCollection.AddSingleton<TestService1>();
+                _serviceCollection.AddSingleton<TestService1>();
             });
 
-            var factory = m_ServiceCollection.First().ImplementationFactory;
+            var factory = _serviceCollection.First().ImplementationFactory;
 
             var service = factory(serviceProviderMock.Object);
 
@@ -89,12 +89,12 @@ namespace FluentEvents.UnitTests
         {
             var serviceDescriptor = new ServiceDescriptor(typeof(TestService3<>), new TestService3<object>());
 
-            m_ServiceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
+            _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                m_ServiceCollection.Add(serviceDescriptor);
+                _serviceCollection.Add(serviceDescriptor);
             });
 
-            Assert.That(m_ServiceCollection, Has.One.Items.EqualTo(serviceDescriptor));
+            Assert.That(_serviceCollection, Has.One.Items.EqualTo(serviceDescriptor));
         }
 
         [Test]
@@ -103,35 +103,35 @@ namespace FluentEvents.UnitTests
         )
         {
             var serviceDescriptor0 = new ServiceDescriptor(typeof(TestService0), new TestService0());
-            m_ServiceCollection.Add(serviceDescriptor0);
+            _serviceCollection.Add(serviceDescriptor0);
 
-            m_ServiceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
+            _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                m_ServiceCollection.Add(
+                _serviceCollection.Add(
                     new ServiceDescriptor(typeof(TestService1), typeof(TestService1), serviceLifetime)
                 );
 
-                m_ServiceCollection.Add(
+                _serviceCollection.Add(
                     new ServiceDescriptor(typeof(TestService1), x => new TestService1(), serviceLifetime)
                 );
 
-                m_ServiceCollection.Add(
+                _serviceCollection.Add(
                     new ServiceDescriptor(typeof(TestService1), new TestService1())
                 );
             });
 
             var serviceDescriptor2 = new ServiceDescriptor(typeof(TestService2), new TestService2());
-            m_ServiceCollection.Add(serviceDescriptor2);
+            _serviceCollection.Add(serviceDescriptor2);
 
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.Exactly(3).Items.With.Property(nameof(ServiceDescriptor.ImplementationFactory)).Not.Null
             );
 
             var servicesWithCurrentLifetimeCount = serviceLifetime == ServiceLifetime.Singleton ? 3 : 2;
             
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.Exactly(servicesWithCurrentLifetimeCount)
                     .Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(TestService1))
                     .And
@@ -140,7 +140,7 @@ namespace FluentEvents.UnitTests
 
             if (serviceLifetime != ServiceLifetime.Singleton)
                 Assert.That(
-                    m_ServiceCollection,
+                    _serviceCollection,
                     Has.Exactly(1)
                         .Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(TestService1))
                         .And
@@ -148,12 +148,12 @@ namespace FluentEvents.UnitTests
                 );
 
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.EqualTo(serviceDescriptor0)
             );
 
             Assert.That(
-                m_ServiceCollection,
+                _serviceCollection,
                 Has.One.Items.EqualTo(serviceDescriptor2)
             );
         }

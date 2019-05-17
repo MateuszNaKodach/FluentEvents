@@ -8,14 +8,14 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal class HttpRequestFactory : IHttpRequestFactory
     {
-        private readonly string m_MimeType = "application/json";
-        private readonly Encoding m_Encoding = Encoding.UTF8;
+        private readonly string _mimeType = "application/json";
+        private readonly Encoding _encoding = Encoding.UTF8;
 
-        private readonly IAccessTokensService m_AccessTokensService;
+        private readonly IAccessTokensService _accessTokensService;
 
         public HttpRequestFactory(IAccessTokensService accessTokensService)
         {
-            m_AccessTokensService = accessTokensService;
+            _accessTokensService = accessTokensService;
         }
 
         public HttpRequestMessage CreateHttpRequest(
@@ -47,10 +47,10 @@ namespace FluentEvents.Azure.SignalR.Client
 
             request.Headers.Authorization = new AuthenticationHeaderValue(
                 "Bearer",
-                m_AccessTokensService.GenerateAccessToken(connectionString, url)
+                _accessTokensService.GenerateAccessToken(connectionString, url)
             );
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(m_MimeType));
-            request.Content = new StringContent(JsonConvert.SerializeObject(payloadMessage), m_Encoding, m_MimeType);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(_mimeType));
+            request.Content = new StringContent(JsonConvert.SerializeObject(payloadMessage), _encoding, _mimeType);
 
             return request;
         }

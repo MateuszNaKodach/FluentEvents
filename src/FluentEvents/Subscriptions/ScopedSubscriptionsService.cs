@@ -9,13 +9,13 @@ namespace FluentEvents.Subscriptions
 {
     internal class ScopedSubscriptionsService : IScopedSubscriptionsService
     {
-        private readonly ISubscriptionsFactory m_SubscriptionsFactory;
-        private readonly ConcurrentDictionary<ISubscriptionCreationTask, bool> m_ScopedSubscriptionCreationTasks;
+        private readonly ISubscriptionsFactory _subscriptionsFactory;
+        private readonly ConcurrentDictionary<ISubscriptionCreationTask, bool> _scopedSubscriptionCreationTasks;
 
         public ScopedSubscriptionsService(ISubscriptionsFactory subscriptionsFactory)
         {
-            m_SubscriptionsFactory = subscriptionsFactory;
-            m_ScopedSubscriptionCreationTasks = new ConcurrentDictionary<ISubscriptionCreationTask, bool>();
+            _subscriptionsFactory = subscriptionsFactory;
+            _scopedSubscriptionCreationTasks = new ConcurrentDictionary<ISubscriptionCreationTask, bool>();
         }
 
         public void ConfigureScopedServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
@@ -24,15 +24,15 @@ namespace FluentEvents.Subscriptions
         {
             var serviceSubscriptionTask = new SubscriptionCreationTask<TService, TSource>(
                 subscriptionAction,
-                m_SubscriptionsFactory
+                _subscriptionsFactory
             );
 
-            m_ScopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
+            _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
         public IEnumerable<Subscription> SubscribeServices(IAppServiceProvider scopedAppServiceProvider)
         {
-            return m_ScopedSubscriptionCreationTasks.Keys
+            return _scopedSubscriptionCreationTasks.Keys
                 .Select(subscriptionCreationTask => subscriptionCreationTask.CreateSubscription(scopedAppServiceProvider))
                 .ToList();
         }

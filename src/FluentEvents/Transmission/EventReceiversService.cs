@@ -8,8 +8,8 @@ namespace FluentEvents.Transmission
     /// <inheritdoc />
     public class EventReceiversService : IEventReceiversService
     {
-        private readonly ILogger<EventReceiversService> m_Logger;
-        private readonly IEnumerable<IEventReceiver> m_EventReceivers;
+        private readonly ILogger<EventReceiversService> _logger;
+        private readonly IEnumerable<IEventReceiver> _eventReceivers;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -17,33 +17,33 @@ namespace FluentEvents.Transmission
         /// </summary>
         public EventReceiversService(ILogger<EventReceiversService> logger, IEnumerable<IEventReceiver> eventReceivers)
         {
-            m_Logger = logger;
-            m_EventReceivers = eventReceivers;
+            _logger = logger;
+            _eventReceivers = eventReceivers;
         }
 
         /// <inheritdoc />
         public async Task StartReceiversAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var eventReceiver in m_EventReceivers)
+            foreach (var eventReceiver in _eventReceivers)
             {
-                m_Logger.EventReceiverStarting(eventReceiver.GetType().Name);
+                _logger.EventReceiverStarting(eventReceiver.GetType().Name);
 
                 await eventReceiver.StartReceivingAsync(cancellationToken);
 
-                m_Logger.EventReceiverStarted(eventReceiver.GetType().Name);
+                _logger.EventReceiverStarted(eventReceiver.GetType().Name);
             }
         }
 
         /// <inheritdoc />
         public async Task StopReceiversAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var eventReceiver in m_EventReceivers)
+            foreach (var eventReceiver in _eventReceivers)
             {
-                m_Logger.EventReceiverStopping(eventReceiver.GetType().Name);
+                _logger.EventReceiverStopping(eventReceiver.GetType().Name);
 
                 await eventReceiver.StopReceivingAsync(cancellationToken);
                 
-                m_Logger.EventReceiverStopped(eventReceiver.GetType().Name);
+                _logger.EventReceiverStopped(eventReceiver.GetType().Name);
             }
         }
     }

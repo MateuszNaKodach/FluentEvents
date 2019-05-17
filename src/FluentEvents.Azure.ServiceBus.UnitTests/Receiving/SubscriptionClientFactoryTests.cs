@@ -9,18 +9,18 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
     {
         private const string SubscriptionName = nameof(SubscriptionName);
 
-        private SubscriptionClientFactory m_SubscriptionClientFactory;
+        private SubscriptionClientFactory _subscriptionClientFactory;
 
         [SetUp]
         public void SetUp()
         {
-            m_SubscriptionClientFactory = new SubscriptionClientFactory();
+            _subscriptionClientFactory = new SubscriptionClientFactory();
         }
 
         [Test]
         public void GetNew_ShouldReturnSubscriptionClient()
         {
-            var subscriptionClient = m_SubscriptionClientFactory.GetNew(Constants.ValidConnectionString, SubscriptionName);
+            var subscriptionClient = _subscriptionClientFactory.GetNew(Constants.ValidConnectionString, SubscriptionName);
 
             Assert.That(subscriptionClient, Is.TypeOf<SubscriptionClient>());
             Assert.That(

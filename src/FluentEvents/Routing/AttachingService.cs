@@ -8,9 +8,9 @@ namespace FluentEvents.Routing
     /// <inheritdoc />
     public class AttachingService : IAttachingService
     {
-        private readonly ISourceModelsService m_SourceModelsService;
-        private readonly IForwardingService m_ForwardingService;
-        private readonly IEnumerable<IAttachingInterceptor> m_AttachingInterceptors;
+        private readonly ISourceModelsService _sourceModelsService;
+        private readonly IForwardingService _forwardingService;
+        private readonly IEnumerable<IAttachingInterceptor> _attachingInterceptors;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -22,9 +22,9 @@ namespace FluentEvents.Routing
             IEnumerable<IAttachingInterceptor> attachingInterceptors
         )
         {
-            m_SourceModelsService = sourceModelsService;
-            m_ForwardingService = forwardingService;
-            m_AttachingInterceptors = attachingInterceptors;
+            _sourceModelsService = sourceModelsService;
+            _forwardingService = forwardingService;
+            _attachingInterceptors = attachingInterceptors;
         }
 
         /// <inheritdoc />
@@ -33,18 +33,18 @@ namespace FluentEvents.Routing
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
-            foreach (var attachingInterceptor in m_AttachingInterceptors)
+            foreach (var attachingInterceptor in _attachingInterceptors)
                 attachingInterceptor.OnAttaching(this, source, eventsScope);
 
             var sourceType = source.GetType();
 
             foreach (var type in sourceType.GetBaseTypesInclusive())
             {
-                var sourceModel = m_SourceModelsService.GetSourceModel(type);
+                var sourceModel = _sourceModelsService.GetSourceModel(type);
                 if (sourceModel == null)
                     continue;
 
-                m_ForwardingService.ForwardEventsToRouting(sourceModel, source, eventsScope);
+                _forwardingService.ForwardEventsToRouting(sourceModel, source, eventsScope);
                 break;
             }
         }

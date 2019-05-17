@@ -9,25 +9,25 @@ namespace FluentEvents.UnitTests.Queues
         private const string QueueName1 = nameof(QueueName1);
         private const string QueueName2 = nameof(QueueName2);
 
-        private EventsQueuesContext m_EventsQueuesContext1;
-        private EventsQueuesContext m_EventsQueuesContext2;
+        private EventsQueuesContext _eventsQueuesContext1;
+        private EventsQueuesContext _eventsQueuesContext2;
 
-        private EventsQueueCollection m_EventsQueueCollection;
+        private EventsQueueCollection _eventsQueueCollection;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsQueuesContext1 = new EventsQueuesContext();
-            m_EventsQueuesContext2 = new EventsQueuesContext();
+            _eventsQueuesContext1 = new EventsQueuesContext();
+            _eventsQueuesContext2 = new EventsQueuesContext();
 
-            m_EventsQueueCollection = new EventsQueueCollection();
+            _eventsQueueCollection = new EventsQueueCollection();
         }
 
         [Test]
         public void GetOrAddEventsQueue_ShouldNotAddDuplicates()
         {
-            var eventsQueue1 = m_EventsQueueCollection.GetOrAddEventsQueue(m_EventsQueuesContext1, QueueName1);
-            var eventsQueue2 = m_EventsQueueCollection.GetOrAddEventsQueue(m_EventsQueuesContext1, QueueName1);
+            var eventsQueue1 = _eventsQueueCollection.GetOrAddEventsQueue(_eventsQueuesContext1, QueueName1);
+            var eventsQueue2 = _eventsQueueCollection.GetOrAddEventsQueue(_eventsQueuesContext1, QueueName1);
 
             Assert.That(eventsQueue1, Is.EqualTo(eventsQueue2));
         }
@@ -39,12 +39,12 @@ namespace FluentEvents.UnitTests.Queues
             [Values(true, false)] bool isQueueNameDifferent
         )
         {
-            var eventsQueue1 = m_EventsQueueCollection.GetOrAddEventsQueue(m_EventsQueuesContext1, QueueName1);
+            var eventsQueue1 = _eventsQueueCollection.GetOrAddEventsQueue(_eventsQueuesContext1, QueueName1);
 
-            var eventsQueueContext = isEventsQueueContextDifferent ? m_EventsQueuesContext2 : m_EventsQueuesContext1;
+            var eventsQueueContext = isEventsQueueContextDifferent ? _eventsQueuesContext2 : _eventsQueuesContext1;
             var queueName = isQueueNameDifferent ? QueueName2 : QueueName1;
 
-            var eventsQueue2 = m_EventsQueueCollection.GetOrAddEventsQueue(eventsQueueContext, queueName);
+            var eventsQueue2 = _eventsQueueCollection.GetOrAddEventsQueue(eventsQueueContext, queueName);
 
             Assert.That(eventsQueue1, Is.Not.EqualTo(eventsQueue2));
         }
@@ -52,7 +52,7 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void GetEnumerator_ShouldReturnEnumerator()
         {
-            var enumerator = m_EventsQueueCollection.GetEnumerator();
+            var enumerator = _eventsQueueCollection.GetEnumerator();
 
             Assert.That(enumerator, Is.Not.Null);
         }

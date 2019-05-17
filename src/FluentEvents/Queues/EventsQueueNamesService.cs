@@ -6,22 +6,22 @@ namespace FluentEvents.Queues
 {
     internal class EventsQueueNamesService : IEventsQueueNamesService
     {
-        private readonly IList<string> m_QueueNames;
+        private readonly IList<string> _queueNames;
 
         public EventsQueueNamesService()
         {
-            m_QueueNames = new List<string>();
+            _queueNames = new List<string>();
         }
 
         public void RegisterQueueNameIfNotExists(string queueName)
         {
             if (queueName == null) throw new ArgumentNullException(nameof(queueName));
-            m_QueueNames.Add(queueName);
+            _queueNames.Add(queueName);
         }
 
         public bool IsQueueNameExisting(string queueName)
         {
-            return m_QueueNames.Any(x => x == queueName);
+            return _queueNames.Any(x => x == queueName);
         }
     }
 }

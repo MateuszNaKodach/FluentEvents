@@ -7,23 +7,23 @@ namespace FluentEvents.Subscriptions
 {
     internal static class SubscriptionsLoggerMessages
     {
-        private static readonly Action<ILogger, Exception> m_EventHandlerThrew = LoggerMessage.Define(
+        private static readonly Action<ILogger, Exception> _eventHandlerThrew = LoggerMessage.Define(
             LogLevel.Error,
             EventIds.EventHandlerThrew,
             "An event handler threw an exception"
         );
 
         internal static void EventHandlerThrew(this ILogger logger, Exception exception)
-            => m_EventHandlerThrew(logger, exception);
+            => _eventHandlerThrew(logger, exception);
 
-        private static readonly Action<ILogger, string, string, Exception> m_PublishingEvent = LoggerMessage.Define<string, string>(
+        private static readonly Action<ILogger, string, string, Exception> _publishingEvent = LoggerMessage.Define<string, string>(
             LogLevel.Information,
             EventIds.PublishingEvent,
             "Publishing event fired from {eventSenderTypeName}.{eventSenderFieldName}"
         );
 
         internal static void PublishingEvent(this ILogger logger, PipelineEvent pipelineEvent)
-            => m_PublishingEvent(
+            => _publishingEvent(
                 logger,
                 pipelineEvent.OriginalSender.GetType().Name,
                 pipelineEvent.OriginalEventFieldName,

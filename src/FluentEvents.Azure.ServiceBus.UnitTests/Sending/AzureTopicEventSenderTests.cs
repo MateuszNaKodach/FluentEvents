@@ -14,44 +14,44 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class AzureTopicEventSenderTests
     {
-        private Mock<ILogger<AzureTopicEventSender>> m_LoggerMock;
-        private Mock<IEventsSerializationService> m_EventsSerializationServiceMock;
-        private Mock<ITopicClientFactory> m_TopicClientFactoryMock;
-        private AzureTopicEventSender m_AzureTopicEventSender;
-        private PipelineEvent m_PipelineEvent;
-        private Mock<ITopicClient> m_TopicClientMock;
+        private Mock<ILogger<AzureTopicEventSender>> _loggerMock;
+        private Mock<IEventsSerializationService> _eventsSerializationServiceMock;
+        private Mock<ITopicClientFactory> _topicClientFactoryMock;
+        private AzureTopicEventSender _azureTopicEventSender;
+        private PipelineEvent _pipelineEvent;
+        private Mock<ITopicClient> _topicClientMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_PipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
-            m_TopicClientMock = new Mock<ITopicClient>(MockBehavior.Strict);
-            m_LoggerMock = new Mock<ILogger<AzureTopicEventSender>>(MockBehavior.Strict);
-            m_EventsSerializationServiceMock = new Mock<IEventsSerializationService>(MockBehavior.Strict);
-            m_TopicClientFactoryMock = new Mock<ITopicClientFactory>(MockBehavior.Strict);
-            m_TopicClientFactoryMock
+            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _topicClientMock = new Mock<ITopicClient>(MockBehavior.Strict);
+            _loggerMock = new Mock<ILogger<AzureTopicEventSender>>(MockBehavior.Strict);
+            _eventsSerializationServiceMock = new Mock<IEventsSerializationService>(MockBehavior.Strict);
+            _topicClientFactoryMock = new Mock<ITopicClientFactory>(MockBehavior.Strict);
+            _topicClientFactoryMock
                 .Setup(x => x.GetNew(Constants.ValidConnectionString))
-                .Returns(m_TopicClientMock.Object)
+                .Returns(_topicClientMock.Object)
                 .Verifiable();
 
-            m_AzureTopicEventSender = new AzureTopicEventSender(
-                m_LoggerMock.Object,
+            _azureTopicEventSender = new AzureTopicEventSender(
+                _loggerMock.Object,
                 Options.Create(new AzureTopicEventSenderConfig
                 {
                     ConnectionString = Constants.ValidConnectionString
                 }),
-                m_EventsSerializationServiceMock.Object,
-                m_TopicClientFactoryMock.Object
+                _eventsSerializationServiceMock.Object,
+                _topicClientFactoryMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_TopicClientMock.Verify();
-            m_LoggerMock.Verify();
-            m_EventsSerializationServiceMock.Verify();
-            m_TopicClientFactoryMock.Verify();
+            _topicClientMock.Verify();
+            _loggerMock.Verify();
+            _eventsSerializationServiceMock.Verify();
+            _topicClientFactoryMock.Verify();
         }
 
         [Test]
@@ -59,22 +59,22 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         {
             var serializedEventBytes = new byte[] {1, 2, 3, 4, 5};
 
-            m_EventsSerializationServiceMock
-                .Setup(x => x.SerializeEvent(m_PipelineEvent))
+            _eventsSerializationServiceMock
+                .Setup(x => x.SerializeEvent(_pipelineEvent))
                 .Returns(serializedEventBytes)
                 .Verifiable();
 
-            m_TopicClientMock
+            _topicClientMock
                 .Setup(x => x.SendAsync(It.IsAny<Message>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Information))
                 .Returns(true)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     LoggerMessages.EventIds.MessageSent,
@@ -84,18 +84,18 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
                 ))
                 .Verifiable();
 
-            await m_AzureTopicEventSender.SendAsync(m_PipelineEvent);
+            await _azureTopicEventSender.SendAsync(_pipelineEvent);
         }
 
         [Test]
         public void Dispose_ShouldCloseTopicClient()
         {
-            m_TopicClientMock
+            _topicClientMock
                 .Setup(x => x.CloseAsync())
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_AzureTopicEventSender.Dispose();
+            _azureTopicEventSender.Dispose();
         }
     }
 }

@@ -10,11 +10,11 @@ namespace FluentEvents.Subscriptions
     /// <inheritdoc />
     public class SubscriptionScanService : ISubscriptionScanService
     {
-        private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
-        private static readonly ProxyGenerationOptions ProxyGenerationOptions = new ProxyGenerationOptions();
+        private static readonly IProxyBuilder _proxyBuilder = new DefaultProxyBuilder();
+        private static readonly ProxyGenerationOptions _proxyGenerationOptions = new ProxyGenerationOptions();
 
         private static Type CreateClassProxyType(Type type)
-            => ProxyBuilder.CreateClassProxyType(type, Type.EmptyTypes, ProxyGenerationOptions);
+            => _proxyBuilder.CreateClassProxyType(type, Type.EmptyTypes, _proxyGenerationOptions);
 
         /// <inheritdoc />
         public IEnumerable<SubscribedHandler> GetSubscribedHandlers(

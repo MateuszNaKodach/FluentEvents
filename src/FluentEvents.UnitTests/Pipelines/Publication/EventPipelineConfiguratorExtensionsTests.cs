@@ -14,63 +14,63 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
     [TestFixture]
     public class EventPipelineConfiguratorExtensionsTests
     {
-        private Mock<IServiceProvider> m_ServiceProviderMock;
-        private SourceModel m_SourceModel;
-        private SourceModelEventField m_SourceModelEventField;
-        private Mock<IPipeline> m_PipelineMock;
-        private EventPipelineConfigurator<TestSource, TestEventArgs> m_EventPipelineConfigurator;
+        private Mock<IServiceProvider> _serviceProviderMock;
+        private SourceModel _sourceModel;
+        private SourceModelEventField _sourceModelEventField;
+        private Mock<IPipeline> _pipelineMock;
+        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
-            m_ServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_SourceModelEventField = m_SourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
-            m_PipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
+            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
+            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
        
-            m_EventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                m_SourceModel,
-                m_SourceModelEventField,
-                m_ServiceProviderMock.Object,
-                m_PipelineMock.Object
+            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
+                _sourceModel,
+                _sourceModelEventField,
+                _serviceProviderMock.Object,
+                _pipelineMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_ServiceProviderMock.Verify();
-            m_PipelineMock.Verify();
+            _serviceProviderMock.Verify();
+            _pipelineMock.Verify();
         }
 
         [Test]
         public void ThenIsPublishedToScopedSubscriptions_ShouldAddPipelineModule()
         {
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
                         It.IsAny<ScopedPublishPipelineModuleConfig>()
                     )
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsPublishedToScopedSubscriptions();
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToScopedSubscriptions();
             
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(m_EventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
         }
 
         [Test]
         public void ThenIsPublishedToGlobalSubscriptions_WithoutArgs_ShouldAddPipelineModuleWithoutEventSender()
         {
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                         It.Is<GlobalPublishPipelineModuleConfig>(y => y.SenderType == null)
                     )
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions();
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions();
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(m_EventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
         }
 
         [Test]
@@ -78,44 +78,44 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         {
             Assert.That(() =>
             {
-                m_EventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(null);
+                _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public void ThenIsPublishedToGlobalSubscriptions_WithTransmissionConfiguration_ShouldAddPipelineModuleWithEventSender()
         {
-            m_ServiceProviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IEnumerable<IEventSender>)))
                 .Returns(new [] { new TestEventSender() })
                 .Verifiable();
 
-            m_PipelineMock
+            _pipelineMock
                 .Setup(x => x.AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                         It.Is<GlobalPublishPipelineModuleConfig>(y => y.SenderType == typeof(TestEventSender))
                     )
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = m_EventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
                 x => ((IConfigureTransmission)x).With<TestEventSender>()
             );
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(m_EventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
         }
 
 
         [Test]
         public void ThenIsPublishedToGlobalSubscriptions_WithTransmissionConfigurationAndEventSenderNotRegistered_ShouldThrow()
         {
-            m_ServiceProviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IEnumerable<IEventSender>)))
                 .Returns(new IEventSender[0])
                 .Verifiable();
 
             Assert.That(() =>
             {
-                m_EventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
+                _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
                     x => ((IConfigureTransmission)x).With<TestEventSender>()
                 );
             }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());

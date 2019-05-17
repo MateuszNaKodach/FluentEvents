@@ -11,8 +11,8 @@ namespace FluentEvents.IntegrationTests
     [TestFixture]
     public class UnknownEventSenderTest
     {
-        private TestEventsContext m_TestEventsContext;
-        private EventsScope m_EventsScope;
+        private TestEventsContext _testEventsContext;
+        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -22,8 +22,8 @@ namespace FluentEvents.IntegrationTests
             services.AddEventsContext<TestEventsContext>(options => { });
 
             var serviceProvider = services.BuildServiceProvider();
-            m_TestEventsContext = serviceProvider.GetService<TestEventsContext>();
-            m_EventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
+            _testEventsContext = serviceProvider.GetService<TestEventsContext>();
+            _eventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace FluentEvents.IntegrationTests
         {
             Assert.That(() =>
             {
-                m_TestEventsContext.Attach(new TestEntity(), m_EventsScope);
+                _testEventsContext.Attach(new TestEntity(), _eventsScope);
             }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());
         }
 
@@ -41,7 +41,7 @@ namespace FluentEvents.IntegrationTests
             {
                 var pipelineBuilder = pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline();
+                    .IsWatched();
 
                 pipelineBuilder.ThenIsPublishedToGlobalSubscriptions(x => new PublishTransmissionConfiguration(typeof(object)));
             }

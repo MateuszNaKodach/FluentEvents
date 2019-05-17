@@ -10,24 +10,24 @@ namespace FluentEvents
     /// </summary>
     public class EventsContextOptions : IFluentEventsPluginOptions
     {
-        private readonly IList<IFluentEventsPlugin> m_Plugins;
-        IEnumerable<IFluentEventsPlugin> IFluentEventsPluginOptions.Plugins => m_Plugins;
+        private readonly IList<IFluentEventsPlugin> _plugins;
+        IEnumerable<IFluentEventsPlugin> IFluentEventsPluginOptions.Plugins => _plugins;
 
         /// <summary>
         ///     Initializes a new instance.
         /// </summary>
         public EventsContextOptions()
         {
-            m_Plugins = new List<IFluentEventsPlugin>();
+            _plugins = new List<IFluentEventsPlugin>();
         }
 
         void IFluentEventsPluginOptions.AddPlugin(IFluentEventsPlugin plugin)
         {
             if (plugin == null) throw new ArgumentNullException(nameof(plugin));
-            if (m_Plugins.Any(x => x.GetType() == plugin.GetType()))
+            if (_plugins.Any(x => x.GetType() == plugin.GetType()))
                 throw new DuplicatePluginException();
 
-            m_Plugins.Add(plugin);
+            _plugins.Add(plugin);
         }
     }
 }

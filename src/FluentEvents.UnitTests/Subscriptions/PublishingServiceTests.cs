@@ -11,49 +11,49 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class PublishingServiceTests
     {
-        private Mock<ILogger<PublishingService>> m_LoggerMock;
-        private Mock<IGlobalSubscriptionCollection> m_GlobalSubscriptionCollectionMock;
-        private Mock<ISubscriptionsMatchingService> m_SubscriptionsMatchingServiceMock;
-        private Mock<EventsScope> m_EventsScopeMock;
+        private Mock<ILogger<PublishingService>> _loggerMock;
+        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollectionMock;
+        private Mock<ISubscriptionsMatchingService> _subscriptionsMatchingServiceMock;
+        private Mock<EventsScope> _eventsScopeMock;
 
-        private PublishingService m_PublishingService;
-        private Subscription[] m_Subscriptions;
-        private PipelineEvent m_PipelineEvent;
+        private PublishingService _publishingService;
+        private Subscription[] _subscriptions;
+        private PipelineEvent _pipelineEvent;
 
         [SetUp]
         public void SetUp()
         {
-            m_LoggerMock = new Mock<ILogger<PublishingService>>(MockBehavior.Strict);
-            m_GlobalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
-            m_SubscriptionsMatchingServiceMock = new Mock<ISubscriptionsMatchingService>(MockBehavior.Strict);
-            m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
+            _loggerMock = new Mock<ILogger<PublishingService>>(MockBehavior.Strict);
+            _globalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _subscriptionsMatchingServiceMock = new Mock<ISubscriptionsMatchingService>(MockBehavior.Strict);
+            _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
-            m_PublishingService = new PublishingService(
-                m_LoggerMock.Object,
-                m_GlobalSubscriptionCollectionMock.Object,
-                m_SubscriptionsMatchingServiceMock.Object
+            _publishingService = new PublishingService(
+                _loggerMock.Object,
+                _globalSubscriptionCollectionMock.Object,
+                _subscriptionsMatchingServiceMock.Object
             );
 
-            m_Subscriptions = new[]
+            _subscriptions = new[]
             {
                 new Subscription(typeof(object)),
                 new Subscription(typeof(object)),
                 new Subscription(typeof(object)),
             };
 
-            m_PipelineEvent = new PipelineEvent(
+            _pipelineEvent = new PipelineEvent(
                 typeof(object), 
                 "fieldName", 
                 new object(),
                 new object()
             );
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Information))
                 .Returns(true)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
                     SubscriptionsLoggerMessages.EventIds.PublishingEvent,
@@ -67,10 +67,10 @@ namespace FluentEvents.UnitTests.Subscriptions
         [TearDown]
         public void TearDown()
         {
-            m_LoggerMock.Verify();
-            m_GlobalSubscriptionCollectionMock.Verify();
-            m_SubscriptionsMatchingServiceMock.Verify();
-            m_EventsScopeMock.Verify();
+            _loggerMock.Verify();
+            _globalSubscriptionCollectionMock.Verify();
+            _subscriptionsMatchingServiceMock.Verify();
+            _eventsScopeMock.Verify();
         }
 
         [Test]
@@ -80,15 +80,15 @@ namespace FluentEvents.UnitTests.Subscriptions
             SetUpSubscriptionsMatchingService();
 
             var exception = new Exception();
-            SetUpSubscriptionEventsHandler(m_Subscriptions[0], (sender, args) => throw exception);
-            SetUpSubscriptionEventsHandler(m_Subscriptions[1], (sender, args) => throw exception);
+            SetUpSubscriptionEventsHandler(_subscriptions[0], (sender, args) => throw exception);
+            SetUpSubscriptionEventsHandler(_subscriptions[1], (sender, args) => throw exception);
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Error))
                 .Returns(true)
                 .Verifiable();
 
-            m_LoggerMock
+            _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Error,
                     SubscriptionsLoggerMessages.EventIds.EventHandlerThrew,
@@ -98,9 +98,9 @@ namespace FluentEvents.UnitTests.Subscriptions
                 ))
                 .Verifiable();
 
-            await m_PublishingService.PublishEventToScopedSubscriptionsAsync(
-                m_PipelineEvent,
-                m_EventsScopeMock.Object
+            await _publishingService.PublishEventToScopedSubscriptionsAsync(
+                _pipelineEvent,
+                _eventsScopeMock.Object
             );
         }
 
@@ -111,33 +111,33 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             await TestPublishing(async () =>
             {
-                await m_PublishingService.PublishEventToScopedSubscriptionsAsync(
-                    m_PipelineEvent,
-                    m_EventsScopeMock.Object
+                await _publishingService.PublishEventToScopedSubscriptionsAsync(
+                    _pipelineEvent,
+                    _eventsScopeMock.Object
                 );
             });
         }
 
         private void SetUpEventsScopeGetSubscriptions()
         {
-            m_EventsScopeMock
+            _eventsScopeMock
                 .Setup(x => x.GetSubscriptions())
-                .Returns(m_Subscriptions)
+                .Returns(_subscriptions)
                 .Verifiable();
         }
 
         [Test]
         public async Task PublishEventToGlobalSubscriptionsAsync_ShouldGetSubscriptionsFromGlobalScopeAndPublishToMatchingSubscriptions()
         {
-            m_GlobalSubscriptionCollectionMock
+            _globalSubscriptionCollectionMock
                 .Setup(x => x.GetGlobalScopeSubscriptions())
-                .Returns(m_Subscriptions)
+                .Returns(_subscriptions)
                 .Verifiable();
 
             await TestPublishing(async () =>
             {
-                await m_PublishingService.PublishEventToGlobalSubscriptionsAsync(
-                    m_PipelineEvent
+                await _publishingService.PublishEventToGlobalSubscriptionsAsync(
+                    _pipelineEvent
                 );
             });
         }
@@ -164,28 +164,28 @@ namespace FluentEvents.UnitTests.Subscriptions
                 subscription1Args = args;
             }
 
-            SetUpSubscriptionEventsHandler(m_Subscriptions[0], Subscription0HandlerAction);
-            SetUpSubscriptionEventsHandler(m_Subscriptions[1], Subscription1HandlerAction);
+            SetUpSubscriptionEventsHandler(_subscriptions[0], Subscription0HandlerAction);
+            SetUpSubscriptionEventsHandler(_subscriptions[1], Subscription1HandlerAction);
 
             await testAction();
 
-            Assert.That(subscription0Sender, Is.EqualTo(m_PipelineEvent.OriginalSender));
-            Assert.That(subscription0Args, Is.EqualTo(m_PipelineEvent.OriginalEventArgs));
-            Assert.That(subscription1Sender, Is.EqualTo(m_PipelineEvent.OriginalSender));
-            Assert.That(subscription1Args, Is.EqualTo(m_PipelineEvent.OriginalEventArgs));
+            Assert.That(subscription0Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
+            Assert.That(subscription0Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
+            Assert.That(subscription1Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
+            Assert.That(subscription1Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
         }
 
         private void SetUpSubscriptionsMatchingService()
         {
-            m_SubscriptionsMatchingServiceMock
-                .Setup(x => x.GetMatchingSubscriptionsForSender(m_Subscriptions, m_PipelineEvent.OriginalSender))
-                .Returns(new[] {m_Subscriptions[0], m_Subscriptions[1]})
+            _subscriptionsMatchingServiceMock
+                .Setup(x => x.GetMatchingSubscriptionsForSender(_subscriptions, _pipelineEvent.OriginalSender))
+                .Returns(new[] {_subscriptions[0], _subscriptions[1]})
                 .Verifiable();
         }
 
         private void SetUpSubscriptionEventsHandler(Subscription subscription, Action<object, object> handlerAction)
         {
-            subscription.AddHandler(m_PipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
+            subscription.AddHandler(_pipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
         }
     }
 }

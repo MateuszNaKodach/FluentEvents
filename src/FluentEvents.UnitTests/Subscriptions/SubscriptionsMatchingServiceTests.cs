@@ -6,12 +6,12 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionsMatchingServiceTests
     {
-        private SubscriptionsMatchingService m_SubscriptionsMatchingService;
+        private SubscriptionsMatchingService _subscriptionsMatchingService;
 
         [SetUp]
         public void SetUp()
         {
-            m_SubscriptionsMatchingService = new SubscriptionsMatchingService();
+            _subscriptionsMatchingService = new SubscriptionsMatchingService();
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             var sender = new TestSource2();
 
-            var matchingSubscriptions = m_SubscriptionsMatchingService
+            var matchingSubscriptions = _subscriptionsMatchingService
                 .GetMatchingSubscriptionsForSender(subscriptions, sender);
 
             Assert.That(matchingSubscriptions, Is.EquivalentTo(new []

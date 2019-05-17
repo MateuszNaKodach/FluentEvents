@@ -16,15 +16,15 @@ namespace FluentEvents.Config
         where TSource : class
         where TEventArgs : class
     {
-        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_ServiceProvider;
-        SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
-        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
-        IPipeline IInfrastructure<IPipeline>.Instance => m_Pipeline;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;
+        SourceModel IInfrastructure<SourceModel>.Instance => _sourceModel;
+        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => _sourceModelEventField;
+        IPipeline IInfrastructure<IPipeline>.Instance => _pipeline;
 
-        private readonly IServiceProvider m_ServiceProvider;
-        private readonly SourceModel m_SourceModel;
-        private readonly SourceModelEventField m_SourceModelEventField;
-        private readonly IPipeline m_Pipeline;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly SourceModel _sourceModel;
+        private readonly SourceModelEventField _sourceModelEventField;
+        private readonly IPipeline _pipeline;
 
         /// <summary>
         ///     Creates an instance by taking dependencies from an <see cref="EventConfigurator{TSource,TEventArgs}"/>
@@ -36,10 +36,10 @@ namespace FluentEvents.Config
             EventConfigurator<TSource, TEventArgs> eventConfigurator
         )
         {
-            m_SourceModel = eventConfigurator.Get<SourceModel>();
-            m_SourceModelEventField = eventConfigurator.Get<SourceModelEventField>();
-            m_ServiceProvider = eventConfigurator.Get<IServiceProvider>();
-            m_Pipeline = pipeline;
+            _sourceModel = eventConfigurator.Get<SourceModel>();
+            _sourceModelEventField = eventConfigurator.Get<SourceModelEventField>();
+            _serviceProvider = eventConfigurator.Get<IServiceProvider>();
+            _pipeline = pipeline;
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace FluentEvents.Config
             IPipeline pipeline
         )
         {
-            m_SourceModel = sourceModel;
-            m_SourceModelEventField = sourceModelEventField;
-            m_ServiceProvider = serviceProvider;
-            m_Pipeline = pipeline;
+            _sourceModel = sourceModel;
+            _sourceModelEventField = sourceModelEventField;
+            _serviceProvider = serviceProvider;
+            _pipeline = pipeline;
         }
     }
 }

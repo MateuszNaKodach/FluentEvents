@@ -18,61 +18,61 @@ namespace FluentEvents.UnitTests
     [TestFixture]
     public class EventsContextTests
     {
-        private EventsContextImpl m_EventsContext;
-        private EventsContextOptions m_EventsContextOptions;
-        private Mock<IInternalServiceCollection> m_InternalServiceCollectionMock;
-        private Mock<IServiceProvider> m_InternalServiceProviderMock;
-        private Mock<IScopedSubscriptionsService> m_ScopedSubscriptionsServiceMock;
-        private Mock<IGlobalSubscriptionCollection> m_GlobalSubscriptionCollectionMock;
-        private Mock<IEventReceiversService> m_EventReceiversServiceMock;
-        private Mock<ISourceModelsService> m_SourceModelsServiceMock;
-        private Mock<IAttachingService> m_AttachingServiceMock;
-        private EventsContextDependencies m_EventsContextDependencies;
+        private EventsContextImpl _eventsContext;
+        private EventsContextOptions _eventsContextOptions;
+        private Mock<IInternalServiceCollection> _internalServiceCollectionMock;
+        private Mock<IServiceProvider> _internalServiceProviderMock;
+        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
+        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollectionMock;
+        private Mock<IEventReceiversService> _eventReceiversServiceMock;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
+        private Mock<IAttachingService> _attachingServiceMock;
+        private EventsContextDependencies _eventsContextDependencies;
 
-        private Mock<EventsScope> m_EventsScopeMock;
-        private Mock<IEventsQueuesService> m_EventsQueuesServiceMock;
-        private Mock<IValidableConfig> m_ValidableConfigMock;
-        private Mock<IEventSelectionService> m_EventSelectionServiceMock;
+        private Mock<EventsScope> _eventsScopeMock;
+        private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
+        private Mock<IValidableConfig> _validableConfigMock;
+        private Mock<IEventSelectionService> _eventSelectionServiceMock;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsContext = new EventsContextImpl();
-            m_EventsContextOptions = new EventsContextOptions();
-            m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_InternalServiceCollectionMock = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
-            m_ScopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            m_GlobalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
-            m_EventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
-            m_SourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
-            m_AttachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
-            m_EventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
-            m_ValidableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
-            m_EventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
+            _eventsContext = new EventsContextImpl();
+            _eventsContextOptions = new EventsContextOptions();
+            _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _internalServiceCollectionMock = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
+            _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
+            _globalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _eventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _attachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
+            _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
+            _validableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
+            _eventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
 
-            m_EventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
+            _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
-            m_EventsContextDependencies = new EventsContextDependencies(
-                m_GlobalSubscriptionCollectionMock.Object,
-                m_EventReceiversServiceMock.Object,
-                m_AttachingServiceMock.Object,
-                m_EventsQueuesServiceMock.Object
+            _eventsContextDependencies = new EventsContextDependencies(
+                _globalSubscriptionCollectionMock.Object,
+                _eventReceiversServiceMock.Object,
+                _attachingServiceMock.Object,
+                _eventsQueuesServiceMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_InternalServiceProviderMock.Verify();
-            m_InternalServiceCollectionMock.Verify();
-            m_ScopedSubscriptionsServiceMock.Verify();
-            m_GlobalSubscriptionCollectionMock.Verify();
-            m_EventReceiversServiceMock.Verify();
-            m_SourceModelsServiceMock.Verify();
-            m_AttachingServiceMock.Verify();
-            m_EventsQueuesServiceMock.Verify();
-            m_ValidableConfigMock.Verify();
-            m_EventSelectionServiceMock.Verify();
+            _internalServiceProviderMock.Verify();
+            _internalServiceCollectionMock.Verify();
+            _scopedSubscriptionsServiceMock.Verify();
+            _globalSubscriptionCollectionMock.Verify();
+            _eventReceiversServiceMock.Verify();
+            _sourceModelsServiceMock.Verify();
+            _attachingServiceMock.Verify();
+            _eventsQueuesServiceMock.Verify();
+            _validableConfigMock.Verify();
+            _eventSelectionServiceMock.Verify();
         }
 
         [Test]
@@ -81,11 +81,11 @@ namespace FluentEvents.UnitTests
             SetUpServiceProviderAndServiceCollection();
             SetUpBuilding();
 
-            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+            _eventsContext.Configure(_eventsContextOptions, _internalServiceCollectionMock.Object);
 
-            var serviceProvider = m_EventsContext.Get<IServiceProvider>();
+            var serviceProvider = _eventsContext.Get<IServiceProvider>();
 
-            Assert.That(serviceProvider, Is.EqualTo(m_InternalServiceProviderMock.Object));
+            Assert.That(serviceProvider, Is.EqualTo(_internalServiceProviderMock.Object));
         }
 
         [Test]
@@ -97,9 +97,9 @@ namespace FluentEvents.UnitTests
         {
             Assert.That(() =>
             {
-                m_EventsContext.Configure(
-                    areOptionsNull ? null : m_EventsContextOptions,
-                    isServiceCollectionNull ? null : m_InternalServiceCollectionMock.Object
+                _eventsContext.Configure(
+                    areOptionsNull ? null : _eventsContextOptions,
+                    isServiceCollectionNull ? null : _internalServiceCollectionMock.Object
                 );
             }, Throws.TypeOf<ArgumentNullException>());
         }
@@ -108,16 +108,16 @@ namespace FluentEvents.UnitTests
         public void Instance_OnFirstCall_ShouldCallBuilders()
         {
             SetUpServiceProviderAndServiceCollection();
-            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+            _eventsContext.Configure(_eventsContextOptions, _internalServiceCollectionMock.Object);
             SetUpBuilding();
 
             var isOnBuildingPipelinesCalled = false;
-            m_EventsContext.OnBuildingPipelinesCalled += (sender, args) =>
+            _eventsContext.OnBuildingPipelinesCalled += (sender, args) =>
             {
                 isOnBuildingPipelinesCalled = true;
             };
 
-            m_EventsContext.Get<IServiceProvider>();
+            _eventsContext.Get<IServiceProvider>();
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
         }
@@ -129,12 +129,12 @@ namespace FluentEvents.UnitTests
 
             var cts = new CancellationTokenSource();
 
-            m_EventReceiversServiceMock
+            _eventReceiversServiceMock
                 .Setup(x => x.StartReceiversAsync(cts.Token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_EventsContext.StartEventReceivers(cts.Token);
+            _eventsContext.StartEventReceivers(cts.Token);
         }
 
         [Test]
@@ -144,12 +144,12 @@ namespace FluentEvents.UnitTests
 
             var cts = new CancellationTokenSource();
 
-            m_EventReceiversServiceMock
+            _eventReceiversServiceMock
                 .Setup(x => x.StopReceiversAsync(cts.Token))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_EventsContext.StopEventReceivers(cts.Token);
+            _eventsContext.StopEventReceivers(cts.Token);
         }
 
         [Test]
@@ -159,11 +159,11 @@ namespace FluentEvents.UnitTests
 
             var source = new object();
 
-            m_AttachingServiceMock
-                .Setup(x => x.Attach(source, m_EventsScopeMock.Object))
+            _attachingServiceMock
+                .Setup(x => x.Attach(source, _eventsScopeMock.Object))
                 .Verifiable();
 
-            m_EventsContext.Attach(source, m_EventsScopeMock.Object);
+            _eventsContext.Attach(source, _eventsScopeMock.Object);
         }
 
         [Test]
@@ -173,12 +173,12 @@ namespace FluentEvents.UnitTests
 
             const string queueName = "queueName";
 
-            m_EventsQueuesServiceMock
-                .Setup(x => x.ProcessQueuedEventsAsync(m_EventsScopeMock.Object, queueName))
+            _eventsQueuesServiceMock
+                .Setup(x => x.ProcessQueuedEventsAsync(_eventsScopeMock.Object, queueName))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await m_EventsContext.ProcessQueuedEventsAsync(m_EventsScopeMock.Object, queueName);
+            await _eventsContext.ProcessQueuedEventsAsync(_eventsScopeMock.Object, queueName);
         }
 
         [Test]
@@ -188,11 +188,11 @@ namespace FluentEvents.UnitTests
 
             const string queueName = "queueName";
 
-            m_EventsQueuesServiceMock
-                .Setup(x => x.DiscardQueuedEvents(m_EventsScopeMock.Object, queueName))
+            _eventsQueuesServiceMock
+                .Setup(x => x.DiscardQueuedEvents(_eventsScopeMock.Object, queueName))
                 .Verifiable();
 
-            m_EventsContext.DiscardQueuedEvents(m_EventsScopeMock.Object, queueName);
+            _eventsContext.DiscardQueuedEvents(_eventsScopeMock.Object, queueName);
         }
 
         [Test]
@@ -203,12 +203,12 @@ namespace FluentEvents.UnitTests
             Action<object> subscriptionAction = o => { };
             var subscription = new Subscription(typeof(object));
 
-            m_GlobalSubscriptionCollectionMock
+            _globalSubscriptionCollectionMock
                 .Setup(x => x.AddGlobalScopeSubscription(subscriptionAction))
                 .Returns(subscription)
                 .Verifiable();
 
-            var returnedSubscription = m_EventsContext.SubscribeGloballyTo(subscriptionAction);
+            var returnedSubscription = _eventsContext.SubscribeGloballyTo(subscriptionAction);
 
             Assert.That(returnedSubscription, Is.EqualTo(subscription));
         }
@@ -220,64 +220,64 @@ namespace FluentEvents.UnitTests
 
             var subscription = new Subscription(typeof(object));
 
-            m_GlobalSubscriptionCollectionMock
+            _globalSubscriptionCollectionMock
                 .Setup(x => x.RemoveGlobalScopeSubscription(subscription))
                 .Verifiable();
 
-            m_EventsContext.Unsubscribe(subscription);
+            _eventsContext.Unsubscribe(subscription);
         }
         
         private void ConfigureEventsContext()
         {
             SetUpServiceProviderAndServiceCollection();
             SetUpGetDependencies();
-            m_EventsContext.Configure(m_EventsContextOptions, m_InternalServiceCollectionMock.Object);
+            _eventsContext.Configure(_eventsContextOptions, _internalServiceCollectionMock.Object);
 
             SetUpBuilding();
         }
 
         private void SetUpServiceProviderAndServiceCollection()
         {
-            m_InternalServiceCollectionMock
-                .Setup(x => x.BuildServiceProvider(m_EventsContext, m_EventsContextOptions))
-                .Returns(m_InternalServiceProviderMock.Object)
+            _internalServiceCollectionMock
+                .Setup(x => x.BuildServiceProvider(_eventsContext, _eventsContextOptions))
+                .Returns(_internalServiceProviderMock.Object)
                 .Verifiable();
 
         }
 
         private void SetUpGetDependencies()
         {
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(IEventsContextDependencies)))
-                .Returns(m_EventsContextDependencies)
+                .Returns(_eventsContextDependencies)
                 .Verifiable();
         }
 
         private void SetUpBuilding()
         {
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(m_GlobalSubscriptionCollectionMock.Object,
-                    m_ScopedSubscriptionsServiceMock.Object
+                .Returns(new SubscriptionsBuilder(_globalSubscriptionCollectionMock.Object,
+                    _scopedSubscriptionsServiceMock.Object
                 ))
                 .Verifiable();
 
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
                 .Returns(new PipelinesBuilder(
-                    m_InternalServiceProviderMock.Object,
-                    m_SourceModelsServiceMock.Object,
-                    m_EventSelectionServiceMock.Object
+                    _internalServiceProviderMock.Object,
+                    _sourceModelsServiceMock.Object,
+                    _eventSelectionServiceMock.Object
                 ))
                 .Verifiable();
 
-            m_ValidableConfigMock
+            _validableConfigMock
                 .Setup(x => x.Validate())
                 .Verifiable();
 
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(IEnumerable<IValidableConfig>)))
-                .Returns(new [] { m_ValidableConfigMock.Object })
+                .Returns(new [] { _validableConfigMock.Object })
                 .Verifiable();
         }
 

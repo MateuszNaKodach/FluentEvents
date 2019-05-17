@@ -8,7 +8,7 @@ namespace FluentEvents.Routing
     /// <inheritdoc />
     public class ForwardingService : IForwardingService
     {
-        private readonly IRoutingService m_RoutingService;
+        private readonly IRoutingService _routingService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -16,7 +16,7 @@ namespace FluentEvents.Routing
         /// </summary>
         public ForwardingService(IRoutingService routingService)
         {
-            m_RoutingService = routingService;
+            _routingService = routingService;
         }
 
         /// <inheritdoc />
@@ -31,7 +31,7 @@ namespace FluentEvents.Routing
                     AsyncHandlerAction(sender, args).GetAwaiter().GetResult();
 
                 async Task AsyncHandlerAction(object sender, object args) =>
-                    await m_RoutingService.RouteEventAsync(
+                    await _routingService.RouteEventAsync(
                         new PipelineEvent(sourceModel.ClrType, eventField.FieldInfo.Name, sender, args),
                         eventsScope
                     );

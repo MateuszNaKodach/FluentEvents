@@ -6,38 +6,38 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelsServiceTests
     {
-        private SourceModelsService m_SourceModelsService;
+        private SourceModelsService _sourceModelsService;
 
         [SetUp]
         public void SetUp()
         {
-            m_SourceModelsService = new SourceModelsService();
+            _sourceModelsService = new SourceModelsService();
         }
 
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelDoesNotExists_ShouldCreate()
         {
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object));
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(object));
 
-            Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
-            Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
+            Assert.That(_sourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
+            Assert.That(_sourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
         }
 
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelExists_ShouldNotCreate()
         {
-            m_SourceModelsService.GetOrCreateSourceModel(typeof(object));
-            var sourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object));
+            _sourceModelsService.GetOrCreateSourceModel(typeof(object));
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(object));
 
-            Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
-            Assert.That(m_SourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
+            Assert.That(_sourceModelsService.GetSourceModels(), Has.Exactly(1).Items);
+            Assert.That(_sourceModelsService.GetSourceModels(), Has.Exactly(1).Items.EqualTo(sourceModel));
         }
 
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelExists_ShouldReturn()
         {
-            var createdSourceModel = m_SourceModelsService.GetOrCreateSourceModel(typeof(object));
-            var returnedSourceModel = m_SourceModelsService.GetSourceModel(typeof(object));
+            var createdSourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(object));
+            var returnedSourceModel = _sourceModelsService.GetSourceModel(typeof(object));
 
             Assert.That(returnedSourceModel, Is.Not.Null);
             Assert.That(returnedSourceModel, Is.EqualTo(createdSourceModel));
@@ -46,7 +46,7 @@ namespace FluentEvents.UnitTests.Model
         [Test]
         public void GetOrCreateSourceModel_WhenSourceModelDoesNotExists_ShouldReturnNull()
         {
-            var returnedSourceModel = m_SourceModelsService.GetSourceModel(typeof(object));
+            var returnedSourceModel = _sourceModelsService.GetSourceModel(typeof(object));
 
             Assert.That(returnedSourceModel, Is.Null);
         }

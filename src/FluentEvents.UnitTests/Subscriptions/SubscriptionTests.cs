@@ -9,27 +9,27 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionTests
     {
-        private PipelineEvent m_PipelineEvent;
+        private PipelineEvent _pipelineEvent;
 
-        private Subscription m_Subscription;
+        private Subscription _subscription;
 
         [SetUp]
         public void SetUp()
         {
-            m_PipelineEvent = new PipelineEvent(
+            _pipelineEvent = new PipelineEvent(
                 typeof(object),
                 "fieldName",
                 new object(),
                 new object()
             );
 
-            m_Subscription = new Subscription(typeof(object));
+            _subscription = new Subscription(typeof(object));
         }
 
         [Test]
         public void AddHandler_ShouldAdd()
         {
-            SetUpSubscriptionEventsHandler(m_Subscription, (o, o1) => { });
+            SetUpSubscriptionEventsHandler(_subscription, (o, o1) => { });
         }
 
         [Test]
@@ -69,21 +69,21 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             if (isAsync)
             {
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction1Async);
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction2Async);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction1Async);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction2Async);
             }
             else
             {
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction1);
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction2);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction1);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction2);
             }
 
-            await m_Subscription.PublishEventAsync(m_PipelineEvent);
+            await _subscription.PublishEventAsync(_pipelineEvent);
 
-            Assert.That(handlerAction1Sender, Is.EqualTo(m_PipelineEvent.OriginalSender));
-            Assert.That(handlerAction2Sender, Is.EqualTo(m_PipelineEvent.OriginalSender));
-            Assert.That(handlerAction1Args, Is.EqualTo(m_PipelineEvent.OriginalEventArgs));
-            Assert.That(handlerAction2Args, Is.EqualTo(m_PipelineEvent.OriginalEventArgs));
+            Assert.That(handlerAction1Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
+            Assert.That(handlerAction2Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
+            Assert.That(handlerAction1Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
+            Assert.That(handlerAction2Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
         }
 
         [Test]
@@ -96,18 +96,18 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             if (isAsync)
             {
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction1Async);
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction2Async);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction1Async);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction2Async);
             }
             else
             {
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction1);
-                SetUpSubscriptionEventsHandler(m_Subscription, HandlerAction2);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction1);
+                SetUpSubscriptionEventsHandler(_subscription, HandlerAction2);
             }
 
             Assert.That(async () =>
             {
-                await m_Subscription.PublishEventAsync(m_PipelineEvent);
+                await _subscription.PublishEventAsync(_pipelineEvent);
             }, Throws.TypeOf<SubscriptionPublishAggregateException>()
                 .With
                 .Property(nameof(AggregateException.InnerExceptions)).Count.EqualTo(2));
@@ -115,12 +115,12 @@ namespace FluentEvents.UnitTests.Subscriptions
 
         private void SetUpSubscriptionEventsHandler(Subscription subscription, Action<object, object> handlerAction)
         {
-            subscription.AddHandler(m_PipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
+            subscription.AddHandler(_pipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
         }
 
         private void SetUpSubscriptionEventsHandler(Subscription subscription, Func<object, object, Task> handlerAction)
         {
-            subscription.AddHandler(m_PipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
+            subscription.AddHandler(_pipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
         }
     }
 }

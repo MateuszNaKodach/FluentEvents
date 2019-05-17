@@ -10,7 +10,7 @@ namespace FluentEvents.Transmission
     /// </summary>
     public class EventReceiversHostedService : IHostedService
     {
-        private readonly IEventReceiversService m_EventReceiversService;
+        private readonly IEventReceiversService _eventReceiversService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -18,19 +18,19 @@ namespace FluentEvents.Transmission
         /// </summary>
         public EventReceiversHostedService(IEventReceiversService eventReceiversService)
         {
-            m_EventReceiversService = eventReceiversService;
+            _eventReceiversService = eventReceiversService;
         }
 
         /// <inheritdoc />
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return m_EventReceiversService.StartReceiversAsync(cancellationToken);
+            return _eventReceiversService.StartReceiversAsync(cancellationToken);
         }
 
         /// <inheritdoc />
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return m_EventReceiversService.StopReceiversAsync(cancellationToken);
+            return _eventReceiversService.StopReceiversAsync(cancellationToken);
         }
     }
 }

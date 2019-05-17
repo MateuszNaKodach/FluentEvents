@@ -7,12 +7,12 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class AzureTopicEventSenderConfigTests
     {
-        private AzureTopicEventSenderConfig m_AzureTopicEventSenderConfig;
+        private AzureTopicEventSenderConfig _azureTopicEventSenderConfig;
 
         [SetUp]
         public void SetUp()
         {
-            m_AzureTopicEventSenderConfig = new AzureTopicEventSenderConfig();
+            _azureTopicEventSenderConfig = new AzureTopicEventSenderConfig();
         }
 
         [Test]
@@ -20,17 +20,17 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventSenderConfig.ConnectionString = Constants.InvalidConnectionString;
+                _azureTopicEventSenderConfig.ConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventSenderConfig.ConnectionString = Constants.ValidConnectionString;
+            _azureTopicEventSenderConfig.ConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
-                m_AzureTopicEventSenderConfig,
+                _azureTopicEventSenderConfig,
                 Has
                     .Property(nameof(AzureTopicEventSenderConfig.ConnectionString))
                     .EqualTo(Constants.ValidConnectionString)
@@ -42,7 +42,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         {
             Assert.That(() =>
             {
-                ((IValidableConfig) m_AzureTopicEventSenderConfig).Validate(); 
+                ((IValidableConfig) _azureTopicEventSenderConfig).Validate(); 
             }, Throws.TypeOf<ConnectionStringIsNullException>());
         }
     }

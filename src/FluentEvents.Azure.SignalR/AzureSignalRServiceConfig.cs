@@ -8,15 +8,15 @@ namespace FluentEvents.Azure.SignalR
     /// </summary>
     public class AzureSignalRServiceConfig : IValidableConfig
     {
-        private string m_ConnectionString;
+        private string _connectionString;
 
         /// <summary>
         ///     The connection string of the Azure SignalR Service.
         /// </summary>
         public string ConnectionString
         {
-            get => m_ConnectionString;
-            set => m_ConnectionString = Client.ConnectionString.Validate(value);
+            get => _connectionString;
+            set => _connectionString = Client.ConnectionString.Validate(value);
         }
 
         void IValidableConfig.Validate()

@@ -15,13 +15,13 @@ namespace FluentEvents.Config
         where TSource : class 
         where TEventArgs : class 
     {
-        IServiceProvider IInfrastructure<IServiceProvider>.Instance => m_ServiceProvider;
-        SourceModel IInfrastructure<SourceModel>.Instance => m_SourceModel;
-        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => m_SourceModelEventField;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;
+        SourceModel IInfrastructure<SourceModel>.Instance => _sourceModel;
+        SourceModelEventField IInfrastructure<SourceModelEventField>.Instance => _sourceModelEventField;
 
-        private readonly IServiceProvider m_ServiceProvider;
-        private readonly SourceModel m_SourceModel;
-        private readonly SourceModelEventField m_SourceModelEventField;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly SourceModel _sourceModel;
+        private readonly SourceModelEventField _sourceModelEventField;
 
         internal EventConfigurator(
             IServiceProvider serviceProvider,
@@ -29,9 +29,9 @@ namespace FluentEvents.Config
             SourceModelEventField sourceModelEventField
         )
         {
-            m_SourceModel = sourceModel;
-            m_SourceModelEventField = sourceModelEventField;
-            m_ServiceProvider = serviceProvider;
+            _sourceModel = sourceModel;
+            _sourceModelEventField = sourceModelEventField;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -40,16 +40,25 @@ namespace FluentEvents.Config
         /// <returns>
         ///     An <see cref="EventPipelineConfigurator{TSource,TEventArgs}"/> to configure the modules of the pipeline.
         /// </returns>
-        public EventPipelineConfigurator<TSource, TEventArgs> IsForwardedToPipeline()
+        public EventPipelineConfigurator<TSource, TEventArgs> IsWatched()
         {
-            var pipeline = new Pipeline(m_ServiceProvider);
+            var pipeline = new Pipeline(_serviceProvider);
 
-            m_SourceModelEventField.AddPipeline(pipeline);
+            _sourceModelEventField.AddPipeline(pipeline);
 
             return new EventPipelineConfigurator<TSource, TEventArgs>(
                 pipeline,
                 this
             );
         }
+
+        /// <summary>
+        ///     This method creates a pipeline for the current event.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="EventPipelineConfigurator{TSource,TEventArgs}"/> to configure the modules of the pipeline.
+        /// </returns>
+        [Obsolete("Use IsWatched()")]
+        public EventPipelineConfigurator<TSource, TEventArgs> IsForwardedToPipeline() => IsWatched();
     }
 }

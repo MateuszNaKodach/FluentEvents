@@ -27,10 +27,10 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         private protected HubConnection HubConnection2 { get; private set; }
         private protected HubConnection HubConnection3 { get; private set; }
 
-        private protected int ReceivedEventsCount => m_ReceivedEventsCount;
+        private protected int ReceivedEventsCount => _receivedEventsCount;
 
-        private int m_ReceivedEventsCount;
-        private IServiceProvider m_ServiceProvider;
+        private int _receivedEventsCount;
+        private IServiceProvider _serviceProvider;
 
         [SetUp]
         public async Task SetUp()
@@ -52,17 +52,17 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
 
             AddEventsContext<TEventsContext>(services, configuration);
 
-            m_ServiceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
-            EventsContext = m_ServiceProvider.GetRequiredService<TEventsContext>();
+            EventsContext = _serviceProvider.GetRequiredService<TEventsContext>();
 
-            Scope = m_ServiceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
+            Scope = _serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
 
             HubConnection1 = await SetUpHubConnection(ConnectionString, hubUrl, UserId1);
             HubConnection2 = await SetUpHubConnection(ConnectionString, hubUrl, UserId2);
             HubConnection3 = await SetUpHubConnection(ConnectionString, hubUrl, UserId3);
 
-            m_ReceivedEventsCount = 0;
+            _receivedEventsCount = 0;
         }
 
         private static void AddEventsContext<TContext>(IServiceCollection services, IConfiguration configuration)
@@ -110,7 +110,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             await Watcher.WaitUntilAsync(() => receivedEventArgs != null, 6000);
 
             if (receivedEventArgs != null)
-                Interlocked.Increment(ref m_ReceivedEventsCount);
+                Interlocked.Increment(ref _receivedEventsCount);
 
             if (isPublishingExpected)
             {

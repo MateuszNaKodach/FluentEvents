@@ -12,51 +12,51 @@ namespace FluentEvents.UnitTests.Routing
     [TestFixture]
     public class ForwardingServiceTests
     {
-        private Mock<IRoutingService> m_RoutingServiceMock;
+        private Mock<IRoutingService> _routingServiceMock;
 
-        private SourceModel m_SourceModel;
-        private EventsScope m_EventsScope;
-        private ForwardingService m_ForwardingService;
+        private SourceModel _sourceModel;
+        private EventsScope _eventsScope;
+        private ForwardingService _forwardingService;
 
         [SetUp]
         public void SetUp()
         {
-            m_RoutingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
+            _routingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
 
-            m_SourceModel = new SourceModel(typeof(TestSource));
-            m_EventsScope = new EventsScope();
-            m_ForwardingService = new ForwardingService(m_RoutingServiceMock.Object);
+            _sourceModel = new SourceModel(typeof(TestSource));
+            _eventsScope = new EventsScope();
+            _forwardingService = new ForwardingService(_routingServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_RoutingServiceMock.Verify();
+            _routingServiceMock.Verify();
         }
 
         [Test]
         public async Task ForwardEventsToRouting_ShouldAddEventHandlers()
         {
             var source = new TestSource();
-            m_RoutingServiceMock
-                .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), m_EventsScope))
+            _routingServiceMock
+                .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), _eventsScope))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            m_SourceModel.GetOrCreateEventField(nameof(TestSource.NoArgsEvent));
-            m_SourceModel.GetOrCreateEventField(nameof(TestSource.EventWithArgs));
-            m_SourceModel.GetOrCreateEventField(nameof(TestSource.AsyncNoArgsEvent));
-            m_SourceModel.GetOrCreateEventField(nameof(TestSource.AsyncEventWithArgs));
+            _sourceModel.GetOrCreateEventField(nameof(TestSource.NoArgsEvent));
+            _sourceModel.GetOrCreateEventField(nameof(TestSource.EventWithArgs));
+            _sourceModel.GetOrCreateEventField(nameof(TestSource.AsyncNoArgsEvent));
+            _sourceModel.GetOrCreateEventField(nameof(TestSource.AsyncEventWithArgs));
 
-            m_ForwardingService.ForwardEventsToRouting(
-                m_SourceModel,
+            _forwardingService.ForwardEventsToRouting(
+                _sourceModel,
                 source,
-                m_EventsScope
+                _eventsScope
             );
 
             await source.RaiseEvents();
 
-            Assert.That(m_RoutingServiceMock.Invocations, Has.Exactly(4).Items);
+            Assert.That(_routingServiceMock.Invocations, Has.Exactly(4).Items);
         }
 
         [Test]
@@ -66,10 +66,10 @@ namespace FluentEvents.UnitTests.Routing
 
             Assert.That(() =>
             {
-                m_ForwardingService.ForwardEventsToRouting(
-                    m_SourceModel,
+                _forwardingService.ForwardEventsToRouting(
+                    _sourceModel,
                     source,
-                    m_EventsScope
+                    _eventsScope
                 );
             }, Throws.TypeOf<SourceDoesNotMatchModelTypeException>());
         }

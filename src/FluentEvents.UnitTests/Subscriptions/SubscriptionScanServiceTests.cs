@@ -9,24 +9,24 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class SubscriptionScanServiceTests
     {
-        private SubscriptionScanService m_SubscriptionScanService;
-        private SourceModel m_ConcreteSourceModel;
-        private SourceModel m_AbstractSourceModel;
+        private SubscriptionScanService _subscriptionScanService;
+        private SourceModel _concreteSourceModel;
+        private SourceModel _abstractSourceModel;
 
         [SetUp]
         public void SetUp()
         {
-            m_ConcreteSourceModel = new SourceModel(typeof(ConcreteSource));
-            m_ConcreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent1));
-            m_ConcreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent2));
-            m_ConcreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent3));
+            _concreteSourceModel = new SourceModel(typeof(ConcreteSource));
+            _concreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent1));
+            _concreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent2));
+            _concreteSourceModel.GetOrCreateEventField(nameof(ConcreteSource.TestEvent3));
 
-            m_AbstractSourceModel = new SourceModel(typeof(AbstractSource));
-            m_AbstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent1));
-            m_AbstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent2));
-            m_AbstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent3));
+            _abstractSourceModel = new SourceModel(typeof(AbstractSource));
+            _abstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent1));
+            _abstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent2));
+            _abstractSourceModel.GetOrCreateEventField(nameof(AbstractSource.TestEvent3));
 
-            m_SubscriptionScanService = new SubscriptionScanService();
+            _subscriptionScanService = new SubscriptionScanService();
         }
 
         [Test]
@@ -39,9 +39,9 @@ namespace FluentEvents.UnitTests.Subscriptions
                 x.TestEvent2 += delegate { };
             }
 
-            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
-                m_ConcreteSourceModel.ClrType,
-                m_ConcreteSourceModel.EventFields.Select(x => x.FieldInfo),
+            var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
+                _concreteSourceModel.ClrType,
+                _concreteSourceModel.EventFields.Select(x => x.FieldInfo),
                 x => SubscriptionAction((ConcreteSource) x)
             ).ToArray();
 
@@ -67,9 +67,9 @@ namespace FluentEvents.UnitTests.Subscriptions
                 x.TestEvent2 += delegate { };
             }
 
-            var subscribedHandlers = m_SubscriptionScanService.GetSubscribedHandlers(
-                m_AbstractSourceModel.ClrType,
-                m_AbstractSourceModel.EventFields.Select(x => x.FieldInfo),
+            var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
+                _abstractSourceModel.ClrType,
+                _abstractSourceModel.EventFields.Select(x => x.FieldInfo),
                 x => SubscriptionAction((AbstractSource)x)
             ).ToArray();
 

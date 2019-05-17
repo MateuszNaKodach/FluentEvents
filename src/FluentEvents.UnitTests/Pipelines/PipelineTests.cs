@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -12,28 +11,28 @@ namespace FluentEvents.UnitTests.Pipelines
     [TestFixture]
     public class PipelineTests
     {
-        private EventsScope m_EventsScope;
-        private Mock<IServiceProvider> m_InternalServiceProviderMock;
-        private Pipeline m_Pipeline;
+        private EventsScope _eventsScope;
+        private Mock<IServiceProvider> _internalServiceProviderMock;
+        private Pipeline _pipeline;
 
         [SetUp]
         public void SetUp()
         {
-            m_EventsScope = new EventsScope();
-            m_InternalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            m_Pipeline = new Pipeline(m_InternalServiceProviderMock.Object);
+            _eventsScope = new EventsScope();
+            _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            _pipeline = new Pipeline(_internalServiceProviderMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            m_InternalServiceProviderMock.Verify();
+            _internalServiceProviderMock.Verify();
         }
 
         [Test]
         public void AddModuleConfig_ShouldAdd()
         {
-            m_Pipeline.AddModule<PipelineModule1, object>(new object());
+            _pipeline.AddModule<PipelineModule1, object>(new object());
         }
 
         [Test]
@@ -41,20 +40,20 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             Assert.That(() =>
             {
-                m_Pipeline.AddModule<PipelineModule1, object>(null);
+                _pipeline.AddModule<PipelineModule1, object>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public async Task ProcessEventAsync_ShouldCreateAndDisposeNewServiceScope()
         {
-            await m_Pipeline.ProcessEventAsync(new PipelineEvent(
+            await _pipeline.ProcessEventAsync(new PipelineEvent(
                     typeof(object),
                     "f",
                     new object(),
                     new object()
                 ),
-                m_EventsScope
+                _eventsScope
             );
         }
 
@@ -70,13 +69,13 @@ namespace FluentEvents.UnitTests.Pipelines
                 pipelineModuleMocks.Add(pipelineModuleMock);
             }
 
-            await m_Pipeline.ProcessEventAsync(new PipelineEvent(
+            await _pipeline.ProcessEventAsync(new PipelineEvent(
                     typeof(object),
                     "f",
                     new object(),
                     new object()
                 ),
-                m_EventsScope
+                _eventsScope
             );
 
             foreach (var pipelineModuleMock in pipelineModuleMocks)
@@ -95,12 +94,12 @@ namespace FluentEvents.UnitTests.Pipelines
                 .Verifiable();
 
             var loggerType = typeof(ILogger<>).MakeGenericType(module.GetType());
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(loggerType))
                 .Returns(new LoggerFactory().CreateLogger(loggerType))
                 .Verifiable();
 
-            m_InternalServiceProviderMock
+            _internalServiceProviderMock
                 .Setup(x => x.GetService(module.GetType()))
                 .Returns(pipelineModuleMock.Object)
                 .Verifiable();
@@ -116,19 +115,19 @@ namespace FluentEvents.UnitTests.Pipelines
             {
                 case 0:
                     module = new PipelineModule1();
-                    m_Pipeline.AddModule<PipelineModule1, object>(new object());
+                    _pipeline.AddModule<PipelineModule1, object>(new object());
                     break;
                 case 1:
                     module = new PipelineModule2();
-                    m_Pipeline.AddModule<PipelineModule2, object>(new object());
+                    _pipeline.AddModule<PipelineModule2, object>(new object());
                     break;
                 case 2:
                     module = new PipelineModule3();
-                    m_Pipeline.AddModule<PipelineModule3, object>(new object());
+                    _pipeline.AddModule<PipelineModule3, object>(new object());
                     break;
                 case 3:
                     module = new PipelineModule4();
-                    m_Pipeline.AddModule<PipelineModule4, object>(new object());
+                    _pipeline.AddModule<PipelineModule4, object>(new object());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

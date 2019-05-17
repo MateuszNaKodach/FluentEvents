@@ -8,12 +8,12 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
     [TestFixture]
     public class AzureTopicEventReceiverConfigTests
     {
-        private AzureTopicEventReceiverConfig m_AzureTopicEventReceiverConfig;
+        private AzureTopicEventReceiverConfig _azureTopicEventReceiverConfig;
 
         [SetUp]
         public void SetUp()
         {
-            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
                 ReceiveConnectionString = Constants.ValidConnectionString,
                 ManagementConnectionString = Constants.ValidConnectionString,
@@ -25,9 +25,9 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [Test]
         public void SubscriptionNameGenerator_WhenNotSet_ShouldReturnGuidByDefault()
         {
-            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig();
+            _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig();
 
-            var subscriptionName = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator();
+            var subscriptionName = _azureTopicEventReceiverConfig.SubscriptionNameGenerator();
 
             Assert.That(subscriptionName, Is.Not.Null);
             Assert.That(Guid.TryParse(subscriptionName, out _), Is.True);
@@ -38,7 +38,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+                _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
                 {
                     SubscriptionNameGenerator = null
                 };
@@ -50,17 +50,17 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventReceiverConfig.ManagementConnectionString = Constants.InvalidConnectionString;
+                _azureTopicEventReceiverConfig.ManagementConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ManagementConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventReceiverConfig.ManagementConnectionString = Constants.ValidConnectionString;
+            _azureTopicEventReceiverConfig.ManagementConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
-                m_AzureTopicEventReceiverConfig,
+                _azureTopicEventReceiverConfig,
                 Has
                     .Property(nameof(AzureTopicEventReceiverConfig.ManagementConnectionString))
                     .EqualTo(Constants.ValidConnectionString)
@@ -72,17 +72,17 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         {
             Assert.That(() =>
             {
-                m_AzureTopicEventReceiverConfig.ReceiveConnectionString = Constants.InvalidConnectionString;
+                _azureTopicEventReceiverConfig.ReceiveConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ReceiveConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            m_AzureTopicEventReceiverConfig.ReceiveConnectionString = Constants.ValidConnectionString;
+            _azureTopicEventReceiverConfig.ReceiveConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
-                m_AzureTopicEventReceiverConfig,
+                _azureTopicEventReceiverConfig,
                 Has
                     .Property(nameof(AzureTopicEventReceiverConfig.ReceiveConnectionString))
                     .EqualTo(Constants.ValidConnectionString)
@@ -92,48 +92,48 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [Test]
         public void Validate_WhenReceiveConnectionStringIsNull_ShouldThrow()
         {
-            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
                 ManagementConnectionString = Constants.ValidConnectionString,
-                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
-                TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
+                SubscriptionNameGenerator = _azureTopicEventReceiverConfig.SubscriptionNameGenerator,
+                TopicPath = _azureTopicEventReceiverConfig.TopicPath
             };
 
             Assert.That(() =>
             {
-                ((IValidableConfig) m_AzureTopicEventReceiverConfig).Validate();
+                ((IValidableConfig) _azureTopicEventReceiverConfig).Validate();
             }, Throws.TypeOf<ReceiveConnectionStringIsNullException>());
         }
 
         [Test]
         public void Validate_WhenManagementConnectionStringIsNull_ShouldThrow()
         {
-            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
                 ReceiveConnectionString = Constants.ValidConnectionString,
-                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator,
-                TopicPath = m_AzureTopicEventReceiverConfig.TopicPath
+                SubscriptionNameGenerator = _azureTopicEventReceiverConfig.SubscriptionNameGenerator,
+                TopicPath = _azureTopicEventReceiverConfig.TopicPath
             };
 
             Assert.That(() =>
             {
-                ((IValidableConfig)m_AzureTopicEventReceiverConfig).Validate();
+                ((IValidableConfig)_azureTopicEventReceiverConfig).Validate();
             }, Throws.TypeOf<ManagementConnectionStringIsNullException>());
         }
 
         [Test]
         public void Validate_WhenTopicPathIsNull_ShouldThrow()
         {
-            m_AzureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            _azureTopicEventReceiverConfig = new AzureTopicEventReceiverConfig
             {
                 ManagementConnectionString = Constants.ValidConnectionString,
                 ReceiveConnectionString = Constants.ValidConnectionString,
-                SubscriptionNameGenerator = m_AzureTopicEventReceiverConfig.SubscriptionNameGenerator
+                SubscriptionNameGenerator = _azureTopicEventReceiverConfig.SubscriptionNameGenerator
             };
 
             Assert.That(() =>
             {
-                ((IValidableConfig)m_AzureTopicEventReceiverConfig).Validate();
+                ((IValidableConfig)_azureTopicEventReceiverConfig).Validate();
             }, Throws.TypeOf<TopicPathIsNullException>());
         }
     }

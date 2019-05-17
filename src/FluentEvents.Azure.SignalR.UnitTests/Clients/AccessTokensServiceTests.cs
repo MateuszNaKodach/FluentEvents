@@ -12,21 +12,21 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     public class AccessTokensServiceTests
     {
         private const string Audience = nameof(Audience);
-        private readonly ConnectionString m_ConnectionStringWithValidAccessKey = "Endpoint=123;AccessKey=tBNrNxHRYlTuqAWUUb3Y0YMHgY7iCd9HtA7nCsfANB8;";
-        private readonly ConnectionString m_ConnectionStringWithInvalidAccessKey = "Endpoint=123;AccessKey=123;";
+        private readonly ConnectionString _connectionStringWithValidAccessKey = "Endpoint=123;AccessKey=tBNrNxHRYlTuqAWUUb3Y0YMHgY7iCd9HtA7nCsfANB8;";
+        private readonly ConnectionString _connectionStringWithInvalidAccessKey = "Endpoint=123;AccessKey=123;";
 
-        private AccessTokensService m_AccessTokensService;
+        private AccessTokensService _accessTokensService;
 
         [SetUp]
         public void SetUp()
         {
-            m_AccessTokensService = new AccessTokensService();
+            _accessTokensService = new AccessTokensService();
         }
 
         [Test]
         public void GenerateAccessToken_WithValidAccessKey_ShouldReturnValidJwt()
         {
-            var accessToken = m_AccessTokensService.GenerateAccessToken(m_ConnectionStringWithValidAccessKey, Audience);
+            var accessToken = _accessTokensService.GenerateAccessToken(_connectionStringWithValidAccessKey, Audience);
 
             Assert.That(accessToken, Is.Not.Null);
             Assert.That(accessToken, Has.Exactly(2).Items.EqualTo('.'));
@@ -50,7 +50,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         {
             Assert.That(() =>
             {
-                m_AccessTokensService.GenerateAccessToken(m_ConnectionStringWithInvalidAccessKey, Audience);
+                _accessTokensService.GenerateAccessToken(_connectionStringWithInvalidAccessKey, Audience);
             }, Throws.TypeOf<InvalidConnectionStringAccessKeyException>());
         }
     }

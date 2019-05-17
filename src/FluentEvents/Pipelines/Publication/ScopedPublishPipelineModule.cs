@@ -5,11 +5,11 @@ namespace FluentEvents.Pipelines.Publication
 {
     internal class ScopedPublishPipelineModule : IPipelineModule<ScopedPublishPipelineModuleConfig>
     {
-        private readonly IPublishingService m_PublishingService;
+        private readonly IPublishingService _publishingService;
 
         public ScopedPublishPipelineModule(IPublishingService publishingService)
         {
-            m_PublishingService = publishingService;
+            _publishingService = publishingService;
         }
 
         public async Task InvokeAsync(
@@ -18,7 +18,7 @@ namespace FluentEvents.Pipelines.Publication
             NextModuleDelegate invokeNextModule
         )
         {
-            await m_PublishingService.PublishEventToScopedSubscriptionsAsync(
+            await _publishingService.PublishEventToScopedSubscriptionsAsync(
                 pipelineContext.PipelineEvent, 
                 pipelineContext.EventsScope
             );

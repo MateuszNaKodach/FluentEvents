@@ -5,11 +5,11 @@ namespace FluentEvents.Pipelines.Queues
 {
     internal class EnqueuePipelineModule : IPipelineModule<EnqueuePipelineModuleConfig>
     {
-        private readonly IEventsQueuesService m_EventsQueuesService;
+        private readonly IEventsQueuesService _eventsQueuesService;
 
         public EnqueuePipelineModule(IEventsQueuesService eventsQueuesService)
         {
-            m_EventsQueuesService = eventsQueuesService;
+            _eventsQueuesService = eventsQueuesService;
         }
         
         public Task InvokeAsync(
@@ -18,7 +18,7 @@ namespace FluentEvents.Pipelines.Queues
             NextModuleDelegate invokeNextModule
         )
         {
-            m_EventsQueuesService.EnqueueEvent(
+            _eventsQueuesService.EnqueueEvent(
                 pipelineContext.EventsScope,
                 pipelineContext.PipelineEvent,
                 config.QueueName,

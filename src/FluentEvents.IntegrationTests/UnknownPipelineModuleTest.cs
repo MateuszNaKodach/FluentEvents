@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines;
@@ -14,8 +11,8 @@ namespace FluentEvents.IntegrationTests
     [TestFixture]
     public class UnknownPipelineModuleTest
     {
-        private TestEventsContext m_TestEventsContext;
-        private EventsScope m_EventsScope;
+        private TestEventsContext _testEventsContext;
+        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -25,8 +22,8 @@ namespace FluentEvents.IntegrationTests
             services.AddEventsContext<TestEventsContext>(options => { });
 
             var serviceProvider = services.BuildServiceProvider();
-            m_TestEventsContext = serviceProvider.GetService<TestEventsContext>();
-            m_EventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
+            _testEventsContext = serviceProvider.GetService<TestEventsContext>();
+            _eventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
         }
 
         [Test]
@@ -34,7 +31,7 @@ namespace FluentEvents.IntegrationTests
         {
             Assert.That(() =>
             {
-                TestUtils.AttachAndRaiseEvent(m_TestEventsContext, m_EventsScope);
+                TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
             }, Throws.TypeOf<PipelineModuleNotFoundException>());
         }
 
@@ -44,7 +41,7 @@ namespace FluentEvents.IntegrationTests
             {
                 var pipelineBuilder = pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsForwardedToPipeline();
+                    .IsWatched();
 
                 var pipeline = pipelineBuilder.Get<IPipeline>();
 

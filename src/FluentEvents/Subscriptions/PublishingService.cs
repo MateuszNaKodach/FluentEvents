@@ -9,9 +9,9 @@ namespace FluentEvents.Subscriptions
     /// <inheritdoc />
     public class PublishingService : IPublishingService
     {
-        private readonly ILogger<PublishingService> m_Logger;
-        private readonly IGlobalSubscriptionCollection m_GlobalSubscriptionCollection;
-        private readonly ISubscriptionsMatchingService m_SubscriptionsMatchingService;
+        private readonly ILogger<PublishingService> _logger;
+        private readonly IGlobalSubscriptionCollection _globalSubscriptionCollection;
+        private readonly ISubscriptionsMatchingService _subscriptionsMatchingService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -23,9 +23,9 @@ namespace FluentEvents.Subscriptions
             ISubscriptionsMatchingService subscriptionsMatchingService
         )
         {
-            m_Logger = logger;
-            m_GlobalSubscriptionCollection = globalSubscriptionCollection;
-            m_SubscriptionsMatchingService = subscriptionsMatchingService;
+            _logger = logger;
+            _globalSubscriptionCollection = globalSubscriptionCollection;
+            _subscriptionsMatchingService = subscriptionsMatchingService;
         }
 
         /// <inheritdoc />
@@ -38,13 +38,13 @@ namespace FluentEvents.Subscriptions
 
         /// <inheritdoc />
         public async Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
-            => await PublishInternalAsync(pipelineEvent, m_GlobalSubscriptionCollection.GetGlobalScopeSubscriptions());
+            => await PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalScopeSubscriptions());
 
         private async Task PublishInternalAsync(PipelineEvent pipelineEvent, IEnumerable<Subscription> subscriptions)
         {
-            m_Logger.PublishingEvent(pipelineEvent);
+            _logger.PublishingEvent(pipelineEvent);
 
-            var eventsSubscriptions = m_SubscriptionsMatchingService
+            var eventsSubscriptions = _subscriptionsMatchingService
                 .GetMatchingSubscriptionsForSender(subscriptions, pipelineEvent.OriginalSender);
 
             foreach (var eventsSubscription in eventsSubscriptions)
@@ -56,7 +56,7 @@ namespace FluentEvents.Subscriptions
                 catch (SubscriptionPublishAggregateException ex)
                 {
                     foreach (var innerException in ex.InnerExceptions)
-                        m_Logger.EventHandlerThrew(innerException);
+                        _logger.EventHandlerThrew(innerException);
                 }
             }
         }

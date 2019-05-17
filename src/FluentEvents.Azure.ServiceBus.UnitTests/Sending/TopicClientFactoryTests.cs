@@ -10,18 +10,18 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
     [TestFixture]
     public class TopicClientFactoryTests
     {
-        private TopicClientFactory m_TopicClientFactory;
+        private TopicClientFactory _topicClientFactory;
 
         [SetUp]
         public void SetUp()
         {
-            m_TopicClientFactory = new TopicClientFactory();
+            _topicClientFactory = new TopicClientFactory();
         }
 
         [Test]
         public void GetNew_ShouldReturnTopicClient()
         {
-            var topicClient = m_TopicClientFactory.GetNew(Constants.ValidConnectionString);
+            var topicClient = _topicClientFactory.GetNew(Constants.ValidConnectionString);
 
             Assert.That(topicClient, Is.TypeOf<TopicClient>());
         }

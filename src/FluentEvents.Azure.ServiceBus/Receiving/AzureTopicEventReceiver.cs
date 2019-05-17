@@ -11,14 +11,14 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     internal class AzureTopicEventReceiver : IEventReceiver
     {
-        private readonly AzureTopicEventReceiverConfig m_Config;
-        private readonly ILogger<AzureTopicEventReceiver> m_Logger;
-        private readonly IPublishingService m_PublishingService;
-        private readonly IEventsSerializationService m_EventsSerializationService;
-        private readonly ITopicSubscriptionsService m_TopicSubscriptionsService;
-        private readonly ISubscriptionClientFactory m_SubscriptionClientFactory;
+        private readonly AzureTopicEventReceiverConfig _config;
+        private readonly ILogger<AzureTopicEventReceiver> _logger;
+        private readonly IPublishingService _publishingService;
+        private readonly IEventsSerializationService _eventsSerializationService;
+        private readonly ITopicSubscriptionsService _topicSubscriptionsService;
+        private readonly ISubscriptionClientFactory _subscriptionClientFactory;
 
-        private ISubscriptionClient m_SubscriptionClient;
+        private ISubscriptionClient _subscriptionClient;
 
         public AzureTopicEventReceiver(
             ILogger<AzureTopicEventReceiver> logger,
@@ -29,57 +29,57 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             ISubscriptionClientFactory subscriptionClientFactory
         )
         {
-            m_Config = config.Value;
-            m_Logger = logger;
-            m_PublishingService = publishingService;
-            m_EventsSerializationService = eventsSerializationService;
-            m_TopicSubscriptionsService = topicSubscriptionsService;
-            m_SubscriptionClientFactory = subscriptionClientFactory;
+            _config = config.Value;
+            _logger = logger;
+            _publishingService = publishingService;
+            _eventsSerializationService = eventsSerializationService;
+            _topicSubscriptionsService = topicSubscriptionsService;
+            _subscriptionClientFactory = subscriptionClientFactory;
         }
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            var subscriptionName = m_Config.SubscriptionNameGenerator.Invoke();
+            var subscriptionName = _config.SubscriptionNameGenerator.Invoke();
 
-            await m_TopicSubscriptionsService.CreateSubscriptionAsync(
-                m_Config.ManagementConnectionString,
+            await _topicSubscriptionsService.CreateSubscriptionAsync(
+                _config.ManagementConnectionString,
                 subscriptionName,
-                m_Config.TopicPath,
-                m_Config.SubscriptionsAutoDeleteOnIdleTimeout,
+                _config.TopicPath,
+                _config.SubscriptionsAutoDeleteOnIdleTimeout,
                 cancellationToken
             );
 
-            m_SubscriptionClient = m_SubscriptionClientFactory.GetNew(
-                m_Config.ReceiveConnectionString,
+            _subscriptionClient = _subscriptionClientFactory.GetNew(
+                _config.ReceiveConnectionString,
                 subscriptionName
             );
 
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
-                MaxConcurrentCalls = m_Config.MaxConcurrentMessages,
+                MaxConcurrentCalls = _config.MaxConcurrentMessages,
                 AutoComplete = true
             };
 
-            m_SubscriptionClient.RegisterMessageHandler(HandleMessageAsync, messageHandlerOptions);
+            _subscriptionClient.RegisterMessageHandler(HandleMessageAsync, messageHandlerOptions);
         }
 
         private async Task HandleMessageAsync(Message message, CancellationToken token)
         {
             try
             {
-                var entityEvent = m_EventsSerializationService.DeserializeEvent(message.Body);
+                var entityEvent = _eventsSerializationService.DeserializeEvent(message.Body);
 
-                await m_PublishingService.PublishEventToGlobalSubscriptionsAsync(entityEvent);
+                await _publishingService.PublishEventToGlobalSubscriptionsAsync(entityEvent);
             }
             catch (Exception ex)
             {
-                m_Logger.MessagesProcessingThrew(ex, message.MessageId);
+                _logger.MessagesProcessingThrew(ex, message.MessageId);
             }
         }
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
-            m_Logger.ServiceBusExceptionReceived(
+            _logger.ServiceBusExceptionReceived(
                 exceptionReceivedEventArgs.Exception,
                 exceptionReceivedEventArgs.ExceptionReceivedContext
             );
@@ -88,7 +88,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         public async Task StopReceivingAsync(CancellationToken cancellationToken = default)
         {
-            await m_SubscriptionClient.CloseAsync();
+            await _subscriptionClient.CloseAsync();
         }
     }
 }

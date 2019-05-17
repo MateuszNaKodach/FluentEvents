@@ -14,11 +14,11 @@ namespace FluentEvents
     /// </summary>
     public class EventsScope
     {
-        private readonly IAppServiceProvider m_ScopedAppServiceProvider;
-        private readonly IEnumerable<EventsContext> m_EventsContexts;
+        private readonly IAppServiceProvider _scopedAppServiceProvider;
+        private readonly IEnumerable<EventsContext> _eventsContexts;
 
-        private readonly object m_SyncSubscriptions = new object();
-        private IEnumerable<Subscription> m_Subscriptions;
+        private readonly object _syncSubscriptions = new object();
+        private IEnumerable<Subscription> _subscriptions;
 
         internal IEventsQueueCollection EventsQueues { get; }
 
@@ -32,8 +32,8 @@ namespace FluentEvents
             IEventsQueueCollection eventsQueues
         ) 
         {
-            m_EventsContexts = eventsContexts;
-            m_ScopedAppServiceProvider = scopedAppServiceProvider;
+            _eventsContexts = eventsContexts;
+            _scopedAppServiceProvider = scopedAppServiceProvider;
             EventsQueues = eventsQueues;
         }
 
@@ -48,26 +48,26 @@ namespace FluentEvents
 
         internal virtual IEnumerable<Subscription> GetSubscriptions()
         {
-            lock (m_SyncSubscriptions)
+            lock (_syncSubscriptions)
             {
-                if (m_Subscriptions == null)
+                if (_subscriptions == null)
                 {
                     var subscriptions = new List<Subscription>();
-                    foreach (var eventsContext in m_EventsContexts)
+                    foreach (var eventsContext in _eventsContexts)
                     {
                         var scopedSubscriptionsService = eventsContext
                             .Get<IServiceProvider>()
                             .GetRequiredService<IScopedSubscriptionsService>();
 
                         subscriptions.AddRange(
-                            scopedSubscriptionsService.SubscribeServices(m_ScopedAppServiceProvider)
+                            scopedSubscriptionsService.SubscribeServices(_scopedAppServiceProvider)
                         );
                     }
 
-                    m_Subscriptions = subscriptions;
+                    _subscriptions = subscriptions;
                 }
 
-                return m_Subscriptions;
+                return _subscriptions;
             }
         }
     }
