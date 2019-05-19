@@ -2,7 +2,7 @@
 
 namespace WorkerSample.DomainModel
 {
-    internal class ProductSubscription
+    public class ProductSubscription
     {
         public int Id { get; private set; }
         public string CustomerEmailAddress { get; private set; }

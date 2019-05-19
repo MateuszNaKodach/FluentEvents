@@ -2,7 +2,7 @@
 
 namespace WorkerSample.DomainModel
 {
-    internal class ProductSubscriptionCancelledEventArgs
+    public class ProductSubscriptionCancelledEventArgs
     {
         public DateTime CancellationDateTime { get; set; }
     }

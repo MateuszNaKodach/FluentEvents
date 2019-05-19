@@ -5,7 +5,7 @@ using WorkerSample.DomainModel;
 
 namespace WorkerSample.Repositories
 {
-    internal class ProductSubscriptionsRepository : IProductSubscriptionsRepository
+    public class ProductSubscriptionsRepository : IProductSubscriptionsRepository
     {
         private readonly AppDbContext _appDbContext;
 

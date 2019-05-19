@@ -7,7 +7,7 @@ using WorkerSample.Events;
 
 namespace WorkerSample.Repositories
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         private readonly AppEventsContext _appEventsContext;
         private readonly EventsScope _eventsScope;

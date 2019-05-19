@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace WorkerSample.Mail
+namespace WorkerSample.Notifications
 {
-    internal class MailService : IMailService
+    public class MailService : IMailService
     {
         private readonly ILogger<MailService> _logger;
 

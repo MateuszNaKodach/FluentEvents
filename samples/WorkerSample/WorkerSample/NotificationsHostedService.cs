@@ -4,11 +4,11 @@ using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Hosting;
 using WorkerSample.DomainModel;
 using WorkerSample.Events;
-using WorkerSample.Mail;
+using WorkerSample.Notifications;
 
 namespace WorkerSample
 {
-    internal class NotificationsHostedService : IHostedService
+    public class NotificationsHostedService : IHostedService
     {
         private readonly AppEventsContext _appEventsContext;
         private readonly IMailService _mailService;

@@ -2,7 +2,7 @@
 
 namespace WorkerSample.DomainModel
 {
-    internal interface IProductSubscriptionCancellationService
+    public interface IProductSubscriptionCancellationService
     {
         void CancelExpiredSubscriptions(DateTime now);
     }

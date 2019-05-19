@@ -1,6 +1,6 @@
-﻿namespace WorkerSample.Mail
+﻿namespace WorkerSample.Notifications
 {
-    internal interface IMailService
+    public interface IMailService
     {
         void SendSubscriptionCancelledEmail(string emailAddress);
     }

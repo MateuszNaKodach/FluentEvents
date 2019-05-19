@@ -2,7 +2,7 @@
 
 namespace WorkerSample.DomainModel
 {
-    internal class ProductSubscriptionCancellationService : IProductSubscriptionCancellationService
+    public class ProductSubscriptionCancellationService : IProductSubscriptionCancellationService
     {
         private readonly IProductSubscriptionsRepository _productSubscriptionsRepository;
 

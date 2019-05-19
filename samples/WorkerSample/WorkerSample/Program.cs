@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WorkerSample.DomainModel;
 using WorkerSample.Events;
-using WorkerSample.Mail;
+using WorkerSample.Notifications;
 using WorkerSample.Repositories;
 
 namespace WorkerSample

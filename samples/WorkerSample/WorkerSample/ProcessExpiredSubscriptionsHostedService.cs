@@ -8,7 +8,7 @@ using WorkerSample.Repositories;
 
 namespace WorkerSample
 {
-    internal class ProcessExpiredSubscriptionsHostedService : IHostedService, IDisposable
+    public class ProcessExpiredSubscriptionsHostedService : IHostedService, IDisposable
     {
         private readonly IServiceProvider _serviceProvider;
         private Timer _timer;

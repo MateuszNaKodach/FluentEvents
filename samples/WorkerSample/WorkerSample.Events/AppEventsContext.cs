@@ -6,9 +6,9 @@ using WorkerSample.DomainModel;
 
 namespace WorkerSample.Events
 {
-    internal class AppEventsContext : EventsContext
+    public class AppEventsContext : EventsContext
     {
-        internal static string AfterSaveChangesQueueName { get; } = "AfterSaveChangesQueue";
+        public static string AfterSaveChangesQueueName { get; } = "AfterSaveChangesQueue";
 
         protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
         {
