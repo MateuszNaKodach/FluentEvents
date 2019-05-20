@@ -1375,5 +1375,15 @@
                 An exception thrown when using the dynamic object in ways that differ from using it as an event handler. 
             </summary>
         </member>
+        <member name="T:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException">
+            <summary>
+                An exception thrown when trying to select an event with a return type different from void or Task.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException.#ctor">
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException"/>
+            </summary>
+        </member>
     </members>
 </doc>

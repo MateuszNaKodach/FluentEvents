@@ -57,7 +57,8 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         {
             SetUpServiceProvider();
             SetUpSourceModelsService();
-            SetUpPipeline();
+            ProjectionPipelineModuleConfig config = null;
+            SetUpPipeline(callbackConfig => config = callbackConfig);
 
             var newEventPipelineConfigurator = _eventPipelineConfigurator.ThenIsProjected(
                 x => new ProjectedTestSource(),
@@ -65,7 +66,10 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 isEventFieldNameNull ? null : nameof(ProjectedTestSource.TestEvent2)
             );
 
-            AssertThatPipelineModuleIsAdded(newEventPipelineConfigurator);
+            var expectedEventFieldName = isEventFieldNameNull
+                ? nameof(ProjectedTestSource.TestEvent)
+                : nameof(ProjectedTestSource.TestEvent2);
+            AssertThatPipelineModuleIsAdded(newEventPipelineConfigurator, config, expectedEventFieldName);
         }
 
         [Test]
@@ -73,7 +77,8 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         {
             SetUpServiceProvider();
             SetUpSourceModelsService();
-            SetUpPipeline();
+            ProjectionPipelineModuleConfig config = null;
+            SetUpPipeline(callbackConfig => config = callbackConfig);
 
             _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IEventSelectionService)))
@@ -93,7 +98,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                 selectionAction
             );
 
-            AssertThatPipelineModuleIsAdded(newEventPipelineConfigurator);
+            AssertThatPipelineModuleIsAdded(newEventPipelineConfigurator, config, nameof(ProjectedTestSource.TestEvent2));
         }
 
         [Test]
@@ -137,19 +142,27 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         }
 
         private void AssertThatPipelineModuleIsAdded(
-            EventPipelineConfigurator<ProjectedTestSource, ProjectedTestEventArgs> newEventPipelineConfigurator
+            EventPipelineConfigurator<ProjectedTestSource, ProjectedTestEventArgs> newEventPipelineConfigurator,
+            ProjectionPipelineModuleConfig config,
+            string expectedEventFieldName
         )
         {
             Assert.That(
                 newEventPipelineConfigurator,
                 Is.TypeOf<EventPipelineConfigurator<ProjectedTestSource, ProjectedTestEventArgs>>()
             );
+            Assert.That(
+                config, 
+                Has
+                    .Property(nameof(ProjectionPipelineModuleConfig.ProjectedEventFieldName))
+                    .EqualTo(expectedEventFieldName)
+            );
             Assert.That(newEventPipelineConfigurator.Get<SourceModel>(), Is.EqualTo(_projectedSourceModel));
             Assert.That(newEventPipelineConfigurator.Get<IServiceProvider>(), Is.EqualTo(_serviceProviderMock.Object));
             Assert.That(newEventPipelineConfigurator.Get<IPipeline>(), Is.EqualTo(_pipelineMock.Object));
         }
 
-        private void SetUpPipeline()
+        private void SetUpPipeline(Action<ProjectionPipelineModuleConfig> callback)
         {
             _pipelineMock
                 .Setup(x =>
@@ -157,6 +170,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
                         It.IsAny<ProjectionPipelineModuleConfig>()
                     )
                 )
+                .Callback(callback)
                 .Verifiable();
         }
 

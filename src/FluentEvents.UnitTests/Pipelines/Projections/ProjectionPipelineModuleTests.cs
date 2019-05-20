@@ -9,6 +9,8 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
     [TestFixture]
     public class ProjectionPipelineModuleTests : PipelineModuleTestBase
     {
+        private readonly string _projectedEventFieldName = "eventName";
+
         private ProjectionPipelineModule _projectionPipelineModule;
         private ProjectionPipelineModuleConfig _projectionPipelineModuleConfig;
         private Mock<IEventsSenderProjection> _eventSenderProjectionMock;
@@ -22,7 +24,8 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             _projectionPipelineModule = new ProjectionPipelineModule();
             _projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
                 _eventSenderProjectionMock.Object,
-                _eventArgsProjectionMock.Object
+                _eventArgsProjectionMock.Object,
+                _projectedEventFieldName
             );
         }
 
@@ -75,6 +78,11 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             Assert.That(
                 nextModuleContext.PipelineEvent,
                 Has.Property(nameof(PipelineEvent.OriginalEventArgs)).EqualTo(projectedTestEventArgs)
+            );
+
+            Assert.That(
+                nextModuleContext.PipelineEvent,
+                Has.Property(nameof(PipelineEvent.OriginalEventFieldName)).EqualTo(_projectedEventFieldName)
             );
         }
 
