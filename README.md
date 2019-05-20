@@ -7,7 +7,7 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 
 #### FluentEvents can:
 - Simplify **domain events pattern** implementation allowing to create a **fully encapsulated domain model**.
-- Help when you have lots of objects that are potential event sources by centralizing the registration.
+- Help when you have lots of objects that are potential event sources by centralizing the registration logic.
 - Generalize events using projections.
 - Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
