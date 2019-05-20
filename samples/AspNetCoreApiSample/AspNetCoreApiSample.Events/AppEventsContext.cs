@@ -18,7 +18,10 @@ namespace AspNetCoreApiSample.Events
             pipelinesBuilder
                 .Event<Contract, ContractTerminatedEventArgs>((source, h) => source.Terminated += h)
                 .IsWatched()
+                // Publishing happens when the ProcessQueuedEventsAsync() method is called
+                // by the override of DbContext.SaveChangesAsync().
                 .ThenIsQueuedTo(AfterSaveChangesQueueName)
+                // Subscribers can now subscribe to ContractEvents using async event handlers.
                 .ThenIsProjected(
                     source => new ContractEvents
                     {
@@ -27,7 +30,8 @@ namespace AspNetCoreApiSample.Events
                     args => new ContractEvents.ContractTerminatedEventArgs
                     {
                         Reason = args.Reason
-                    }
+                    },
+                    (source, h) => source.Terminated += h
                 )
                 .ThenIsPublishedToGlobalSubscriptions();
         }
