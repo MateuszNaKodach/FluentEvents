@@ -30,9 +30,28 @@ namespace FluentEvents.UnitTests.Pipelines
         }
 
         [Test]
-        public void AddModuleConfig_ShouldAdd()
+        public void AddModuleConfig_WithModuleFoundByServiceProvider_ShouldAdd()
         {
+            _internalServiceProviderMock
+                .Setup(x => x.GetService(typeof(PipelineModule1)))
+                .Returns(new PipelineModule1())
+                .Verifiable();
+
             _pipeline.AddModule<PipelineModule1, object>(new object());
+        }
+
+        [Test]
+        public void AddModuleConfig_WithModuleNotFoundByServiceProvider_ShouldThrow()
+        {
+            _internalServiceProviderMock
+                .Setup(x => x.GetService(typeof(PipelineModule1)))
+                .Returns(null)
+                .Verifiable();
+
+            Assert.That(() =>
+            {
+                _pipeline.AddModule<PipelineModule1, object>(new object());
+            }, Throws.TypeOf<PipelineModuleNotFoundException>());
         }
 
         [Test]
@@ -85,7 +104,7 @@ namespace FluentEvents.UnitTests.Pipelines
         private Mock<IPipelineModule<object>> SetUpPipelineModule(int index)
         {
             var pipelineModuleMock = new Mock<IPipelineModule<object>>(MockBehavior.Strict);
-            var module = AddModule(index);
+            var module = AddModule(index, pipelineModuleMock);
 
             pipelineModuleMock
                 .Setup(x => x.InvokeAsync(It.IsAny<object>(), It.IsAny<PipelineContext>(), It.IsAny<NextModuleDelegate>()))
@@ -99,35 +118,38 @@ namespace FluentEvents.UnitTests.Pipelines
                 .Returns(new LoggerFactory().CreateLogger(loggerType))
                 .Verifiable();
 
-            _internalServiceProviderMock
-                .Setup(x => x.GetService(module.GetType()))
-                .Returns(pipelineModuleMock.Object)
-                .Verifiable();
-
             return pipelineModuleMock;
         }
 
-        private object AddModule(int index)
+        private object AddModule(int index, Mock<IPipelineModule<object>> pipelineModuleMock)
         {
             IPipelineModule<object> module;
+
+            T SetUpServiceProviderAndAddModule<T>(T moduleToAdd) where T : IPipelineModule<object>
+            {
+                _internalServiceProviderMock
+                    .Setup(x => x.GetService(typeof(T)))
+                    .Returns(pipelineModuleMock.Object)
+                    .Verifiable();
+
+                _pipeline.AddModule<T, object>(new object());
+               
+                return moduleToAdd;
+            }
 
             switch (index)
             {
                 case 0:
-                    module = new PipelineModule1();
-                    _pipeline.AddModule<PipelineModule1, object>(new object());
+                    module = SetUpServiceProviderAndAddModule(new PipelineModule1());
                     break;
                 case 1:
-                    module = new PipelineModule2();
-                    _pipeline.AddModule<PipelineModule2, object>(new object());
+                    module = SetUpServiceProviderAndAddModule(new PipelineModule2());
                     break;
                 case 2:
-                    module = new PipelineModule3();
-                    _pipeline.AddModule<PipelineModule3, object>(new object());
+                    module = SetUpServiceProviderAndAddModule(new PipelineModule3());
                     break;
                 case 3:
-                    module = new PipelineModule4();
-                    _pipeline.AddModule<PipelineModule4, object>(new object());
+                    module = SetUpServiceProviderAndAddModule(new PipelineModule4());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

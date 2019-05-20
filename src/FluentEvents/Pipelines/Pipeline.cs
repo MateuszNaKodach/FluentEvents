@@ -35,6 +35,10 @@ namespace FluentEvents.Pipelines
             if (moduleConfig == null)
                 throw new ArgumentNullException(nameof(moduleConfig));
 
+            var module = _internalServiceProvider.GetService(typeof(TModule));
+            if (module == null)
+                throw new PipelineModuleNotFoundException();
+
             _moduleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
         }
 
@@ -99,10 +103,8 @@ namespace FluentEvents.Pipelines
 
             public override Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next)
             {
-                var module = (IPipelineModule<TConfig>) pipelineContext.ServiceProvider.GetService(Type);
-                if (module == null)
-                    throw new PipelineModuleNotFoundException();
-
+                var module = (IPipelineModule<TConfig>) pipelineContext.ServiceProvider.GetRequiredService(Type);
+           
                 return module.InvokeAsync(_config, pipelineContext, next);
             }
         }
