@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Azure.SignalR.Client
 {
-    internal interface IAzureSignalRClient
+    internal interface IEventSendingService
     {
         Task SendEventAsync(
             PublicationMethod publicationMethod,

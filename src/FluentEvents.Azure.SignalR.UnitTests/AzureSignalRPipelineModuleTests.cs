@@ -12,7 +12,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
     {
         private static readonly string[] _receiverIds = {"1", "2"};
 
-        private Mock<IAzureSignalRClient> _azureSignalRClientMock;
+        private Mock<IEventSendingService> _azureSignalRClientMock;
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IServiceProvider> _appServiceProviderMock;
         private Mock<EventsContext> _eventsContextMock;
@@ -27,7 +27,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         [SetUp]
         public void SetUp()
         {
-            _azureSignalRClientMock = new Mock<IAzureSignalRClient>(MockBehavior.Strict);
+            _azureSignalRClientMock = new Mock<IEventSendingService>(MockBehavior.Strict);
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _appServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);

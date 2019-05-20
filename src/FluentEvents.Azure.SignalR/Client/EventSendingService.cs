@@ -6,24 +6,24 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.SignalR.Client
 {
-    internal class AzureSignalRClient : IAzureSignalRClient
+    internal class EventSendingService : IEventSendingService
     {
         private static readonly string[] _nullReceiver = {null};
 
-        private readonly HttpClient _httpClient;
+        private readonly IAzureSignalRHttpClient _signalRHttpClient;
         private readonly IUrlProvider _urlProvider;
         private readonly IHttpRequestFactory _httpRequestFactory;
 
         private readonly ConnectionString _connectionString;
 
-        public AzureSignalRClient(
+        public EventSendingService(
             IOptions<AzureSignalRServiceConfig> config,
-            HttpClient httpClient,
+            IAzureSignalRHttpClient signalRHttpClient,
             IUrlProvider urlProvider,
             IHttpRequestFactory httpRequestFactory
         )
         {
-            _httpClient = httpClient;
+            _signalRHttpClient = signalRHttpClient;
             _httpRequestFactory = httpRequestFactory;
             _urlProvider = urlProvider;
             _connectionString = config.Value.ConnectionString;
@@ -55,7 +55,7 @@ namespace FluentEvents.Azure.SignalR.Client
                     url
                 );
 
-                var response = await _httpClient.SendAsync(request);
+                var response = await _signalRHttpClient.SendAsync(request);
                 try
                 {
                     response.EnsureSuccessStatusCode();

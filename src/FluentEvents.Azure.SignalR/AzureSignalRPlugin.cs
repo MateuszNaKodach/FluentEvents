@@ -39,13 +39,14 @@ namespace FluentEvents.Azure.SignalR
             else
                 services.Configure<AzureSignalRServiceConfig>(_configuration);
 
-            var httpClientBuilder = services.AddHttpClient<IAzureSignalRClient, AzureSignalRClient>();
+            var httpClientBuilder = services.AddHttpClient<IAzureSignalRHttpClient, AzureSignalRHttpClient>();
             _httpClientBuilderAction?.Invoke(httpClientBuilder);
 
             services.AddSingleton<IValidableConfig>(x =>
                 x.GetRequiredService<IOptions<AzureSignalRServiceConfig>>().Value
             );
             services.AddSingleton<AzureSignalRPipelineModule>();            
+            services.AddSingleton<IEventSendingService, EventSendingService>();
             services.AddSingleton<IUrlProvider, UrlProvider>();
             services.AddSingleton<IHttpRequestFactory, HttpRequestFactory>();
             services.AddSingleton<IAccessTokensService, AccessTokensService>();

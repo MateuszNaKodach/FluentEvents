@@ -6,11 +6,11 @@ namespace FluentEvents.Azure.SignalR
 {
     internal class AzureSignalRPipelineModule : IPipelineModule<AzureSignalRPipelineModuleConfig>
     {
-        private readonly IAzureSignalRClient _azureSignalRClient;
+        private readonly IEventSendingService _eventSendingService;
 
-        public AzureSignalRPipelineModule(IAzureSignalRClient azureSignalRClient)
+        public AzureSignalRPipelineModule(IEventSendingService eventSendingService)
         {
-            _azureSignalRClient = azureSignalRClient;
+            _eventSendingService = eventSendingService;
         }
 
         public async Task InvokeAsync(
@@ -19,7 +19,7 @@ namespace FluentEvents.Azure.SignalR
             NextModuleDelegate invokeNextModule
         )
         {
-            await _azureSignalRClient.SendEventAsync(
+            await _eventSendingService.SendEventAsync(
                 config.PublicationMethod,
                 config.HubName,
                 config.HubMethodName,
