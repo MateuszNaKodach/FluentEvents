@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using Microsoft.CSharp.RuntimeBinder;
@@ -29,7 +30,7 @@ namespace FluentEvents.Utils
             Action<TSource, object> subscriptionToDynamicAction
         )
         {
-            void WrappingSubscriptionToDynamicAction(object x)
+            void SubscriptionToDynamicActionWrapper(object x)
             {
                 try
                 {
@@ -44,7 +45,7 @@ namespace FluentEvents.Utils
             var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
                 sourceModel.ClrTypeFieldInfos,
-                WrappingSubscriptionToDynamicAction
+                SubscriptionToDynamicActionWrapper
             );
 
             return subscribedHandlers.Select(x => x.EventName);
@@ -66,15 +67,27 @@ namespace FluentEvents.Utils
 
             private Delegate CreateEventHandler(Type type)
             {
-                var eventHandlerParameters = type
-                    .GetMethod(nameof(EventHandler.Invoke))
+                var invokeMethod = type
+                    .GetMethod(nameof(EventHandler.Invoke));
+
+                var eventHandlerParameters = invokeMethod
                     .GetParameters()
                     .Select(parameter => Expression.Parameter(parameter.ParameterType))
                     .ToArray();
 
+                var returnType = invokeMethod.ReturnType;
+                Expression body;
+                
+                if (returnType == typeof(Task))
+                    body = Expression.Constant(Task.CompletedTask);
+                else if (returnType == typeof(void))
+                    body = Expression.Empty();
+                else
+                    throw new SelectedEventHasUnsupportedReturnTypeException();
+
                 var handler = Expression.Lambda(
                         type,
-                        Expression.Empty(),
+                        body,
                         eventHandlerParameters
                     )
                     .Compile();

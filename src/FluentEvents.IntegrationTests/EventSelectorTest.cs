@@ -25,7 +25,7 @@ namespace FluentEvents.IntegrationTests
         }
 
         [Test]
-        public void WhenEventSenderIsNotRegistered_OnBuildingPipelines_ShouldThrow()
+        public void EventSelector_WithSyncEvent_ShouldWork()
         {
             object receivedSender = null;
             TestEventArgs receivedEventArgs = null;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AsyncEvent;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using FluentEvents.Utils;
@@ -38,7 +39,8 @@ namespace FluentEvents.UnitTests.Utils
                 nameof(TestSource.TestEvent1),
                 nameof(TestSource.TestEvent2),
                 nameof(TestSource.TestEvent3),
-                nameof(TestSource.TestEvent4)
+                nameof(TestSource.TestEvent4),
+                nameof(TestSource.TestEvent5)
             )] string eventName
         )
         {
@@ -49,9 +51,30 @@ namespace FluentEvents.UnitTests.Utils
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
 
-            _eventSelectionService.GetSelectedEvents<TestSource>(
+            Action<TestSource, dynamic> subscriptionActionWithDynamic;
+            switch (eventName)
+            {
+                case nameof(TestSource.TestEvent1):
+                    subscriptionActionWithDynamic = (source, eventHandler) => source.TestEvent1 += eventHandler;
+                    break;
+                case nameof(TestSource.TestEvent2): 
+                    subscriptionActionWithDynamic = (source, eventHandler) => source.TestEvent2 += eventHandler;
+                    break;
+                case nameof(TestSource.TestEvent3): 
+                    subscriptionActionWithDynamic = (source, eventHandler) => source.TestEvent3 += eventHandler;
+                    break;
+                case nameof(TestSource.TestEvent4): 
+                    subscriptionActionWithDynamic = (source, eventHandler) => source.TestEvent4 += eventHandler;
+                    break;
+                case nameof(TestSource.TestEvent5):
+                    subscriptionActionWithDynamic = (source, eventHandler) => source.TestEvent5 += eventHandler;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(eventName));
+            }
+            _eventSelectionService.GetSelectedEvents(
                 _sourceModel,
-                (source, eventHandler) => source.TestEvent1 += (dynamic)eventHandler
+                subscriptionActionWithDynamic
             );
 
             var testSource = new TestSource();
@@ -84,6 +107,29 @@ namespace FluentEvents.UnitTests.Utils
             }, Throws.TypeOf<InvalidEventSelectionException>());
         }
 
+        [Test]
+        public void GetSelectedEvents_WithInvalidEventHandlerReturnType_ShouldThrow()
+        {
+            Action<object> subscriptionAction = null;
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
+                .Returns(new SubscribedHandler[0])
+                .Verifiable();
+
+            _eventSelectionService.GetSelectedEvents<TestSource>(
+                _sourceModel,
+                (source, h) => source.InvalidEventReturnType += (dynamic)h
+            );
+
+            var testSource = new TestSource();
+
+            Assert.That(() =>
+            {
+                subscriptionAction(testSource);
+            }, Throws.TypeOf<SelectedEventHasUnsupportedReturnTypeException>());
+        }
+
         private static TestCaseData[] InvalidSelectionActions => new[]
         {
             new TestCaseData(new Action<TestSource, dynamic>((source, eventHandler) => eventHandler.Invalid())),
@@ -95,7 +141,10 @@ namespace FluentEvents.UnitTests.Utils
             public event EventHandler TestEvent1;
             public event EventHandler<object> TestEvent2;
             public event Action<object, object> TestEvent3;
-            public event Func<Task, object, object> TestEvent4;
+            public event Func<object, object, Task> TestEvent4;
+            public event AsyncEventHandler<object> TestEvent5;
+
+            public event Func<object> InvalidEventReturnType;
 
             public Delegate[] GetMergedInvocationList()
                 => new Delegate[]
@@ -104,6 +153,7 @@ namespace FluentEvents.UnitTests.Utils
                         TestEvent2,
                         TestEvent3,
                         TestEvent4,
+                        TestEvent5,
                     }
                     .Where(x => x != null)
                     .SelectMany(x => x.GetInvocationList())
