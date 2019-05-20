@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncEvent" Version="0.2.0" />
-    <PackageReference Include="FluentEvents" Version="2.6.2" />
-    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="2.6.2" />
+    <PackageReference Include="FluentEvents" Version="2.6.5" />
+    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="2.6.5" />
   </ItemGroup>
 
   <ItemGroup>
