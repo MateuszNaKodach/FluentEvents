@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncEvent" Version="0.2.0" />
+    <PackageReference Include="FluentEvents" Version="2.6.2" />
+    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="2.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreApiSample.DomainModel\AspNetCoreApiSample.DomainModel.csproj" />
+  </ItemGroup>
+
+</Project>
