@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using WorkerSample.DomainModel;
 using WorkerSample.Repositories;
 
-namespace WorkerSample
+namespace WorkerSample.Worker
 {
     public class ProcessExpiredSubscriptionsHostedService : IHostedService, IDisposable
     {

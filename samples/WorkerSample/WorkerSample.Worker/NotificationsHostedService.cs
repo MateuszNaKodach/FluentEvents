@@ -6,7 +6,7 @@ using WorkerSample.DomainModel;
 using WorkerSample.Events;
 using WorkerSample.Notifications;
 
-namespace WorkerSample
+namespace WorkerSample.Worker
 {
     public class NotificationsHostedService : IHostedService
     {

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample", "WorkerSample\WorkerSample.csproj", "{4EE6F4FC-3FEA-4341-A93B-639F77666A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Worker", "WorkerSample.Worker\WorkerSample.Worker.csproj", "{4EE6F4FC-3FEA-4341-A93B-639F77666A9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerSample.DomainModel", "WorkerSample.DomainModel\WorkerSample.DomainModel.csproj", "{83D27712-455E-4BF4-978A-D67BF3553F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.DomainModel", "WorkerSample.DomainModel\WorkerSample.DomainModel.csproj", "{83D27712-455E-4BF4-978A-D67BF3553F81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerSample.Repositories", "WorkerSample.Repositories\WorkerSample.Repositories.csproj", "{86E355DB-E501-4EF5-954A-92A8D9341799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Repositories", "WorkerSample.Repositories\WorkerSample.Repositories.csproj", "{86E355DB-E501-4EF5-954A-92A8D9341799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerSample.Events", "WorkerSample.Events\WorkerSample.Events.csproj", "{5569F6C5-8620-4E4B-B93D-7304587C6CF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Events", "WorkerSample.Events\WorkerSample.Events.csproj", "{5569F6C5-8620-4E4B-B93D-7304587C6CF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerSample.Notifications", "WorkerSample.Notifications\WorkerSample.Notifications.csproj", "{0AFD3CB4-ED63-44F7-8A53-0C0044C1C93C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Notifications", "WorkerSample.Notifications\WorkerSample.Notifications.csproj", "{0AFD3CB4-ED63-44F7-8A53-0C0044C1C93C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

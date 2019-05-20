@@ -11,7 +11,7 @@ using WorkerSample.Events;
 using WorkerSample.Notifications;
 using WorkerSample.Repositories;
 
-namespace WorkerSample
+namespace WorkerSample.Worker
 {
     public static class Program
     {
@@ -41,6 +41,7 @@ namespace WorkerSample
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
                 {
+                    configLogging.SetMinimumLevel(LogLevel.Warning);
                     configLogging.AddConsole();
                 })
                 .UseConsoleLifetime()
