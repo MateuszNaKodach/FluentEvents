@@ -1,3 +1,5 @@
+## How to run the sample
+
 1. Set the connection strings in the [Secret Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=visual-studio#secret-manager) tool for .NET Core, and run this app.
 
 ```
