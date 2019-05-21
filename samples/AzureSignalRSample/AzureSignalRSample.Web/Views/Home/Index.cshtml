@@ -1,0 +1,33 @@
+﻿@model IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="center-block text-center">
+            <div class="light-bulb @(Model.LightBulbIsOn ? "is-on" : "is-off")" id="light-bulb">
+                <img src="images/light-bulb-on.svg" class="light-bulb-image light-bulb-image-on"/>
+                <img src="images/light-bulb-off.svg" class="light-bulb-image light-bulb-image-off"/>
+            </div>
+            <button type="button" class="btn btn-lg btn-info" id="toggle-light-bulb-with-signalr">Toggle with SignalR hub method</button>
+            <button type="button" class="btn btn-lg btn-primary" id="toggle-light-bulb-with-api">Toggle with API call</button>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="logs">
+            <textarea id="log-area" class="form-control" rows="20" readonly="readonly"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="modal alert alert-danger fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p>Connection Error...</p>
+                <p><strong>Hit Refresh/F5</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
