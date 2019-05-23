@@ -6,13 +6,13 @@
 FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
 
 #### FluentEvents can:
-- Simplify **domain events pattern** implementation allowing to create a **fully encapsulated domain model**.
-- Help when you have lots of objects that are potential event sources by centralizing the registration logic.
-- Generalize events using projections.
-- Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
-- Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
-- Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
-- Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) on every instance of your application transparently using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
+:heavy_check_mark: Simplify **domain events pattern** implementation allowing to create a **fully encapsulated domain model**.
+:heavy_check_mark: Help when you have lots of objects that are potential event sources by centralizing the registration logic.
+:heavy_check_mark: Generalize events using projections.
+:heavy_check_mark: Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
+:heavy_check_mark: Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
+:heavy_check_mark: Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
+:heavy_check_mark: Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) on every instance of your application transparently using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
 
 #### How it works:
 ```csharp
