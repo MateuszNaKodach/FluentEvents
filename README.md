@@ -12,7 +12,7 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 - :heavy_check_mark: Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
 - :heavy_check_mark: Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
 - :heavy_check_mark: Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
-- :heavy_check_mark: Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions) on every instance of your application transparently using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
+- :heavy_check_mark: Broadcast events to every instance of your application using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
 
 #### How it works:
 ```csharp
