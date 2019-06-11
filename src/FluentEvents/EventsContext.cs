@@ -174,12 +174,12 @@ namespace FluentEvents
         ///         );
         ///     </code>
         /// </example>
-        /// <remarks>You can call <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.</remarks>
+        /// <remarks>You can call <see cref="Unsubscribe"/> to stop receiving the events.</remarks>
         /// <typeparam name="TSource">The type of the events source.</typeparam>
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
         /// <returns>
         ///     The <see cref="ISubscriptionsCancellationToken"/> that should be passed to
-        ///     <see cref="CancelGlobalSubscriptions"/> to stop receiving the events.
+        ///     <see cref="Unsubscribe"/> to stop receiving the events.
         /// </returns>
         public ISubscriptionsCancellationToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
             => Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
@@ -189,14 +189,6 @@ namespace FluentEvents
         /// </summary>
         /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
         public void Unsubscribe(ISubscriptionsCancellationToken subscriptionsCancellationToken)
-            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscriptionsCancellationToken);
-
-        /// <summary>
-        ///     Cancels a global subscription.
-        /// </summary>
-        /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
-        [Obsolete("Use Unsubscribe()")]
-        public void CancelGlobalSubscriptions(ISubscriptionsCancellationToken subscriptionsCancellationToken)
             => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscriptionsCancellationToken);
     }
 }

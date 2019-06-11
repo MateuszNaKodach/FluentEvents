@@ -51,14 +51,5 @@ namespace FluentEvents.Config
                 this
             );
         }
-
-        /// <summary>
-        ///     This method creates a pipeline for the current event.
-        /// </summary>
-        /// <returns>
-        ///     An <see cref="EventPipelineConfigurator{TSource,TEventArgs}"/> to configure the modules of the pipeline.
-        /// </returns>
-        [Obsolete("Use IsWatched()")]
-        public EventPipelineConfigurator<TSource, TEventArgs> IsForwardedToPipeline() => IsWatched();
     }
 }
