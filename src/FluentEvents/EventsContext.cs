@@ -70,8 +70,10 @@ namespace FluentEvents
             IInternalServiceCollection internalServices
         )
         {
+#pragma warning disable IDE0016 // Use 'throw' expression
             if (options == null) throw new ArgumentNullException(nameof(options));
             if (internalServices == null) throw new ArgumentNullException(nameof(internalServices));
+#pragma warning restore IDE0016 // Use 'throw' expression
 
             _options = options;
             _internalServices = internalServices;
