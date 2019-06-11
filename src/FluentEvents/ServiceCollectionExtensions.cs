@@ -40,7 +40,7 @@ namespace FluentEvents
             var options = new EventsContextOptions();
             optionsBuilder(options);
 
-            services.AddScoped<EventsScope>();
+            services.TryAddScoped<EventsScope>();
             services.AddSingleton(x =>
             {
                 var context = ActivatorUtilities.CreateInstance<T>(x);
