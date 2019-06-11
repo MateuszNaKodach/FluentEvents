@@ -55,7 +55,7 @@ namespace FluentEvents.Azure.SignalR.Client
                     url
                 );
 
-                var response = await _signalRHttpClient.SendAsync(request);
+                var response = await _signalRHttpClient.SendAsync(request).ConfigureAwait(false);
                 try
                 {
                     response.EnsureSuccessStatusCode();

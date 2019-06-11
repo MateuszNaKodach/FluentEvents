@@ -29,9 +29,9 @@ namespace FluentEvents.Azure.SignalR
                 ),
                 pipelineContext.PipelineEvent.OriginalSender,
                 pipelineContext.PipelineEvent.OriginalEventArgs
-            );
+            ).ConfigureAwait(false);
 
-            await invokeNextModule(pipelineContext);
+            await invokeNextModule(pipelineContext).ConfigureAwait(false);
         }
     }
 }

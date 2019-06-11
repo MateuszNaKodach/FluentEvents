@@ -4,7 +4,7 @@ namespace FluentEvents.Pipelines.Projections
 {
     internal class ProjectionPipelineModule : IPipelineModule<ProjectionPipelineModuleConfig>
     {
-        public async Task InvokeAsync(
+        public Task InvokeAsync(
             ProjectionPipelineModuleConfig config,
             PipelineContext pipelineContext, 
             NextModuleDelegate invokeNextModule
@@ -21,7 +21,7 @@ namespace FluentEvents.Pipelines.Projections
             
             pipelineContext.PipelineEvent = projectedPipelineEvent;
 
-            await invokeNextModule(pipelineContext);
+            return invokeNextModule(pipelineContext);
         }
     }
 }

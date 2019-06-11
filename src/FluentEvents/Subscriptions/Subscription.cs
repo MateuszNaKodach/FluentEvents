@@ -46,10 +46,10 @@ namespace FluentEvents.Subscriptions
                     {
                         if (isAsync)
                         {
-                            await (Task) eventHandler.DynamicInvoke(
+                            await ((Task) eventHandler.DynamicInvoke(
                                 pipelineEvent.OriginalSender,
                                 pipelineEvent.OriginalEventArgs
-                            );
+                            )).ConfigureAwait(false);
                         }
                         else
                         {

@@ -21,9 +21,9 @@ namespace FluentEvents.Pipelines.Publication
             await _publishingService.PublishEventToScopedSubscriptionsAsync(
                 pipelineContext.PipelineEvent, 
                 pipelineContext.EventsScope
-            );
+            ).ConfigureAwait(false);
 
-            await invokeNextModule(pipelineContext);
+            await invokeNextModule(pipelineContext).ConfigureAwait(false);
         }
     }
 }

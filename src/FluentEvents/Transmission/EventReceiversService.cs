@@ -28,7 +28,7 @@ namespace FluentEvents.Transmission
             {
                 _logger.EventReceiverStarting(eventReceiver.GetType().Name);
 
-                await eventReceiver.StartReceivingAsync(cancellationToken);
+                await eventReceiver.StartReceivingAsync(cancellationToken).ConfigureAwait(false);
 
                 _logger.EventReceiverStarted(eventReceiver.GetType().Name);
             }
@@ -41,7 +41,7 @@ namespace FluentEvents.Transmission
             {
                 _logger.EventReceiverStopping(eventReceiver.GetType().Name);
 
-                await eventReceiver.StopReceivingAsync(cancellationToken);
+                await eventReceiver.StopReceivingAsync(cancellationToken).ConfigureAwait(false);
                 
                 _logger.EventReceiverStopped(eventReceiver.GetType().Name);
             }

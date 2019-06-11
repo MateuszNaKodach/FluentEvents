@@ -29,16 +29,16 @@ namespace FluentEvents.Subscriptions
         }
 
         /// <inheritdoc />
-        public async Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
+        public Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
-            await PublishInternalAsync(pipelineEvent, eventsScope.GetSubscriptions());
+            return PublishInternalAsync(pipelineEvent, eventsScope.GetSubscriptions());
         }
 
         /// <inheritdoc />
-        public async Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
-            => await PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalScopeSubscriptions());
+        public Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
+            => PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalScopeSubscriptions());
 
         private async Task PublishInternalAsync(PipelineEvent pipelineEvent, IEnumerable<Subscription> subscriptions)
         {
@@ -51,7 +51,7 @@ namespace FluentEvents.Subscriptions
             {
                 try
                 {
-                    await eventsSubscription.PublishEventAsync(pipelineEvent);
+                    await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
                 }
                 catch (SubscriptionPublishAggregateException ex)
                 {

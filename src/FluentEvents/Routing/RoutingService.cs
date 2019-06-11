@@ -41,7 +41,7 @@ namespace FluentEvents.Routing
                     foreach (var pipeline in field.Pipelines)
                     {
                         _logger.EventRoutedToPipeline();
-                        await pipeline.ProcessEventAsync(pipelineEvent, eventsScope);
+                        await pipeline.ProcessEventAsync(pipelineEvent, eventsScope).ConfigureAwait(false);
                     }
 
                     if (field.Pipelines.Any())

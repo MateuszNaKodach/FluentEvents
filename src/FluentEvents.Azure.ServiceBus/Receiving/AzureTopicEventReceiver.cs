@@ -47,7 +47,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
                 _config.TopicPath,
                 _config.SubscriptionsAutoDeleteOnIdleTimeout,
                 cancellationToken
-            );
+            ).ConfigureAwait(false);
 
             _subscriptionClient = _subscriptionClientFactory.GetNew(
                 _config.ReceiveConnectionString,
@@ -69,7 +69,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             {
                 var entityEvent = _eventsSerializationService.DeserializeEvent(message.Body);
 
-                await _publishingService.PublishEventToGlobalSubscriptionsAsync(entityEvent);
+                await _publishingService.PublishEventToGlobalSubscriptionsAsync(entityEvent).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -86,9 +86,9 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             return Task.CompletedTask;
         }
 
-        public async Task StopReceivingAsync(CancellationToken cancellationToken = default)
+        public Task StopReceivingAsync(CancellationToken cancellationToken = default)
         {
-            await _subscriptionClient.CloseAsync();
+            return _subscriptionClient.CloseAsync();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FluentEvents.Pipelines.Filters
         )
         {
             if (config.IsMatching(pipelineContext.PipelineEvent.OriginalSender, pipelineContext.PipelineEvent.OriginalEventArgs))
-                await invokeNextModule(pipelineContext);
+                await invokeNextModule(pipelineContext).ConfigureAwait(false);
         }
     }
 }

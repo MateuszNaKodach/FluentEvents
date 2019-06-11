@@ -43,13 +43,13 @@ namespace FluentEvents.Pipelines
         }
 
         /// <inheritdoc />
-        public async Task ProcessEventAsync(
+        public Task ProcessEventAsync(
             PipelineEvent pipelineEvent,
             EventsScope eventsScope
         )
         {
             var pipeline = _nextModule ?? (_nextModule = Build());
-            await pipeline(new PipelineContext(pipelineEvent, eventsScope, _internalServiceProvider));
+            return pipeline(new PipelineContext(pipelineEvent, eventsScope, _internalServiceProvider));
         }
 
         private NextModuleDelegate Build()

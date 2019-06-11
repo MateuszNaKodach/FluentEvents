@@ -26,13 +26,13 @@ namespace FluentEvents.Pipelines.Publication
         {
             if (config.SenderType != null)
                 if (_eventSenders.TryGetValue(config.SenderType, out var eventSender))
-                    await eventSender.SendAsync(pipelineContext.PipelineEvent);
+                    await eventSender.SendAsync(pipelineContext.PipelineEvent).ConfigureAwait(false);
                 else
                     throw new EventSenderNotFoundException();
             else
-                await _publishingService.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent);
+                await _publishingService.PublishEventToGlobalSubscriptionsAsync(pipelineContext.PipelineEvent).ConfigureAwait(false);
 
-            await invokeNextModule(pipelineContext);
+            await invokeNextModule(pipelineContext).ConfigureAwait(false);
         }
     }
 }

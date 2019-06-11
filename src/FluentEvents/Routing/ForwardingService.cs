@@ -30,8 +30,8 @@ namespace FluentEvents.Routing
                 void HandlerAction(object sender, object args) =>
                     AsyncHandlerAction(sender, args).GetAwaiter().GetResult();
 
-                async Task AsyncHandlerAction(object sender, object args) =>
-                    await _routingService.RouteEventAsync(
+                Task AsyncHandlerAction(object sender, object args) =>
+                    _routingService.RouteEventAsync(
                         new PipelineEvent(sourceModel.ClrType, eventField.FieldInfo.Name, sender, args),
                         eventsScope
                     );

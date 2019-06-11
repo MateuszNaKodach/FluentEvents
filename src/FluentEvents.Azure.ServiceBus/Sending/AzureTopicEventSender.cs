@@ -34,7 +34,7 @@ namespace FluentEvents.Azure.ServiceBus.Sending
                 MessageId = Guid.NewGuid().ToString()
             };
 
-            await _topicClient.SendAsync(message);
+            await _topicClient.SendAsync(message).ConfigureAwait(false);
 
             _logger.MessageSent(message.MessageId);
         }

@@ -25,12 +25,12 @@ namespace FluentEvents.Queues
                     throw new EventsQueueNotFoundException();
 
                 var eventsQueue = eventsScope.EventsQueues.GetOrAddEventsQueue(_eventsQueuesContext, queueName);
-                await ProcessQueue(eventsScope, eventsQueue);
+                await ProcessQueue(eventsScope, eventsQueue).ConfigureAwait(false);
             }
             else
             {
                 foreach (var eventsQueue in eventsScope.EventsQueues)
-                    await ProcessQueue(eventsScope, eventsQueue);
+                    await ProcessQueue(eventsScope, eventsQueue).ConfigureAwait(false);
             }
         }
 
@@ -40,7 +40,7 @@ namespace FluentEvents.Queues
             if (eventsQueue == null) throw new ArgumentNullException(nameof(eventsQueue));
 
             foreach (var queuedPipelineEvent in eventsQueue.DequeueAll())
-                await queuedPipelineEvent.InvokeNextModule();
+                await queuedPipelineEvent.InvokeNextModule().ConfigureAwait(false);
         }
 
         public void DiscardQueuedEvents(EventsScope eventsScope, string queueName)

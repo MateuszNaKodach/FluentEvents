@@ -26,7 +26,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
                         AutoDeleteOnIdle = autoDeleteOnIdleTimeout
                     },
                     cancellationToken
-                );
+                ).ConfigureAwait(false);
             }
             catch (ServiceBusException e)
             {
