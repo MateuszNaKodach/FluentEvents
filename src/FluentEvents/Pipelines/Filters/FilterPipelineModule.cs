@@ -4,14 +4,18 @@ namespace FluentEvents.Pipelines.Filters
 {
     internal class FilterPipelineModule : IPipelineModule<FilterPipelineModuleConfig>
     {
-        public async Task InvokeAsync(
+        public Task InvokeAsync(
             FilterPipelineModuleConfig config,
             PipelineContext pipelineContext, 
             NextModuleDelegate invokeNextModule
         )
         {
-            if (config.IsMatching(pipelineContext.PipelineEvent.OriginalSender, pipelineContext.PipelineEvent.OriginalEventArgs))
-                await invokeNextModule(pipelineContext).ConfigureAwait(false);
+            return config.IsMatching(
+                pipelineContext.PipelineEvent.OriginalSender,
+                pipelineContext.PipelineEvent.OriginalEventArgs
+            )
+                ? invokeNextModule(pipelineContext)
+                : Task.CompletedTask;
         }
     }
 }
