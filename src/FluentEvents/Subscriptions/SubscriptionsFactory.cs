@@ -32,8 +32,8 @@ namespace FluentEvents.Subscriptions
             var subscription = new Subscription(sourceType);
             var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
-                sourceModel.EventFields.Select(x => x.FieldInfo),
-                x => subscriptionAction((TSource)x)
+                sourceModel.ClrTypeFieldInfos,
+                x => subscriptionAction((TSource) x)
             );
 
             foreach (var subscribedHandler in subscribedHandlers)
