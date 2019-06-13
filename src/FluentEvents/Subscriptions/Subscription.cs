@@ -41,20 +41,9 @@ namespace FluentEvents.Subscriptions
 
                 foreach (var eventHandler in invocationList)
                 {
-                    var isAsync = eventHandler.Method.ReturnType == typeof(Task);
                     try
                     {
-                        if (isAsync)
-                        {
-                            await ((Task) eventHandler.DynamicInvoke(
-                                pipelineEvent.OriginalSender,
-                                pipelineEvent.OriginalEventArgs
-                            )).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
-                        }
+                        await InvokeEventHandlerAsync(pipelineEvent, eventHandler).ConfigureAwait(false);
                     }
                     catch (TargetInvocationException ex) when (ex.InnerException != null)
                     {
@@ -65,6 +54,23 @@ namespace FluentEvents.Subscriptions
                 if (exceptions.Any())
                     throw new SubscriptionPublishAggregateException(exceptions);
             }
+        }
+
+        private static Task InvokeEventHandlerAsync(PipelineEvent pipelineEvent, Delegate eventHandler)
+        {
+            var isAsync = eventHandler.Method.ReturnType == typeof(Task);
+
+            if (isAsync)
+            {
+                return (Task) eventHandler.DynamicInvoke(
+                    pipelineEvent.OriginalSender,
+                    pipelineEvent.OriginalEventArgs
+                );
+            }
+
+            eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+
+            return Task.CompletedTask;
         }
     }
 }
