@@ -3,16 +3,14 @@
 [![Build status](https://luca-s.visualstudio.com/FluentEvents/_apis/build/status/FluentEvents-CI)](https://luca-s.visualstudio.com/FluentEvents/_build/latest?definitionId=8) [![NuGet](https://img.shields.io/nuget/v/FluentEvents.svg)](https://www.nuget.org/packages/FluentEvents/)
 
 ### What is FluentEvents?
-FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework that simplifies event subscriptions when using Dependency Injection and ORMs making even easier to add real-time functionality to your applications.
+FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework for implementing [domain events and integration events](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/domain-events-design-implementation#domain-events-versus-integration-events) in DDD applications.
 
 #### FluentEvents can:
-- :heavy_check_mark: Simplify **domain events pattern** implementation allowing to create a **fully encapsulated domain model**.
-- :heavy_check_mark: Help when you have lots of objects that are potential event sources by centralizing the registration logic.
-- :heavy_check_mark: Generalize events using projections.
-- :heavy_check_mark: Publish events to [global subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Global-subscriptions).
-- :heavy_check_mark: Publish events to [scoped subscriptions](https://github.com/luca-esse/FluentEvents/wiki/Scoped-subscriptions).
-- :heavy_check_mark: Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised.
-- :heavy_check_mark: Broadcast events to every instance of your application using [Azure Service Bus topics](https://azure.microsoft.com/en-us/services/service-bus/). 
+- Dispatch domain events
+- Dispatch integration events
+- Dispatch Two-phase domain events ([A better domain events pattern](https://lostechies.com/jimmybogard/2014/05/13/a-better-domain-events-pattern/))
+- Generalize events using projections.
+- Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised. 
 
 #### How it works:
 ```csharp
@@ -34,17 +32,7 @@ public class NotificationsService
     {
         var order = (Order) order;
 
-        await _mailService.SendOrderShippedEmail(order.Buyer.EmailAddress, order.Code);
+        await _mailService.SendOrderShippedEmail(order.Customer.EmailAddress, order.Code);
     }
 }
 ```
-
-### NuGet Packages
-
-| Package                            | Version                                                                                                                                           |
-|------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
-| FluentEvents                       | [![NuGet](https://img.shields.io/nuget/v/FluentEvents.svg)](https://www.nuget.org/packages/FluentEvents/)                                         |
-| FluentEvents.EntityFramework       | [![NuGet](https://img.shields.io/nuget/v/FluentEvents.EntityFramework.svg)](https://www.nuget.org/packages/FluentEvents.EntityFramework/)         |
-| FluentEvents.EntityFrameworkCore   | [![NuGet](https://img.shields.io/nuget/v/FluentEvents.EntityFrameworkCore.svg)](https://www.nuget.org/packages/FluentEvents.EntityFrameworkCore/) |
-| FluentEvents.Azure.ServiceBus      | [![NuGet](https://img.shields.io/nuget/v/FluentEvents.Azure.ServiceBus.svg)](https://www.nuget.org/packages/FluentEvents.Azure.ServiceBus/)       |
-| FluentEvents.Azure.SignalR      | [![NuGet](https://img.shields.io/nuget/v/FluentEvents.Azure.SignalR.svg)](https://www.nuget.org/packages/FluentEvents.Azure.SignalR/)       |
