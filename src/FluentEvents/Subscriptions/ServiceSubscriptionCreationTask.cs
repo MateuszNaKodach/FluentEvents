@@ -4,12 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
 {
-    internal class SubscriptionCreationTask<TService, TSource> : ISubscriptionCreationTask
+    internal class ServiceSubscriptionCreationTask<TService, TSource> : ISubscriptionCreationTask
     {
         private readonly Action<TService, TSource> _subscriptionAction;
         private readonly ISubscriptionsFactory _subscriptionsFactory;
 
-        public SubscriptionCreationTask(
+        public ServiceSubscriptionCreationTask(
             Action<TService, TSource> subscriptionAction,
             ISubscriptionsFactory subscriptionsFactory
         )

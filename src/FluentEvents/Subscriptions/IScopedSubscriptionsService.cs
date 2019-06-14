@@ -22,6 +22,15 @@ namespace FluentEvents.Subscriptions
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        void ConfigureScopedServiceSubscription<TService, TSource, TEventArgs>(string eventName)
+            where TService : class, IEventHandler<TSource, TEventArgs>
+            where TSource : class
+            where TEventArgs : class;
+
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         IEnumerable<Subscription> SubscribeServices(IAppServiceProvider scopedAppServiceProvider);
     }
 }

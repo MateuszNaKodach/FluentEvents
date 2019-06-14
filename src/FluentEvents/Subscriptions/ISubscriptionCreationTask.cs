@@ -1,5 +1,4 @@
-﻿using System;
-using FluentEvents.Infrastructure;
+﻿using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Subscriptions
 {

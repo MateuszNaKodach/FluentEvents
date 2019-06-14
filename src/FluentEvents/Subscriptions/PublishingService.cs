@@ -38,7 +38,7 @@ namespace FluentEvents.Subscriptions
 
         /// <inheritdoc />
         public Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
-            => PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalScopeSubscriptions());
+            => PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalSubscriptions());
 
         private async Task PublishInternalAsync(PipelineEvent pipelineEvent, IEnumerable<Subscription> subscriptions)
         {

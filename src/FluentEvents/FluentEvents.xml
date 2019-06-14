@@ -22,13 +22,11 @@
                 An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.
             </returns>
         </member>
-        <member name="M:FluentEvents.Config.EventConfigurator`2.IsForwardedToPipeline">
+        <member name="T:FluentEvents.Config.EventNotConfiguredException">
             <summary>
-                This method creates a pipeline for the current event.
+                An exception thrown when referencing an event that was not
+                configured inside of the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
             </summary>
-            <returns>
-                An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.
-            </returns>
         </member>
         <member name="T:FluentEvents.Config.EventPipelineConfigurator`2">
             <summary>
@@ -126,12 +124,39 @@
             </param>
             <returns>The configuration object to add more subscriptions.</returns>
         </member>
+        <member name="T:FluentEvents.Config.ServiceHandlerConfigurator`3">
+            <summary>
+                Provides an API surface to configure the subscriptions of a service event handler.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscription(System.String)">
+            <summary>
+                Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
+            </summary>
+            <param name="eventName"></param>
+            <returns>The configuration object to add more subscriptions.</returns>
+            <exception cref="T:FluentEvents.Config.EventNotConfiguredException">
+                An event with the provided name wasn't configured
+                in the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
+            </exception>
+        </member>
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscription(System.String)">
+            <summary>
+                Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to scoped events.
+            </summary>
+            <param name="eventName"></param>
+            <returns>The configuration object to add more subscriptions.</returns>
+            <exception cref="T:FluentEvents.Config.EventNotConfiguredException">
+                An event with the provided name wasn't configured
+                in the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
+            </exception>
+        </member>
         <member name="T:FluentEvents.Config.SubscriptionsBuilder">
             <summary>
                 Provides a simple API surface to select a service and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.IScopedSubscriptionsService)">
+        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.IScopedSubscriptionsService,FluentEvents.Model.ISourceModelsService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -140,10 +165,19 @@
         <member name="M:FluentEvents.Config.SubscriptionsBuilder.Service``1">
             <summary>
                 Returns an object that can be used to configure subscriptions for a service.
-                configure multiple pipelines.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
             <returns>The configuration object for the specified service.</returns>
+        </member>
+        <member name="M:FluentEvents.Config.SubscriptionsBuilder.ServiceHandler``3">
+            <summary>
+                Returns an object that can be used to configure subscriptions for
+                an <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> method.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TSource">The type of the event source.</typeparam>
+            <typeparam name="TEventArgs">The type of the event args</typeparam>
+            <returns></returns>
         </member>
         <member name="T:FluentEvents.EventsContext">
             <summary>
@@ -248,21 +282,15 @@
                     );
                 </code>
             </example>
-            <remarks>You can call <see cref="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.</remarks>
+            <remarks>You can call <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.</remarks>
             <typeparam name="TSource">The type of the events source.</typeparam>
             <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
             <returns>
                 The <see cref="T:FluentEvents.Subscriptions.ISubscriptionsCancellationToken"/> that should be passed to
-                <see cref="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.
+                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.
             </returns>
         </member>
         <member name="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
-            <summary>
-                Cancels a global subscription.
-            </summary>
-            <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
             <summary>
                 Cancels a global subscription.
             </summary>
@@ -318,6 +346,23 @@
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
             </summary>
+        </member>
+        <member name="T:FluentEvents.IEventHandler`2">
+            <summary>
+                An interface implemented by a service to handle an event.
+                Note: the subscription should be configured in the
+                <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)"/> method.
+            </summary>
+            <typeparam name="TSource">The type of the event source.</typeparam>
+            <typeparam name="TEventArgs">the type of the event arguments.</typeparam>
+        </member>
+        <member name="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)">
+            <summary>
+                Handles an event.
+            </summary>
+            <param name="source">The source of the event.</param>
+            <param name="args">The arguments of the events.</param>
+            <returns></returns>
         </member>
         <member name="T:FluentEvents.Infrastructure.IAppServiceProvider">
             <summary>
@@ -800,21 +845,6 @@
                 Extension methods for adding a pipeline module that queues the events.
             </summary>
         </member>
-        <member name="M:FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions.ThenIsQueuedToDefaultQueue``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1})">
-            <summary>
-                Adds module to the current pipeline that queues the event in the default queue
-                and pauses the execution of the current pipeline until the event is dequeued.
-            </summary>
-            <remarks>The name of the default queue is "Default".</remarks>
-            <typeparam name="TSource">The type of the event source.</typeparam>
-            <typeparam name="TEventArgs">The type of the event args.</typeparam>
-            <param name="eventPipelineConfigurator">
-                The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> for the pipeline being configured.
-            </param>
-            <returns>
-                The same <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> instance so that multiple calls can be chained.
-            </returns>
-        </member>
         <member name="M:FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions.ThenIsQueuedTo``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.String)">
             <summary>
                 Adds module to the current pipeline that queues the event in a queue
@@ -1019,16 +1049,19 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalScopeSubscription``1(System.Action{``0})">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalSubscription``1(System.Action{``0})">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalScopeServiceSubscription``2(System.Action{``0,``1})">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalServiceHandlerSubscription``3(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.GetGlobalScopeSubscriptions">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.RemoveGlobalSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.GetGlobalSubscriptions">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Subscriptions.IGlobalSubscriptionCollection">
@@ -1037,25 +1070,31 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalScopeSubscription``1(System.Action{``0})">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalSubscription``1(System.Action{``0})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalScopeServiceSubscription``2(System.Action{``0,``1})">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.RemoveGlobalScopeSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalServiceHandlerSubscription``3(System.String)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.GetGlobalScopeSubscriptions">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.RemoveGlobalSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.GetGlobalSubscriptions">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1093,6 +1132,12 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceSubscription``3(System.String)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
         <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(FluentEvents.Infrastructure.IAppServiceProvider)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
@@ -1102,7 +1147,7 @@
         <member name="T:FluentEvents.Subscriptions.ISubscriptionsCancellationToken">
             <summary>
                 A token that can be used to cancel a global subscription with the
-                <see cref="M:FluentEvents.EventsContext.CancelGlobalSubscriptions(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> method.
+                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> method.
             </summary>
         </member>
         <member name="T:FluentEvents.Subscriptions.ISubscriptionScanService">
@@ -1118,6 +1163,12 @@
             </summary>
         </member>
         <member name="T:FluentEvents.Subscriptions.ISubscriptionsFactory">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Subscriptions.ISubscriptionsFactory.CreateSubscription``1(FluentEvents.Subscriptions.SubscribedHandler)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1223,6 +1274,9 @@
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
+        </member>
+        <member name="M:FluentEvents.Subscriptions.SubscriptionsFactory.CreateSubscription``1(FluentEvents.Subscriptions.SubscribedHandler)">
+            <inheritdoc />
         </member>
         <member name="M:FluentEvents.Subscriptions.SubscriptionsFactory.CreateSubscription``1(System.Action{``0})">
             <inheritdoc />

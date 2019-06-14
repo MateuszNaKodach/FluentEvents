@@ -22,6 +22,16 @@ namespace FluentEvents.Subscriptions
         }
 
         /// <inheritdoc />
+        public Subscription CreateSubscription<TSource>(SubscribedHandler subscribedHandler)
+        {
+            var subscription = new Subscription(typeof(TSource));
+
+            subscription.AddHandler(subscribedHandler.EventName, subscribedHandler.EventsHandler);
+
+            return subscription;
+        }
+
+        /// <inheritdoc />
         public Subscription CreateSubscription<TSource>(Action<TSource> subscriptionAction)
         {
             var sourceType = typeof(TSource);

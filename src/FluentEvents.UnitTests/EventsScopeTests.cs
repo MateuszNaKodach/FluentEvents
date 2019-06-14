@@ -91,7 +91,7 @@ namespace FluentEvents.UnitTests
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(null, null))
+                .Returns(new SubscriptionsBuilder(null, null, null))
                 .Verifiable();
 
             serviceProviderMock

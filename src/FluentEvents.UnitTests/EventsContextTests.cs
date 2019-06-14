@@ -204,7 +204,7 @@ namespace FluentEvents.UnitTests
             var subscription = new Subscription(typeof(object));
 
             _globalSubscriptionCollectionMock
-                .Setup(x => x.AddGlobalScopeSubscription(subscriptionAction))
+                .Setup(x => x.AddGlobalSubscription(subscriptionAction))
                 .Returns(subscription)
                 .Verifiable();
 
@@ -221,7 +221,7 @@ namespace FluentEvents.UnitTests
             var subscription = new Subscription(typeof(object));
 
             _globalSubscriptionCollectionMock
-                .Setup(x => x.RemoveGlobalScopeSubscription(subscription))
+                .Setup(x => x.RemoveGlobalSubscription(subscription))
                 .Verifiable();
 
             _eventsContext.Unsubscribe(subscription);
@@ -257,8 +257,10 @@ namespace FluentEvents.UnitTests
         {
             _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(_globalSubscriptionCollectionMock.Object,
-                    _scopedSubscriptionsServiceMock.Object
+                .Returns(new SubscriptionsBuilder(
+                    _globalSubscriptionCollectionMock.Object,
+                    _scopedSubscriptionsServiceMock.Object,
+                    _sourceModelsServiceMock.Object
                 ))
                 .Verifiable();
 

@@ -13,24 +13,33 @@ namespace FluentEvents.Subscriptions
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction);
+        Subscription AddGlobalSubscription<TSource>(Action<TSource> subscriptionAction);
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction);
+        void AddGlobalServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction);
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription);
+        void AddGlobalServiceHandlerSubscription<TService, TSource, TEventArgs>(string eventName)
+            where TService : class, IEventHandler<TSource, TEventArgs>
+            where TSource : class
+            where TEventArgs : class;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        IEnumerable<Subscription> GetGlobalScopeSubscriptions();
+        void RemoveGlobalSubscription(ISubscriptionsCancellationToken subscription);
+
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        IEnumerable<Subscription> GetGlobalSubscriptions();
     }
 }

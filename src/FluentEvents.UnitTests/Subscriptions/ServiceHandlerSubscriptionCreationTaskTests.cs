@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
@@ -7,8 +10,10 @@ using NUnit.Framework;
 namespace FluentEvents.UnitTests.Subscriptions
 {
     [TestFixture]
-    public class SubscriptionCreationTaskTests
+    public class ServiceHandlerSubscriptionCreationTaskTests
     {
+        private static readonly string _eventName = nameof(_eventName);
+
         private Mock<IAppServiceProvider> _appServiceProviderMock;
         private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
         private Subscription _subscription;
@@ -22,8 +27,8 @@ namespace FluentEvents.UnitTests.Subscriptions
             _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
             _subscription = new Subscription(typeof(object));
 
-            _subscriptionCreationTask = new SubscriptionCreationTask<TestService, object>(
-                (o, o1) => { },
+            _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object, object>(
+                _eventName,
                 _subscriptionsFactoryMock.Object
             );
         }
@@ -44,7 +49,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Verifiable();
 
             _subscriptionsFactoryMock
-                .Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()))
+                .Setup(x => x.CreateSubscription<object>(It.Is<SubscribedHandler>(y => y.EventName == _eventName)))
                 .Returns(_subscription)
                 .Verifiable();
 
@@ -67,6 +72,12 @@ namespace FluentEvents.UnitTests.Subscriptions
             }, Throws.TypeOf<SubscribingServiceNotFoundException>());
         }
 
-        public class TestService { }
+        private class TestService : IEventHandler<object, object>
+        {
+            public Task HandleEventAsync(object source, object args)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

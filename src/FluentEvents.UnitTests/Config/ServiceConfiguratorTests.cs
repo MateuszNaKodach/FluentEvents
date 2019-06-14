@@ -53,7 +53,7 @@ namespace FluentEvents.UnitTests.Config
             Action<TestService, TestSource> subscriptionAction = (service, source) => { };
 
             _globalSubscriptionCollection
-                .Setup(x => x.AddGlobalScopeServiceSubscription(subscriptionAction))
+                .Setup(x => x.AddGlobalServiceSubscription(subscriptionAction))
                 .Verifiable();
 
             _serviceConfigurator.HasGlobalSubscription(subscriptionAction);

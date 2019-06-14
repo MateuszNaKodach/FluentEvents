@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
@@ -34,41 +35,47 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
-        public void AddGlobalScopeSubscription_ShouldCreateSubscriptionAndAdd()
+        public void AddGlobalSubscription_ShouldCreateSubscriptionAndAdd()
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
             var returnedSubscription = _globalSubscriptionCollection
-                .AddGlobalScopeSubscription(action);
+                .AddGlobalSubscription(action);
 
             Assert.That(subscription, Is.EqualTo(returnedSubscription));
-            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items);
-            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
+            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Has.One.Items);
+            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
         }
 
         [Test]
-        public void AddGlobalScopeServiceSubscription_ShouldEnqueueSubscriptionCreation()
+        public void AddGlobalServiceSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionCollection.AddGlobalScopeServiceSubscription<object, object>((x, y) => { });
+            _globalSubscriptionCollection.AddGlobalServiceSubscription<TestService, object>((x, y) => { });
         }
 
         [Test]
-        public void RemoveGlobalScopeSubscription_ShouldRemove()
+        public void AddGlobalServiceHandlerSubscription_ShouldEnqueueSubscriptionCreation()
+        {
+            _globalSubscriptionCollection.AddGlobalServiceHandlerSubscription<TestService, object, object>("");
+        }
+
+        [Test]
+        public void RemoveGlobalSubscription_ShouldRemove()
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
             _globalSubscriptionCollection
-                .AddGlobalScopeSubscription(action);
+                .AddGlobalSubscription(action);
 
-            _globalSubscriptionCollection.RemoveGlobalScopeSubscription(subscription);
+            _globalSubscriptionCollection.RemoveGlobalSubscription(subscription);
 
-            Assert.That(_globalSubscriptionCollection.GetGlobalScopeSubscriptions(), Is.Empty);
+            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Is.Empty);
         }
 
         [Test]
-        public void GetGlobalScopeSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
+        public void GetGlobalSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
         {
-            _globalSubscriptionCollection.AddGlobalScopeServiceSubscription<TestService, object>((x, y) => {});
+            _globalSubscriptionCollection.AddGlobalServiceSubscription<TestService, object>((x, y) => {});
             SetUpSubscriptionsFactory(false);
 
             _appServiceProviderMock
@@ -76,10 +83,10 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Returns(new TestService())
                 .Verifiable();
 
-            var subscriptions = _globalSubscriptionCollection.GetGlobalScopeSubscriptions();
+            var subscriptions = _globalSubscriptionCollection.GetGlobalSubscriptions();
             Assert.That(subscriptions, Has.One.Items);
 
-            var secondCallSubscriptions = _globalSubscriptionCollection.GetGlobalScopeSubscriptions();
+            var secondCallSubscriptions = _globalSubscriptionCollection.GetGlobalSubscriptions();
             Assert.That(secondCallSubscriptions, Has.One.Items);
         }
 
@@ -98,8 +105,12 @@ namespace FluentEvents.UnitTests.Subscriptions
             return (action, subscription);
         }
 
-        private class TestService
+        private class TestService : IEventHandler<object, object>
         {
+            public Task HandleEventAsync(object source, object args)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

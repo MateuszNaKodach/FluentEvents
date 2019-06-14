@@ -81,8 +81,8 @@ namespace FluentEvents
 
         private void Build()
         {
-            OnBuildingSubscriptions(InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
             OnBuildingPipelines(InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
+            OnBuildingSubscriptions(InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
 
             foreach (var validableConfig in InternalServiceProvider.GetServices<IValidableConfig>())
                 validableConfig.Validate();
@@ -184,13 +184,13 @@ namespace FluentEvents
         ///     <see cref="Unsubscribe"/> to stop receiving the events.
         /// </returns>
         public ISubscriptionsCancellationToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
-            => Dependencies.GlobalSubscriptionCollection.AddGlobalScopeSubscription(subscriptionAction);
+            => Dependencies.GlobalSubscriptionCollection.AddGlobalSubscription(subscriptionAction);
 
         /// <summary>
         ///     Cancels a global subscription.
         /// </summary>
         /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
         public void Unsubscribe(ISubscriptionsCancellationToken subscriptionsCancellationToken)
-            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalScopeSubscription(subscriptionsCancellationToken);
+            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalSubscription(subscriptionsCancellationToken);
     }
 }

@@ -22,8 +22,21 @@ namespace FluentEvents.Subscriptions
             where TService : class
             where TSource : class
         {
-            var serviceSubscriptionTask = new SubscriptionCreationTask<TService, TSource>(
+            var serviceSubscriptionTask = new ServiceSubscriptionCreationTask<TService, TSource>(
                 subscriptionAction,
+                _subscriptionsFactory
+            );
+
+            _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
+        }
+
+        public void ConfigureScopedServiceSubscription<TService, TSource, TEventArgs>(string eventName)
+            where TService : class, IEventHandler<TSource, TEventArgs>
+            where TSource : class
+            where TEventArgs : class
+        {
+            var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TSource, TEventArgs>(
+                eventName,
                 _subscriptionsFactory
             );
 

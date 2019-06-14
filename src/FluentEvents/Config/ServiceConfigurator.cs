@@ -54,7 +54,7 @@ namespace FluentEvents.Config
         {
             if (subscriptionAction == null) throw new ArgumentNullException(nameof(subscriptionAction));
 
-            _globalSubscriptionCollection.AddGlobalScopeServiceSubscription(subscriptionAction);
+            _globalSubscriptionCollection.AddGlobalServiceSubscription(subscriptionAction);
             return this;
         }
     }

@@ -2,7 +2,9 @@
 
 namespace FluentEvents.IntegrationTests.Common
 {
-    public class SubscribingService
+    public class SubscribingService 
+        : IEventHandler<TestEntity, TestEventArgs>,
+            IEventHandler<ProjectedTestEntity, ProjectedEventArgs>
     {
         public TestEventArgs EventArgs { get; private set; }
         public ProjectedEventArgs ProjectedEventArgs { get; private set; }
@@ -46,6 +48,18 @@ namespace FluentEvents.IntegrationTests.Common
         private Task EntityOnAsyncTest(object sender, TestEventArgs e)
         {
             EventArgs = e;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleEventAsync(TestEntity source, TestEventArgs args)
+        {
+            EventArgs = args;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleEventAsync(ProjectedTestEntity source, ProjectedEventArgs args)
+        {
+            ProjectedEventArgs = args;
             return Task.CompletedTask;
         }
     }

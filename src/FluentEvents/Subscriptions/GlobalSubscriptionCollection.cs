@@ -8,7 +8,7 @@ namespace FluentEvents.Subscriptions
     /// <inheritdoc />
     public class GlobalSubscriptionCollection : IGlobalSubscriptionCollection
     {
-        private readonly ConcurrentDictionary<Subscription, bool> _globalScopeSubscriptions;
+        private readonly ConcurrentDictionary<Subscription, bool> _globalSubscriptions;
         private readonly ConcurrentQueue<ISubscriptionCreationTask> _subscriptionCreationTasks;
         private readonly ISubscriptionsFactory _subscriptionsFactory;
         private readonly IAppServiceProvider _appServiceProvider;
@@ -19,39 +19,50 @@ namespace FluentEvents.Subscriptions
         /// </summary>
         public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IAppServiceProvider appServiceProvider)
         {
-            _globalScopeSubscriptions = new ConcurrentDictionary<Subscription, bool>();
+            _globalSubscriptions = new ConcurrentDictionary<Subscription, bool>();
             _subscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
             _subscriptionsFactory = subscriptionsFactory;
             _appServiceProvider = appServiceProvider;
         }
 
         /// <inheritdoc />
-        public Subscription AddGlobalScopeSubscription<TSource>(Action<TSource> subscriptionAction)
+        public Subscription AddGlobalSubscription<TSource>(Action<TSource> subscriptionAction)
         {
             var subscription = _subscriptionsFactory.CreateSubscription(subscriptionAction);
-            _globalScopeSubscriptions.TryAdd(subscription, true);
+            _globalSubscriptions.TryAdd(subscription, true);
             return subscription;
         }
 
         /// <inheritdoc />
-        public void AddGlobalScopeServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
+        public void AddGlobalServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
         {
             _subscriptionCreationTasks.Enqueue(
-                new SubscriptionCreationTask<TService, TSource>(subscriptionAction, _subscriptionsFactory)
+                new ServiceSubscriptionCreationTask<TService, TSource>(subscriptionAction, _subscriptionsFactory)
             );
         }
 
         /// <inheritdoc />
-        public void RemoveGlobalScopeSubscription(ISubscriptionsCancellationToken subscription) 
-            => _globalScopeSubscriptions.TryRemove((Subscription)subscription, out _);
+        public void AddGlobalServiceHandlerSubscription<TService, TSource, TEventArgs>(string eventName)
+            where TService : class, IEventHandler<TSource, TEventArgs>
+            where TSource : class
+            where TEventArgs : class
+        {
+            _subscriptionCreationTasks.Enqueue(
+                new ServiceHandlerSubscriptionCreationTask<TService, TSource, TEventArgs>(eventName, _subscriptionsFactory)
+            );
+        }
 
         /// <inheritdoc />
-        public IEnumerable<Subscription> GetGlobalScopeSubscriptions()
+        public void RemoveGlobalSubscription(ISubscriptionsCancellationToken subscription) 
+            => _globalSubscriptions.TryRemove((Subscription)subscription, out _);
+
+        /// <inheritdoc />
+        public IEnumerable<Subscription> GetGlobalSubscriptions()
         {
             while (_subscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
-                _globalScopeSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(_appServiceProvider), true);
+                _globalSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(_appServiceProvider), true);
 
-            return _globalScopeSubscriptions.Keys;
+            return _globalSubscriptions.Keys;
         }
     }
 }

@@ -130,7 +130,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         public async Task PublishEventToGlobalSubscriptionsAsync_ShouldGetSubscriptionsFromGlobalScopeAndPublishToMatchingSubscriptions()
         {
             _globalSubscriptionCollectionMock
-                .Setup(x => x.GetGlobalScopeSubscriptions())
+                .Setup(x => x.GetGlobalSubscriptions())
                 .Returns(_subscriptions)
                 .Verifiable();
 

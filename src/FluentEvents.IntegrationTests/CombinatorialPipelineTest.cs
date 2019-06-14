@@ -80,7 +80,8 @@ namespace FluentEvents.IntegrationTests
             if (isQueued)
                 await _context.ProcessQueuedEventsAsync(_scope);
 
-            var subscribingService = publicationType == PublicationType.Scoped
+            var subscribingService = publicationType == PublicationType.ScopedWithServiceSubscription
+                                     || publicationType == PublicationType.ScopedWithServiceHandlerSubscription
                 ? _scopedSubscribingService
                 : _singletonSubscribingService;
 
@@ -150,9 +151,11 @@ namespace FluentEvents.IntegrationTests
 
         public enum PublicationType
         {
+            GlobalWithServiceHandlerSubscription,
             GlobalWithServiceSubscription,
             GlobalWithManualSubscription,
-            Scoped
+            ScopedWithServiceHandlerSubscription,
+            ScopedWithServiceSubscription,
         }
 
         private class TestRunParameters
@@ -178,28 +181,139 @@ namespace FluentEvents.IntegrationTests
                 if (_parameters.PublicationType == PublicationType.GlobalWithManualSubscription)
                     return;
 
-                subscriptionsBuilder
-                    .Service<ScopedSubscribingService>()
-                    .HasScopedSubscription<TestEntity>((service, entity) => service.Subscribe(entity))
-                    .HasScopedSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
-
-                subscriptionsBuilder
-                    .Service<SingletonSubscribingService>()
-                    .HasGlobalSubscription<TestEntity>((service, entity) => service.Subscribe(entity))
-                    .HasGlobalSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
-
                 if (!_parameters.IsProjected)
-                    return;
+                {
+                    if (_parameters.PublicationType == PublicationType.ScopedWithServiceSubscription)
+                        AddScopedServiceSubscription(subscriptionsBuilder);
 
-                subscriptionsBuilder
-                    .Service<ScopedSubscribingService>()
-                    .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity))
-                    .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                    if (_parameters.PublicationType == PublicationType.ScopedWithServiceHandlerSubscription)
+                        AddScopedServiceHandlerSubscription(subscriptionsBuilder);
 
-                subscriptionsBuilder
-                    .Service<SingletonSubscribingService>()
-                    .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity))
-                    .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                    if (_parameters.PublicationType == PublicationType.GlobalWithServiceSubscription)
+                        AddGlobalServiceSubscription(subscriptionsBuilder);
+
+                    if (_parameters.PublicationType == PublicationType.GlobalWithServiceHandlerSubscription)
+                        AddGlobalServiceHandlerSubscription(subscriptionsBuilder);
+                }
+
+                if (_parameters.IsProjected)
+                {
+                    if (_parameters.PublicationType == PublicationType.ScopedWithServiceSubscription)
+                        AddScopedServiceSubscriptionToProjection(subscriptionsBuilder);
+
+                    if (_parameters.PublicationType == PublicationType.ScopedWithServiceHandlerSubscription)
+                        AddScopedServiceHandlerSubscriptionToProjection(subscriptionsBuilder);
+
+                    if (_parameters.PublicationType == PublicationType.GlobalWithServiceSubscription)
+                        AddGlobalServiceSubscriptionToProjection(subscriptionsBuilder);
+
+                    if (_parameters.PublicationType == PublicationType.GlobalWithServiceHandlerSubscription)
+                        AddGlobalServiceHandlerSubscriptionToProjection(subscriptionsBuilder);
+                }
+            }
+
+            private void AddGlobalServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .ServiceHandler<SingletonSubscribingService, ProjectedTestEntity, ProjectedEventArgs>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasGlobalSubscription(nameof(ProjectedTestEntity.Test));
+                else
+                    serviceConfigurator
+                        .HasGlobalSubscription(nameof(ProjectedTestEntity.AsyncTest));
+            }
+
+            private void AddGlobalServiceSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .Service<SingletonSubscribingService>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
+                else
+                    serviceConfigurator
+                        .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+            }
+
+            private void AddScopedServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .ServiceHandler<ScopedSubscribingService, ProjectedTestEntity, ProjectedEventArgs>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasScopedSubscription(nameof(ProjectedTestEntity.Test));
+                else
+                    serviceConfigurator
+                        .HasScopedSubscription(nameof(ProjectedTestEntity.AsyncTest));
+            }
+
+            private void AddScopedServiceSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .Service<ScopedSubscribingService>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
+                else
+                    serviceConfigurator
+                        .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+            }
+
+            private void AddGlobalServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .ServiceHandler<SingletonSubscribingService, TestEntity, TestEventArgs>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasGlobalSubscription(nameof(TestEntity.Test));
+                else
+                    serviceConfigurator
+                        .HasGlobalSubscription(nameof(TestEntity.AsyncTest));
+            }
+
+            private void AddGlobalServiceSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .Service<SingletonSubscribingService>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasGlobalSubscription<TestEntity>((service, entity) => service.Subscribe(entity));
+                else
+                    serviceConfigurator
+                        .HasGlobalSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
+            }
+
+            private void AddScopedServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .ServiceHandler<ScopedSubscribingService, TestEntity, TestEventArgs>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasScopedSubscription(nameof(TestEntity.Test));
+                else
+                    serviceConfigurator
+                        .HasScopedSubscription(nameof(TestEntity.AsyncTest));
+            }
+
+            private void AddScopedServiceSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                var serviceConfigurator = subscriptionsBuilder
+                    .Service<ScopedSubscribingService>();
+
+                if (!_parameters.IsAsync)
+                    serviceConfigurator
+                        .HasScopedSubscription<TestEntity>((service, entity) => service.Subscribe(entity));
+                else
+                    serviceConfigurator
+                        .HasScopedSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
             }
 
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
@@ -241,9 +355,11 @@ namespace FluentEvents.IntegrationTests
                 {
                     case PublicationType.GlobalWithServiceSubscription:
                     case PublicationType.GlobalWithManualSubscription:
+                    case PublicationType.GlobalWithServiceHandlerSubscription:
                         pipelineConfigurator.ThenIsPublishedToGlobalSubscriptions();
                         break;
-                    case PublicationType.Scoped:
+                    case PublicationType.ScopedWithServiceHandlerSubscription:
+                    case PublicationType.ScopedWithServiceSubscription:
                         pipelineConfigurator.ThenIsPublishedToScopedSubscriptions();
                         break;
                     default:
