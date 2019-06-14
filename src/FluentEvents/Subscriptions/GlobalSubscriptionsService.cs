@@ -6,7 +6,7 @@ using FluentEvents.Infrastructure;
 namespace FluentEvents.Subscriptions
 {
     /// <inheritdoc />
-    public class GlobalSubscriptionCollection : IGlobalSubscriptionCollection
+    public class GlobalSubscriptionsService : IGlobalSubscriptionsService
     {
         private readonly ConcurrentDictionary<Subscription, bool> _globalSubscriptions;
         private readonly ConcurrentQueue<ISubscriptionCreationTask> _subscriptionCreationTasks;
@@ -17,7 +17,7 @@ namespace FluentEvents.Subscriptions
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public GlobalSubscriptionCollection(ISubscriptionsFactory subscriptionsFactory, IAppServiceProvider appServiceProvider)
+        public GlobalSubscriptionsService(ISubscriptionsFactory subscriptionsFactory, IAppServiceProvider appServiceProvider)
         {
             _globalSubscriptions = new ConcurrentDictionary<Subscription, bool>();
             _subscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
@@ -53,8 +53,8 @@ namespace FluentEvents.Subscriptions
         }
 
         /// <inheritdoc />
-        public void RemoveGlobalSubscription(ISubscriptionsCancellationToken subscription) 
-            => _globalSubscriptions.TryRemove((Subscription)subscription, out _);
+        public void RemoveGlobalSubscription(Subscription subscription) 
+            => _globalSubscriptions.TryRemove(subscription, out _);
 
         /// <inheritdoc />
         public IEnumerable<Subscription> GetGlobalSubscriptions()

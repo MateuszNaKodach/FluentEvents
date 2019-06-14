@@ -23,7 +23,7 @@ namespace FluentEvents.UnitTests
         private Mock<IInternalServiceCollection> _internalServiceCollectionMock;
         private Mock<IServiceProvider> _internalServiceProviderMock;
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
-        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollectionMock;
+        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
         private Mock<IEventReceiversService> _eventReceiversServiceMock;
         private Mock<ISourceModelsService> _sourceModelsServiceMock;
         private Mock<IAttachingService> _attachingServiceMock;
@@ -42,7 +42,7 @@ namespace FluentEvents.UnitTests
             _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _internalServiceCollectionMock = new Mock<IInternalServiceCollection>(MockBehavior.Strict);
             _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            _globalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
             _eventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
             _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             _attachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
@@ -53,7 +53,7 @@ namespace FluentEvents.UnitTests
             _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
             _eventsContextDependencies = new EventsContextDependencies(
-                _globalSubscriptionCollectionMock.Object,
+                _globalSubscriptionsServiceMock.Object,
                 _eventReceiversServiceMock.Object,
                 _attachingServiceMock.Object,
                 _eventsQueuesServiceMock.Object
@@ -66,7 +66,7 @@ namespace FluentEvents.UnitTests
             _internalServiceProviderMock.Verify();
             _internalServiceCollectionMock.Verify();
             _scopedSubscriptionsServiceMock.Verify();
-            _globalSubscriptionCollectionMock.Verify();
+            _globalSubscriptionsServiceMock.Verify();
             _eventReceiversServiceMock.Verify();
             _sourceModelsServiceMock.Verify();
             _attachingServiceMock.Verify();
@@ -203,7 +203,7 @@ namespace FluentEvents.UnitTests
             Action<object> subscriptionAction = o => { };
             var subscription = new Subscription(typeof(object));
 
-            _globalSubscriptionCollectionMock
+            _globalSubscriptionsServiceMock
                 .Setup(x => x.AddGlobalSubscription(subscriptionAction))
                 .Returns(subscription)
                 .Verifiable();
@@ -220,7 +220,7 @@ namespace FluentEvents.UnitTests
 
             var subscription = new Subscription(typeof(object));
 
-            _globalSubscriptionCollectionMock
+            _globalSubscriptionsServiceMock
                 .Setup(x => x.RemoveGlobalSubscription(subscription))
                 .Verifiable();
 
@@ -258,7 +258,7 @@ namespace FluentEvents.UnitTests
             _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
                 .Returns(new SubscriptionsBuilder(
-                    _globalSubscriptionCollectionMock.Object,
+                    _globalSubscriptionsServiceMock.Object,
                     _scopedSubscriptionsServiceMock.Object,
                     _sourceModelsServiceMock.Object
                 ))

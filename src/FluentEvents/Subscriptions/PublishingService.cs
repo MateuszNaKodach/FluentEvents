@@ -10,7 +10,7 @@ namespace FluentEvents.Subscriptions
     public class PublishingService : IPublishingService
     {
         private readonly ILogger<PublishingService> _logger;
-        private readonly IGlobalSubscriptionCollection _globalSubscriptionCollection;
+        private readonly IGlobalSubscriptionsService _globalSubscriptionsService;
         private readonly ISubscriptionsMatchingService _subscriptionsMatchingService;
 
         /// <summary>
@@ -19,12 +19,12 @@ namespace FluentEvents.Subscriptions
         /// </summary>
         public PublishingService(
             ILogger<PublishingService> logger,
-            IGlobalSubscriptionCollection globalSubscriptionCollection,
+            IGlobalSubscriptionsService globalSubscriptionsService,
             ISubscriptionsMatchingService subscriptionsMatchingService
         )
         {
             _logger = logger;
-            _globalSubscriptionCollection = globalSubscriptionCollection;
+            _globalSubscriptionsService = globalSubscriptionsService;
             _subscriptionsMatchingService = subscriptionsMatchingService;
         }
 
@@ -38,7 +38,7 @@ namespace FluentEvents.Subscriptions
 
         /// <inheritdoc />
         public Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
-            => PublishInternalAsync(pipelineEvent, _globalSubscriptionCollection.GetGlobalSubscriptions());
+            => PublishInternalAsync(pipelineEvent, _globalSubscriptionsService.GetGlobalSubscriptions());
 
         private async Task PublishInternalAsync(PipelineEvent pipelineEvent, IEnumerable<Subscription> subscriptions)
         {

@@ -156,7 +156,7 @@
                 Provides a simple API surface to select a service and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.IScopedSubscriptionsService,FluentEvents.Model.ISourceModelsService)">
+        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.IScopedSubscriptionsService,FluentEvents.Model.ISourceModelsService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1040,61 +1040,61 @@
                 is not an instance of <see cref="P:FluentEvents.Subscriptions.Subscription.SourceType"/>.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.GlobalSubscriptionCollection">
+        <member name="T:FluentEvents.Subscriptions.GlobalSubscriptionsService">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.#ctor(FluentEvents.Subscriptions.ISubscriptionsFactory,FluentEvents.Infrastructure.IAppServiceProvider)">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.#ctor(FluentEvents.Subscriptions.ISubscriptionsFactory,FluentEvents.Infrastructure.IAppServiceProvider)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalSubscription``1(System.Action{``0})">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.AddGlobalSubscription``1(System.Action{``0})">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.AddGlobalServiceHandlerSubscription``3(System.String)">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.AddGlobalServiceHandlerSubscription``3(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.RemoveGlobalSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.RemoveGlobalSubscription(FluentEvents.Subscriptions.Subscription)">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionCollection.GetGlobalSubscriptions">
+        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.GetGlobalSubscriptions">
             <inheritdoc />
         </member>
-        <member name="T:FluentEvents.Subscriptions.IGlobalSubscriptionCollection">
+        <member name="T:FluentEvents.Subscriptions.IGlobalSubscriptionsService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalSubscription``1(System.Action{``0})">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionsService.AddGlobalSubscription``1(System.Action{``0})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionsService.AddGlobalServiceSubscription``2(System.Action{``0,``1})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.AddGlobalServiceHandlerSubscription``3(System.String)">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionsService.AddGlobalServiceHandlerSubscription``3(System.String)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.RemoveGlobalSubscription(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionsService.RemoveGlobalSubscription(FluentEvents.Subscriptions.Subscription)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionCollection.GetGlobalSubscriptions">
+        <member name="M:FluentEvents.Subscriptions.IGlobalSubscriptionsService.GetGlobalSubscriptions">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1126,13 +1126,13 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceSubscription``2(System.Action{``0,``1})">
+        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription``2(System.Action{``0,``1})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceSubscription``3(System.String)">
+        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription``3(System.String)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1195,7 +1195,7 @@
         <member name="T:FluentEvents.Subscriptions.PublishingService">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.PublishingService.#ctor(Microsoft.Extensions.Logging.ILogger{FluentEvents.Subscriptions.PublishingService},FluentEvents.Subscriptions.IGlobalSubscriptionCollection,FluentEvents.Subscriptions.ISubscriptionsMatchingService)">
+        <member name="M:FluentEvents.Subscriptions.PublishingService.#ctor(Microsoft.Extensions.Logging.ILogger{FluentEvents.Subscriptions.PublishingService},FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.ISubscriptionsMatchingService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

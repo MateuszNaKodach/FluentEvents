@@ -10,7 +10,7 @@ namespace FluentEvents.UnitTests.Config
     public class ServiceConfiguratorTests
     {
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
-        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollection;
+        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsService;
 
         private ServiceConfigurator<TestService> _serviceConfigurator;
 
@@ -18,11 +18,11 @@ namespace FluentEvents.UnitTests.Config
         public void SetUp()
         {
             _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            _globalSubscriptionCollection = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _globalSubscriptionsService = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
 
             _serviceConfigurator = new ServiceConfigurator<TestService>(
                 _scopedSubscriptionsServiceMock.Object,
-                _globalSubscriptionCollection.Object
+                _globalSubscriptionsService.Object
             );
         }
 
@@ -52,7 +52,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Action<TestService, TestSource> subscriptionAction = (service, source) => { };
 
-            _globalSubscriptionCollection
+            _globalSubscriptionsService
                 .Setup(x => x.AddGlobalServiceSubscription(subscriptionAction))
                 .Verifiable();
 

@@ -8,12 +8,12 @@ using NUnit.Framework;
 namespace FluentEvents.UnitTests.Subscriptions
 {
     [TestFixture]
-    public class GlobalSubscriptionCollectionTests
+    public class GlobalSubscriptionsServiceTests
     {
         private Mock<IAppServiceProvider> _appServiceProviderMock;
         private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
 
-        private GlobalSubscriptionCollection _globalSubscriptionCollection;
+        private GlobalSubscriptionsService _globalSubscriptionsService;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +21,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
             _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
 
-            _globalSubscriptionCollection = new GlobalSubscriptionCollection(
+            _globalSubscriptionsService = new GlobalSubscriptionsService(
                 _subscriptionsFactoryMock.Object,
                 _appServiceProviderMock.Object
             );
@@ -39,24 +39,24 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
-            var returnedSubscription = _globalSubscriptionCollection
+            var returnedSubscription = _globalSubscriptionsService
                 .AddGlobalSubscription(action);
 
             Assert.That(subscription, Is.EqualTo(returnedSubscription));
-            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Has.One.Items);
-            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
+            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Has.One.Items);
+            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
         }
 
         [Test]
         public void AddGlobalServiceSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionCollection.AddGlobalServiceSubscription<TestService, object>((x, y) => { });
+            _globalSubscriptionsService.AddGlobalServiceSubscription<TestService, object>((x, y) => { });
         }
 
         [Test]
         public void AddGlobalServiceHandlerSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionCollection.AddGlobalServiceHandlerSubscription<TestService, object, object>("");
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object, object>("");
         }
 
         [Test]
@@ -64,18 +64,18 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var (action, subscription) = SetUpSubscriptionsFactory(true);
 
-            _globalSubscriptionCollection
+            _globalSubscriptionsService
                 .AddGlobalSubscription(action);
 
-            _globalSubscriptionCollection.RemoveGlobalSubscription(subscription);
+            _globalSubscriptionsService.RemoveGlobalSubscription(subscription);
 
-            Assert.That(_globalSubscriptionCollection.GetGlobalSubscriptions(), Is.Empty);
+            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Is.Empty);
         }
 
         [Test]
         public void GetGlobalSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
         {
-            _globalSubscriptionCollection.AddGlobalServiceSubscription<TestService, object>((x, y) => {});
+            _globalSubscriptionsService.AddGlobalServiceSubscription<TestService, object>((x, y) => {});
             SetUpSubscriptionsFactory(false);
 
             _appServiceProviderMock
@@ -83,10 +83,10 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Returns(new TestService())
                 .Verifiable();
 
-            var subscriptions = _globalSubscriptionCollection.GetGlobalSubscriptions();
+            var subscriptions = _globalSubscriptionsService.GetGlobalSubscriptions();
             Assert.That(subscriptions, Has.One.Items);
 
-            var secondCallSubscriptions = _globalSubscriptionCollection.GetGlobalSubscriptions();
+            var secondCallSubscriptions = _globalSubscriptionsService.GetGlobalSubscriptions();
             Assert.That(secondCallSubscriptions, Has.One.Items);
         }
 

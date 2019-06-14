@@ -10,7 +10,7 @@ namespace FluentEvents.UnitTests.Config
     [TestFixture]
     public class SubscriptionsBuilderTests
     {
-        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollection;
+        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsService;
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsService;
         private Mock<ISourceModelsService> _sourceModelsService;
 
@@ -19,12 +19,12 @@ namespace FluentEvents.UnitTests.Config
         [SetUp]
         public void SetUp()
         {
-            _globalSubscriptionCollection = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _globalSubscriptionsService = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
             _scopedSubscriptionsService = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
             _sourceModelsService = new Mock<ISourceModelsService>(MockBehavior.Strict);
 
             _subscriptionsBuilder = new SubscriptionsBuilder(
-                _globalSubscriptionCollection.Object,
+                _globalSubscriptionsService.Object,
                 _scopedSubscriptionsService.Object,
                 _sourceModelsService.Object
             );

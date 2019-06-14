@@ -7,19 +7,19 @@ namespace FluentEvents.Infrastructure
 {
     internal class EventsContextDependencies : IEventsContextDependencies
     {
-        public IGlobalSubscriptionCollection GlobalSubscriptionCollection { get; }
+        public IGlobalSubscriptionsService GlobalSubscriptionsService { get; }
         public IEventReceiversService EventReceiversService { get; }
         public IAttachingService AttachingService { get; }
         public IEventsQueuesService EventsQueuesService { get; }
 
         public EventsContextDependencies(
-            IGlobalSubscriptionCollection globalSubscriptionCollection,
+            IGlobalSubscriptionsService globalSubscriptionsService,
             IEventReceiversService eventReceiversService, 
             IAttachingService attachingService,
             IEventsQueuesService eventsQueuesService
         )
         {
-            GlobalSubscriptionCollection = globalSubscriptionCollection;
+            GlobalSubscriptionsService = globalSubscriptionsService;
             EventReceiversService = eventReceiversService;
             AttachingService = attachingService;
             EventsQueuesService = eventsQueuesService;

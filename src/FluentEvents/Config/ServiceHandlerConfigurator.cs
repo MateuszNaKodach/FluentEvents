@@ -14,17 +14,17 @@ namespace FluentEvents.Config
         where TEventArgs : class
     {
         private readonly IScopedSubscriptionsService _scopedSubscriptionsService;
-        private readonly IGlobalSubscriptionCollection _globalSubscriptionCollection;
+        private readonly IGlobalSubscriptionsService _globalSubscriptionsService;
         private readonly ISourceModelsService _sourceModelsService;
 
         internal ServiceHandlerConfigurator(
             IScopedSubscriptionsService scopedSubscriptionsService, 
-            IGlobalSubscriptionCollection globalSubscriptionCollection,
+            IGlobalSubscriptionsService globalSubscriptionsService,
             ISourceModelsService sourceModelsService
         )
         {
             _scopedSubscriptionsService = scopedSubscriptionsService;
-            _globalSubscriptionCollection = globalSubscriptionCollection;
+            _globalSubscriptionsService = globalSubscriptionsService;
             _sourceModelsService = sourceModelsService;
         }
 
@@ -45,7 +45,7 @@ namespace FluentEvents.Config
             if (eventField == null)
                 throw new EventNotConfiguredException();
 
-            _globalSubscriptionCollection.AddGlobalServiceHandlerSubscription<TService, TSource, TEventArgs>(
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TService, TSource, TEventArgs>(
                 eventName
             );
 
@@ -69,7 +69,7 @@ namespace FluentEvents.Config
             if (eventField == null)
                 throw new EventNotConfiguredException();
 
-            _scopedSubscriptionsService.ConfigureScopedServiceSubscription<TService, TSource, TEventArgs>(
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<TService, TSource, TEventArgs>(
                 eventName
             );
 

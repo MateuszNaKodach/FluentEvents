@@ -30,7 +30,7 @@ namespace FluentEvents.Subscriptions
             _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
-        public void ConfigureScopedServiceSubscription<TService, TSource, TEventArgs>(string eventName)
+        public void ConfigureScopedServiceHandlerSubscription<TService, TSource, TEventArgs>(string eventName)
             where TService : class, IEventHandler<TSource, TEventArgs>
             where TSource : class
             where TEventArgs : class

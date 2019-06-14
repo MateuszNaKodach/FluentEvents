@@ -9,15 +9,15 @@ namespace FluentEvents.Config
     public class ServiceConfigurator<TService> where TService : class 
     {
         private readonly IScopedSubscriptionsService _scopedSubscriptionsService;
-        private readonly IGlobalSubscriptionCollection _globalSubscriptionCollection;
+        private readonly IGlobalSubscriptionsService _globalSubscriptionsService;
 
         internal ServiceConfigurator(
             IScopedSubscriptionsService scopedSubscriptionsService,
-            IGlobalSubscriptionCollection globalSubscriptionCollection
+            IGlobalSubscriptionsService globalSubscriptionsService
         )
         {
             _scopedSubscriptionsService = scopedSubscriptionsService;
-            _globalSubscriptionCollection = globalSubscriptionCollection;
+            _globalSubscriptionsService = globalSubscriptionsService;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace FluentEvents.Config
         {
             if (subscriptionAction == null) throw new ArgumentNullException(nameof(subscriptionAction));
 
-            _globalSubscriptionCollection.AddGlobalServiceSubscription(subscriptionAction);
+            _globalSubscriptionsService.AddGlobalServiceSubscription(subscriptionAction);
             return this;
         }
     }

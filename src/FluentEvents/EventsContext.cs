@@ -184,13 +184,13 @@ namespace FluentEvents
         ///     <see cref="Unsubscribe"/> to stop receiving the events.
         /// </returns>
         public ISubscriptionsCancellationToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
-            => Dependencies.GlobalSubscriptionCollection.AddGlobalSubscription(subscriptionAction);
+            => Dependencies.GlobalSubscriptionsService.AddGlobalSubscription(subscriptionAction);
 
         /// <summary>
         ///     Cancels a global subscription.
         /// </summary>
         /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
         public void Unsubscribe(ISubscriptionsCancellationToken subscriptionsCancellationToken)
-            => Dependencies.GlobalSubscriptionCollection.RemoveGlobalSubscription(subscriptionsCancellationToken);
+            => Dependencies.GlobalSubscriptionsService.RemoveGlobalSubscription((Subscription)subscriptionsCancellationToken);
     }
 }

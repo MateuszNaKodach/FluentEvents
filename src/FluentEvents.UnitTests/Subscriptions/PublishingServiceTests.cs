@@ -12,7 +12,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     public class PublishingServiceTests
     {
         private Mock<ILogger<PublishingService>> _loggerMock;
-        private Mock<IGlobalSubscriptionCollection> _globalSubscriptionCollectionMock;
+        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
         private Mock<ISubscriptionsMatchingService> _subscriptionsMatchingServiceMock;
         private Mock<EventsScope> _eventsScopeMock;
 
@@ -24,13 +24,13 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void SetUp()
         {
             _loggerMock = new Mock<ILogger<PublishingService>>(MockBehavior.Strict);
-            _globalSubscriptionCollectionMock = new Mock<IGlobalSubscriptionCollection>(MockBehavior.Strict);
+            _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
             _subscriptionsMatchingServiceMock = new Mock<ISubscriptionsMatchingService>(MockBehavior.Strict);
             _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
             _publishingService = new PublishingService(
                 _loggerMock.Object,
-                _globalSubscriptionCollectionMock.Object,
+                _globalSubscriptionsServiceMock.Object,
                 _subscriptionsMatchingServiceMock.Object
             );
 
@@ -68,7 +68,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void TearDown()
         {
             _loggerMock.Verify();
-            _globalSubscriptionCollectionMock.Verify();
+            _globalSubscriptionsServiceMock.Verify();
             _subscriptionsMatchingServiceMock.Verify();
             _eventsScopeMock.Verify();
         }
@@ -129,7 +129,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public async Task PublishEventToGlobalSubscriptionsAsync_ShouldGetSubscriptionsFromGlobalScopeAndPublishToMatchingSubscriptions()
         {
-            _globalSubscriptionCollectionMock
+            _globalSubscriptionsServiceMock
                 .Setup(x => x.GetGlobalSubscriptions())
                 .Returns(_subscriptions)
                 .Verifiable();

@@ -8,7 +8,7 @@ namespace FluentEvents.Infrastructure
 {
     internal interface IEventsContextDependencies
     {
-        IGlobalSubscriptionCollection GlobalSubscriptionCollection { get; }
+        IGlobalSubscriptionsService GlobalSubscriptionsService { get; }
         IEventReceiversService EventReceiversService { get; }
         IAttachingService AttachingService { get; }
         IEventsQueuesService EventsQueuesService { get; }
