@@ -13,8 +13,8 @@ namespace FluentEvents.UnitTests.Config
     [TestFixture]
     public class ServiceHandlerConfiguratorTests
     {
-        private string _event1Name = nameof(SourceEntity.Event);
-        private string _event2Name = nameof(SourceEntity.Event2);
+        private readonly string _event1Name = nameof(SourceEntity.Event);
+        private readonly string _event2Name = nameof(SourceEntity.Event2);
 
         private SourceModel _sourceModel;
         private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
