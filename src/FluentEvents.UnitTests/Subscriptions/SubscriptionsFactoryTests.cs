@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using Moq;
@@ -40,7 +41,19 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
-        public void CreateSubscription_ShouldScanSubscribedHandlersAndReturnNewSubscription()
+        public void CreateSubscription_WithSubscribedHandler_ShouldReturnNewSubscription()
+        {
+            var service = new SubscribingService();
+            Func<object, object, Task> action = service.HandleEventAsync;
+            var handler = Delegate.CreateDelegate(action.GetType(), service, action.Method);
+            
+            var subscription = _subscriptionsFactory.CreateSubscription<EventsSource>(new SubscribedHandler("", handler));
+
+            Assert.That(subscription, Is.Not.Null);
+        }
+
+        [Test]
+        public void CreateSubscription_WithSubscriptionAction_ShouldScanSubscribedHandlersAndReturnNewSubscription()
         {
             _sourceModelsServiceMock
                 .Setup(x => x.GetSourceModel(typeof(EventsSource)))
@@ -53,10 +66,35 @@ namespace FluentEvents.UnitTests.Subscriptions
                     It.Is<IEnumerable<FieldInfo>>(y => y.SequenceEqual(_sourceModel.EventFields.Select(z => z.FieldInfo))), 
                     It.IsAny<Action<object>>())
                 )
+                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => action(new EventsSource()))
                 .Returns(new List<SubscribedHandler>())
                 .Verifiable();
 
-            _subscriptionsFactory.CreateSubscription<EventsSource>(x => { });
+            var subscription = _subscriptionsFactory.CreateSubscription<EventsSource>(x => { });
+
+            Assert.That(subscription, Is.Not.Null);
+        }
+
+        [Test]
+        public void CreateSubscription_WithSubscriptionActionAndSourceModelNotConfigured_ShouldThrow()
+        {
+            _sourceModelsServiceMock
+                .Setup(x => x.GetSourceModel(typeof(EventsSource)))
+                .Returns<SourceModel>(null)
+                .Verifiable();
+
+            Assert.That(
+                () => _subscriptionsFactory.CreateSubscription<EventsSource>(x => { }),
+                Throws.TypeOf<SourceIsNotConfiguredException>()
+            );
+        }
+
+        private class SubscribingService : IEventHandler<object, object>
+        {
+            public Task HandleEventAsync(object source, object args)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private class EventsSource
