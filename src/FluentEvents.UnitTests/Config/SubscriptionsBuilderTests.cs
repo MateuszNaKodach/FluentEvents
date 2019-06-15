@@ -10,36 +10,36 @@ namespace FluentEvents.UnitTests.Config
     [TestFixture]
     public class SubscriptionsBuilderTests
     {
-        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsService;
-        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsService;
-        private Mock<IEventSelectionService> _eventSelectionService;
-        private Mock<ISourceModelsService> _sourceModelsService;
+        private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
+        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
+        private Mock<IEventSelectionService> _eventSelectionServiceMock;
+        private Mock<ISourceModelsService> _sourceModelsServiceMock;
 
         private SubscriptionsBuilder _subscriptionsBuilder;
 
         [SetUp]
         public void SetUp()
         {
-            _globalSubscriptionsService = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
-            _scopedSubscriptionsService = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
-            _eventSelectionService = new Mock<IEventSelectionService>(MockBehavior.Strict);
-            _sourceModelsService = new Mock<ISourceModelsService>(MockBehavior.Strict);
+            _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
+            _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
+            _eventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
+            _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
 
             _subscriptionsBuilder = new SubscriptionsBuilder(
-                _globalSubscriptionsService.Object,
-                _scopedSubscriptionsService.Object,
-                _sourceModelsService.Object,
-                _eventSelectionService.Object
+                _globalSubscriptionsServiceMock.Object,
+                _scopedSubscriptionsServiceMock.Object,
+                _sourceModelsServiceMock.Object,
+                _eventSelectionServiceMock.Object
             );
         }
 
         [TearDown]
         public void TearDown()
         {
-            _globalSubscriptionsService.Verify();
-            _scopedSubscriptionsService.Verify();
-            _eventSelectionService.Verify();
-            _sourceModelsService.Verify();
+            _globalSubscriptionsServiceMock.Verify();
+            _scopedSubscriptionsServiceMock.Verify();
+            _eventSelectionServiceMock.Verify();
+            _sourceModelsServiceMock.Verify();
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace FluentEvents.UnitTests.Config
         [Test]
         public void ServiceHandler_ShouldReturnServiceHandlerConfigurator()
         {
-            _sourceModelsService
+            _sourceModelsServiceMock
                 .Setup(x => x.GetOrCreateSourceModel(typeof(object)))
                 .Returns(new SourceModel(typeof(object)))
                 .Verifiable();
