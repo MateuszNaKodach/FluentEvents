@@ -260,7 +260,8 @@ namespace FluentEvents.UnitTests
                 .Returns(new SubscriptionsBuilder(
                     _globalSubscriptionsServiceMock.Object,
                     _scopedSubscriptionsServiceMock.Object,
-                    _sourceModelsServiceMock.Object
+                    _sourceModelsServiceMock.Object,
+                    _eventSelectionServiceMock.Object
                 ))
                 .Verifiable();
 
