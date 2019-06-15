@@ -6,9 +6,10 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
+using FluentEvents.Utils;
 using Microsoft.CSharp.RuntimeBinder;
 
-namespace FluentEvents.Utils
+namespace FluentEvents.Config
 {
     /// <inheritdoc />
     public class EventSelectionService : IEventSelectionService
@@ -49,6 +50,25 @@ namespace FluentEvents.Utils
             );
 
             return subscribedHandlers.Select(x => x.EventName);
+        }
+
+        /// <inheritdoc />
+        public string GetSingleSelectedEvent<TSource>(
+            SourceModel sourceModel, 
+            Action<TSource, object> subscriptionToDynamicAction
+        )
+        {
+            var eventFieldNames = GetSelectedEvents(sourceModel, subscriptionToDynamicAction);
+
+            if (eventFieldNames.Count() > 1)
+                throw new MoreThanOneEventSelectedException();
+
+            if (!eventFieldNames.Any())
+                throw new NoEventsSelectedException();
+
+            var eventFieldName = eventFieldNames.First();
+
+            return eventFieldName;
         }
 
         private class DynamicEventHandler : DynamicObject

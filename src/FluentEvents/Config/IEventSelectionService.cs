@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentEvents.Model;
-using FluentEvents.Subscriptions;
 
-namespace FluentEvents.Utils
+namespace FluentEvents.Config
 {
     /// <summary>
     ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -16,6 +15,15 @@ namespace FluentEvents.Utils
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         IEnumerable<string> GetSelectedEvents<TSource>(
+            SourceModel sourceModel,
+            Action<TSource, object> subscriptionToDynamicAction
+        );
+
+        /// <summary>
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        string GetSingleSelectedEvent<TSource>(
             SourceModel sourceModel,
             Action<TSource, object> subscriptionToDynamicAction
         );

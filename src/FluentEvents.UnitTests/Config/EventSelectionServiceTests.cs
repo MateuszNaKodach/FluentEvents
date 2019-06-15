@@ -4,13 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AsyncEvent;
+using FluentEvents.Config;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using FluentEvents.Utils;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Utils
+namespace FluentEvents.UnitTests.Config
 {
     [TestFixture]
     public class EventSelectionServiceTests
@@ -129,6 +130,50 @@ namespace FluentEvents.UnitTests.Utils
                 subscriptionAction(testSource);
             }, Throws.TypeOf<SelectedEventHasUnsupportedReturnTypeException>());
         }
+
+
+        [Test]
+        public void Event_WithMultipleEventsSelected_ShouldThrow()
+        {
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Returns(new[]
+                {
+                    new SubscribedHandler(nameof(TestSource.TestEvent1), null),
+                    new SubscribedHandler(nameof(TestSource.TestEvent2), null),
+                })
+                .Verifiable();
+
+            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler) => source.TestEvent1 += eventHandler;
+
+            Assert.That(() =>
+            {
+                _eventSelectionService.GetSingleSelectedEvent(
+                    _sourceModel,
+                    (Action<TestSource, dynamic>) SubscriptionActionWithDynamic
+                );
+            }, Throws.TypeOf<MoreThanOneEventSelectedException>());
+        }
+
+        [Test]
+        public void Event_WithNoEventsSelected_ShouldThrow()
+        {
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Returns(new SubscribedHandler[0])
+                .Verifiable();
+
+            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler) => source.TestEvent1 += eventHandler;
+
+            Assert.That(() =>
+            {
+                _eventSelectionService.GetSingleSelectedEvent(
+                    _sourceModel,
+                    (Action<TestSource, dynamic>)SubscriptionActionWithDynamic
+                );
+            }, Throws.TypeOf<NoEventsSelectedException>());
+        }
+
 
         private static TestCaseData[] InvalidSelectionActions => new[]
         {

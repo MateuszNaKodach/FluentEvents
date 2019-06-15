@@ -58,7 +58,13 @@ namespace FluentEvents.Pipelines.Projections
                 typeof(TToSource)
             );
 
-            return ThenIsProjected(eventPipelineConfigurator, senderConverter, eventArgsConverter, projectedSourceModel, eventFieldName);
+            return ThenIsProjected(
+                eventPipelineConfigurator,
+                senderConverter,
+                eventArgsConverter,
+                projectedSourceModel,
+                eventFieldName
+            );
         }
 
         /// <summary>
@@ -114,21 +120,16 @@ namespace FluentEvents.Pipelines.Projections
             var sourceModelsService = serviceProvider.GetRequiredService<ISourceModelsService>();
             var eventSelectionService = serviceProvider.GetRequiredService<IEventSelectionService>();
 
-            var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(
-                typeof(TToSource)
+            var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(typeof(TToSource));
+            var eventFieldName = eventSelectionService.GetSingleSelectedEvent(projectedSourceModel, eventSelectionAction);
+
+            return ThenIsProjected(
+                eventPipelineConfigurator, 
+                senderConverter,
+                eventArgsConverter, 
+                projectedSourceModel,
+                eventFieldName
             );
-
-            var eventFieldNames = eventSelectionService.GetSelectedEvents(projectedSourceModel, eventSelectionAction);
-
-            if (eventFieldNames.Count() > 1)
-                throw new MoreThanOneEventSelectedException();
-
-            if (!eventFieldNames.Any())
-                throw new NoEventsSelectedException();
-
-            var eventFieldName = eventFieldNames.FirstOrDefault();
-
-            return ThenIsProjected(eventPipelineConfigurator, senderConverter, eventArgsConverter, projectedSourceModel, eventFieldName);
         }
 
         private static EventPipelineConfigurator<TToSource, TToEventArgs> ThenIsProjected<TSource, TToSource, TEventArgs, TToEventArgs>(

@@ -57,8 +57,8 @@ namespace FluentEvents.UnitTests.Config
             Action<TestSource, dynamic> action = (source, eventHandler) => { };
 
             _eventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvents(_sourceModel, action))
-                .Returns(new [] { nameof(TestSource.TestEvent) })
+                .Setup(x => x.GetSingleSelectedEvent(_sourceModel, action))
+                .Returns(nameof(TestSource.TestEvent))
                 .Verifiable();
 
             var eventConfigurator = _pipelinesBuilder.Event<TestSource, TestEventArgs>(action);
@@ -93,48 +93,6 @@ namespace FluentEvents.UnitTests.Config
             {
                 _pipelinesBuilder.Event<TestSource, TestEventArgs>("Invalid");
             }, Throws.TypeOf<EventFieldNotFoundException>());
-        }
-
-        [Test]
-        public void Event_WithMultipleEventsSelected_ShouldThrow()
-        {
-            _sourceModelsServiceMock
-                .Setup(x => x.GetOrCreateSourceModel(typeof(TestSource)))
-                .Returns(_sourceModel)
-                .Verifiable();
-
-            Action<TestSource, dynamic> action = (source, eventHandler) => { };
-
-            _eventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvents(_sourceModel, action))
-                .Returns(new[] { nameof(TestSource.TestEvent), nameof(TestSource.TestEvent2) })
-                .Verifiable();
-
-            Assert.That(() =>
-            {
-                _pipelinesBuilder.Event<TestSource, TestEventArgs>(action);
-            }, Throws.TypeOf<MoreThanOneEventSelectedException>());
-        }
-
-        [Test]
-        public void Event_WithNoEventsSelected_ShouldThrow()
-        {
-            _sourceModelsServiceMock
-                .Setup(x => x.GetOrCreateSourceModel(typeof(TestSource)))
-                .Returns(_sourceModel)
-                .Verifiable();
-
-            Action<TestSource, dynamic> action = (source, eventHandler) => { };
-
-            _eventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvents(_sourceModel, action))
-                .Returns(new string[0])
-                .Verifiable();
-
-            Assert.That(() =>
-            {
-                _pipelinesBuilder.Event<TestSource, TestEventArgs>(action);
-            }, Throws.TypeOf<NoEventsSelectedException>());
         }
 
         [Test]
@@ -180,8 +138,8 @@ namespace FluentEvents.UnitTests.Config
             Action<TestSource, dynamic> action = (source, eventHandler) => { };
 
             _eventSelectionServiceMock
-                .Setup(x => x.GetSelectedEvents(_sourceModel, action))
-                .Returns(new[] { nameof(TestSource.TestEvent) })
+                .Setup(x => x.GetSingleSelectedEvent(_sourceModel, action))
+                .Returns(nameof(TestSource.TestEvent))
                 .Verifiable();
 
             Assert.That(() =>

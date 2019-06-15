@@ -76,15 +76,7 @@ namespace FluentEvents.Config
             if (eventSelectionAction == null) throw new ArgumentNullException(nameof(eventSelectionAction));
 
             var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(TSource));
-            var eventFieldNames = _eventSelectionService.GetSelectedEvents(sourceModel, eventSelectionAction);
-
-            if (eventFieldNames.Count() > 1)
-                throw new MoreThanOneEventSelectedException();
-
-            if (!eventFieldNames.Any())
-                throw new NoEventsSelectedException();
-
-            var eventFieldName = eventFieldNames.FirstOrDefault();
+            var eventFieldName = _eventSelectionService.GetSingleSelectedEvent(sourceModel, eventSelectionAction);
 
             return Event<TSource, TEventArgs>(sourceModel, eventFieldName);
         }
