@@ -121,7 +121,7 @@ namespace FluentEvents.Pipelines.Projections
             var eventSelectionService = serviceProvider.GetRequiredService<IEventSelectionService>();
 
             var projectedSourceModel = sourceModelsService.GetOrCreateSourceModel(typeof(TToSource));
-            var eventFieldName = eventSelectionService.GetSingleSelectedEvent(projectedSourceModel, eventSelectionAction);
+            var eventFieldName = eventSelectionService.GetSingleSelectedEventName(projectedSourceModel, eventSelectionAction);
 
             return ThenIsProjected(
                 eventPipelineConfigurator, 

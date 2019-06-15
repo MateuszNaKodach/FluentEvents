@@ -73,7 +73,7 @@ namespace FluentEvents.UnitTests.Config
                 default:
                     throw new ArgumentOutOfRangeException(nameof(eventName));
             }
-            _eventSelectionService.GetSelectedEvents(
+            _eventSelectionService.GetSelectedEventNames(
                 _sourceModel,
                 subscriptionActionWithDynamic
             );
@@ -95,7 +95,7 @@ namespace FluentEvents.UnitTests.Config
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
-            _eventSelectionService.GetSelectedEvents(
+            _eventSelectionService.GetSelectedEventNames(
                 _sourceModel,
                 selectionAction
             );
@@ -118,7 +118,7 @@ namespace FluentEvents.UnitTests.Config
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
-            _eventSelectionService.GetSelectedEvents<TestSource>(
+            _eventSelectionService.GetSelectedEventNames<TestSource>(
                 _sourceModel,
                 (source, h) => source.InvalidEventReturnType += (dynamic)h
             );
@@ -148,7 +148,7 @@ namespace FluentEvents.UnitTests.Config
 
             Assert.That(() =>
             {
-                _eventSelectionService.GetSingleSelectedEvent(
+                _eventSelectionService.GetSingleSelectedEventName(
                     _sourceModel,
                     (Action<TestSource, dynamic>) SubscriptionActionWithDynamic
                 );
@@ -167,7 +167,7 @@ namespace FluentEvents.UnitTests.Config
 
             Assert.That(() =>
             {
-                _eventSelectionService.GetSingleSelectedEvent(
+                _eventSelectionService.GetSingleSelectedEventName(
                     _sourceModel,
                     (Action<TestSource, dynamic>)SubscriptionActionWithDynamic
                 );

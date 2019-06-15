@@ -57,7 +57,7 @@ namespace FluentEvents.UnitTests.Config
             Action<TestSource, dynamic> action = (source, eventHandler) => { };
 
             _eventSelectionServiceMock
-                .Setup(x => x.GetSingleSelectedEvent(_sourceModel, action))
+                .Setup(x => x.GetSingleSelectedEventName(_sourceModel, action))
                 .Returns(nameof(TestSource.TestEvent))
                 .Verifiable();
 
@@ -138,7 +138,7 @@ namespace FluentEvents.UnitTests.Config
             Action<TestSource, dynamic> action = (source, eventHandler) => { };
 
             _eventSelectionServiceMock
-                .Setup(x => x.GetSingleSelectedEvent(_sourceModel, action))
+                .Setup(x => x.GetSingleSelectedEventName(_sourceModel, action))
                 .Returns(nameof(TestSource.TestEvent))
                 .Verifiable();
 

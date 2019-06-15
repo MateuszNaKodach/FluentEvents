@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using FluentEvents.Model;
-using FluentEvents.Utils;
 
 namespace FluentEvents.Config
 {
@@ -76,7 +74,7 @@ namespace FluentEvents.Config
             if (eventSelectionAction == null) throw new ArgumentNullException(nameof(eventSelectionAction));
 
             var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(TSource));
-            var eventFieldName = _eventSelectionService.GetSingleSelectedEvent(sourceModel, eventSelectionAction);
+            var eventFieldName = _eventSelectionService.GetSingleSelectedEventName(sourceModel, eventSelectionAction);
 
             return Event<TSource, TEventArgs>(sourceModel, eventFieldName);
         }
@@ -85,7 +83,8 @@ namespace FluentEvents.Config
             SourceModel sourceModel,
             string eventFieldName
         )
-            where TSource : class where TEventArgs : class
+            where TSource : class 
+            where TEventArgs : class
         {
             var eventField = sourceModel.GetOrCreateEventField(eventFieldName);
 

@@ -14,7 +14,7 @@ namespace FluentEvents.Config
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        IEnumerable<string> GetSelectedEvents<TSource>(
+        IEnumerable<string> GetSelectedEventNames<TSource>(
             SourceModel sourceModel,
             Action<TSource, object> subscriptionToDynamicAction
         );
@@ -23,7 +23,7 @@ namespace FluentEvents.Config
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        string GetSingleSelectedEvent<TSource>(
+        string GetSingleSelectedEventName<TSource>(
             SourceModel sourceModel,
             Action<TSource, object> subscriptionToDynamicAction
         );

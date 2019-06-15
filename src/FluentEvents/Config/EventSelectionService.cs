@@ -26,7 +26,7 @@ namespace FluentEvents.Config
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetSelectedEvents<TSource>(
+        public IEnumerable<string> GetSelectedEventNames<TSource>(
             SourceModel sourceModel,
             Action<TSource, object> subscriptionToDynamicAction
         )
@@ -53,12 +53,12 @@ namespace FluentEvents.Config
         }
 
         /// <inheritdoc />
-        public string GetSingleSelectedEvent<TSource>(
+        public string GetSingleSelectedEventName<TSource>(
             SourceModel sourceModel, 
             Action<TSource, object> subscriptionToDynamicAction
         )
         {
-            var eventFieldNames = GetSelectedEvents(sourceModel, subscriptionToDynamicAction);
+            var eventFieldNames = GetSelectedEventNames(sourceModel, subscriptionToDynamicAction);
 
             if (eventFieldNames.Count() > 1)
                 throw new MoreThanOneEventSelectedException();

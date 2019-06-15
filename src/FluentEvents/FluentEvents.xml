@@ -58,10 +58,10 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.EventSelectionService.GetSelectedEvents``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Config.EventSelectionService.GetSelectedEventNames``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Config.EventSelectionService.GetSingleSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Config.EventSelectionService.GetSingleSelectedEventName``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Config.IEventSelectionService">
@@ -70,13 +70,13 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.IEventSelectionService.GetSelectedEvents``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Config.IEventSelectionService.GetSelectedEventNames``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.IEventSelectionService.GetSingleSelectedEvent``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
+        <member name="M:FluentEvents.Config.IEventSelectionService.GetSingleSelectedEventName``1(FluentEvents.Model.SourceModel,System.Action{``0,System.Object})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using FluentEvents.Model;
+﻿using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Config
@@ -12,6 +11,7 @@ namespace FluentEvents.Config
         private readonly IGlobalSubscriptionsService _globalSubscriptionsService;
         private readonly IScopedSubscriptionsService _scopedSubscriptionsService;
         private readonly ISourceModelsService _sourceModelsService;
+        private readonly IEventSelectionService _eventSelectionService;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -20,12 +20,14 @@ namespace FluentEvents.Config
         public SubscriptionsBuilder(
             IGlobalSubscriptionsService globalSubscriptionsService,
             IScopedSubscriptionsService scopedSubscriptionsService,
-            ISourceModelsService sourceModelsService
+            ISourceModelsService sourceModelsService,
+            IEventSelectionService eventSelectionService
         )
         {
             _globalSubscriptionsService = globalSubscriptionsService;
             _scopedSubscriptionsService = scopedSubscriptionsService;
             _sourceModelsService = sourceModelsService;
+            _eventSelectionService = eventSelectionService;
         }
 
         /// <summary>
@@ -55,10 +57,13 @@ namespace FluentEvents.Config
             where TSource : class
             where TEventArgs : class
         {
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(typeof(TSource));
+
             return new ServiceHandlerConfigurator<TService, TSource, TEventArgs>(
+                sourceModel,
                 _scopedSubscriptionsService,
                 _globalSubscriptionsService,
-                _sourceModelsService
+                _eventSelectionService
             );
         }
     }
