@@ -40,7 +40,7 @@ namespace FluentEvents.UnitTests.Model
                     );
                 }, Throws.TypeOf<InvalidEventHandlerReturnTypeException>());
         }
-        
+
         private delegate void EventHandlerWithInvalidArgs<in TEventArgs>(object sender, TEventArgs e, object invalidArg);
 
         private class TestSourceWithInvalidArgs

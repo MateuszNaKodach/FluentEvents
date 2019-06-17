@@ -22,12 +22,6 @@
                 An <see cref="T:FluentEvents.Config.EventPipelineConfigurator`2"/> to configure the modules of the pipeline.
             </returns>
         </member>
-        <member name="T:FluentEvents.Config.EventNotConfiguredException">
-            <summary>
-                An exception thrown when referencing an event that was not
-                configured inside of the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Config.EventPipelineConfigurator`2">
             <summary>
                 Provides a simple API surface for configuring an event pipeline.
@@ -168,9 +162,32 @@
             </summary>
             <param name="eventName"></param>
             <returns>The configuration object to add more subscriptions.</returns>
-            <exception cref="T:FluentEvents.Config.EventNotConfiguredException">
-                An event with the provided name wasn't configured
-                in the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
+            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
+                The specified event args type is different from the event args type of the event being selected.
+            </exception>
+        </member>
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscription(System.Action{`1,System.Object})">
+            <summary>
+                Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
+            </summary>
+            <param name="eventSelectionAction">
+                This parameter accepts an <see cref="T:System.Action`2"/> that subscribes the dynamic object
+                supplied in the second <see cref="T:System.Action`2"/> parameter to the event being selected.
+                Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
+            </param>
+            <example>
+                HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+            </example>
+            <returns>The configuration object to add more subscriptions.</returns>
+            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
+                The specified event args type is different from the event args type of the event being selected.
+            </exception>
+            <exception cref="T:FluentEvents.Config.MoreThanOneEventSelectedException">
+                More than one event selected.
+                The dynamic object provided in the selection action can only be subscribed once.
+            </exception>
+            <exception cref="T:FluentEvents.Config.NoEventsSelectedException">
+                The event selection action doesn't subscribe the provided dynamic object to any event.
             </exception>
         </member>
         <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscription(System.String)">
@@ -179,9 +196,32 @@
             </summary>
             <param name="eventName"></param>
             <returns>The configuration object to add more subscriptions.</returns>
-            <exception cref="T:FluentEvents.Config.EventNotConfiguredException">
-                An event with the provided name wasn't configured
-                in the <see cref="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)"/> method.
+            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
+                The specified event args type is different from the event args type of the event being selected.
+            </exception>
+        </member>
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscription(System.Action{`1,System.Object})">
+            <summary>
+                Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
+            </summary>
+            <param name="eventSelectionAction">
+                This parameter accepts an <see cref="T:System.Action`2"/> that subscribes the dynamic object
+                supplied in the second <see cref="T:System.Action`2"/> parameter to the event being selected.
+                Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
+            </param>
+            <example>
+                HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+            </example>
+            <returns>The configuration object to add more subscriptions.</returns>
+            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
+                The specified event args type is different from the event args type of the event being selected.
+            </exception>
+            <exception cref="T:FluentEvents.Config.MoreThanOneEventSelectedException">
+                More than one event selected.
+                The dynamic object provided in the selection action can only be subscribed once.
+            </exception>
+            <exception cref="T:FluentEvents.Config.NoEventsSelectedException">
+                The event selection action doesn't subscribe the provided dynamic object to any event.
             </exception>
         </member>
         <member name="T:FluentEvents.Config.SubscriptionsBuilder">
@@ -189,7 +229,7 @@
                 Provides a simple API surface to select a service and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.IScopedSubscriptionsService,FluentEvents.Model.ISourceModelsService)">
+        <member name="M:FluentEvents.Config.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.IScopedSubscriptionsService,FluentEvents.Model.ISourceModelsService,FluentEvents.Config.IEventSelectionService)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -356,12 +396,6 @@
                 A base exception inherited by all exceptions thrown by FluentEvents (Except for <see cref="T:System.AggregateException"/>s).
             </summary>
         </member>
-        <member name="M:FluentEvents.FluentEventsException.#ctor">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
-            </summary>
-        </member>
         <member name="M:FluentEvents.FluentEventsException.#ctor(System.String)">
             <inheritdoc />
             <summary>
@@ -369,12 +403,6 @@
             </summary>
         </member>
         <member name="M:FluentEvents.FluentEventsException.#ctor(System.String,System.Exception)">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.FluentEventsException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <inheritdoc />
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.

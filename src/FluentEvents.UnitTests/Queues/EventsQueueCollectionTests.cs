@@ -1,4 +1,6 @@
-﻿using FluentEvents.Queues;
+﻿using System.Collections;
+using System.Collections.Generic;
+using FluentEvents.Queues;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Queues
@@ -53,6 +55,14 @@ namespace FluentEvents.UnitTests.Queues
         public void GetEnumerator_ShouldReturnEnumerator()
         {
             var enumerator = _eventsQueueCollection.GetEnumerator();
+
+            Assert.That(enumerator, Is.Not.Null);
+        }
+
+        [Test]
+        public void ExplicitGetEnumerator_ShouldReturnEnumerator()
+        {
+            var enumerator = ((IEnumerable)_eventsQueueCollection).GetEnumerator();
 
             Assert.That(enumerator, Is.Not.Null);
         }

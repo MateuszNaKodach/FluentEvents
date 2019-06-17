@@ -133,11 +133,20 @@ namespace FluentEvents.UnitTests.Model
         }
 
         [Test]
-        public void AddPipeline_ShouldAddNewPipeline([Values(null, "q")] string queueName)
+        public void AddPipeline_ShouldAddNewPipeline()
         {
             var pipeline = _sourceModelEventField.AddPipeline(_pipelineMock.Object);
 
             Assert.That(_sourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
+        }
+
+        [Test]
+        public void AddPipeline_WithNullPipeline_ShouldThrow()
+        {
+            Assert.That(() =>
+            {
+                _sourceModelEventField.AddPipeline(null);
+            }, Throws.TypeOf<ArgumentNullException>());
         }
 
         private class TestModel : TestModelBase

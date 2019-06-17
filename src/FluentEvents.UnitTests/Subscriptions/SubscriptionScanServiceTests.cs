@@ -90,11 +90,6 @@ namespace FluentEvents.UnitTests.Subscriptions
             public event EventHandler TestEvent1;
             public event EventHandler TestEvent2;
             public event EventHandler TestEvent3;
-
-            public ConcreteSource(int p1, int p2)
-            {
-                
-            }
         }
 
         public abstract class AbstractSource
@@ -102,11 +97,6 @@ namespace FluentEvents.UnitTests.Subscriptions
             public event EventHandler TestEvent1;
             public event EventHandler TestEvent2;
             public event EventHandler TestEvent3;
-
-            protected AbstractSource(int p1, int p2)
-            {
-
-            }
         }
     }
 }

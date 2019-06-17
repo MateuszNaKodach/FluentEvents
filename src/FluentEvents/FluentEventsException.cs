@@ -14,14 +14,6 @@ namespace FluentEvents
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsException" /> class.
         /// </summary>
-        protected FluentEventsException()
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsException" /> class.
-        /// </summary>
         protected FluentEventsException(string message) : base(message)
         {
         }
@@ -31,16 +23,6 @@ namespace FluentEvents
         ///     Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
         /// </summary>
         protected FluentEventsException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsException" /> class.
-        /// </summary>
-        protected FluentEventsException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
         {
         }
     }

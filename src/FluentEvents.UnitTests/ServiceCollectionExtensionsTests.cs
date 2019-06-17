@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using FluentEvents.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,7 +51,9 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void AddWithEventsAttachedTo_ShouldReplaceServiceDescriptorsWithFactoryThatAttachesTheService()
+        public void AddWithEventsAttachedTo_ShouldReplaceServiceDescriptorsWithFactoryThatAttachesTheService(
+            [Values] ServiceDescriptorImplementation serviceDescriptorImplementation
+        )
         {
             var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             var eventsContextMock = new Mock<TestEventsContext>(MockBehavior.Strict);
@@ -71,7 +75,24 @@ namespace FluentEvents.UnitTests
 
             _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
             {
-                _serviceCollection.AddSingleton<TestService1>();
+                switch (serviceDescriptorImplementation)
+                {
+                    case ServiceDescriptorImplementation.Type:
+                        _serviceCollection.AddSingleton<TestService1>();
+                        break;
+                    case ServiceDescriptorImplementation.Factory:
+                        _serviceCollection.AddSingleton(x => new TestService1());
+                        break;
+                    case ServiceDescriptorImplementation.Instance:
+                        _serviceCollection.AddSingleton(new TestService1());
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(serviceDescriptorImplementation),
+                            serviceDescriptorImplementation,
+                            null
+                        );
+                }
             });
 
             var factory = _serviceCollection.First().ImplementationFactory;
@@ -82,6 +103,31 @@ namespace FluentEvents.UnitTests
 
             serviceProviderMock.Verify();
             eventsContextMock.Verify();
+        }
+
+        [Test]
+        public void AddWithEventsAttachedTo_WithUnsupportedImplementationType_ShouldThrow()
+        {
+            var constructor = typeof(ServiceDescriptor).GetConstructor(
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new[] {typeof(Type), typeof(ServiceLifetime)},
+                null
+            );
+
+            var serviceDescriptor = (ServiceDescriptor) constructor.Invoke(new object[]
+            {
+                typeof(object),
+                ServiceLifetime.Scoped
+            });
+
+            Assert.That(() =>
+            {
+                _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
+                {
+                    _serviceCollection.Add(serviceDescriptor);
+                });
+            }, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -156,6 +202,13 @@ namespace FluentEvents.UnitTests
                 _serviceCollection,
                 Has.One.Items.EqualTo(serviceDescriptor2)
             );
+        }
+
+        public enum ServiceDescriptorImplementation
+        {
+            Type,
+            Factory,
+            Instance
         }
 
         private class TestService0 { }

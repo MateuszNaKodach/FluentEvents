@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Model;
@@ -64,6 +62,26 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
+        public void HasGlobalSubscription_WithEventSelector_ShouldConfigureSubscription()
+        {
+            Action<SourceEntity, dynamic> selectionAction = (entity, o) => { };
+
+            _eventSelectionServiceMock
+                .Setup(x => x.GetSingleSelectedEventName(_sourceModel, selectionAction))
+                .Returns(_event1Name)
+                .Verifiable();
+
+            _globalSubscriptionsServiceMock
+                .Setup(x => x.AddGlobalServiceHandlerSubscription<SubscribingService, SourceEntity, object>(
+                        _event1Name
+                    )
+                )
+                .Verifiable();
+
+            _serviceHandlerConfigurator.HasGlobalSubscription(selectionAction);
+        }
+
+        [Test]
         public void HasGlobalSubscription_WithEventArgsTypeMismatch_ShouldThrow()
         {
             Assert.That(() =>
@@ -92,6 +110,26 @@ namespace FluentEvents.UnitTests.Config
                 .Verifiable();
 
             _serviceHandlerConfigurator.HasScopedSubscription(_event1Name);
+        }
+
+        [Test]
+        public void HasScopedSubscription_WithEventSelector_ShouldConfigureSubscription()
+        {
+            Action<SourceEntity, dynamic> selectionAction = (entity, o) => { };
+
+            _eventSelectionServiceMock
+                .Setup(x => x.GetSingleSelectedEventName(_sourceModel, selectionAction))
+                .Returns(_event1Name)
+                .Verifiable();
+
+            _scopedSubscriptionsServiceMock
+                .Setup(x => x.ConfigureScopedServiceHandlerSubscription<SubscribingService, SourceEntity, object>(
+                        _event1Name
+                    )
+                )
+                .Verifiable();
+
+            _serviceHandlerConfigurator.HasScopedSubscription(selectionAction);
         }
 
         [Test]

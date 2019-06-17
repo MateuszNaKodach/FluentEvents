@@ -13,14 +13,6 @@ namespace FluentEvents.Azure.SignalR
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
         /// </summary>
-        protected FluentEventsAzureSignalRException()
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
-        /// </summary>
         protected FluentEventsAzureSignalRException(string message) : base(message)
         {
         }
@@ -30,17 +22,6 @@ namespace FluentEvents.Azure.SignalR
         ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
         /// </summary>
         protected FluentEventsAzureSignalRException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
-        /// </summary>
-        protected FluentEventsAzureSignalRException(
-            SerializationInfo info,
-            StreamingContext context
-        ) : base(info, context)
         {
         }
     }

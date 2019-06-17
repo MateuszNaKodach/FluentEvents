@@ -133,6 +133,23 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
+        [Test]
+        [Sequential]
+        public void ThenIsProjected_WithNullArgsAndEventSelector_ShouldThrow(
+            [Values(true, false)] bool isSenderConverterNull,
+            [Values(false, true)] bool isEventArgsConverterNull
+        )
+        {
+            Assert.That(() =>
+            {
+                _eventPipelineConfigurator.ThenIsProjected(
+                    isSenderConverterNull ? (Func<TestSource, ProjectedTestSource>)null : x => new ProjectedTestSource(),
+                    isEventArgsConverterNull ? (Func<TestEventArgs, ProjectedTestEventArgs>)null : x => new ProjectedTestEventArgs(),
+                    (source, h) => source.TestEvent += h
+                );
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
         private void SetUpServiceProvider()
         {
             _serviceProviderMock

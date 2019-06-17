@@ -20,10 +20,10 @@ namespace FluentEvents.UnitTests.Routing
         private EventsScope _eventsScope;
         private RoutingService _routingService;
         private PipelineEvent _pipelineEvent;
-        private SourceModel _sourceModel;
-        private SourceModelEventField _sourceModelEventField;
+        private SourceModel _sourceModel1;
+        private SourceModel _sourceModel2;
 
-        private readonly string _eventFieldName = nameof(TestSource.TestEvent);
+        private readonly string _eventFieldName = nameof(TestSource2.TestEvent);
 
         [SetUp]
         public void SetUp()
@@ -39,13 +39,16 @@ namespace FluentEvents.UnitTests.Routing
                 _sourceModelsServiceMock.Object
             );
             _pipelineEvent = new PipelineEvent(
-                typeof(TestSource),
+                typeof(TestSource3),
                 _eventFieldName,
-                new TestSource(),
+                new TestSource3(),
                 new TestEventArgs()
             );
-            _sourceModel = new SourceModel(typeof(TestSource));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(_eventFieldName);
+            _sourceModel2 = new SourceModel(typeof(TestSource2));
+            _sourceModel2.GetOrCreateEventField(_eventFieldName);
+
+            _sourceModel1 = new SourceModel(typeof(TestSource1));
+            _sourceModel1.GetOrCreateEventField(_eventFieldName).AddPipeline(_pipelineMock.Object);
         }
 
         [TearDown]
@@ -66,8 +69,18 @@ namespace FluentEvents.UnitTests.Routing
                 .Verifiable();
 
             _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(_pipelineEvent.OriginalSender.GetType()))
-                .Returns(_sourceModel)
+                .Setup(x => x.GetSourceModel(typeof(TestSource1)))
+                .Returns(_sourceModel1)
+                .Verifiable();
+
+            _sourceModelsServiceMock
+                .Setup(x => x.GetSourceModel(typeof(TestSource2)))
+                .Returns(_sourceModel2)
+                .Verifiable();
+
+            _sourceModelsServiceMock
+                .Setup(x => x.GetSourceModel(typeof(TestSource3)))
+                .Returns<SourceModel>(null)
                 .Verifiable();
 
             _loggerScopeMock
@@ -94,14 +107,22 @@ namespace FluentEvents.UnitTests.Routing
                 ))
                 .Verifiable();
 
-            _sourceModelEventField.AddPipeline(_pipelineMock.Object);
-
             await _routingService.RouteEventAsync(_pipelineEvent, _eventsScope);
         }
 
-        private class TestSource
+        
+
+        private class TestSource1
         {
             public event EventHandler<TestEventArgs> TestEvent;
+        }
+
+        private class TestSource2 : TestSource1
+        {
+        }
+
+        private class TestSource3 : TestSource2
+        {
         }
 
         private class TestEventArgs

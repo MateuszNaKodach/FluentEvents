@@ -42,26 +42,11 @@ namespace FluentEvents.UnitTests.Subscriptions
             };
 
             _pipelineEvent = new PipelineEvent(
-                typeof(object), 
-                "fieldName", 
+                typeof(object),
+                "fieldName",
                 new object(),
                 new object()
             );
-
-            _loggerMock
-                .Setup(x => x.IsEnabled(LogLevel.Information))
-                .Returns(true)
-                .Verifiable();
-
-            _loggerMock
-                .Setup(x => x.Log(
-                    LogLevel.Information,
-                    SubscriptionsLoggerMessages.EventIds.PublishingEvent,
-                    It.IsAny<object>(),
-                    null,
-                    It.IsAny<Func<object, Exception, string>>()
-                ))
-                .Verifiable();
         }
 
         [TearDown]
@@ -74,8 +59,21 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
+        public void PublishEventToScopedSubscriptionsAsync_WithNullEventsScope_ShouldThrow()
+        {
+            Assert.That(async () =>
+            {
+                await _publishingService.PublishEventToScopedSubscriptionsAsync(
+                    _pipelineEvent,
+                    null
+                );
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
         public async Task PublishEventToScopedSubscriptionsAsync_ShouldHandlePublishingException()
         {
+            SetUpLogger();
             SetUpEventsScopeGetSubscriptions();
             SetUpSubscriptionsMatchingService();
 
@@ -107,6 +105,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public async Task PublishEventToScopedSubscriptionsAsync_ShouldGetSubscriptionsFromScopeAndPublishToMatchingSubscriptions()
         {
+            SetUpLogger();
             SetUpEventsScopeGetSubscriptions();
 
             await TestPublishing(async () =>
@@ -118,17 +117,10 @@ namespace FluentEvents.UnitTests.Subscriptions
             });
         }
 
-        private void SetUpEventsScopeGetSubscriptions()
-        {
-            _eventsScopeMock
-                .Setup(x => x.GetSubscriptions())
-                .Returns(_subscriptions)
-                .Verifiable();
-        }
-
         [Test]
         public async Task PublishEventToGlobalSubscriptionsAsync_ShouldGetSubscriptionsFromGlobalScopeAndPublishToMatchingSubscriptions()
         {
+            SetUpLogger();
             _globalSubscriptionsServiceMock
                 .Setup(x => x.GetGlobalSubscriptions())
                 .Returns(_subscriptions)
@@ -140,6 +132,32 @@ namespace FluentEvents.UnitTests.Subscriptions
                     _pipelineEvent
                 );
             });
+        }
+
+        private void SetUpLogger()
+        {
+            _loggerMock
+                .Setup(x => x.IsEnabled(LogLevel.Information))
+                .Returns(true)
+                .Verifiable();
+
+            _loggerMock
+                .Setup(x => x.Log(
+                    LogLevel.Information,
+                    SubscriptionsLoggerMessages.EventIds.PublishingEvent,
+                    It.IsAny<object>(),
+                    null,
+                    It.IsAny<Func<object, Exception, string>>()
+                ))
+                .Verifiable();
+        }
+
+        private void SetUpEventsScopeGetSubscriptions()
+        {
+            _eventsScopeMock
+                .Setup(x => x.GetSubscriptions())
+                .Returns(_subscriptions)
+                .Verifiable();
         }
 
         private async Task TestPublishing(Func<Task> testAction)

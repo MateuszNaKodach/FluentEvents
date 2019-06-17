@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentEvents.Pipelines;
 using FluentEvents.Queues;
 using NUnit.Framework;
 
@@ -8,7 +10,7 @@ namespace FluentEvents.UnitTests.Queues
     [TestFixture]
     public class EventsQueueTests
     {
-        private string _eventsQueueName = nameof(_eventsQueueName);
+        private readonly string _eventsQueueName = nameof(_eventsQueueName);
         private EventsQueue _eventsQueue;
         private QueuedPipelineEvent _queuedPipelineEvent;
 
@@ -16,7 +18,8 @@ namespace FluentEvents.UnitTests.Queues
         public void SetUp()
         {
             _eventsQueue = new EventsQueue(_eventsQueueName);
-            _queuedPipelineEvent = new QueuedPipelineEvent();
+            var pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _queuedPipelineEvent = new QueuedPipelineEvent(() => Task.CompletedTask, pipelineEvent);
         }
 
         [Test]
@@ -28,6 +31,13 @@ namespace FluentEvents.UnitTests.Queues
            }, Throws.TypeOf<ArgumentNullException>());
         }
 
+        [Test]
+        public void Ctor_ShouldSetName()
+        {
+            var eventsQueue = new EventsQueue(_eventsQueueName);
+
+            Assert.That(eventsQueue, Has.Property(nameof(EventsQueue.Name)).EqualTo(_eventsQueueName));
+        }
 
         [Test]
         public void Enqueue_WithNullEvent_ShouldThrow()

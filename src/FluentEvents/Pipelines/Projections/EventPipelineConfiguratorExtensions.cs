@@ -148,7 +148,7 @@ namespace FluentEvents.Pipelines.Projections
             );
 
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
-                new EventsSenderProjection<TSource, TToSource>(senderConverter),
+                new EventSenderProjection<TSource, TToSource>(senderConverter),
                 new EventArgsProjection<TEventArgs, TToEventArgs>(eventArgsConverter),
                 projectedEventField.Name
             );

@@ -15,7 +15,9 @@ namespace FluentEvents.UnitTests.Subscriptions
     {
         private Mock<ISourceModelsService> _sourceModelsServiceMock;
         private Mock<ISubscriptionScanService> _subscriptionScanServiceMock;
+
         private SourceModel _sourceModel;
+        private SubscribedHandler _subscribedHandler;
 
         private SubscriptionsFactory _subscriptionsFactory;
 
@@ -24,8 +26,14 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             _subscriptionScanServiceMock = new Mock<ISubscriptionScanService>(MockBehavior.Strict);
+
             _sourceModel = new SourceModel(typeof(EventsSource));
             _sourceModel.GetOrCreateEventField(nameof(EventsSource.TestEvent));
+
+            var service = new SubscribingService();
+            Func<object, object, Task> action = service.HandleEventAsync;
+            var handler = Delegate.CreateDelegate(action.GetType(), service, action.Method);
+            _subscribedHandler = new SubscribedHandler("", handler);
 
             _subscriptionsFactory = new SubscriptionsFactory(
                 _sourceModelsServiceMock.Object,
@@ -43,11 +51,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void CreateSubscription_WithSubscribedHandler_ShouldReturnNewSubscription()
         {
-            var service = new SubscribingService();
-            Func<object, object, Task> action = service.HandleEventAsync;
-            var handler = Delegate.CreateDelegate(action.GetType(), service, action.Method);
-            
-            var subscription = _subscriptionsFactory.CreateSubscription<EventsSource>(new SubscribedHandler("", handler));
+            var subscription = _subscriptionsFactory.CreateSubscription<EventsSource>(_subscribedHandler);
 
             Assert.That(subscription, Is.Not.Null);
         }
@@ -67,7 +71,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                     It.IsAny<Action<object>>())
                 )
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => action(new EventsSource()))
-                .Returns(new List<SubscribedHandler>())
+                .Returns(new [] { _subscribedHandler })
                 .Verifiable();
 
             var subscription = _subscriptionsFactory.CreateSubscription<EventsSource>(x => { });

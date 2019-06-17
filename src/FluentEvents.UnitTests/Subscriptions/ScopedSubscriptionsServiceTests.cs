@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
 using Moq;
@@ -34,6 +35,12 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void ConfigureScopedServiceSubscription_ShouldAddCreationTask()
         {
             _scopedSubscriptionsService.ConfigureScopedServiceSubscription<object, object>((service, source) => { });
+        }
+
+        [Test]
+        public void ConfigureScopedServiceHandlerSubscription_ShouldAddCreationTask()
+        {
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object, object>("");
         }
 
         [Test]
@@ -80,7 +87,12 @@ namespace FluentEvents.UnitTests.Subscriptions
             return service;
         }
 
-        private class Service1 { }
+        private class Service1 : IEventHandler<object, object> {
+            public Task HandleEventAsync(object source, object args)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         private class Service2 { }
     }

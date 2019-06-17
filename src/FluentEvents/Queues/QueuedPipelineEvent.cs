@@ -6,7 +6,13 @@ namespace FluentEvents.Queues
 {
     internal class QueuedPipelineEvent
     {
-        public Func<Task> InvokeNextModule { get; set; }
-        public PipelineEvent PipelineEvent { get; set; }
+        public Func<Task> InvokeNextModule { get; }
+        public PipelineEvent PipelineEvent { get; }
+
+        public QueuedPipelineEvent(Func<Task> invokeNextModule, PipelineEvent pipelineEvent)
+        {
+            InvokeNextModule = invokeNextModule;
+            PipelineEvent = pipelineEvent;
+        }
     }
 }

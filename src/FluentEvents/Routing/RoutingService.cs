@@ -31,7 +31,7 @@ namespace FluentEvents.Routing
         {
             using (_logger.BeginEventRoutingScope(pipelineEvent))
             {
-                var originalSenderType = pipelineEvent.OriginalSender.GetType();
+                var originalSenderType = pipelineEvent.OriginalSenderType;
                 foreach (var baseSenderType in originalSenderType.GetBaseTypesInclusive())
                 {
                     var field = _sourceModelsService.GetSourceModel(baseSenderType)?.GetEventField(pipelineEvent.OriginalEventFieldName);

@@ -112,12 +112,6 @@
                 An exception thrown by the FluentEvents.Azure.SignalR plugin.
             </summary>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
-            </summary>
-        </member>
         <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.String)">
             <inheritdoc />
             <summary>
@@ -125,12 +119,6 @@
             </summary>
         </member>
         <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.String,System.Exception)">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <inheritdoc />
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException" /> class.

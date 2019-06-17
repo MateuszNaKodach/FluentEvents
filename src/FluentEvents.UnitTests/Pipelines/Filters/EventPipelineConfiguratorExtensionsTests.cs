@@ -39,17 +39,21 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         }
 
         [Test]
-        public void ThenIsFiltered_ShouldAddPipelineModule()
+        public void ThenIsFiltered_ShouldAddPipelineModule([Values] bool isMatching)
         {
+            FilterPipelineModuleConfig config = null;
             _pipelineMock
                 .Setup(x =>
-                    x.AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
-                        It.IsAny<FilterPipelineModuleConfig>()))
+                    x.AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(It.IsAny<FilterPipelineModuleConfig>())
+                )
+                .Callback<FilterPipelineModuleConfig>(paramsConfig => config = paramsConfig)
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered((x, y) => true);
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered((x, y) => isMatching);
 
             Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
+            Assert.That(config, Is.Not.Null);
+            Assert.That(config.IsMatching(new TestSource(), new TestEventArgs()), Is.EqualTo(isMatching));
         }
 
         [Test]

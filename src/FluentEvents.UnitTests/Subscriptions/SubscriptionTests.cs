@@ -33,6 +33,25 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
+        public void PublishEventAsync_WithNullPipelineEvent_ShouldThrow()
+        {
+            Assert.That(async () => {
+                await _subscription.PublishEventAsync(null);
+            }, Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void PublishEventAsync_WithEventSourceTypeMismatch_ShouldThrow()
+        {
+            var pipelineEvent = new PipelineEvent(typeof(int), "", null, null);
+
+            Assert.That(async () =>
+            {
+                await _subscription.PublishEventAsync(pipelineEvent);
+            }, Throws.TypeOf<EventSourceTypeMismatchException>());
+        }
+
+        [Test]
         public async Task PublishEvent_ShouldPublishToAllHandlers([Values] bool isAsync)
         {
             object handlerAction1Sender = null;

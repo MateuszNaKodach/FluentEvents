@@ -105,19 +105,33 @@ namespace FluentEvents
         )
             where TEventsContext : EventsContext
         {
+            ServiceImplementation serviceImplementation;
+            if (serviceDescriptor.ImplementationType != null)
+                serviceImplementation = ServiceImplementation.Type;
+            else if (serviceDescriptor.ImplementationFactory != null)
+                serviceImplementation = ServiceImplementation.Factory;
+            else if (serviceDescriptor.ImplementationInstance != null)
+                serviceImplementation = ServiceImplementation.Instance;
+            else
+                throw new NotSupportedException();
+
             if (!serviceDescriptor.ServiceType.IsGenericTypeDefinition)
                 services.Replace(new ServiceDescriptor(serviceDescriptor.ServiceType, x =>
                 {
-                    object service;
+                    object service = null;
 
-                    if (serviceDescriptor.ImplementationType != null)
-                        service = ActivatorUtilities.CreateInstance(x, serviceDescriptor.ImplementationType);
-                    else if (serviceDescriptor.ImplementationFactory != null)
-                        service = serviceDescriptor.ImplementationFactory(x);
-                    else if (serviceDescriptor.ImplementationInstance != null)
-                        service = serviceDescriptor.ImplementationInstance;
-                    else
-                        throw new NotSupportedException();
+                    switch (serviceImplementation)
+                    {
+                        case ServiceImplementation.Type:
+                            service = ActivatorUtilities.CreateInstance(x, serviceDescriptor.ImplementationType);
+                            break;
+                        case ServiceImplementation.Factory:
+                            service = serviceDescriptor.ImplementationFactory(x);
+                            break;
+                        case ServiceImplementation.Instance:
+                            service = serviceDescriptor.ImplementationInstance;
+                            break;
+                    }
 
                     AttachService<TEventsContext>(x, service);
 
@@ -133,6 +147,13 @@ namespace FluentEvents
 
             if (!eventsContext.IsInitializing)
                 eventsContext.Attach(service, eventsScope);
+        }
+
+        private enum ServiceImplementation
+        {
+            Type,
+            Factory,
+            Instance
         }
     }
 }

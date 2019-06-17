@@ -89,12 +89,7 @@ namespace FluentEvents.Model
 
         private static FieldInfo GetEventFieldInfo(Type type, MemberInfo eventInfo)
         {
-            var eventFieldInfo = type.GetFieldFromBaseTypesInclusive(eventInfo.Name, HandlerFieldsBindingFlags);
-
-            if (eventFieldInfo == null)
-                throw new EventFieldNotFoundException();
-
-            return eventFieldInfo;
+            return type.GetFieldFromBaseTypesInclusive(eventInfo.Name, HandlerFieldsBindingFlags);
         }
     }
 }

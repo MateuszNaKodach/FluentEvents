@@ -43,8 +43,14 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         {
             var isNextInvoked = false;
 
+            Func<Task> invokeNextModule = null;
+
             _eventsQueuesServiceMock
                 .Setup(x => x.EnqueueEvent(_eventsScope, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
+                .Callback<EventsScope, PipelineEvent, string, Func<Task>>((_, __, ___, func) =>
+                {
+                    invokeNextModule = func;
+                })
                 .Verifiable();
 
             await _enqueuePipelineModule.InvokeAsync(
@@ -56,7 +62,12 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
                     return Task.CompletedTask;
                 });
 
+            Assert.That(invokeNextModule, Is.Not.Null);
             Assert.That(isNextInvoked, Is.False);
+
+            await invokeNextModule();
+
+            Assert.That(isNextInvoked, Is.True);
         }
     }
 }

@@ -15,14 +15,6 @@ namespace FluentEvents.Azure.ServiceBus
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
         /// </summary>
-        protected FluentEventsServiceBusException()
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
-        /// </summary>
         protected FluentEventsServiceBusException(string message) : base(message)
         {
         }
@@ -32,17 +24,6 @@ namespace FluentEvents.Azure.ServiceBus
         ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
         /// </summary>
         protected FluentEventsServiceBusException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
-        /// </summary>
-        protected FluentEventsServiceBusException(
-            SerializationInfo info,
-            StreamingContext context
-        ) : base(info, context)
         {
         }
     }

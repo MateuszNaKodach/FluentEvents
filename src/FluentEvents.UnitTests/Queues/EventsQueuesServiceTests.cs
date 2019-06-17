@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
@@ -12,16 +13,18 @@ namespace FluentEvents.UnitTests.Queues
     [TestFixture]
     public class EventsQueuesServiceTests
     {
+        private static readonly string _queueName = "queueName";
+
         private Mock<IEventsQueueCollection> _eventQueueCollectionMock;
         private Mock<IAppServiceProvider> _appServiceProviderMock;
         private Mock<EventsContext> _eventsContextMock;
         private Mock<IPipeline> _pipelineMock;
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
 
+        private EventsQueue _eventsQueue;
         private EventsQueuesContext _eventsQueuesContext;
         private EventsScope _eventsScope;
         private PipelineEvent _pipelineEvent;
-        private readonly string _queueName = "queueName";
 
         private EventsQueuesService _eventsQueuesService;
 
@@ -33,6 +36,7 @@ namespace FluentEvents.UnitTests.Queues
             _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
+            _eventsQueue = new EventsQueue(_queueName);
             _eventsQueuesContext = new EventsQueuesContext();
             _eventsScope = new EventsScope(
                 new[] {_eventsContextMock.Object},
@@ -98,7 +102,7 @@ namespace FluentEvents.UnitTests.Queues
         {
             var pipelineEvent = MakeNewPipelineEvent();
 
-            SetUpGetQueue(_queueName);
+            SetUpGetQueue();
 
             var isNextModuleInvoked = false;
 
@@ -158,6 +162,26 @@ namespace FluentEvents.UnitTests.Queues
         }
 
         [Test]
+        public void DiscardQueuedEvents_WithQueueName_ShouldClearSpecificQueue()
+        {
+            _eventsQueueNamesServiceMock
+                .Setup(x => x.IsQueueNameExisting(_queueName))
+                .Returns(true)
+                .Verifiable();
+
+            _eventQueueCollectionMock
+                .Setup(x => x.GetOrAddEventsQueue(_eventsQueuesContext, _queueName))
+                .Returns(_eventsQueue)
+                .Verifiable();
+
+            _eventsQueue.Enqueue(new QueuedPipelineEvent(null, null));
+
+            _eventsQueuesService.DiscardQueuedEvents(_eventsScope, _queueName);
+
+            Assert.That(_eventsQueue.DequeueAll(), Has.Exactly(0).Items);
+        }
+
+        [Test]
         public void DiscardQueuedEvents_WithNonExistingQueue_ShouldThrow()
         {
             _eventsQueueNamesServiceMock
@@ -207,22 +231,27 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void EnqueueEvent_ShouldEnqueue()
         {
-            SetUpGetQueue(_queueName);
+            SetUpGetQueue();
 
-            _eventsQueuesService.EnqueueEvent(_eventsScope, _pipelineEvent, _queueName, () => Task.CompletedTask);
+            Func<Task> invokeNextModule = () => Task.CompletedTask;
+            _eventsQueuesService.EnqueueEvent(_eventsScope, _pipelineEvent, _queueName, invokeNextModule);
+
+            var queuedPipelineEvents = _eventsQueue.DequeueAll().ToList();
+
+            Assert.That(queuedPipelineEvents, Has.One.Items);
+            Assert.That(queuedPipelineEvents, Has.One.Items.With.Property(nameof(QueuedPipelineEvent.PipelineEvent)).EqualTo(_pipelineEvent));
+            Assert.That(queuedPipelineEvents, Has.One.Items.With.Property(nameof(QueuedPipelineEvent.InvokeNextModule)).EqualTo(invokeNextModule));
         }
 
-        private void SetUpGetQueue(string queueName)
+        private void SetUpGetQueue()
         {
-            var eventsQueue = new EventsQueue(queueName);
-
             _eventQueueCollectionMock
-                .Setup(x => x.GetOrAddEventsQueue(_eventsQueuesContext, queueName))
-                .Returns(eventsQueue)
+                .Setup(x => x.GetOrAddEventsQueue(_eventsQueuesContext, _queueName))
+                .Returns(_eventsQueue)
                 .Verifiable();
 
             _eventsQueueNamesServiceMock
-                .Setup(x => x.IsQueueNameExisting(queueName))
+                .Setup(x => x.IsQueueNameExisting(_queueName))
                 .Returns(true)
                 .Verifiable();
         }

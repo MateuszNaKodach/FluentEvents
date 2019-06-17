@@ -90,12 +90,6 @@
                 An exception thrown by the FluentEvents.Azure.ServiceBus plugin.
             </summary>
         </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
-            </summary>
-        </member>
         <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor(System.String)">
             <inheritdoc />
             <summary>
@@ -103,12 +97,6 @@
             </summary>
         </member>
         <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor(System.String,System.Exception)">
-            <inheritdoc />
-            <summary>
-                Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <inheritdoc />
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.

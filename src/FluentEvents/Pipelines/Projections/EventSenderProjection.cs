@@ -2,13 +2,13 @@
 
 namespace FluentEvents.Pipelines.Projections
 {
-    internal class EventsSenderProjection<TFrom, TTo> : IEventsSenderProjection
+    internal class EventSenderProjection<TFrom, TTo> : IEventsSenderProjection
     {
         private readonly Func<TFrom, TTo> _conversionFunc;
 
-        internal EventsSenderProjection(Func<TFrom, TTo> mConversionFunc)
+        internal EventSenderProjection(Func<TFrom, TTo> conversionFunc)
         {
-            _conversionFunc = mConversionFunc;
+            _conversionFunc = conversionFunc;
         }
 
         public object Convert(object obj)

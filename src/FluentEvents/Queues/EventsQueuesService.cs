@@ -25,20 +25,17 @@ namespace FluentEvents.Queues
                     throw new EventsQueueNotFoundException();
 
                 var eventsQueue = eventsScope.EventsQueues.GetOrAddEventsQueue(_eventsQueuesContext, queueName);
-                await ProcessQueue(eventsScope, eventsQueue).ConfigureAwait(false);
+                await ProcessQueue(eventsQueue).ConfigureAwait(false);
             }
             else
             {
                 foreach (var eventsQueue in eventsScope.EventsQueues)
-                    await ProcessQueue(eventsScope, eventsQueue).ConfigureAwait(false);
+                    await ProcessQueue(eventsQueue).ConfigureAwait(false);
             }
         }
 
-        private async Task ProcessQueue(EventsScope eventsScope, IEventsQueue eventsQueue)
+        private async Task ProcessQueue(IEventsQueue eventsQueue)
         {
-            if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
-            if (eventsQueue == null) throw new ArgumentNullException(nameof(eventsQueue));
-
             foreach (var queuedPipelineEvent in eventsQueue.DequeueAll())
                 await queuedPipelineEvent.InvokeNextModule().ConfigureAwait(false);
         }
@@ -73,11 +70,7 @@ namespace FluentEvents.Queues
 
             var queue = eventsScope.EventsQueues.GetOrAddEventsQueue(_eventsQueuesContext, queueName);
 
-            queue.Enqueue(new QueuedPipelineEvent
-            {
-                InvokeNextModule = invokeNextModule,
-                PipelineEvent = pipelineEvent
-            });
+            queue.Enqueue(new QueuedPipelineEvent(invokeNextModule, pipelineEvent));
         }
     }
 }

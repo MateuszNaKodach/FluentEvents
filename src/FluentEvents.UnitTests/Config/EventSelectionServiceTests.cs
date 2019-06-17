@@ -131,9 +131,29 @@ namespace FluentEvents.UnitTests.Config
             }, Throws.TypeOf<SelectedEventHasUnsupportedReturnTypeException>());
         }
 
+        [Test]
+        public void GetSingleSelectedEventName_WithOneEventSelected_ShouldReturnEventName()
+        {
+            _subscriptionScanServiceMock
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Returns(new[]
+                {
+                    new SubscribedHandler(nameof(TestSource.TestEvent1), null),
+                })
+                .Verifiable();
+
+            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler)
+            {
+            }
+
+            _eventSelectionService.GetSingleSelectedEventName(
+                _sourceModel,
+                (Action<TestSource, dynamic>)SubscriptionActionWithDynamic
+            );
+        }
 
         [Test]
-        public void Event_WithMultipleEventsSelected_ShouldThrow()
+        public void GetSingleSelectedEventName_WithMultipleEventsSelected_ShouldThrow()
         {
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
@@ -144,7 +164,9 @@ namespace FluentEvents.UnitTests.Config
                 })
                 .Verifiable();
 
-            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler) => source.TestEvent1 += eventHandler;
+            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler)
+            {
+            }
 
             Assert.That(() =>
             {
@@ -156,14 +178,16 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void Event_WithNoEventsSelected_ShouldThrow()
+        public void GetSingleSelectedEventName_WithNoEventsSelected_ShouldThrow()
         {
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
-            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler) => source.TestEvent1 += eventHandler;
+            void SubscriptionActionWithDynamic(TestSource source, dynamic eventHandler)
+            {
+            }
 
             Assert.That(() =>
             {
