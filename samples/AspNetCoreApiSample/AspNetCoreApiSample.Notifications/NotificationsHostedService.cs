@@ -10,7 +10,7 @@ namespace AspNetCoreApiSample.Notifications
     {
         private readonly AppEventsContext _appEventsContext;
         private readonly IMailService _mailService;
-        private ISubscriptionsCancellationToken _subscriptionsCancellationToken;
+        private UnsubscribeToken _unsubscribeToken;
 
         public NotificationsHostedService(AppEventsContext appEventsContext, IMailService mailService)
         {
@@ -20,7 +20,7 @@ namespace AspNetCoreApiSample.Notifications
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _subscriptionsCancellationToken = _appEventsContext.SubscribeGloballyTo<ContractEvents>(contract =>
+            _unsubscribeToken = _appEventsContext.SubscribeGloballyTo<ContractEvents>(contract =>
             {
                 contract.Terminated += ContractOnTerminated;
             });
@@ -37,7 +37,7 @@ namespace AspNetCoreApiSample.Notifications
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _appEventsContext.Unsubscribe(_subscriptionsCancellationToken);
+            _appEventsContext.Unsubscribe(_unsubscribeToken);
 
             return Task.CompletedTask;
         }

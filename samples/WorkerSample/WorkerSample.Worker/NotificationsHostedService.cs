@@ -13,7 +13,7 @@ namespace WorkerSample.Worker
         private readonly AppEventsContext _appEventsContext;
         private readonly IMailService _mailService;
 
-        private ISubscriptionsCancellationToken _subscriptionsCancellationToken;
+        private UnsubscribeToken _unsubscribeToken;
 
         public NotificationsHostedService(AppEventsContext appEventsContext, IMailService mailService)
         {
@@ -23,7 +23,7 @@ namespace WorkerSample.Worker
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _subscriptionsCancellationToken = _appEventsContext
+            _unsubscribeToken = _appEventsContext
                 .SubscribeGloballyTo<ProductSubscription>(productSubscription =>
                 {
                     productSubscription.Cancelled += ProductSubscriptionOnCancelled;
@@ -40,7 +40,7 @@ namespace WorkerSample.Worker
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _appEventsContext.Unsubscribe(_subscriptionsCancellationToken);
+            _appEventsContext.Unsubscribe(_unsubscribeToken);
 
             return Task.CompletedTask;
         }

@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentEvents" Version="2.6.5" />
-    <PackageReference Include="FluentEvents.Azure.SignalR" Version="2.6.5" />
-    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="2.6.5" />
+    <PackageReference Include="FluentEvents" Version="3.1.1-beta" />
+    <PackageReference Include="FluentEvents.Azure.SignalR" Version="3.1.1-beta" />
+    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="3.1.1-beta" />
   </ItemGroup>
 
   <ItemGroup>
