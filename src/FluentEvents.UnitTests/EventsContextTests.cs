@@ -123,7 +123,7 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
-        public void StartEventReceivers_ShouldCallEventReceiversService()
+        public async Task StartEventReceiversAsync_ShouldCallEventReceiversService()
         {
             ConfigureEventsContext();
 
@@ -134,11 +134,11 @@ namespace FluentEvents.UnitTests
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            _eventsContext.StartEventReceivers(cts.Token);
+            await _eventsContext.StartEventReceiversAsync(cts.Token);
         }
 
         [Test]
-        public void StopEventReceivers_ShouldCallEventReceiversService()
+        public async Task StopEventReceiversAsync_ShouldCallEventReceiversService()
         {
             ConfigureEventsContext();
 
@@ -149,7 +149,7 @@ namespace FluentEvents.UnitTests
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            _eventsContext.StopEventReceivers(cts.Token);
+            await _eventsContext.StopEventReceiversAsync(cts.Token);
         }
 
         [Test]

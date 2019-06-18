@@ -25,16 +25,16 @@ namespace FluentEvents.Queues
                     throw new EventsQueueNotFoundException();
 
                 var eventsQueue = eventsScope.EventsQueues.GetOrAddEventsQueue(_eventsQueuesContext, queueName);
-                await ProcessQueue(eventsQueue).ConfigureAwait(false);
+                await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
             else
             {
                 foreach (var eventsQueue in eventsScope.EventsQueues)
-                    await ProcessQueue(eventsQueue).ConfigureAwait(false);
+                    await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
         }
 
-        private async Task ProcessQueue(IEventsQueue eventsQueue)
+        private async Task ProcessQueueAsync(IEventsQueue eventsQueue)
         {
             foreach (var queuedPipelineEvent in eventsQueue.DequeueAll())
                 await queuedPipelineEvent.InvokeNextModule().ConfigureAwait(false);

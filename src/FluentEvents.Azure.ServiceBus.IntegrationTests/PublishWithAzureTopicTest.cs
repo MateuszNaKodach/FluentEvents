@@ -43,7 +43,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         [Test]
         public async Task EventShouldBePublishedWithAzureServiceBusTopic()
         {
-            await _testEventsContext.StartEventReceivers();
+            await _testEventsContext.StartEventReceiversAsync();
 
             object receivedSender = null;
             TestEventArgs receivedEventArgs = null;

@@ -123,7 +123,7 @@ namespace FluentEvents
         ///     This method should to be called only if the application isn't using the <see cref="Microsoft.Extensions.Hosting.HostBuilder"/>.
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
-        public Task StartEventReceivers(CancellationToken cancellationToken = default) 
+        public Task StartEventReceiversAsync(CancellationToken cancellationToken = default) 
             => Dependencies.EventReceiversService.StartReceiversAsync(cancellationToken);
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace FluentEvents
         ///     the <see cref="Microsoft.Extensions.Hosting.HostBuilder"/>.
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token for the async operation.</param>
-        public Task StopEventReceivers(CancellationToken cancellationToken = default) 
+        public Task StopEventReceiversAsync(CancellationToken cancellationToken = default) 
             => Dependencies.EventReceiversService.StopReceiversAsync(cancellationToken);
 
         /// <summary>
