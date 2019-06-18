@@ -35,7 +35,7 @@ namespace FluentEvents.UnitTests.Config
                 .Setup(x => x.ConfigureScopedServiceSubscription(subscriptionAction))
                 .Verifiable();
 
-            _serviceConfigurator.HasScopedSubscription(subscriptionAction);
+            _serviceConfigurator.HasScopedSubscriptionTo(subscriptionAction);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceConfigurator.HasScopedSubscription<TestSource>(null);
+                _serviceConfigurator.HasScopedSubscriptionTo<TestSource>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -56,7 +56,7 @@ namespace FluentEvents.UnitTests.Config
                 .Setup(x => x.AddGlobalServiceSubscription(subscriptionAction))
                 .Verifiable();
 
-            _serviceConfigurator.HasGlobalSubscription(subscriptionAction);
+            _serviceConfigurator.HasGlobalSubscriptionTo(subscriptionAction);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceConfigurator.HasGlobalSubscription<TestSource>(null);
+                _serviceConfigurator.HasGlobalSubscriptionTo<TestSource>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 

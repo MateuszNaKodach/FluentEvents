@@ -58,7 +58,7 @@ namespace FluentEvents.UnitTests.Config
                 )
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasGlobalSubscription(_event1Name);
+            _serviceHandlerConfigurator.HasGlobalSubscriptionTo(_event1Name);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace FluentEvents.UnitTests.Config
                 )
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasGlobalSubscription(selectionAction);
+            _serviceHandlerConfigurator.HasGlobalSubscriptionTo(selectionAction);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceHandlerConfigurator.HasGlobalSubscription(_event2Name);
+                _serviceHandlerConfigurator.HasGlobalSubscriptionTo(_event2Name);
             }, Throws.TypeOf<EventArgsTypeMismatchException>());
         }
 
@@ -95,7 +95,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceHandlerConfigurator.HasGlobalSubscription("");
+                _serviceHandlerConfigurator.HasGlobalSubscriptionTo("");
             }, Throws.TypeOf<EventFieldNotFoundException>());
         }
 
@@ -109,7 +109,7 @@ namespace FluentEvents.UnitTests.Config
                 )
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasScopedSubscription(_event1Name);
+            _serviceHandlerConfigurator.HasScopedSubscriptionTo(_event1Name);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace FluentEvents.UnitTests.Config
                 )
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasScopedSubscription(selectionAction);
+            _serviceHandlerConfigurator.HasScopedSubscriptionTo(selectionAction);
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceHandlerConfigurator.HasScopedSubscription(_event2Name);
+                _serviceHandlerConfigurator.HasScopedSubscriptionTo(_event2Name);
             }, Throws.TypeOf<EventArgsTypeMismatchException>());
         }
 
@@ -146,7 +146,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                _serviceHandlerConfigurator.HasScopedSubscription("");
+                _serviceHandlerConfigurator.HasScopedSubscriptionTo("");
             }, Throws.TypeOf<EventFieldNotFoundException>());
         }
 

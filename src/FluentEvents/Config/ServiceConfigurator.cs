@@ -28,7 +28,7 @@ namespace FluentEvents.Config
         ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        public ServiceConfigurator<TService> HasScopedSubscription<TSource>(
+        public ServiceConfigurator<TService> HasScopedSubscriptionTo<TSource>(
             Action<TService, TSource> subscriptionAction
         )
             where TSource : class
@@ -47,7 +47,7 @@ namespace FluentEvents.Config
         ///     The method that will be called to make the subscriptions to the source's events.
         /// </param>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        public ServiceConfigurator<TService> HasGlobalSubscription<TSource>(
+        public ServiceConfigurator<TService> HasGlobalSubscriptionTo<TSource>(
             Action<TService, TSource> subscriptionAction
         )
             where TSource : class

@@ -38,7 +38,7 @@ namespace FluentEvents.Config
         /// <exception cref="EventArgsTypeMismatchException">
         ///     The specified event args type is different from the event args type of the event being selected.
         /// </exception>
-        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasGlobalSubscription(string eventName)
+        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasGlobalSubscriptionTo(string eventName)
         {
             CheckEventField(eventName);
 
@@ -58,7 +58,7 @@ namespace FluentEvents.Config
         ///     Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
         /// </param>
         /// <example>
-        ///     HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+        ///     HasGlobalSubscriptionTo&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
         /// </example>
         /// <returns>The configuration object to add more subscriptions.</returns>
         /// <exception cref="EventArgsTypeMismatchException">
@@ -71,13 +71,13 @@ namespace FluentEvents.Config
         /// <exception cref="NoEventsSelectedException">
         ///     The event selection action doesn't subscribe the provided dynamic object to any event.
         /// </exception>
-        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasGlobalSubscription(
+        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasGlobalSubscriptionTo(
             Action<TSource, dynamic> eventSelectionAction
         )
         {
             var eventName = _eventSelectionService.GetSingleSelectedEventName(_sourceModel, eventSelectionAction);
 
-            return HasGlobalSubscription(eventName);
+            return HasGlobalSubscriptionTo(eventName);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace FluentEvents.Config
         /// <exception cref="EventArgsTypeMismatchException">
         ///     The specified event args type is different from the event args type of the event being selected.
         /// </exception>
-        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasScopedSubscription(string eventName)
+        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasScopedSubscriptionTo(string eventName)
         {
             CheckEventField(eventName);
 
@@ -108,7 +108,7 @@ namespace FluentEvents.Config
         ///     Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
         /// </param>
         /// <example>
-        ///     HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+        ///     HasScopedSubscriptionTo&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
         /// </example>
         /// <returns>The configuration object to add more subscriptions.</returns>
         /// <exception cref="EventArgsTypeMismatchException">
@@ -121,13 +121,13 @@ namespace FluentEvents.Config
         /// <exception cref="NoEventsSelectedException">
         ///     The event selection action doesn't subscribe the provided dynamic object to any event.
         /// </exception>
-        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasScopedSubscription(
+        public ServiceHandlerConfigurator<TService, TSource, TEventArgs> HasScopedSubscriptionTo(
             Action<TSource, dynamic> eventSelectionAction
         )
         {
             var eventName = _eventSelectionService.GetSingleSelectedEventName(_sourceModel, eventSelectionAction);
 
-            return HasScopedSubscription(eventName);
+            return HasScopedSubscriptionTo(eventName);
         }
 
         private void CheckEventField(string eventName)

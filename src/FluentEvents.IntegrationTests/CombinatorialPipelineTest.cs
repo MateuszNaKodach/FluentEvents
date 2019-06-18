@@ -219,10 +219,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasGlobalSubscription(nameof(ProjectedTestEntity.Test));
+                        .HasGlobalSubscriptionTo(nameof(ProjectedTestEntity.Test));
                 else
                     serviceConfigurator
-                        .HasGlobalSubscription(nameof(ProjectedTestEntity.AsyncTest));
+                        .HasGlobalSubscriptionTo(nameof(ProjectedTestEntity.AsyncTest));
             }
 
             private void AddGlobalServiceSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
@@ -232,10 +232,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
+                        .HasGlobalSubscriptionTo<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
                 else
                     serviceConfigurator
-                        .HasGlobalSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                        .HasGlobalSubscriptionTo<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
             }
 
             private void AddScopedServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
@@ -245,10 +245,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasScopedSubscription(nameof(ProjectedTestEntity.Test));
+                        .HasScopedSubscriptionTo(nameof(ProjectedTestEntity.Test));
                 else
                     serviceConfigurator
-                        .HasScopedSubscription(nameof(ProjectedTestEntity.AsyncTest));
+                        .HasScopedSubscriptionTo(nameof(ProjectedTestEntity.AsyncTest));
             }
 
             private void AddScopedServiceSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
@@ -258,10 +258,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
+                        .HasScopedSubscriptionTo<ProjectedTestEntity>((service, entity) => service.Subscribe(entity));
                 else
                     serviceConfigurator
-                        .HasScopedSubscription<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                        .HasScopedSubscriptionTo<ProjectedTestEntity>((service, entity) => service.AsyncSubscribe(entity));
             }
 
             private void AddGlobalServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
@@ -271,10 +271,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasGlobalSubscription(nameof(TestEntity.Test));
+                        .HasGlobalSubscriptionTo(nameof(TestEntity.Test));
                 else
                     serviceConfigurator
-                        .HasGlobalSubscription(nameof(TestEntity.AsyncTest));
+                        .HasGlobalSubscriptionTo(nameof(TestEntity.AsyncTest));
             }
 
             private void AddGlobalServiceSubscription(SubscriptionsBuilder subscriptionsBuilder)
@@ -284,10 +284,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasGlobalSubscription<TestEntity>((service, entity) => service.Subscribe(entity));
+                        .HasGlobalSubscriptionTo<TestEntity>((service, entity) => service.Subscribe(entity));
                 else
                     serviceConfigurator
-                        .HasGlobalSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                        .HasGlobalSubscriptionTo<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
             }
 
             private void AddScopedServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
@@ -297,10 +297,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasScopedSubscription(nameof(TestEntity.Test));
+                        .HasScopedSubscriptionTo(nameof(TestEntity.Test));
                 else
                     serviceConfigurator
-                        .HasScopedSubscription(nameof(TestEntity.AsyncTest));
+                        .HasScopedSubscriptionTo(nameof(TestEntity.AsyncTest));
             }
 
             private void AddScopedServiceSubscription(SubscriptionsBuilder subscriptionsBuilder)
@@ -310,10 +310,10 @@ namespace FluentEvents.IntegrationTests
 
                 if (!_parameters.IsAsync)
                     serviceConfigurator
-                        .HasScopedSubscription<TestEntity>((service, entity) => service.Subscribe(entity));
+                        .HasScopedSubscriptionTo<TestEntity>((service, entity) => service.Subscribe(entity));
                 else
                     serviceConfigurator
-                        .HasScopedSubscription<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
+                        .HasScopedSubscriptionTo<TestEntity>((service, entity) => service.AsyncSubscribe(entity));
             }
 
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
