@@ -120,6 +120,23 @@ namespace FluentEvents.UnitTests
             _eventsContext.Get<IServiceProvider>();
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
+
+        [Test]
+        public void Instance_OnSecondCall_ShouldNotCallBuilders()
+        {
+            SetUpServiceProviderAndServiceCollection();
+            _eventsContext.Configure(_eventsContextOptions, _internalServiceCollectionMock.Object);
+            SetUpBuilding();
+
+            var isOnBuildingPipelinesCallsCount = 0;
+            _eventsContext.OnBuildingPipelinesCalled += (sender, args) => { isOnBuildingPipelinesCallsCount++; };
+
+            var serviceProvider1 = ((IInfrastructure<IServiceProvider>)_eventsContext).Instance;
+            var serviceProvider2 = ((IInfrastructure<IServiceProvider>)_eventsContext).Instance;
+
+            Assert.That(isOnBuildingPipelinesCallsCount, Is.EqualTo(1));
+            Assert.That(serviceProvider1, Is.Not.Null);
+            Assert.That(serviceProvider2, Is.EqualTo(serviceProvider1));
         }
 
         [Test]
