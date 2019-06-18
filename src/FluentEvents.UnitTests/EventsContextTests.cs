@@ -210,7 +210,10 @@ namespace FluentEvents.UnitTests
 
             var returnedSubscription = _eventsContext.SubscribeGloballyTo(subscriptionAction);
 
-            Assert.That(returnedSubscription, Is.EqualTo(subscription));
+            Assert.That(
+                returnedSubscription,
+                Has.Property(nameof(UnsubscribeToken.Subscription)).EqualTo(subscription)
+            );
         }
 
         [Test]
@@ -224,7 +227,7 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.RemoveGlobalSubscription(subscription))
                 .Verifiable();
 
-            _eventsContext.Unsubscribe(subscription);
+            _eventsContext.Unsubscribe(new UnsubscribeToken(subscription));
         }
         
         private void ConfigureEventsContext()

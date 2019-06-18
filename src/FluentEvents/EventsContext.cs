@@ -180,17 +180,17 @@ namespace FluentEvents
         /// <typeparam name="TSource">The type of the events source.</typeparam>
         /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
         /// <returns>
-        ///     The <see cref="ISubscriptionsCancellationToken"/> that should be passed to
+        ///     The <see cref="UnsubscribeToken"/> that should be passed to
         ///     <see cref="Unsubscribe"/> to stop receiving the events.
         /// </returns>
-        public ISubscriptionsCancellationToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
-            => Dependencies.GlobalSubscriptionsService.AddGlobalSubscription(subscriptionAction);
+        public UnsubscribeToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
+            => new UnsubscribeToken(Dependencies.GlobalSubscriptionsService.AddGlobalSubscription(subscriptionAction));
 
         /// <summary>
         ///     Cancels a global subscription.
         /// </summary>
-        /// <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
-        public void Unsubscribe(ISubscriptionsCancellationToken subscriptionsCancellationToken)
-            => Dependencies.GlobalSubscriptionsService.RemoveGlobalSubscription((Subscription)subscriptionsCancellationToken);
+        /// <param name="unsubscribeToken">The token of the subscription(s) to cancel.</param>
+        public void Unsubscribe(UnsubscribeToken unsubscribeToken)
+            => Dependencies.GlobalSubscriptionsService.RemoveGlobalSubscription(unsubscribeToken.Subscription);
     }
 }
