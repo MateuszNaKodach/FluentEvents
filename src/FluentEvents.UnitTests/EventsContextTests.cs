@@ -117,9 +117,11 @@ namespace FluentEvents.UnitTests
                 isOnBuildingPipelinesCalled = true;
             };
 
-            _eventsContext.Get<IServiceProvider>();
+            var serviceProvider = ((IInfrastructure<IServiceProvider>) _eventsContext).Instance;
 
             Assert.That(isOnBuildingPipelinesCalled, Is.True);
+            Assert.That(serviceProvider, Is.Not.Null);
+        }
 
         [Test]
         public void Instance_OnSecondCall_ShouldNotCallBuilders()
