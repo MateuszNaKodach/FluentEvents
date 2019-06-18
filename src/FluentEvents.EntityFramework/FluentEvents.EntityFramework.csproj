@@ -8,7 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>EventAggregator;EntityFramework</PackageTags>
+    <PackageTags>EntityFramework;DomainEvents;EventAggregator;Domain;Aggregation;Event</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents.EntityFramework/icon.png</PackageIconUrl>
   </PropertyGroup>
 

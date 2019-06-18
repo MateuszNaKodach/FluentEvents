@@ -8,7 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>EventAggregator;Azure;SignalR</PackageTags>
+    <PackageTags>SignalR;DomainEvents;EventAggregator;Domain;Aggregation;Event</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents.Azure.SignalR/icon.png</PackageIconUrl>
   </PropertyGroup>
 
