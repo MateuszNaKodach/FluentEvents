@@ -47,7 +47,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
@@ -90,7 +90,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
@@ -113,7 +113,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
@@ -135,7 +135,7 @@ namespace FluentEvents.UnitTests.Config
         public void GetSingleSelectedEventName_WithOneEventSelected_ShouldReturnEventName()
         {
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Returns(new[]
                 {
                     new SubscribedHandler(nameof(TestSource.TestEvent1), null),
@@ -156,7 +156,7 @@ namespace FluentEvents.UnitTests.Config
         public void GetSingleSelectedEventName_WithMultipleEventsSelected_ShouldThrow()
         {
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Returns(new[]
                 {
                     new SubscribedHandler(nameof(TestSource.TestEvent1), null),
@@ -181,7 +181,7 @@ namespace FluentEvents.UnitTests.Config
         public void GetSingleSelectedEventName_WithNoEventsSelected_ShouldThrow()
         {
             _subscriptionScanServiceMock
-                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeFieldInfos, It.IsAny<Action<object>>()))
+                .Setup(x => x.GetSubscribedHandlers(_sourceModel.ClrType, _sourceModel.ClrTypeEventFieldInfos, It.IsAny<Action<object>>()))
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 

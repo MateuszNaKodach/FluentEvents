@@ -45,7 +45,7 @@ namespace FluentEvents.Config
 
             var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
-                sourceModel.ClrTypeFieldInfos,
+                sourceModel.ClrTypeEventFieldInfos,
                 SubscriptionToDynamicActionWrapper
             );
 

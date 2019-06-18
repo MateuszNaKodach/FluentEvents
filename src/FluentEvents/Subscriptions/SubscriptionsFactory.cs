@@ -42,7 +42,7 @@ namespace FluentEvents.Subscriptions
             var subscription = new Subscription(sourceType);
             var subscribedHandlers = _subscriptionScanService.GetSubscribedHandlers(
                 sourceModel.ClrType,
-                sourceModel.ClrTypeFieldInfos,
+                sourceModel.ClrTypeEventFieldInfos,
                 x => subscriptionAction((TSource) x)
             );
 

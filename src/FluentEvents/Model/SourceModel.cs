@@ -20,7 +20,7 @@ namespace FluentEvents.Model
         /// <summary>
         ///     The list of the fields present on the <see cref="ClrType"/>.
         /// </summary>
-        public FieldInfo[] ClrTypeFieldInfos { get; }
+        public FieldInfo[] ClrTypeEventFieldInfos { get; }
 
         /// <summary>
         ///     The list of the event fields present on the <see cref="ClrType"/> and created on this model.
@@ -37,7 +37,7 @@ namespace FluentEvents.Model
         public SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
-            ClrTypeFieldInfos = ClrType.GetEvents().Select(x => GetEventFieldInfo(clrType, x)).ToArray();
+            ClrTypeEventFieldInfos = ClrType.GetEvents().Select(x => GetEventFieldInfo(clrType, x)).ToArray();
             _eventFields = new List<SourceModelEventField>();
         }
 
@@ -50,7 +50,7 @@ namespace FluentEvents.Model
             var eventField = _eventFields.FirstOrDefault(x => x.Name == name);
             if (eventField == null)
             {
-                var fieldInfo = ClrTypeFieldInfos.FirstOrDefault(x => x.Name == name);
+                var fieldInfo = ClrTypeEventFieldInfos.FirstOrDefault(x => x.Name == name);
                 if (fieldInfo == null)
                     throw new EventFieldNotFoundException();
 

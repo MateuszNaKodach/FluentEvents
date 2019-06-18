@@ -76,6 +76,17 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="T:FluentEvents.Config.InvalidEventSelectionException">
+            <summary>
+                An exception thrown when using the dynamic object in ways that differ from using it as an event handler. 
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Config.InvalidEventSelectionException.#ctor(System.String)">
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.Config.InvalidEventSelectionException"/>.
+            </summary>
+            <param name="message">The message of the exception.</param>
+        </member>
         <member name="T:FluentEvents.Config.MoreThanOneEventSelectedException">
             <summary>
                 An exception thrown when selecting more than one event in a selection <see cref="T:System.Action"/>.
@@ -126,12 +137,22 @@
             </example>
             <returns>The configuration object for the specified event.</returns>
         </member>
+        <member name="T:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException">
+            <summary>
+                An exception thrown when trying to select an event with a return type different from void or Task.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException.#ctor">
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException"/>
+            </summary>
+        </member>
         <member name="T:FluentEvents.Config.ServiceConfigurator`1">
             <summary>
                 Provides a simple API surface for configuring a service.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.ServiceConfigurator`1.HasScopedSubscription``1(System.Action{`0,``0})">
+        <member name="M:FluentEvents.Config.ServiceConfigurator`1.HasScopedSubscriptionTo``1(System.Action{`0,``0})">
             <summary>
                 Subscribes a service to scoped events the first time a matching event is published. 
             </summary>
@@ -141,7 +162,7 @@
             </param>
             <returns>The configuration object to add more subscriptions.</returns>
         </member>
-        <member name="M:FluentEvents.Config.ServiceConfigurator`1.HasGlobalSubscription``1(System.Action{`0,``0})">
+        <member name="M:FluentEvents.Config.ServiceConfigurator`1.HasGlobalSubscriptionTo``1(System.Action{`0,``0})">
             <summary>
                 Subscribes a service to global events when the EventsContext is initialized. 
             </summary>
@@ -156,7 +177,7 @@
                 Provides an API surface to configure the subscriptions of a service event handler.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscription(System.String)">
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscriptionTo(System.String)">
             <summary>
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
             </summary>
@@ -166,7 +187,7 @@
                 The specified event args type is different from the event args type of the event being selected.
             </exception>
         </member>
-        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscription(System.Action{`1,System.Object})">
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasGlobalSubscriptionTo(System.Action{`1,System.Object})">
             <summary>
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
             </summary>
@@ -176,7 +197,7 @@
                 Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
             </param>
             <example>
-                HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+                HasGlobalSubscriptionTo&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
             </example>
             <returns>The configuration object to add more subscriptions.</returns>
             <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
@@ -190,7 +211,7 @@
                 The event selection action doesn't subscribe the provided dynamic object to any event.
             </exception>
         </member>
-        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscription(System.String)">
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscriptionTo(System.String)">
             <summary>
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to scoped events.
             </summary>
@@ -200,7 +221,7 @@
                 The specified event args type is different from the event args type of the event being selected.
             </exception>
         </member>
-        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscription(System.Action{`1,System.Object})">
+        <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`3.HasScopedSubscriptionTo(System.Action{`1,System.Object})">
             <summary>
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`2.HandleEventAsync(`0,`1)"/> to global events.
             </summary>
@@ -210,7 +231,7 @@
                 Example usage: <code>(source, eventHandler) =&gt; source.MyEvent += eventHandler</code>
             </param>
             <example>
-                HasGlobalSubscription&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
+                HasScopedSubscriptionTo&lt;MySource, MyEventArgs&gt;((source, eventHandler) =&gt; source.MyEvent += eventHandler)
             </example>
             <returns>The configuration object to add more subscriptions.</returns>
             <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
@@ -298,7 +319,7 @@
             </remarks>
             <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.StartEventReceivers(System.Threading.CancellationToken)">
+        <member name="M:FluentEvents.EventsContext.StartEventReceiversAsync(System.Threading.CancellationToken)">
             <summary>
                 Starts the registered event receivers manually.
             </summary>
@@ -308,7 +329,7 @@
             </remarks>
             <param name="cancellationToken">The cancellation token for the async operation.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.StopEventReceivers(System.Threading.CancellationToken)">
+        <member name="M:FluentEvents.EventsContext.StopEventReceiversAsync(System.Threading.CancellationToken)">
             <summary>
                 Stops the registered event receivers manually.
             </summary>
@@ -355,19 +376,19 @@
                     );
                 </code>
             </example>
-            <remarks>You can call <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.</remarks>
+            <remarks>You can call <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.UnsubscribeToken)"/> to stop receiving the events.</remarks>
             <typeparam name="TSource">The type of the events source.</typeparam>
             <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
             <returns>
-                The <see cref="T:FluentEvents.Subscriptions.ISubscriptionsCancellationToken"/> that should be passed to
-                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> to stop receiving the events.
+                The <see cref="T:FluentEvents.Subscriptions.UnsubscribeToken"/> that should be passed to
+                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.UnsubscribeToken)"/> to stop receiving the events.
             </returns>
         </member>
-        <member name="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)">
+        <member name="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.UnsubscribeToken)">
             <summary>
                 Cancels a global subscription.
             </summary>
-            <param name="subscriptionsCancellationToken">The token of the subscription(s) to cancel.</param>
+            <param name="unsubscribeToken">The token of the subscription(s) to cancel.</param>
         </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>
@@ -512,7 +533,7 @@
                 The type of the event source.
             </summary>
         </member>
-        <member name="P:FluentEvents.Model.SourceModel.ClrTypeFieldInfos">
+        <member name="P:FluentEvents.Model.SourceModel.ClrTypeEventFieldInfos">
             <summary>
                 The list of the fields present on the <see cref="P:FluentEvents.Model.SourceModel.ClrType"/>.
             </summary>
@@ -1205,12 +1226,6 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.ISubscriptionsCancellationToken">
-            <summary>
-                A token that can be used to cancel a global subscription with the
-                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.ISubscriptionsCancellationToken)"/> method.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Subscriptions.ISubscriptionScanService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
@@ -1348,6 +1363,12 @@
         <member name="M:FluentEvents.Subscriptions.SubscriptionsMatchingService.GetMatchingSubscriptionsForSender(System.Collections.Generic.IEnumerable{FluentEvents.Subscriptions.Subscription},System.Object)">
             <inheritdoc />
         </member>
+        <member name="T:FluentEvents.Subscriptions.UnsubscribeToken">
+            <summary>
+                A token that can be used to cancel a global subscription with the
+                <see cref="M:FluentEvents.EventsContext.Unsubscribe(FluentEvents.Subscriptions.UnsubscribeToken)"/> method.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Transmission.EventReceiversHostedService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
@@ -1460,21 +1481,6 @@
         </member>
         <member name="M:FluentEvents.Transmission.JsonEventsSerializationService.DeserializeEvent(System.Byte[])">
             <inheritdoc />
-        </member>
-        <member name="T:FluentEvents.Utils.InvalidEventSelectionException">
-            <summary>
-                An exception thrown when using the dynamic object in ways that differ from using it as an event handler. 
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException">
-            <summary>
-                An exception thrown when trying to select an event with a return type different from void or Task.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException.#ctor">
-            <summary>
-                Creates a new instance of <see cref="T:FluentEvents.Utils.SelectedEventHasUnsupportedReturnTypeException"/>
-            </summary>
         </member>
     </members>
 </doc>
