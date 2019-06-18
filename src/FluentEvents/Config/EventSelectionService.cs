@@ -103,7 +103,7 @@ namespace FluentEvents.Config
                 else if (returnType == typeof(void))
                     body = Expression.Empty();
                 else
-                    throw new SelectedEventHasUnsupportedReturnTypeException();
+                    throw new SelectedEventReturnTypeNotSupportedException();
 
                 var handler = Expression.Lambda(
                         type,

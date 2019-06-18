@@ -128,7 +128,7 @@ namespace FluentEvents.UnitTests.Config
             Assert.That(() =>
             {
                 subscriptionAction(testSource);
-            }, Throws.TypeOf<SelectedEventHasUnsupportedReturnTypeException>());
+            }, Throws.TypeOf<SelectedEventReturnTypeNotSupportedException>());
         }
 
         [Test]
