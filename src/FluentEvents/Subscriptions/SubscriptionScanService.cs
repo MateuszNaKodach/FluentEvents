@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Castle.DynamicProxy;
-using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions
 {

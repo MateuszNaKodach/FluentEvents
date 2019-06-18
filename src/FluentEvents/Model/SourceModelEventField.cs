@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
-using FluentEvents.Utils;
 
 namespace FluentEvents.Model
 {

@@ -9,7 +9,6 @@ using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
-using FluentEvents.Utils;
 using Moq;
 using NUnit.Framework;
 

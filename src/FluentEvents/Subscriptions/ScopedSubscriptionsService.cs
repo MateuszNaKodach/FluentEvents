@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using FluentEvents.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
 {

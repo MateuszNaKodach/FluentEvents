@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using FluentEvents.Config;
 using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions

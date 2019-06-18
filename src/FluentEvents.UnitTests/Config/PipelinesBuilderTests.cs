@@ -2,7 +2,6 @@
 using FluentEvents.Infrastructure;
 using FluentEvents.Config;
 using FluentEvents.Model;
-using FluentEvents.Utils;
 using Moq;
 using NUnit.Framework;
 

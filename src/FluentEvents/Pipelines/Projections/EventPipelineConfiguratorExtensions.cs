@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
-using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Pipelines.Projections

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentEvents.Azure.ServiceBus.Sending;
+﻿using FluentEvents.Azure.ServiceBus.Sending;
 using Microsoft.Azure.ServiceBus;
 using NUnit.Framework;
 

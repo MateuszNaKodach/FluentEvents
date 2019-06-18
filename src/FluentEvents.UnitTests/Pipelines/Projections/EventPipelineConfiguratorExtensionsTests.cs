@@ -4,7 +4,6 @@ using FluentEvents.Model;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Projections;
-using FluentEvents.Utils;
 using Moq;
 using NUnit.Framework;
 

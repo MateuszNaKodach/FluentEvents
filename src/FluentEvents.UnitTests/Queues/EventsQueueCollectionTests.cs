@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using FluentEvents.Queues;
 using NUnit.Framework;
 

@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
-using FluentEvents.Utils;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace FluentEvents.Config

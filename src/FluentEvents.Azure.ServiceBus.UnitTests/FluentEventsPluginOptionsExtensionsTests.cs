@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using FluentEvents.Azure.ServiceBus.Receiving;
 using FluentEvents.Azure.ServiceBus.Sending;
 using FluentEvents.Plugins;

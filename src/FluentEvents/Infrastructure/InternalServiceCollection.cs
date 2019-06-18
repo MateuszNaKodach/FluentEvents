@@ -11,7 +11,6 @@ using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
-using FluentEvents.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;

@@ -137,14 +137,14 @@
             </example>
             <returns>The configuration object for the specified event.</returns>
         </member>
-        <member name="T:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException">
+        <member name="T:FluentEvents.Config.SelectedEventReturnTypeNotSupportedException">
             <summary>
                 An exception thrown when trying to select an event with a return type different from void or Task.
             </summary>
         </member>
-        <member name="M:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException.#ctor">
+        <member name="M:FluentEvents.Config.SelectedEventReturnTypeNotSupportedException.#ctor">
             <summary>
-                Creates a new instance of <see cref="T:FluentEvents.Config.SelectedEventHasUnsupportedReturnTypeException"/>
+                Creates a new instance of <see cref="T:FluentEvents.Config.SelectedEventReturnTypeNotSupportedException"/>
             </summary>
         </member>
         <member name="T:FluentEvents.Config.ServiceConfigurator`1">

@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Pipelines;
-using FluentEvents.Transmission;
 using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Subscriptions
