@@ -9,8 +9,8 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 - Dispatch domain events
 - Dispatch integration events
 - Dispatch Two-phase domain events ([A better domain events pattern](https://lostechies.com/jimmybogard/2014/05/13/a-better-domain-events-pattern/))
-- Generalize events using projections.
-- Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised. 
+- Generalize events using projections
+- Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised
 
 #### How it works:
 ```csharp
