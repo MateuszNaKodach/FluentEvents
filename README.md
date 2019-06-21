@@ -27,7 +27,7 @@ public class MyEventsContext : EventsContext
     protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
     {
         pipelinesBuilder
-            .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h))
+            .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h)
             .IsWatched()
             .ThenIsPublishedToGlobalSubscriptions();
     }
