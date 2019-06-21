@@ -13,26 +13,40 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised
 
 #### How it works:
+
 ```csharp
-public class NotificationsService
+public class MyEventsContext : EventsContext
+{
+    protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+    {
+        subscriptionsBuilder
+            .ServiceHandler<NotificationsService, User, FriendRequestAcceptedEventArgs>()
+            .HasGlobalSubscription((user, h) => user.FriendRequestAccepted += h);
+    }
+
+    protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+    {
+        pipelinesBuilder
+            .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h))
+            .IsWatched()
+            .ThenIsPublishedToGlobalSubscriptions();
+    }
+}
+```
+
+```csharp
+public class NotificationsService : IEventHandler<User, FriendRequestAcceptedEventArgs>
 {
     private readonly IMailService _mailService;
 
-    public NotificationsService(MyEventsContext myEventsContext, IMailService mailService)
+    public NotificationsService(IMailService mailService)
     {
-        myEventsContext.SubscribeGloballyTo<Order>(order =>
-        {
-            order.Shipped += OrderOnShipped;
-        });
-        
         _mailService = mailService;
     }
 
-    private async Task OrderOnShipped(object sender, OrderShippedEventArgs e)
+    public async Task HandleEventAsync(User user, FriendRequestAcceptedEventArgs e)
     {
-        var order = (Order) order;
-
-        await _mailService.SendOrderShippedEmail(order.Customer.EmailAddress, order.Code);
+        await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
 }
 ```
