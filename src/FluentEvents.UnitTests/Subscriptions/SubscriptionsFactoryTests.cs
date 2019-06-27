@@ -69,7 +69,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                     _sourceModel, 
                     It.IsAny<Action<object>>())
                 )
-                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => action(new EventsSource()))
+                .Callback<SourceModel, Action<object>>((_, action) => action(new EventsSource()))
                 .Returns(new [] { _subscribedHandler })
                 .Verifiable();
 

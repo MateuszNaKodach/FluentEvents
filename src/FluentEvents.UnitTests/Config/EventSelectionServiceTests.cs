@@ -47,7 +47,7 @@ namespace FluentEvents.UnitTests.Config
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(_sourceModel, It.IsAny<Action<object>>()))
-                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
+                .Callback<SourceModel, Action<object>>((_, action) => subscriptionAction = action)
                 .Returns(new [] { new SubscribedHandler(eventName, null) })
                 .Verifiable();
 
@@ -90,7 +90,7 @@ namespace FluentEvents.UnitTests.Config
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(_sourceModel, It.IsAny<Action<object>>()))
-                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
+                .Callback<SourceModel, Action<object>>((_, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
@@ -113,7 +113,7 @@ namespace FluentEvents.UnitTests.Config
             Action<object> subscriptionAction = null;
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(_sourceModel, It.IsAny<Action<object>>()))
-                .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => subscriptionAction = action)
+                .Callback<SourceModel, Action<object>>((_, action) => subscriptionAction = action)
                 .Returns(new SubscribedHandler[0])
                 .Verifiable();
 
