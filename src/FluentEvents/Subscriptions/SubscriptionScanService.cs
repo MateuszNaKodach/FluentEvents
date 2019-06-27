@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Castle.DynamicProxy;
+using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions
 {
@@ -17,18 +18,19 @@ namespace FluentEvents.Subscriptions
 
         /// <inheritdoc />
         public IEnumerable<SubscribedHandler> GetSubscribedHandlers(
-            Type sourceType, 
-            IEnumerable<FieldInfo> fieldInfos, 
+            SourceModel sourceModel,
             Action<object> subscriptionAction
         )
         {
+            var sourceType = sourceModel.ClrType;
+
             if (sourceType.IsAbstract)
                 sourceType = CreateClassProxyType(sourceType);
 
             var mockSource = FormatterServices.GetUninitializedObject(sourceType);
             subscriptionAction.Invoke(mockSource);
 
-            foreach (var fieldInfo in fieldInfos)
+            foreach (var fieldInfo in sourceModel.ClrTypeEventFieldInfos)
             {
                 var eventsHandler = (Delegate) fieldInfo.GetValue(mockSource);
 

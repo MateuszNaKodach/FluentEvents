@@ -1232,7 +1232,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.ISubscriptionScanService.GetSubscribedHandlers(System.Type,System.Collections.Generic.IEnumerable{System.Reflection.FieldInfo},System.Action{System.Object})">
+        <member name="M:FluentEvents.Subscriptions.ISubscriptionScanService.GetSubscribedHandlers(FluentEvents.Model.SourceModel,System.Action{System.Object})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -1339,7 +1339,7 @@
         <member name="T:FluentEvents.Subscriptions.SubscriptionScanService">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.Subscriptions.SubscriptionScanService.GetSubscribedHandlers(System.Type,System.Collections.Generic.IEnumerable{System.Reflection.FieldInfo},System.Action{System.Object})">
+        <member name="M:FluentEvents.Subscriptions.SubscriptionScanService.GetSubscribedHandlers(FluentEvents.Model.SourceModel,System.Action{System.Object})">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Subscriptions.SubscriptionsFactory">

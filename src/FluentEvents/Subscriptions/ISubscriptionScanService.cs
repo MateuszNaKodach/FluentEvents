@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using FluentEvents.Model;
 
 namespace FluentEvents.Subscriptions
 {
@@ -15,8 +15,7 @@ namespace FluentEvents.Subscriptions
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         IEnumerable<SubscribedHandler> GetSubscribedHandlers(
-            Type sourceType,
-            IEnumerable<FieldInfo> fieldInfos,
+            SourceModel sourceModel,
             Action<object> subscriptionAction
         );
     }

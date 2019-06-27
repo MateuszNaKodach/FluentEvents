@@ -66,8 +66,7 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             _subscriptionScanServiceMock
                 .Setup(x => x.GetSubscribedHandlers(
-                    _sourceModel.ClrType, 
-                    It.Is<IEnumerable<FieldInfo>>(y => y.SequenceEqual(_sourceModel.EventFields.Select(z => z.FieldInfo))), 
+                    _sourceModel, 
                     It.IsAny<Action<object>>())
                 )
                 .Callback<Type, IEnumerable<FieldInfo>, Action<object>>((_, __, action) => action(new EventsSource()))
