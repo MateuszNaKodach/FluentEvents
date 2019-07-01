@@ -16,7 +16,6 @@
     <ProjectReference Include="..\WorkerSample.Application\WorkerSample.Application.csproj" />
     <ProjectReference Include="..\WorkerSample.Domain\WorkerSample.Domain.csproj" />
     <ProjectReference Include="..\WorkerSample.Events\WorkerSample.Events.csproj" />
-    <ProjectReference Include="..\WorkerSample.Notifications\WorkerSample.Notifications.csproj" />
     <ProjectReference Include="..\WorkerSample.Repositories\WorkerSample.Repositories.csproj" />
   </ItemGroup>
 

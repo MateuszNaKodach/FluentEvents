@@ -2,14 +2,14 @@
 using FluentEvents;
 using WorkerSample.Domain;
 
-namespace WorkerSample.Notifications
+namespace WorkerSample.Application
 {
-    public class ProductSubscriptionCancelledMailService 
+    public class ProductSubscriptionCancelledEventHandler 
         : IEventHandler<ProductSubscription, ProductSubscriptionCancelledEventArgs>
     {
         private readonly IMailService _mailService;
 
-        public ProductSubscriptionCancelledMailService(IMailService mailService)
+        public ProductSubscriptionCancelledEventHandler(IMailService mailService)
         {
             _mailService = mailService;
         }

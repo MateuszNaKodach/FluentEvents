@@ -2,8 +2,8 @@
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
+using WorkerSample.Application;
 using WorkerSample.Domain;
-using WorkerSample.Notifications;
 
 namespace WorkerSample.Events
 {
@@ -15,7 +15,7 @@ namespace WorkerSample.Events
         {
             subscriptionsBuilder
                 .ServiceHandler<
-                    ProductSubscriptionCancelledMailService,
+                    ProductSubscriptionCancelledEventHandler,
                     ProductSubscription,
                     ProductSubscriptionCancelledEventArgs
                 >()

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WorkerSample.Notifications
+namespace WorkerSample.Application
 {
     public interface IMailService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using WorkerSample.Notifications;
+using WorkerSample.Application;
 
 namespace WorkerSample.Worker
 {

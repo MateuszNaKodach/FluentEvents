@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using WorkerSample.Application;
 using WorkerSample.Domain;
 using WorkerSample.Events;
-using WorkerSample.Notifications;
 using WorkerSample.Repositories;
 
 namespace WorkerSample.Worker
@@ -37,7 +36,7 @@ namespace WorkerSample.Worker
                     services.AddScoped<IProductSubscriptionsRepository, ProductSubscriptionsRepository>();
                     services.AddScoped<IProductSubscriptionCancellationService, ProductSubscriptionCancellationService>();
                     services.AddScoped<IMailService, FakeMailService>();
-                    services.AddScoped<ProductSubscriptionCancelledMailService>();
+                    services.AddScoped<ProductSubscriptionCancelledEventHandler>();
                     services.AddHostedService<ProcessExpiredSubscriptionsHostedService>();
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
