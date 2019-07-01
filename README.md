@@ -6,9 +6,9 @@
 FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggregator.html) framework for implementing [domain events and integration events](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/domain-events-design-implementation#domain-events-versus-integration-events) in DDD applications.
 
 #### FluentEvents can:
-- Dispatch domain events
-- Dispatch integration events
-- Dispatch Two-phase domain events ([A better domain events pattern](https://lostechies.com/jimmybogard/2014/05/13/a-better-domain-events-pattern/))
+- Manage domain events
+- Manage integration events
+- Manage Two-phase domain events ([A better domain events pattern](https://lostechies.com/jimmybogard/2014/05/13/a-better-domain-events-pattern/))
 - Generalize events using projections
 - Invoke [SignalR](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) methods when events are raised
 
