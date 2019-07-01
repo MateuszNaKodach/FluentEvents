@@ -20,7 +20,7 @@ namespace AzureSignalRSample.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AzureSignalRSample.DomainModel.LightBulb", b =>
+            modelBuilder.Entity("AzureSignalRSample.Domain.LightBulb", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

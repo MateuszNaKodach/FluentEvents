@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreApiSample.DomainModel
+﻿namespace AspNetCoreApiSample.Domain
 {
     public class ContractTerminatedEventArgs
     {

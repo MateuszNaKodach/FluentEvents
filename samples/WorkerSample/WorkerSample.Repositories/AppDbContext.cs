@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FluentEvents;
 using Microsoft.EntityFrameworkCore;
-using WorkerSample.DomainModel;
+using WorkerSample.Domain;
 using WorkerSample.Events;
 
 namespace WorkerSample.Repositories

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using AspNetCoreApiSample.DomainModel;
+using AspNetCoreApiSample.Domain;
 using FluentEvents;
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Projections;

@@ -1,4 +1,4 @@
-﻿using AzureSignalRSample.DomainModel;
+﻿using AzureSignalRSample.Domain;
 using FluentEvents;
 using FluentEvents.Azure.SignalR;
 using FluentEvents.Config;

@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AzureSignalRSample.DomainModel;
+using AzureSignalRSample.Domain;
 using AzureSignalRSample.Events;
 using FluentEvents;
 using Microsoft.EntityFrameworkCore;

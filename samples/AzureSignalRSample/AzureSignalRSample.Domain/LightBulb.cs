@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AzureSignalRSample.DomainModel
+namespace AzureSignalRSample.Domain
 {
     public class LightBulb
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Hosting;
-using WorkerSample.DomainModel;
+using WorkerSample.Domain;
 using WorkerSample.Events;
 using WorkerSample.Notifications;
 

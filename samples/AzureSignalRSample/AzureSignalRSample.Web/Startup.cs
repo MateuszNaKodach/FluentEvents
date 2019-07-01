@@ -1,4 +1,4 @@
-﻿using AzureSignalRSample.DomainModel;
+﻿using AzureSignalRSample.Domain;
 using AzureSignalRSample.Events;
 using AzureSignalRSample.Persistence;
 using AzureSignalRSample.Query;

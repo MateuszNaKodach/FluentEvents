@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AspNetCoreApiSample.DomainModel;
+using AspNetCoreApiSample.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreApiSample.Repositories

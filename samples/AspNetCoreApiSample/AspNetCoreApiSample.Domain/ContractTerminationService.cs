@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AspNetCoreApiSample.DomainModel
+namespace AspNetCoreApiSample.Domain
 {
     public class ContractTerminationService : IContractTerminationService
     {

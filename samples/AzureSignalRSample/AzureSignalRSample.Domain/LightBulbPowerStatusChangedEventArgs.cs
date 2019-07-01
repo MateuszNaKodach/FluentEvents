@@ -1,4 +1,4 @@
-﻿namespace AzureSignalRSample.DomainModel
+﻿namespace AzureSignalRSample.Domain
 {
     public class LightBulbPowerStatusChangedEventArgs
     {

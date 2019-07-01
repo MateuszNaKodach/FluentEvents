@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AzureSignalRSample.DomainModel
+namespace AzureSignalRSample.Domain
 {
     public interface ILightBulbTogglingService
     {

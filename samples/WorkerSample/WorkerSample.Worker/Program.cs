@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WorkerSample.DomainModel;
+using WorkerSample.Domain;
 using WorkerSample.Events;
 using WorkerSample.Notifications;
 using WorkerSample.Repositories;

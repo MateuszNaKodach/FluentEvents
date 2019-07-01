@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AspNetCoreApiSample.DomainModel
+namespace AspNetCoreApiSample.Domain
 {
     public class ContractWasAlreadyTerminatedException : ApplicationException
     {

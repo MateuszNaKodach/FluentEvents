@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkerSample.DomainModel
+namespace WorkerSample.Domain
 {
     public class ProductSubscriptionCancellationService : IProductSubscriptionCancellationService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WorkerSample.DomainModel
+namespace WorkerSample.Domain
 {
     public interface IProductSubscriptionsRepository
     {

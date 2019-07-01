@@ -2,7 +2,7 @@
 using FluentEvents.Config;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
-using WorkerSample.DomainModel;
+using WorkerSample.Domain;
 
 namespace WorkerSample.Events
 {

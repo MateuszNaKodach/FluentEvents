@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using AzureSignalRSample.DomainModel;
+using AzureSignalRSample.Domain;
 using AzureSignalRSample.Persistence;
 using AzureSignalRSample.Query;
 using Microsoft.AspNetCore.Mvc;
