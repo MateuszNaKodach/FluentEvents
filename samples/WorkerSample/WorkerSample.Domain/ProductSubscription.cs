@@ -7,7 +7,7 @@ namespace WorkerSample.Domain
         public int Id { get; private set; }
         public string CustomerEmailAddress { get; private set; }
         public DateTime ExpirationDateTime { get; private set; }
-        public bool IsCancelled { get; private set; }
+        public ProductSubscriptionStatus Status { get; private set; }
 
         public event EventHandler<ProductSubscriptionCancelledEventArgs> Cancelled;
 
@@ -16,11 +16,15 @@ namespace WorkerSample.Domain
             Id = id;
             CustomerEmailAddress = customerEmailAddress;
             ExpirationDateTime = expirationDateTime;
+            Status = ProductSubscriptionStatus.ActivationPending;
         }
 
         public void Cancel()
         {
-            IsCancelled = true;
+            if (Status == ProductSubscriptionStatus.Cancelled)
+                throw new ProductSubscriptionWasAlreadyCancelledException();
+
+            Status = ProductSubscriptionStatus.Cancelled;
 
             Cancelled?.Invoke(this, new ProductSubscriptionCancelledEventArgs());
         }

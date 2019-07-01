@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WorkerSample.Domain;
+using WorkerSample.Application;
 using WorkerSample.Repositories;
 
 namespace WorkerSample.Worker

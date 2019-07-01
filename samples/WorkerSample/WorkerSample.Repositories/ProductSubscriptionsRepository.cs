@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WorkerSample.Application;
 using WorkerSample.Domain;
 
 namespace WorkerSample.Repositories

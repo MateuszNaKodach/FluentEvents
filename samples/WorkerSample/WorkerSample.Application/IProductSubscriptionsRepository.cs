@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using WorkerSample.Domain;
 
-namespace WorkerSample.Domain
+namespace WorkerSample.Application
 {
     public interface IProductSubscriptionsRepository
     {

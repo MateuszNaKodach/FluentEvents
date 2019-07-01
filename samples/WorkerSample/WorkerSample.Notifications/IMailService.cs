@@ -1,7 +1,9 @@
-﻿namespace WorkerSample.Notifications
+﻿using System.Threading.Tasks;
+
+namespace WorkerSample.Notifications
 {
     public interface IMailService
     {
-        void SendSubscriptionCancelledEmail(string emailAddress);
+        Task SendEmailAsync(string receiver, string subject, string body);
     }
 }

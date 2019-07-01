@@ -3,12 +3,24 @@ using FluentEvents.Config;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
 using WorkerSample.Domain;
+using WorkerSample.Notifications;
 
 namespace WorkerSample.Events
 {
     public class AppEventsContext : EventsContext
     {
         public static string AfterSaveChangesQueueName { get; } = "AfterSaveChangesQueue";
+
+        protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+        {
+            subscriptionsBuilder
+                .ServiceHandler<
+                    ProductSubscriptionCancelledMailService,
+                    ProductSubscription,
+                    ProductSubscriptionCancelledEventArgs
+                >()
+                .HasGlobalSubscriptionTo((source, h) => source.Cancelled += h);
+        }
 
         protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkerSample.Domain
+namespace WorkerSample.Application
 {
     public interface IProductSubscriptionCancellationService
     {

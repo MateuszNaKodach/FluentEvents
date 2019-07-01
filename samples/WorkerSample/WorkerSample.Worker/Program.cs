@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WorkerSample.Application;
 using WorkerSample.Domain;
 using WorkerSample.Events;
 using WorkerSample.Notifications;
@@ -35,9 +36,9 @@ namespace WorkerSample.Worker
                     
                     services.AddScoped<IProductSubscriptionsRepository, ProductSubscriptionsRepository>();
                     services.AddScoped<IProductSubscriptionCancellationService, ProductSubscriptionCancellationService>();
-                    services.AddSingleton<IMailService, MailService>();
+                    services.AddScoped<IMailService, FakeMailService>();
+                    services.AddScoped<ProductSubscriptionCancelledMailService>();
                     services.AddHostedService<ProcessExpiredSubscriptionsHostedService>();
-                    services.AddHostedService<NotificationsHostedService>();
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
                 {

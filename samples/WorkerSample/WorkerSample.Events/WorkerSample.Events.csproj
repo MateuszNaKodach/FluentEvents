@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorkerSample.Domain\WorkerSample.Domain.csproj" />
+    <ProjectReference Include="..\WorkerSample.Notifications\WorkerSample.Notifications.csproj" />
   </ItemGroup>
 
 </Project>
