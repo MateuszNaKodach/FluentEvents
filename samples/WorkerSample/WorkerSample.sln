@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Worker", "WorkerSample.Worker\WorkerSample.Worker.csproj", "{4EE6F4FC-3FEA-4341-A93B-639F77666A9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.DomainModel", "WorkerSample.DomainModel\WorkerSample.DomainModel.csproj", "{83D27712-455E-4BF4-978A-D67BF3553F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Domain", "WorkerSample.Domain\WorkerSample.Domain.csproj", "{83D27712-455E-4BF4-978A-D67BF3553F81}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerSample.Repositories", "WorkerSample.Repositories\WorkerSample.Repositories.csproj", "{86E355DB-E501-4EF5-954A-92A8D9341799}"
 EndProject

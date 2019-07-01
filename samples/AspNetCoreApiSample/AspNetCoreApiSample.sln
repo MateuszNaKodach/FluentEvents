@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Reposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Events", "AspNetCoreApiSample.Events\AspNetCoreApiSample.Events.csproj", "{66FB7971-534E-4E9C-B6D6-7931A913BDC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.DomainModel", "AspNetCoreApiSample.DomainModel\AspNetCoreApiSample.DomainModel.csproj", "{DDB0F358-275B-4DD6-BBE8-5EADFFC56D17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.Domain", "AspNetCoreApiSample.Domain\AspNetCoreApiSample.Domain.csproj", "{DDB0F358-275B-4DD6-BBE8-5EADFFC56D17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.Notifications", "AspNetCoreApiSample.Notifications\AspNetCoreApiSample.Notifications.csproj", "{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}"
 EndProject

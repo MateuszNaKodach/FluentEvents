@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AzureSignalRSample.DomainModel\AzureSignalRSample.DomainModel.csproj" />
+    <ProjectReference Include="..\AzureSignalRSample.Domain\AzureSignalRSample.Domain.csproj" />
     <ProjectReference Include="..\AzureSignalRSample.Persistence\AzureSignalRSample.Persistence.csproj" />
   </ItemGroup>
 

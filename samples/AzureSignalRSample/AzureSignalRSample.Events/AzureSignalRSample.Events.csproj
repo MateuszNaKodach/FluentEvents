@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AzureSignalRSample.DomainModel\AzureSignalRSample.DomainModel.csproj" />
+    <ProjectReference Include="..\AzureSignalRSample.Domain\AzureSignalRSample.Domain.csproj" />
   </ItemGroup>
 
 </Project>

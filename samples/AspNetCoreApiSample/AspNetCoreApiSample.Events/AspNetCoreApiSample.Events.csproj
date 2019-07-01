@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreApiSample.DomainModel\AspNetCoreApiSample.DomainModel.csproj" />
+    <ProjectReference Include="..\AspNetCoreApiSample.Domain\AspNetCoreApiSample.Domain.csproj" />
   </ItemGroup>
 
 </Project>

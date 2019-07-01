@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureSignalRSample.Web", "AzureSignalRSample.Web\AzureSignalRSample.Web.csproj", "{80807EBC-EC7F-4AD7-85D8-8D34D6D68E3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureSignalRSample.DomainModel", "AzureSignalRSample.DomainModel\AzureSignalRSample.DomainModel.csproj", "{6A1BBDE6-742A-4603-AF18-735652E6F2FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureSignalRSample.Domain", "AzureSignalRSample.Domain\AzureSignalRSample.Domain.csproj", "{6A1BBDE6-742A-4603-AF18-735652E6F2FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureSignalRSample.Repositories", "AzureSignalRSample.Repositories\AzureSignalRSample.Repositories.csproj", "{98650361-C146-4A6B-950C-1C867910ACBB}"
 EndProject
