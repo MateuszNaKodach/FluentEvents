@@ -1,4 +1,4 @@
-﻿using AspNetCoreApiSample.Domain;
+﻿using AspNetCoreApiSample.Application;
 using AspNetCoreApiSample.Events;
 using AspNetCoreApiSample.Notifications;
 using AspNetCoreApiSample.Repositories;

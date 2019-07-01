@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AspNetCoreApiSample.Domain
+namespace AspNetCoreApiSample.Application
 {
     public interface IContractTerminationService
     {

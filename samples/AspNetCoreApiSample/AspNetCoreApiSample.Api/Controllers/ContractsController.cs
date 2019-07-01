@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using AspNetCoreApiSample.Application;
 using AspNetCoreApiSample.Domain;
 using AspNetCoreApiSample.Repositories;
 using Microsoft.AspNetCore.Mvc;

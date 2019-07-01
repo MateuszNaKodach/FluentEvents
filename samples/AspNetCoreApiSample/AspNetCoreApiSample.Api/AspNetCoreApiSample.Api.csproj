@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreApiSample.Application\AspNetCoreApiSample.Application.csproj" />
     <ProjectReference Include="..\AspNetCoreApiSample.Domain\AspNetCoreApiSample.Domain.csproj" />
     <ProjectReference Include="..\AspNetCoreApiSample.Events\AspNetCoreApiSample.Events.csproj" />
     <ProjectReference Include="..\AspNetCoreApiSample.Notifications\AspNetCoreApiSample.Notifications.csproj" />

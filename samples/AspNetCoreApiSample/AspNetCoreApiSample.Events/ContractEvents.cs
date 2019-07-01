@@ -1,5 +1,4 @@
-﻿using System;
-using AsyncEvent;
+﻿using AsyncEvent;
 
 namespace AspNetCoreApiSample.Events
 {

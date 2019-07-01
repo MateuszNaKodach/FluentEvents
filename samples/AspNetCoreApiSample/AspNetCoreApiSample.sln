@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Reposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Events", "AspNetCoreApiSample.Events\AspNetCoreApiSample.Events.csproj", "{66FB7971-534E-4E9C-B6D6-7931A913BDC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.Domain", "AspNetCoreApiSample.Domain\AspNetCoreApiSample.Domain.csproj", "{DDB0F358-275B-4DD6-BBE8-5EADFFC56D17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Domain", "AspNetCoreApiSample.Domain\AspNetCoreApiSample.Domain.csproj", "{DDB0F358-275B-4DD6-BBE8-5EADFFC56D17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.Notifications", "AspNetCoreApiSample.Notifications\AspNetCoreApiSample.Notifications.csproj", "{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApiSample.Notifications", "AspNetCoreApiSample.Notifications\AspNetCoreApiSample.Notifications.csproj", "{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApiSample.Application", "AspNetCoreApiSample.Application\AspNetCoreApiSample.Application.csproj", "{5F4ABDC5-8E38-47BB-A05C-6074CAC29FD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF829D60-8CFC-4FE5-A207-A80CFD0FF46A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F4ABDC5-8E38-47BB-A05C-6074CAC29FD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F4ABDC5-8E38-47BB-A05C-6074CAC29FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F4ABDC5-8E38-47BB-A05C-6074CAC29FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F4ABDC5-8E38-47BB-A05C-6074CAC29FD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

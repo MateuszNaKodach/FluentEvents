@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using AspNetCoreApiSample.Domain;
 
-namespace AspNetCoreApiSample.Domain
+namespace AspNetCoreApiSample.Application
 {
     public interface IContractsRepository
     {
