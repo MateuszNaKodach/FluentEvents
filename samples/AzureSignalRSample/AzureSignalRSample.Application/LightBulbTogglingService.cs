@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AzureSignalRSample.Domain
+namespace AzureSignalRSample.Application
 {
     public class LightBulbTogglingService : ILightBulbTogglingService
     {

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AzureSignalRSample.Application\AzureSignalRSample.Application.csproj" />
     <ProjectReference Include="..\AzureSignalRSample.Domain\AzureSignalRSample.Domain.csproj" />
     <ProjectReference Include="..\AzureSignalRSample.Events\AzureSignalRSample.Events.csproj" />
     <ProjectReference Include="..\AzureSignalRSample.Persistence\AzureSignalRSample.Persistence.csproj" />

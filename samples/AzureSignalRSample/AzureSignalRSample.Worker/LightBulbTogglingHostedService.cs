@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AzureSignalRSample.Application;
 using AzureSignalRSample.Domain;
 using AzureSignalRSample.Persistence;
 using Microsoft.Extensions.DependencyInjection;

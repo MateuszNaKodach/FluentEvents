@@ -15,7 +15,7 @@ namespace AzureSignalRSample.Events
             pipelinesBuilder
                 .Event<LightBulb, LightBulbPowerStatusChangedEventArgs>((source, h) => source.PowerStatusChanged += h)
                 .IsWatched()
-                .ThenIsQueuedTo("AfterSaveChangesQueue")
+                .ThenIsQueuedTo(AfterSaveChangesQueueName)
                 .ThenIsSentToAllAzureSignalRUsers();
         }
 

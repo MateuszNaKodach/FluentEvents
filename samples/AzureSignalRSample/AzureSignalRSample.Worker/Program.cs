@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AzureSignalRSample.Application;
 using AzureSignalRSample.Domain;
 using AzureSignalRSample.Events;
 using AzureSignalRSample.Persistence;
