@@ -10,6 +10,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>EventAggregator;Azure;AzureServiceBus</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/luca-esse/FluentEvents/master/src/FluentEvents.Azure.ServiceBus/icon.png</PackageIconUrl>
+    <Authors>Luca Schiavone</Authors>
+    <Copyright>Copyright (c) 2018 Luca Schiavone</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
