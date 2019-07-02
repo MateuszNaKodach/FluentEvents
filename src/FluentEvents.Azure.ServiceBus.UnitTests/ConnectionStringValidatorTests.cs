@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentEvents.Azure.ServiceBus.Common;
+using NUnit.Framework;
 
 namespace FluentEvents.Azure.ServiceBus.UnitTests
 {
@@ -21,7 +22,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
            Assert.That(() =>
            {
                ConnectionStringValidator.ValidateOrThrow(connectionString);
-           }, Throws.TypeOf<InvalidConnectionStringException>());
+           }, Throws.TypeOf<ConnectionStringIsInvalidException>());
         }
     }
 }

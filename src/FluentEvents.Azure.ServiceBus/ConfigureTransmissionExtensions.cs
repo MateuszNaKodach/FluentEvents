@@ -1,4 +1,5 @@
-﻿using FluentEvents.Azure.ServiceBus.Sending;
+﻿using FluentEvents.Azure.ServiceBus.Queues.Sending;
+using FluentEvents.Azure.ServiceBus.Topics.Sending;
 using FluentEvents.Pipelines.Publication;
 
 namespace FluentEvents.Azure.ServiceBus
@@ -29,7 +30,31 @@ namespace FluentEvents.Azure.ServiceBus
             this IConfigureTransmission configureTransmission
         )
         {
-            return configureTransmission.With<AzureTopicEventSender>();
+            return configureTransmission.With<AzureServiceBusTopicEventSender>();
+        }
+
+        /// <summary>
+        ///     Publishes the event to different instances of the application
+        ///     with an Azure Service Bus queue.
+        /// </summary>
+        /// <remarks>
+        ///     This method can be used if the AzureQueueSender plugin is added to the <see cref="EventsContext"/>.
+        /// </remarks>
+        /// <param name="configureTransmission">
+        ///     The <see cref="IConfigureTransmission"/> provided by the
+        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TSource,TEventArgs}(Config.EventPipelineConfigurator{TSource,TEventArgs},System.Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     method.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="IPublishTransmissionConfiguration"/> for the
+        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TSource,TEventArgs}(Config.EventPipelineConfigurator{TSource,TEventArgs},System.Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     method.
+        /// </returns>
+        public static IPublishTransmissionConfiguration WithAzureQueue(
+            this IConfigureTransmission configureTransmission
+        )
+        {
+            return configureTransmission.With<AzureServiceBusQueueEventSender>();
         }
     }
 }

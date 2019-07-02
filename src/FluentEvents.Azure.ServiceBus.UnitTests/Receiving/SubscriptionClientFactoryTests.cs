@@ -1,4 +1,4 @@
-﻿using FluentEvents.Azure.ServiceBus.Receiving;
+﻿using FluentEvents.Azure.ServiceBus.Topics.Subscribing;
 using Microsoft.Azure.ServiceBus;
 using NUnit.Framework;
 

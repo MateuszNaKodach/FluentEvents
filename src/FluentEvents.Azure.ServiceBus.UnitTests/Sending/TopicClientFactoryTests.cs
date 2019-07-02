@@ -1,4 +1,4 @@
-﻿using FluentEvents.Azure.ServiceBus.Sending;
+﻿using FluentEvents.Azure.ServiceBus.Topics.Sending;
 using Microsoft.Azure.ServiceBus;
 using NUnit.Framework;
 

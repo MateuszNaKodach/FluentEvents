@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentEvents.Azure.ServiceBus.Topics;
+using FluentEvents.Azure.ServiceBus.Queues;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 {
     [TestFixture]
-    public class PublishWithAzureTopicTest
+    public class PublishWithAzureQueueTest
     {
         private TestEventsContext _testEventsContext;
         private IServiceProvider _serviceProvider;
@@ -21,18 +21,18 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         public void SetUp()
         {
             var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<PublishWithAzureTopicTest>()
+                .AddUserSecrets<PublishWithAzureQueueTest>()
                 .Build();
 
-            if (string.IsNullOrEmpty(configuration["azureTopicSender:sendConnectionString"]))
-                Assert.Ignore("Azure Service Bus topic settings not found in user secrets.");
+            if (string.IsNullOrEmpty(configuration["azureQueueSender:sendConnectionString"]))
+                Assert.Ignore("Azure Service Bus queue settings not found in user secrets.");
 
             var services = new ServiceCollection();
 
             services.AddEventsContext<TestEventsContext>(options =>
             {
-                options.UseAzureTopicEventReceiver(configuration.GetSection("azureTopicReceiver"));
-                options.UseAzureTopicEventSender(configuration.GetSection("azureTopicSender"));
+                options.UseAzureQueueEventReceiver(configuration.GetSection("azureQueueReceiver"));
+                options.UseAzureQueueEventSender(configuration.GetSection("azureQueueSender"));
             });
 
             _serviceProvider = services.BuildServiceProvider();
@@ -42,7 +42,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         }
 
         [Test]
-        public async Task EventShouldBePublishedWithAzureServiceBusTopic()
+        public async Task EventShouldBePublishedWithAzureServiceBusQueue()
         {
             await _testEventsContext.StartEventReceiversAsync();
 
@@ -71,7 +71,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 pipelinesBuilder
                     .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
                     .IsWatched()
-                    .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
+                    .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureQueue());
             }
         }
     }
