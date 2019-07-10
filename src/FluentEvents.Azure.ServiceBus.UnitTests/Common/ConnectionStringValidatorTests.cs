@@ -1,7 +1,7 @@
 ﻿using FluentEvents.Azure.ServiceBus.Common;
 using NUnit.Framework;
 
-namespace FluentEvents.Azure.ServiceBus.UnitTests
+namespace FluentEvents.Azure.ServiceBus.UnitTests.Common
 {
     [TestFixture]
     public class ConnectionStringValidatorTests
@@ -43,7 +43,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
             );
 
             Assert.That(result, Is.False);
-            Assert.That(errorMessage, Is.EqualTo(_connectionStringName + " is invalid"));
+            Assert.That(errorMessage, Is.SupersetOf(_connectionStringName + " is invalid: "));
         }
     }
 }

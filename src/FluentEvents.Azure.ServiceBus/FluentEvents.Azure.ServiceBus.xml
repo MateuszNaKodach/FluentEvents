@@ -30,22 +30,6 @@
                 An Azure Service Bus topic connection string for sending messages. 
             </summary>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsInvalidException">
-            <summary>
-                An exception thrown when value a configured connection string is invalid.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsInvalidException.#ctor">
-            <summary>
-                Creates a new <see cref="T:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsInvalidException"/>
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsInvalidException.#ctor(System.Exception)">
-            <summary>
-                Creates a new <see cref="T:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsInvalidException"/>
-            </summary>
-            <param name="innerException">The inner exception.</param>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions">
             <summary>
                 Extension methods for <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/>.

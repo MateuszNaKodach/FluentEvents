@@ -9,7 +9,7 @@ namespace FluentEvents.Azure.ServiceBus.Common
         {
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                errorMessage = $"{connectionStringName} is null or empty.";
+                errorMessage = $"{connectionStringName} is null or empty";
                 return false;
             }
 
