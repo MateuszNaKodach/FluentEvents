@@ -27,7 +27,7 @@ namespace FluentEvents.Azure.ServiceBus.Queues.Receiving
             _config = config.Value;
         }
 
-        protected override Task<IReceiverClient> CreateReceiverClient(CancellationToken cancellationToken)
+        protected internal override Task<IReceiverClient> CreateReceiverClientAsync(CancellationToken cancellationToken)
         {
             return Task.FromResult<IReceiverClient>(_queueClientFactory.GetNew(_config.ReceiveConnectionString));
         }

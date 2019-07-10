@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Topics.Receiving
 {
-    internal class AzureServiceBusTopicEventReceiver : AzureServiceBusEventReceiverBase, IEventReceiver
+    internal class AzureServiceBusTopicEventReceiver : AzureServiceBusEventReceiverBase
     {
         private readonly AzureServiceBusTopicEventReceiverConfig _config;
         private readonly ITopicSubscriptionsService _topicSubscriptionsService;
@@ -31,8 +31,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics.Receiving
             _subscriptionClientFactory = subscriptionClientFactory;
         }
 
-
-        protected override async Task<IReceiverClient> CreateReceiverClient(CancellationToken cancellationToken)
+        protected internal override async Task<IReceiverClient> CreateReceiverClientAsync(CancellationToken cancellationToken)
         {
             var subscriptionName = _config.SubscriptionNameGenerator.Invoke();
 

@@ -31,11 +31,11 @@ namespace FluentEvents.Azure.ServiceBus.Common
             _config = config;
         }
 
-        protected abstract Task<IReceiverClient> CreateReceiverClient(CancellationToken cancellationToken);
+        protected internal abstract Task<IReceiverClient> CreateReceiverClientAsync(CancellationToken cancellationToken);
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            _subscriptionClient = await CreateReceiverClient(cancellationToken).ConfigureAwait(false);
+            _subscriptionClient = await CreateReceiverClientAsync(cancellationToken).ConfigureAwait(false);
 
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
