@@ -17,16 +17,16 @@ namespace FluentEvents.Azure.ServiceBus.Topics
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureOptions">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureServiceBusTopicEventSenderConfig"/> for
+        ///     An <see cref="Action"/> to configure the <see cref="TopicEventSenderConfig"/> for
         ///     the topic sender plugin.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureTopicEventSender(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureServiceBusTopicEventSenderConfig> configureOptions
+            Action<TopicEventSenderConfig> configureOptions
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusTopicEventSenderPlugin(configureOptions));
+            pluginOptions.AddPlugin(new AzureTopicEventSenderPlugin(configureOptions));
             return pluginOptions;
         }
 
@@ -36,7 +36,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureServiceBusTopicEventSenderConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="TopicEventSenderConfig"/> type.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureTopicEventSender(
@@ -44,7 +44,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics
             IConfiguration configuration
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusTopicEventSenderPlugin(configuration));
+            pluginOptions.AddPlugin(new AzureTopicEventSenderPlugin(configuration));
             return pluginOptions;
         }
 
@@ -57,15 +57,15 @@ namespace FluentEvents.Azure.ServiceBus.Topics
         /// </remarks>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureOptions">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureServiceBusTopicEventReceiverConfig"/> for the receiving plugin.
+        ///     An <see cref="Action"/> to configure the <see cref="TopicEventReceiverConfig"/> for the receiving plugin.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureTopicEventReceiver(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureServiceBusTopicEventReceiverConfig> configureOptions
+            Action<TopicEventReceiverConfig> configureOptions
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusTopicEventReceiverPlugin(configureOptions));
+            pluginOptions.AddPlugin(new AzureTopicEventReceiverPlugin(configureOptions));
             return pluginOptions;
         }
 
@@ -78,7 +78,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics
         /// </remarks>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureServiceBusTopicEventReceiverConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="TopicEventReceiverConfig"/> type.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureTopicEventReceiver(
@@ -86,7 +86,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics
             IConfiguration configuration
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusTopicEventReceiverPlugin(configuration));
+            pluginOptions.AddPlugin(new AzureTopicEventReceiverPlugin(configuration));
             return pluginOptions;
         }
     }

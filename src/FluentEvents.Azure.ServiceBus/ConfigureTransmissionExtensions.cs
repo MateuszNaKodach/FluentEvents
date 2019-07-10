@@ -30,7 +30,7 @@ namespace FluentEvents.Azure.ServiceBus
             this IConfigureTransmission configureTransmission
         )
         {
-            return configureTransmission.With<AzureServiceBusTopicEventSender>();
+            return configureTransmission.With<TopicEventSender>();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace FluentEvents.Azure.ServiceBus
             this IConfigureTransmission configureTransmission
         )
         {
-            return configureTransmission.With<AzureServiceBusQueueEventSender>();
+            return configureTransmission.With<QueueEventSender>();
         }
     }
 }

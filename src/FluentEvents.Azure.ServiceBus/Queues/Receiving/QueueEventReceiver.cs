@@ -1,0 +1,35 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FluentEvents.Azure.ServiceBus.Common;
+using FluentEvents.Azure.ServiceBus.Queues.Common;
+using FluentEvents.Subscriptions;
+using FluentEvents.Transmission;
+using Microsoft.Azure.ServiceBus.Core;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace FluentEvents.Azure.ServiceBus.Queues.Receiving
+{
+    internal class QueueEventReceiver : EventReceiverBase
+    {
+        private readonly IQueueClientFactory _queueClientFactory;
+        private readonly QueueEventReceiverConfig _config;
+
+        public QueueEventReceiver(
+            IQueueClientFactory queueClientFactory,
+            ILogger<QueueEventReceiver> logger,
+            IEventsSerializationService eventsSerializationService,
+            IPublishingService publishingService,
+            IOptions<QueueEventReceiverConfig> config
+        ) : base(logger, eventsSerializationService, publishingService, config.Value)
+        {
+            _queueClientFactory = queueClientFactory;
+            _config = config.Value;
+        }
+
+        protected internal override Task<IReceiverClient> CreateReceiverClientAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IReceiverClient>(_queueClientFactory.GetNew(_config.ReceiveConnectionString));
+        }
+    }
+}

@@ -17,16 +17,16 @@ namespace FluentEvents.Azure.ServiceBus.Queues
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureOptions">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureServiceBusQueueEventSenderConfig"/> for
+        ///     An <see cref="Action"/> to configure the <see cref="QueueEventSenderConfig"/> for
         ///     the queue sender plugin.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureQueueEventSender(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureServiceBusQueueEventSenderConfig> configureOptions
+            Action<QueueEventSenderConfig> configureOptions
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusQueueEventSenderPlugin(configureOptions));
+            pluginOptions.AddPlugin(new AzureQueueEventSenderPlugin(configureOptions));
             return pluginOptions;
         }
 
@@ -36,7 +36,7 @@ namespace FluentEvents.Azure.ServiceBus.Queues
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureServiceBusQueueEventSenderConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="QueueEventSenderConfig"/> type.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureQueueEventSender(
@@ -44,7 +44,7 @@ namespace FluentEvents.Azure.ServiceBus.Queues
             IConfiguration configuration
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusQueueEventSenderPlugin(configuration));
+            pluginOptions.AddPlugin(new AzureQueueEventSenderPlugin(configuration));
             return pluginOptions;
         }
 
@@ -57,15 +57,15 @@ namespace FluentEvents.Azure.ServiceBus.Queues
         /// </remarks>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureOptions">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureServiceBusQueueEventReceiverConfig"/> for the receiving plugin.
+        ///     An <see cref="Action"/> to configure the <see cref="QueueEventReceiverConfig"/> for the receiving plugin.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureQueueEventReceiver(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureServiceBusQueueEventReceiverConfig> configureOptions
+            Action<QueueEventReceiverConfig> configureOptions
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusQueueEventReceiverPlugin(configureOptions));
+            pluginOptions.AddPlugin(new AzureQueueEventReceiverPlugin(configureOptions));
             return pluginOptions;
         }
 
@@ -78,7 +78,7 @@ namespace FluentEvents.Azure.ServiceBus.Queues
         /// </remarks>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureServiceBusQueueEventReceiverConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="QueueEventReceiverConfig"/> type.
         /// </param>
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureQueueEventReceiver(
@@ -86,7 +86,7 @@ namespace FluentEvents.Azure.ServiceBus.Queues
             IConfiguration configuration
         )
         {
-            pluginOptions.AddPlugin(new AzureServiceBusQueueEventReceiverPlugin(configuration));
+            pluginOptions.AddPlugin(new AzureQueueEventReceiverPlugin(configuration));
             return pluginOptions;
         }
     }

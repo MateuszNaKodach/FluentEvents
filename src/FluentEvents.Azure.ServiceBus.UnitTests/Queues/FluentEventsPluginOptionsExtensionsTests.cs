@@ -30,7 +30,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Queues
         public void UseAzureQueueEventSender_WithConfigureAction_ShouldAddPlugin()
         {
             _fluentEventPluginOptionsMock
-                .Setup(x => x.AddPlugin(It.IsAny<AzureServiceBusQueueEventSenderPlugin>()))
+                .Setup(x => x.AddPlugin(It.IsAny<AzureQueueEventSenderPlugin>()))
                 .Verifiable();
 
             _fluentEventPluginOptionsMock.Object.UseAzureQueueEventSender(x => { });
@@ -40,7 +40,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Queues
         public void UseAzureQueueEventSender_WithConfigurationSection_ShouldAddPlugin()
         {
             _fluentEventPluginOptionsMock
-                .Setup(x => x.AddPlugin(It.IsAny<AzureServiceBusQueueEventSenderPlugin>()))
+                .Setup(x => x.AddPlugin(It.IsAny<AzureQueueEventSenderPlugin>()))
                 .Verifiable();
 
             _fluentEventPluginOptionsMock.Object.UseAzureQueueEventSender(
@@ -52,7 +52,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Queues
         public void UseAzureQueueEventReceiver_WithConfigureAction_ShouldAddPlugin()
         {
             _fluentEventPluginOptionsMock
-                .Setup(x => x.AddPlugin(It.IsAny<AzureServiceBusQueueEventReceiverPlugin>()))
+                .Setup(x => x.AddPlugin(It.IsAny<AzureQueueEventReceiverPlugin>()))
                 .Verifiable();
 
             _fluentEventPluginOptionsMock.Object.UseAzureQueueEventReceiver(x => { });
@@ -62,7 +62,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Queues
         public void UseAzureQueueEventReceiver_WithConfigurationSection_ShouldAddPlugin()
         {
             _fluentEventPluginOptionsMock
-                .Setup(x => x.AddPlugin(It.IsAny<AzureServiceBusQueueEventReceiverPlugin>()))
+                .Setup(x => x.AddPlugin(It.IsAny<AzureQueueEventReceiverPlugin>()))
                 .Verifiable();
 
             _fluentEventPluginOptionsMock.Object.UseAzureQueueEventReceiver(

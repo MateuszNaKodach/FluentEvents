@@ -28,7 +28,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
             var publishTransmissionConfiguration = new Mock<IPublishTransmissionConfiguration>(MockBehavior.Strict);
 
             _configureTransmissionMock
-                .Setup(x => x.With<AzureServiceBusEventSenderBase>())
+                .Setup(x => x.With<EventSenderBase>())
                 .Returns(publishTransmissionConfiguration.Object)
                 .Verifiable();
 

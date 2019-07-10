@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentEvents.Azure.ServiceBus.Topics.Receiving;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
 
@@ -31,7 +30,7 @@ namespace FluentEvents.Azure.ServiceBus.Topics.Subscribing
             }
             catch (ServiceBusException e)
             {
-                throw new ServiceBusSubscriptionCreationException(e);
+                throw new TopicSubscriptionCreationException(e);
             }
         }
     }
