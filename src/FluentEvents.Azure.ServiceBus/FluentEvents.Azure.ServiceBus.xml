@@ -46,12 +46,6 @@
             </summary>
             <param name="innerException">The inner exception.</param>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Common.ConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the configuration connection string property is null.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions">
             <summary>
                 Extension methods for <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/>.
@@ -258,18 +252,6 @@
             </summary>
             <remarks>The default implementation returns a GUID.</remarks>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Topics.Receiving.ManagementConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Topics.Receiving.AzureServiceBusTopicEventReceiverConfig.ManagementConnectionString" /> property is null.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Topics.Receiving.ReceiveConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="!:AzureServiceBusTopicEventReceiverConfig.ReceiveConnectionString" /> property is null.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Topics.Receiving.ServiceBusSubscriptionCreationException">
             <inheritdoc />
             <summary>
@@ -282,12 +264,6 @@
                 Creates a new instance of <see cref="T:FluentEvents.Azure.ServiceBus.Topics.Receiving.ServiceBusSubscriptionCreationException" />
             </summary>
             <param name="innerException">The inner exception.</param>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Topics.Receiving.TopicPathIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Topics.Receiving.AzureServiceBusTopicEventReceiverConfig.TopicPath" /> property is null.
-            </summary>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Topics.Sending.AzureServiceBusTopicEventSenderConfig">
             <inheritdoc />

@@ -1,11 +1,9 @@
 ﻿using System;
 using FluentEvents.Azure.ServiceBus.Topics.Subscribing;
-using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Topics.Receiving
 {
@@ -31,9 +29,6 @@ namespace FluentEvents.Azure.ServiceBus.Topics.Receiving
             else
                 services.Configure<AzureServiceBusTopicEventReceiverConfig>(_configuration);
 
-            services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureServiceBusTopicEventReceiverConfig>>().Value
-            );
             services.AddSingleton<ITopicSubscriptionsService, TopicSubscriptionsService>();
             services.AddSingleton<ISubscriptionClientFactory, SubscriptionClientFactory>();
             services.AddSingleton<IEventReceiver, AzureServiceBusTopicEventReceiver>();

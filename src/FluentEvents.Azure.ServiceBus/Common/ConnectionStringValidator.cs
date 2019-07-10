@@ -5,23 +5,29 @@ namespace FluentEvents.Azure.ServiceBus.Common
 {
     internal static class ConnectionStringValidator
     {
-        internal static string ValidateOrThrow(string connectionString)
+        internal static bool IsValid(string connectionString, string connectionStringName, out string errorMessage)
         {
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new ConnectionStringIsInvalidException();
+            {
+                errorMessage = $"{connectionStringName} is null or empty.";
+                return false;
+            }
 
             try
             {
+                // ReSharper disable once UnusedVariable
                 var serviceBusConnectionStringBuilder = new ServiceBusConnectionStringBuilder(
                     connectionString
                 );
             }
             catch (ArgumentException e)
             {
-                throw new ConnectionStringIsInvalidException(e);
+                errorMessage = $"{connectionStringName} is invalid: {e.Message}";
+                return false;
             }
 
-            return connectionString;
+            errorMessage = null;
+            return true;
         }
     }
 }

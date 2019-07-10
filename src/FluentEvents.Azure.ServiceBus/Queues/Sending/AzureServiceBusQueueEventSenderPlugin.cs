@@ -32,9 +32,6 @@ namespace FluentEvents.Azure.ServiceBus.Queues.Sending
             else
                 services.Configure<AzureServiceBusQueueEventSenderConfig>(_configuration);
 
-            services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureServiceBusQueueEventSenderConfig>>().Value
-            );
             services.TryAddSingleton<IQueueClientFactory, QueueClientFactory>();
             services.AddSingleton<IEventSender, AzureServiceBusQueueEventSender>();
         }

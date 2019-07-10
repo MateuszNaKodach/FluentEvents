@@ -30,9 +30,6 @@ namespace FluentEvents.Azure.ServiceBus.Topics.Sending
             else
                 services.Configure<AzureServiceBusTopicEventSenderConfig>(_configuration);
 
-            services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureServiceBusTopicEventSenderConfig>>().Value
-            );
             services.AddSingleton<ITopicClientFactory, TopicClientFactory>();
             services.AddSingleton<IEventSender, AzureServiceBusTopicEventSender>();
         }
