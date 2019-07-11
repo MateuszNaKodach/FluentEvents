@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace FluentEvents.Pipelines
 {
@@ -8,40 +9,20 @@ namespace FluentEvents.Pipelines
     public class PipelineEvent
     {
         /// <summary>
-        ///     The type of the event source.
+        ///     The instance of the event.
         /// </summary>
-        public Type OriginalSenderType { get; }
+        public object Event { get; }
 
         /// <summary>
-        ///     The name of the event field.
+        ///     The instance of the event.
         /// </summary>
-        public string OriginalEventFieldName { get; }
+        public Type EventType { get; }
 
-        /// <summary>
-        ///     The instance of the event source.
-        /// </summary>
-        public object OriginalSender { get; }
-
-        /// <summary>
-        ///     The instance of the event args.
-        /// </summary>
-        public object OriginalEventArgs { get; }
-
-        /// <param name="originalSenderType">The type of the event source.</param>
-        /// <param name="originalEventFieldName">The name of the event field.</param>
-        /// <param name="originalSender">The instance of the event source.</param>
-        /// <param name="originalEventArgs">The instance of the event args.</param>
-        public PipelineEvent(
-            Type originalSenderType,
-            string originalEventFieldName, 
-            object originalSender,
-            object originalEventArgs
-        )
+        /// <param name="event">The instance of the event args.</param>
+        public PipelineEvent(object @event)
         {
-            OriginalSenderType = originalSenderType;
-            OriginalEventFieldName = originalEventFieldName;
-            OriginalSender = originalSender;
-            OriginalEventArgs = originalEventArgs;
+            Event = @event;
+            EventType = @event.GetType();
         }
     }
 }

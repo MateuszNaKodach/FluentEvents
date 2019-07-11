@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using FluentEvents.Infrastructure;
@@ -8,36 +7,18 @@ namespace FluentEvents.Subscriptions
 {
     internal class ScopedSubscriptionsService : IScopedSubscriptionsService
     {
-        private readonly ISubscriptionsFactory _subscriptionsFactory;
         private readonly ConcurrentDictionary<ISubscriptionCreationTask, bool> _scopedSubscriptionCreationTasks;
 
-        public ScopedSubscriptionsService(ISubscriptionsFactory subscriptionsFactory)
+        public ScopedSubscriptionsService()
         {
-            _subscriptionsFactory = subscriptionsFactory;
             _scopedSubscriptionCreationTasks = new ConcurrentDictionary<ISubscriptionCreationTask, bool>();
         }
 
-        public void ConfigureScopedServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
-            where TService : class
-            where TSource : class
+        public void ConfigureScopedServiceHandlerSubscription<TService, TEvent>()
+            where TService : class, IEventHandler<TEvent>
+            where TEvent : class
         {
-            var serviceSubscriptionTask = new ServiceSubscriptionCreationTask<TService, TSource>(
-                subscriptionAction,
-                _subscriptionsFactory
-            );
-
-            _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
-        }
-
-        public void ConfigureScopedServiceHandlerSubscription<TService, TSource, TEventArgs>(string eventName)
-            where TService : class, IEventHandler<TSource, TEventArgs>
-            where TSource : class
-            where TEventArgs : class
-        {
-            var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TSource, TEventArgs>(
-                eventName,
-                _subscriptionsFactory
-            );
+            var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TEvent>();
 
             _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }

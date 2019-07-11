@@ -46,21 +46,21 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
             await _testEventsContext.StartEventReceiversAsync();
 
             object receivedSender = null;
-            TestEventArgs receivedEventArgs = null;
+            TestEvent receivedEvent = null;
             _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
                     receivedSender = sender;
-                    receivedEventArgs = args;
+                    receivedEvent = args;
                 };
             });
 
             TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
 
-            await Watcher.WaitUntilAsync(() => receivedEventArgs != null);
+            await Watcher.WaitUntilAsync(() => receivedEvent != null);
 
-            TestUtils.AssertThatEventIsPublishedProperly(receivedSender, receivedEventArgs);
+            TestUtils.AssertThatEventIsPublishedProperly(receivedEvent);
         }
 
         private class TestEventsContext : EventsContext
@@ -68,8 +68,8 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsWatched()
+                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
             }
         }

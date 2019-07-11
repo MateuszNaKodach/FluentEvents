@@ -26,7 +26,7 @@ namespace FluentEvents.UnitTests.Model
                         nameof(TestSourceWithInvalidArgs.EventWithArgs)
                     );
                 },
-                Throws.TypeOf<InvalidEventHandlerArgsException>());
+                Throws.TypeOf<InvalidEventHandlerParametersException>());
         }
 
         [Test]

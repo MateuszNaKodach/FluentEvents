@@ -6,12 +6,12 @@ namespace FluentEvents.Routing
 {
     internal static class RoutingLoggerMessages
     {
-        private static readonly Func<ILogger, string, string, IDisposable> _beginEventRoutingScope = LoggerMessage.DefineScope<string, string>(
-            "Routing event fired from {eventSenderTypeName}.{eventSenderFieldName}"
+        private static readonly Func<ILogger, string, IDisposable> _beginEventRoutingScope = LoggerMessage.DefineScope<string>(
+            "Routing event of type: {eventType}"
         );
 
         internal static IDisposable BeginEventRoutingScope(this ILogger logger, PipelineEvent pipelineEvent)
-            => _beginEventRoutingScope(logger, pipelineEvent.OriginalSender.GetType().Name, pipelineEvent.OriginalEventFieldName);
+            => _beginEventRoutingScope(logger, pipelineEvent.EventType.Name);
 
         private static readonly Action<ILogger, Exception> _eventRoutedToPipeline = LoggerMessage.Define(
             LogLevel.Information,

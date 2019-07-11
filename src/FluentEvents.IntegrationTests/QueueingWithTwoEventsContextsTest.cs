@@ -1,4 +1,6 @@
-﻿using FluentEvents.Config;
+﻿using System;
+using System.Linq;
+using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
@@ -12,6 +14,8 @@ namespace FluentEvents.IntegrationTests
     {
         private const string QueueName = nameof(QueueName);
 
+        private IServiceProvider _appServiceProvider;
+
         private TestEventsContext1 _testEventsContext1;
         private TestEventsContext2 _testEventsContext2;
 
@@ -20,58 +24,48 @@ namespace FluentEvents.IntegrationTests
         [SetUp]
         public void SetUp()
         {
-            var appServiceProvider = new ServiceCollection().BuildServiceProvider();
+            var services = new ServiceCollection();
+            services.AddSingleton<SubscribingService>();
+            _appServiceProvider = services.BuildServiceProvider();
+
             _testEventsContext1 = new TestEventsContext1();
             _testEventsContext2 = new TestEventsContext2();
 
             _eventsScope = new EventsScope(
                 new EventsContext[] {_testEventsContext1, _testEventsContext2},
-                appServiceProvider
+                _appServiceProvider
             );
         }
 
         [Test]
         public void ProcessQueuedEventsAsync_ShouldProcessOnlyTestEventsContext1Events()
         {
-            object eventsContext1Sender = null;
-            TestEventArgs eventsContext1EventArgs = null;
-            _testEventsContext1.SubscribeGloballyTo<TestEntity>(testEntity =>
-            {
-                testEntity.Test += (sender, args) =>
-                {
-                    eventsContext1Sender = sender;
-                    eventsContext1EventArgs = args;
-                };
-            });
-
-            object eventsContext2Sender = null;
-            TestEventArgs eventsContext2EventArgs = null;
-            _testEventsContext2.SubscribeGloballyTo<TestEntity>(testEntity =>
-            {
-                testEntity.Test += (sender, args) =>
-                {
-                    eventsContext2Sender = sender;
-                    eventsContext2EventArgs = args;
-                };
-            });
+            var subscribingService = _appServiceProvider.GetRequiredService<SubscribingService>();
 
             TestUtils.AttachAndRaiseEvent(_testEventsContext1, _eventsScope);
             TestUtils.AttachAndRaiseEvent(_testEventsContext2, _eventsScope);
 
             _testEventsContext1.ProcessQueuedEventsAsync(_eventsScope, QueueName);
 
-            TestUtils.AssertThatEventIsPublishedProperly(eventsContext1Sender, eventsContext1EventArgs);
-            Assert.That(eventsContext2Sender, Is.Null);
-            Assert.That(eventsContext2EventArgs, Is.Null);
+            TestUtils.AssertThatEventIsPublishedProperly(subscribingService.Events.FirstOrDefault());
+
+            Assert.That(subscribingService, Has.Property(nameof(SubscribingService.Events)).With.One.Items);
         }
 
         private class TestEventsContext1 : EventsContext
         {
+            protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                subscriptionsBuilder
+                    .ServiceHandler<SubscribingService, TestEvent>()
+                    .HasGlobalSubscription();
+            }
+
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsWatched()
+                    .Event<TestEvent>()
+                    .IsPiped()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }
@@ -79,11 +73,18 @@ namespace FluentEvents.IntegrationTests
 
         private class TestEventsContext2 : EventsContext
         {
+            protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                subscriptionsBuilder
+                    .ServiceHandler<SubscribingService, TestEvent>()
+                    .HasGlobalSubscription();
+            }
+
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsWatched()
+                    .Event<TestEvent>()
+                    .IsPiped()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }

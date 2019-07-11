@@ -10,10 +10,7 @@ namespace FluentEvents.Pipelines.Filters
             NextModuleDelegate invokeNextModule
         )
         {
-            return config.IsMatching(
-                pipelineContext.PipelineEvent.OriginalSender,
-                pipelineContext.PipelineEvent.OriginalEventArgs
-            )
+            return config.IsMatching(pipelineContext.PipelineEvent.Event)
                 ? invokeNextModule(pipelineContext)
                 : Task.CompletedTask;
         }

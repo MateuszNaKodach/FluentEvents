@@ -162,35 +162,5 @@ namespace FluentEvents
         /// <param name="queueName">The name of the queue.</param>
         public virtual void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null) 
             => Dependencies.EventsQueuesService.DiscardQueuedEvents(eventsScope, queueName);
-
-        /// <summary>
-        ///     Creates one ore more subscriptions in the global scope.
-        /// </summary>
-        /// <example>
-        ///     <code>
-        ///         eventsContext.MakeGlobalSubscriptionsTo&lt;ExampleEntity&gt;(exampleEntity =&gt;
-        ///             {
-        ///                 exampleEntity.ExampleEvent1 += ExampleEventHandlerMethod1;
-        ///                 exampleEntity.ExampleEvent2 += ExampleEventHandlerMethod2;
-        ///             }
-        ///         );
-        ///     </code>
-        /// </example>
-        /// <remarks>You can call <see cref="Unsubscribe"/> to stop receiving the events.</remarks>
-        /// <typeparam name="TSource">The type of the events source.</typeparam>
-        /// <param name="subscriptionAction">A delegate with the subscriptions to the events of the source.</param>
-        /// <returns>
-        ///     The <see cref="UnsubscribeToken"/> that should be passed to
-        ///     <see cref="Unsubscribe"/> to stop receiving the events.
-        /// </returns>
-        public UnsubscribeToken SubscribeGloballyTo<TSource>(Action<TSource> subscriptionAction)
-            => new UnsubscribeToken(Dependencies.GlobalSubscriptionsService.AddGlobalSubscription(subscriptionAction));
-
-        /// <summary>
-        ///     Cancels a global subscription.
-        /// </summary>
-        /// <param name="unsubscribeToken">The token of the subscription(s) to cancel.</param>
-        public void Unsubscribe(UnsubscribeToken unsubscribeToken)
-            => Dependencies.GlobalSubscriptionsService.RemoveGlobalSubscription(unsubscribeToken.Subscription);
     }
 }

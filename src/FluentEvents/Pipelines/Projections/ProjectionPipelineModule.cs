@@ -10,14 +10,9 @@ namespace FluentEvents.Pipelines.Projections
             NextModuleDelegate invokeNextModule
         )
         {
-            var proxySender = config.EventsSenderProjection.Convert(pipelineContext.PipelineEvent.OriginalSender);
-            var proxyEventArgs = config.EventArgsProjection.Convert(pipelineContext.PipelineEvent.OriginalEventArgs);
-            var projectedPipelineEvent = new PipelineEvent(
-                pipelineContext.PipelineEvent.OriginalSenderType,
-                config.ProjectedEventFieldName,
-                proxySender,
-                proxyEventArgs
-            );
+            var projectedEvent = config.EventProjection.Convert(pipelineContext.PipelineEvent.Event);
+
+            var projectedPipelineEvent = new PipelineEvent(projectedEvent);
             
             pipelineContext.PipelineEvent = projectedPipelineEvent;
 

@@ -55,7 +55,7 @@ namespace FluentEvents.UnitTests.Transmission
 
             Assert.That(
                 deserializedPipelineEvent,
-                Has.Property(nameof(PipelineEvent.OriginalEventArgs))
+                Has.Property(nameof(PipelineEvent.Event))
                     .With.Property(nameof(TestSender.Property1))
                     .EqualTo(_originalEventArgs.Property1)
             );

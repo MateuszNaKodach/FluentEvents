@@ -29,7 +29,7 @@ namespace FluentEvents.Transmission
         /// <inheritdoc />
         public byte[] SerializeEvent(PipelineEvent pipelineEvent)
         {
-            var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.OriginalSenderType, _serializerSettings);
+            var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.EventType, _serializerSettings);
             return Encoding.UTF8.GetBytes(data);
         }
 

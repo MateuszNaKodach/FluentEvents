@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FluentEvents.Config;
 using FluentEvents.Model;
+using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Filters;
 using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;
@@ -45,11 +46,9 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<EventsQueuesContext>();
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
-            services.AddSingleton<ISubscriptionScanService, SubscriptionScanService>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
             services.AddSingleton<IEventsContextDependencies, EventsContextDependencies>();
             services.AddSingleton<IScopedSubscriptionsService, ScopedSubscriptionsService>();
-            services.AddSingleton<ISubscriptionsFactory, SubscriptionsFactory>();
             services.AddSingleton<IRoutingService, RoutingService>();
             services.AddSingleton<IForwardingService, ForwardingService>();
             services.AddSingleton<IEventsQueueNamesService, EventsQueueNamesService>();
@@ -60,7 +59,7 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<IEventReceiversService, EventReceiversService>();
             services.AddSingleton<IAttachingService, AttachingService>();
             services.AddSingleton<ISubscriptionsMatchingService, SubscriptionsMatchingService>();
-            services.AddSingleton<IEventSelectionService, EventSelectionService>();
+            services.AddSingleton<IPipelinesService, PipelinesService>();
             services.AddSingleton<EnqueuePipelineModule>();
             services.AddSingleton<FilterPipelineModule>();
             services.AddSingleton<GlobalPublishPipelineModule>();

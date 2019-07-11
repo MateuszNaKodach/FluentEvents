@@ -1,65 +1,28 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FluentEvents.IntegrationTests.Common
 {
-    public class SubscribingService 
-        : IEventHandler<TestEntity, TestEventArgs>,
-            IEventHandler<ProjectedTestEntity, ProjectedEventArgs>
+    public class SubscribingService : IEventHandler<TestEvent>, IEventHandler<ProjectedEvent>
     {
-        public TestEventArgs EventArgs { get; private set; }
-        public ProjectedEventArgs ProjectedEventArgs { get; private set; }
+        public IList<TestEvent> Events { get; }
+        public IList<ProjectedEvent> ProjectedEvents { get; }
 
-        public void Subscribe(TestEntity testEntity)
+        public SubscribingService()
         {
-            testEntity.Test += TestEntityOnTest;
+            Events = new List<TestEvent>();
+            ProjectedEvents = new List<ProjectedEvent>();
         }
 
-        public void Subscribe(ProjectedTestEntity testEntity)
+        public Task HandleEventAsync(TestEvent domainEvent)
         {
-            testEntity.Test += TestEntityOnTest;
-        }
-
-        public void AsyncSubscribe(TestEntity entity)
-        {
-            entity.AsyncTest += EntityOnAsyncTest;
-        }
-
-        public void AsyncSubscribe(ProjectedTestEntity entity)
-        {
-            entity.AsyncTest += EntityOnAsyncTest;
-        }
-
-        private void TestEntityOnTest(object sender, ProjectedEventArgs e)
-        {
-            ProjectedEventArgs = e;
-        }
-
-        private Task EntityOnAsyncTest(object sender, ProjectedEventArgs e)
-        {
-            ProjectedEventArgs = e;
+            Events.Add(domainEvent);
             return Task.CompletedTask;
         }
 
-        private void TestEntityOnTest(object sender, TestEventArgs e)
+        public Task HandleEventAsync(ProjectedEvent domainEvent)
         {
-            EventArgs = e;
-        }
-
-        private Task EntityOnAsyncTest(object sender, TestEventArgs e)
-        {
-            EventArgs = e;
-            return Task.CompletedTask;
-        }
-
-        public Task HandleEventAsync(TestEntity source, TestEventArgs args)
-        {
-            EventArgs = args;
-            return Task.CompletedTask;
-        }
-
-        public Task HandleEventAsync(ProjectedTestEntity source, ProjectedEventArgs args)
-        {
-            ProjectedEventArgs = args;
+            ProjectedEvents.Add(domainEvent);
             return Task.CompletedTask;
         }
     }

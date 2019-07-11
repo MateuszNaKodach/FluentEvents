@@ -7,18 +7,15 @@ namespace FluentEvents
     ///     Note: the subscription should be configured in the
     ///     <see cref="EventsContext.OnBuildingSubscriptions"/> method.
     /// </summary>
-    /// <typeparam name="TSource">The type of the event source.</typeparam>
-    /// <typeparam name="TEventArgs">the type of the event arguments.</typeparam>
-    public interface IEventHandler<in TSource, in TEventArgs>
-        where TSource : class
-        where TEventArgs : class
+    /// <typeparam name="TDomainEvent">the type of the event arguments.</typeparam>
+    public interface IEventHandler<in TDomainEvent>
+        where TDomainEvent : class
     {
         /// <summary>
         ///     Handles an event.
         /// </summary>
-        /// <param name="source">The source of the event.</param>
-        /// <param name="args">The arguments of the events.</param>
+        /// <param name="domainEvent">The arguments of the events.</param>
         /// <returns></returns>
-        Task HandleEventAsync(TSource source, TEventArgs args);
+        Task HandleEventAsync(TDomainEvent domainEvent);
     }
 }

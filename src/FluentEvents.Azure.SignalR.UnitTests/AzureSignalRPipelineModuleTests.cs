@@ -61,7 +61,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                     _azureSignalRPipelineModuleConfig.HubMethodName,
                     isReceiverIdsProviderActionNull ? null : _receiverIds,
                     _pipelineEvent.OriginalSender,
-                    _pipelineEvent.OriginalEventArgs)
+                    _pipelineEvent.Event)
                 )
                 .Returns(Task.CompletedTask)
                 .Verifiable();

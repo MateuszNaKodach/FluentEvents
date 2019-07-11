@@ -12,31 +12,29 @@ namespace FluentEvents.Pipelines.Filters
         /// <summary>
         ///     Adds an event filtering module to the current pipeline.
         /// </summary>
-        /// <typeparam name="TSource">The type of the event source.</typeparam>
-        /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event args.</typeparam>
         /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
+        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="filter">
-        ///     A <see cref="Func{TSource, TEventArgs, TResult}"/> that takes the event sender and the event args
+        ///     A <see cref="Func{TEvent, TResult}"/> that takes the event sender and the event args
         ///     as input and returns false if the event should be filtered
         ///     (When an event is filtered any module configured after the filter won't be invoked).
         /// </param>
         /// <returns>
-        ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
+        ///     The same <see cref="EventPipelineConfigurator{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsFiltered<TSource, TEventArgs>(
-            this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
-            Func<TSource, TEventArgs, bool> filter
+        public static EventPipelineConfigurator<TEvent> ThenIsFiltered<TEvent>(
+            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator,
+            Func<TEvent, bool> filter
         )
-            where TSource : class 
-            where TEventArgs : class
+            where TEvent : class 
         {
             if (filter == null) throw new ArgumentNullException(nameof(filter));
 
             eventPipelineConfigurator.Get<IPipeline>()
                 .AddModule<FilterPipelineModule, FilterPipelineModuleConfig>(
-                    new FilterPipelineModuleConfig((sender, args) => filter((TSource) sender, (TEventArgs) args))
+                    new FilterPipelineModuleConfig(pipedEvent => filter((TEvent) pipedEvent))
                 );
 
             return eventPipelineConfigurator;

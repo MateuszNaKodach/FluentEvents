@@ -15,17 +15,16 @@ namespace FluentEvents.Subscriptions
         internal static void EventHandlerThrew(this ILogger logger, Exception exception)
             => _eventHandlerThrew(logger, exception);
 
-        private static readonly Action<ILogger, string, string, Exception> _publishingEvent = LoggerMessage.Define<string, string>(
+        private static readonly Action<ILogger, string, Exception> _publishingEvent = LoggerMessage.Define<string>(
             LogLevel.Information,
             EventIds.PublishingEvent,
-            "Publishing event fired from {eventSenderTypeName}.{eventSenderFieldName}"
+            "Publishing event of type: {eventType}"
         );
 
         internal static void PublishingEvent(this ILogger logger, PipelineEvent pipelineEvent)
             => _publishingEvent(
                 logger,
-                pipelineEvent.OriginalSender.GetType().Name,
-                pipelineEvent.OriginalEventFieldName,
+                pipelineEvent.EventType.Name,
                 null
             );
 

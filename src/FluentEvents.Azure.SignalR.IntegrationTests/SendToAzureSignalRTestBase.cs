@@ -98,28 +98,28 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         )
         {
             TestEntity receivedSender = null;
-            TestEventArgs receivedEventArgs = null;
-            hubConnection.On<TestEntity, TestEventArgs>(HubMethodName, (sender, eventArgs) =>
+            TestEvent receivedEvent = null;
+            hubConnection.On<TestEntity, TestEvent>(HubMethodName, (sender, eventArgs) =>
             {
                 receivedSender = sender;
-                receivedEventArgs = eventArgs;
+                receivedEvent = eventArgs;
             });
 
             await semaphoreSlim.WaitAsync();
 
-            await Watcher.WaitUntilAsync(() => receivedEventArgs != null, 6000);
+            await Watcher.WaitUntilAsync(() => receivedEvent != null, 6000);
 
-            if (receivedEventArgs != null)
+            if (receivedEvent != null)
                 Interlocked.Increment(ref _receivedEventsCount);
 
             if (isPublishingExpected)
             {
-                TestUtils.AssertThatEventIsPublishedProperly(receivedSender, receivedEventArgs);
+                TestUtils.AssertThatEventIsPublishedProperly(receivedEvent);
             }
             else
             {
                 Assert.That(receivedSender, Is.Null);
-                Assert.That(receivedEventArgs, Is.Null);
+                Assert.That(receivedEvent, Is.Null);
             }
         }
     }

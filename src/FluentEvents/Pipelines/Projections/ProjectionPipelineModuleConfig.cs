@@ -2,19 +2,11 @@
 {
     internal class ProjectionPipelineModuleConfig
     {
-        internal ProjectionPipelineModuleConfig(
-            IEventsSenderProjection eventsSenderProjection,
-            IEventArgsProjection eventArgsProjection,
-            string projectedEventFieldName
-        )
-        {
-            EventsSenderProjection = eventsSenderProjection;
-            EventArgsProjection = eventArgsProjection;
-            ProjectedEventFieldName = projectedEventFieldName;
-        }
+        internal IEventArgsProjection EventProjection { get; }
 
-        internal IEventsSenderProjection EventsSenderProjection { get; }
-        internal IEventArgsProjection EventArgsProjection { get; }
-        internal string ProjectedEventFieldName { get; }
+        internal ProjectionPipelineModuleConfig(IEventArgsProjection eventProjection)
+        {
+            EventProjection = eventProjection;
+        }
     }
 }

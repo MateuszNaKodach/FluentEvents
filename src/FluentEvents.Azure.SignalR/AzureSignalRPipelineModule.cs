@@ -25,10 +25,10 @@ namespace FluentEvents.Azure.SignalR
                 config.HubMethodName,
                 config.ReceiverIdsProviderAction?.Invoke(
                     pipelineContext.PipelineEvent.OriginalSender,
-                    pipelineContext.PipelineEvent.OriginalEventArgs
+                    pipelineContext.PipelineEvent.Event
                 ),
                 pipelineContext.PipelineEvent.OriginalSender,
-                pipelineContext.PipelineEvent.OriginalEventArgs
+                pipelineContext.PipelineEvent.Event
             ).ConfigureAwait(false);
 
             await invokeNextModule(pipelineContext).ConfigureAwait(false);

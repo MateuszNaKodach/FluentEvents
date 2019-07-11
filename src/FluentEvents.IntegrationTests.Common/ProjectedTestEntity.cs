@@ -6,7 +6,7 @@ namespace FluentEvents.IntegrationTests.Common
     public class ProjectedTestEntity
     {
         public int Id { get; set; }
-        public event EventHandler<ProjectedEventArgs> Test;
-        public event AsyncEventHandler<ProjectedEventArgs> AsyncTest;
+        public event EventHandler<ProjectedEvent> Test;
+        public event AsyncEventHandler<ProjectedEvent> AsyncTest;
     }
 }

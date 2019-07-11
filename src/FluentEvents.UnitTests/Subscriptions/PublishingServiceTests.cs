@@ -188,15 +188,15 @@ namespace FluentEvents.UnitTests.Subscriptions
             await testAction();
 
             Assert.That(subscription0Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
-            Assert.That(subscription0Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
+            Assert.That(subscription0Args, Is.EqualTo(_pipelineEvent.Event));
             Assert.That(subscription1Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
-            Assert.That(subscription1Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
+            Assert.That(subscription1Args, Is.EqualTo(_pipelineEvent.Event));
         }
 
         private void SetUpSubscriptionsMatchingService()
         {
             _subscriptionsMatchingServiceMock
-                .Setup(x => x.GetMatchingSubscriptionsForSender(_subscriptions, _pipelineEvent.OriginalSender))
+                .Setup(x => x.GetMatchingSubscriptionsForEvent(_subscriptions, _pipelineEvent.OriginalSender))
                 .Returns(new[] {_subscriptions[0], _subscriptions[1]})
                 .Verifiable();
         }

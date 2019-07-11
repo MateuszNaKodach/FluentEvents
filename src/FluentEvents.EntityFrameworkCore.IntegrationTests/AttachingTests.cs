@@ -48,12 +48,12 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
         [Test]
         public void AttachFromQueryResultTest()
         {
-            TestEventArgs testEventArgs = null;
+            TestEvent testEvent = null;
             _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
             {
                 testEntity.Test += (sender, args) =>
                 {
-                    testEventArgs = args;
+                    testEvent = args;
                 };
             });
 
@@ -64,7 +64,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 testEntity.RaiseEvent("");
             }
             
-            Assert.That(testEventArgs, Is.Not.Null);
+            Assert.That(testEvent, Is.Not.Null);
         }
 
         private class TestDbContext : DbContext
@@ -83,8 +83,8 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsWatched()
+                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }

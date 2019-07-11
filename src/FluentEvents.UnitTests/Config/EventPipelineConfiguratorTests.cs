@@ -25,9 +25,7 @@ namespace FluentEvents.UnitTests.Config
             _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
             _pipeline = new Pipeline(_serviceProviderMock.Object);
             _eventConfigurator = new EventConfigurator<TestSource, TestEventArgs>(
-                _serviceProviderMock.Object,
-                _sourceModel,
-                _sourceModelEventField
+                _serviceProviderMock.Object
             );
         }
 

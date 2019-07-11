@@ -29,8 +29,8 @@ namespace FluentEvents.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>((source, eventHandler) => source.Test += eventHandler)
-                    .IsWatched()
+                    .Event<TestEvent>()
+                    .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
             }
         }

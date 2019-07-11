@@ -40,8 +40,8 @@ namespace FluentEvents.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 var pipelineBuilder = pipelinesBuilder
-                    .Event<TestEntity, TestEventArgs>(nameof(TestEntity.Test))
-                    .IsWatched();
+                    .Event<TestEvent>()
+                    .IsPiped();
 
                 var pipeline = pipelineBuilder.Get<IPipeline>();
 

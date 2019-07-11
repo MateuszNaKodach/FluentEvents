@@ -12,15 +12,12 @@ namespace FluentEvents.Model
     /// </summary>
     public class SourceModel
     {
+        private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
+
         /// <summary>
         ///     The type of the event source.
         /// </summary>
         public Type ClrType { get; }
-
-        /// <summary>
-        ///     The list of the fields present on the <see cref="ClrType"/>.
-        /// </summary>
-        public FieldInfo[] ClrTypeEventFieldInfos { get; }
 
         /// <summary>
         ///     The list of the event fields present on the <see cref="ClrType"/> and created on this model.
@@ -28,7 +25,6 @@ namespace FluentEvents.Model
         public IEnumerable<SourceModelEventField> EventFields => _eventFields;
 
         private readonly IList<SourceModelEventField> _eventFields;
-        private const BindingFlags HandlerFieldsBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
 
         /// <summary>
         ///     Creates a new instance of a <see cref="SourceModel"/>.
@@ -37,37 +33,11 @@ namespace FluentEvents.Model
         public SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
-            ClrTypeEventFieldInfos = ClrType.GetEvents().Select(x => GetEventFieldInfo(clrType, x)).ToArray();
-            _eventFields = new List<SourceModelEventField>();
+            _eventFields = ClrType
+                .GetEvents()
+                .Select(x => CreateEventField(GetEventFieldInfo(clrType, x)))
+                .ToArray();
         }
-
-        /// <summary>
-        ///     Gets or creates an event field if present on the <see cref="ClrType"/>.
-        /// </summary>
-        /// <param name="name">The name of the event field.</param>
-        public SourceModelEventField GetOrCreateEventField(string name)
-        {
-            var eventField = _eventFields.FirstOrDefault(x => x.Name == name);
-            if (eventField == null)
-            {
-                var fieldInfo = ClrTypeEventFieldInfos.FirstOrDefault(x => x.Name == name);
-                if (fieldInfo == null)
-                    throw new EventFieldNotFoundException();
-
-                var eventInfo = ClrType.GetEvent(fieldInfo.Name);
-                eventField = new SourceModelEventField(fieldInfo, eventInfo);
-                _eventFields.Add(eventField);
-            }
-
-            return eventField;
-        }
-
-        /// <summary>
-        ///     Gets an event field previously created with <see cref="GetOrCreateEventField"/>
-        /// </summary>
-        /// <param name="name">The name of the event field.</param>
-        public SourceModelEventField GetEventField(string name)
-            => _eventFields.FirstOrDefault(x => x.Name == name);
 
         internal Delegate CreateEventHandler<T>(SourceModelEventField eventField, T handlerAction)
         {
@@ -78,13 +48,20 @@ namespace FluentEvents.Model
                     Expression.Call(
                         Expression.Constant(handlerAction),
                         invokeMethodInfo,
-                        eventField.EventHandlerParameters[0],
-                        eventField.EventHandlerParameters[1]),
+                        eventField.EventHandlerParameters[0]
+                    ),
                     eventField.EventHandlerParameters
                 )
                 .Compile();
 
             return handler;
+        }
+
+        private SourceModelEventField CreateEventField(FieldInfo fieldInfo)
+        {
+            var eventInfo = ClrType.GetEvent(fieldInfo.Name);
+            var eventField = new SourceModelEventField(fieldInfo, eventInfo);
+            return eventField;
         }
 
         private static FieldInfo GetEventFieldInfo(Type type, MemberInfo eventInfo)

@@ -56,7 +56,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void AddGlobalServiceHandlerSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object, object>("");
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object, object>();
         }
 
         [Test]

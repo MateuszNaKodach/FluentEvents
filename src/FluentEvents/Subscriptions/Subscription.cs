@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,46 +13,38 @@ namespace FluentEvents.Subscriptions
     /// </summary>
     public class Subscription
     {
-        internal Type SourceType { get; }
-        private readonly ConcurrentDictionary<string, Delegate> _eventHandlers;
+        internal Type EventType { get; }
+        private readonly Delegate _eventsHandler;
 
-        internal Subscription(Type sourceType)
+        internal Subscription(Type sourceType, Delegate eventsHandler)
         {
-            SourceType = sourceType ?? throw new ArgumentNullException(nameof(sourceType));
-            _eventHandlers = new ConcurrentDictionary<string, Delegate>();
-        }
-
-        internal void AddHandler(string eventName, Delegate eventsHandler)
-        {
-            _eventHandlers.AddOrUpdate(eventName, eventsHandler, (s, d) => Delegate.Combine(eventsHandler, d));
+            EventType = sourceType ?? throw new ArgumentNullException(nameof(sourceType));
+            _eventsHandler = eventsHandler;
         }
 
         internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
-            if (!SourceType.IsInstanceOfType(pipelineEvent.OriginalSender))
-                throw new EventSourceTypeMismatchException();
+            if (!EventType.IsInstanceOfType(pipelineEvent.Event))
+                throw new EventTypeMismatchException();
 
-            if (_eventHandlers.TryGetValue(pipelineEvent.OriginalEventFieldName, out var eventDelegate))
+            var exceptions = new List<TargetInvocationException>();
+            var invocationList = _eventsHandler.GetInvocationList();
+
+            foreach (var eventHandler in invocationList)
             {
-                var exceptions = new List<TargetInvocationException>();
-                var invocationList = eventDelegate.GetInvocationList();
-
-                foreach (var eventHandler in invocationList)
+                try
                 {
-                    try
-                    {
-                        await InvokeEventHandlerAsync(pipelineEvent, eventHandler).ConfigureAwait(false);
-                    }
-                    catch (TargetInvocationException ex) when (ex.InnerException != null)
-                    {
-                        exceptions.Add(ex);
-                    }
+                    await InvokeEventHandlerAsync(pipelineEvent, eventHandler).ConfigureAwait(false);
                 }
-
-                if (exceptions.Any())
-                    throw new SubscriptionPublishAggregateException(exceptions);
+                catch (TargetInvocationException ex) when (ex.InnerException != null)
+                {
+                    exceptions.Add(ex);
+                }
             }
+
+            if (exceptions.Any())
+                throw new SubscriptionPublishAggregateException(exceptions);
         }
 
         private static Task InvokeEventHandlerAsync(PipelineEvent pipelineEvent, Delegate eventHandler)
@@ -61,14 +52,9 @@ namespace FluentEvents.Subscriptions
             var isAsync = eventHandler.Method.ReturnType == typeof(Task);
 
             if (isAsync)
-            {
-                return (Task) eventHandler.DynamicInvoke(
-                    pipelineEvent.OriginalSender,
-                    pipelineEvent.OriginalEventArgs
-                );
-            }
+                return (Task) eventHandler.DynamicInvoke(pipelineEvent.Event);
 
-            eventHandler.DynamicInvoke(pipelineEvent.OriginalSender, pipelineEvent.OriginalEventArgs);
+            eventHandler.DynamicInvoke(pipelineEvent.Event);
 
             return Task.CompletedTask;
         }

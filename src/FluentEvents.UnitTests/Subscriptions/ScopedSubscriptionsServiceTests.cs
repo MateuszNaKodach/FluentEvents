@@ -40,7 +40,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void ConfigureScopedServiceHandlerSubscription_ShouldAddCreationTask()
         {
-            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object, object>("");
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object, object>();
         }
 
         [Test]

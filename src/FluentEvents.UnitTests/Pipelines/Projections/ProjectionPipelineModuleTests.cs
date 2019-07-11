@@ -77,7 +77,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             );
             Assert.That(
                 nextModuleContext.PipelineEvent,
-                Has.Property(nameof(PipelineEvent.OriginalEventArgs)).EqualTo(projectedTestEventArgs)
+                Has.Property(nameof(PipelineEvent.Event)).EqualTo(projectedTestEventArgs)
             );
 
             Assert.That(

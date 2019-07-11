@@ -45,7 +45,7 @@ namespace FluentEvents.Subscriptions
             _logger.PublishingEvent(pipelineEvent);
 
             var eventsSubscriptions = _subscriptionsMatchingService
-                .GetMatchingSubscriptionsForSender(subscriptions, pipelineEvent.OriginalSender);
+                .GetMatchingSubscriptionsForEvent(subscriptions, pipelineEvent.Event);
 
             foreach (var eventsSubscription in eventsSubscriptions)
             {

@@ -14,18 +14,9 @@ namespace FluentEvents.Subscriptions
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        void ConfigureScopedServiceSubscription<TService, TSource>(Action<TService, TSource> subscriptionAction)
-            where TService : class
-            where TSource : class;
-
-        /// <summary>
-        ///     This API supports the FluentEvents infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        void ConfigureScopedServiceHandlerSubscription<TService, TSource, TEventArgs>(string eventName)
-            where TService : class, IEventHandler<TSource, TEventArgs>
-            where TSource : class
-            where TEventArgs : class;
+        void ConfigureScopedServiceHandlerSubscription<TService, TEvent>()
+            where TService : class, IEventHandler<TEvent>
+            where TEvent : class;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used

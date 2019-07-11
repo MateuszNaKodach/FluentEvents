@@ -31,7 +31,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             var sender = new TestSource2();
 
             var matchingSubscriptions = _subscriptionsMatchingService
-                .GetMatchingSubscriptionsForSender(subscriptions, sender);
+                .GetMatchingSubscriptionsForEvent(subscriptions, sender);
 
             Assert.That(matchingSubscriptions, Is.EquivalentTo(new []
             {

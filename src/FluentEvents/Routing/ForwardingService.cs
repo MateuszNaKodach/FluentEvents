@@ -27,18 +27,15 @@ namespace FluentEvents.Routing
 
             foreach (var eventField in sourceModel.EventFields)
             {
-                void HandlerAction(object sender, object args) =>
-                    HandlerActionAsync(sender, args).GetAwaiter().GetResult();
+                void HandlerAction(object @event) =>
+                    HandlerActionAsync(@event).GetAwaiter().GetResult();
 
-                Task HandlerActionAsync(object sender, object args) =>
-                    _routingService.RouteEventAsync(
-                        new PipelineEvent(sourceModel.ClrType, eventField.FieldInfo.Name, sender, args),
-                        eventsScope
-                    );
+                Task HandlerActionAsync(object @event) =>
+                    _routingService.RouteEventAsync(new PipelineEvent(@event), eventsScope);
 
                 var eventHandler = eventField.IsAsync
-                    ? sourceModel.CreateEventHandler<Func<object, object, Task>>(eventField, HandlerActionAsync)
-                    : sourceModel.CreateEventHandler<Action<object, object>>(eventField, HandlerAction);
+                    ? sourceModel.CreateEventHandler<Func<object, Task>>(eventField, HandlerActionAsync)
+                    : sourceModel.CreateEventHandler<Action<object>>(eventField, HandlerAction);
 
                 eventField.EventInfo.AddEventHandler(source, eventHandler);
             }

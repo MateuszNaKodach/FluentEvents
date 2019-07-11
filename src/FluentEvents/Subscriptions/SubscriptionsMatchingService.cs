@@ -8,14 +8,14 @@ namespace FluentEvents.Subscriptions
     public class SubscriptionsMatchingService : ISubscriptionsMatchingService
     {
         /// <inheritdoc />
-        public IEnumerable<Subscription> GetMatchingSubscriptionsForSender(
+        public IEnumerable<Subscription> GetMatchingSubscriptionsForEvent(
             IEnumerable<Subscription> subscriptions,
             object sender
         )
         {
             var types = sender.GetType().GetBaseTypesInclusive();
 
-            return subscriptions.Where(x => types.Any(y => y == x.SourceType));
+            return subscriptions.Where(x => types.Any(y => y == x.EventType));
         }
     }
 }

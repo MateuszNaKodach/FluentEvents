@@ -48,7 +48,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             Assert.That(async () =>
             {
                 await _subscription.PublishEventAsync(pipelineEvent);
-            }, Throws.TypeOf<EventSourceTypeMismatchException>());
+            }, Throws.TypeOf<EventTypeMismatchException>());
         }
 
         [Test]
@@ -101,8 +101,8 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             Assert.That(handlerAction1Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
             Assert.That(handlerAction2Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
-            Assert.That(handlerAction1Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
-            Assert.That(handlerAction2Args, Is.EqualTo(_pipelineEvent.OriginalEventArgs));
+            Assert.That(handlerAction1Args, Is.EqualTo(_pipelineEvent.Event));
+            Assert.That(handlerAction2Args, Is.EqualTo(_pipelineEvent.Event));
         }
 
         [Test]

@@ -15,41 +15,27 @@ namespace FluentEvents.Pipelines.Queues
         ///     Adds module to the current pipeline that queues the event in a queue
         ///     and pauses the execution of the current pipeline until the event is dequeued.
         /// </summary>
-        /// <typeparam name="TSource">The type of the event source.</typeparam>
-        /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event args.</typeparam>
         /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> for the pipeline being configured.
+        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="queueName">The name of the queue.</param>
         /// <returns>
-        ///     The same <see cref="EventPipelineConfigurator{TSource, TEventArgs}"/> instance so that multiple calls can be chained.
+        ///     The same <see cref="EventPipelineConfigurator{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TSource, TEventArgs> ThenIsQueuedTo<TSource, TEventArgs>(
-            this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
+        public static EventPipelineConfigurator<TEvent> ThenIsQueuedTo<TEvent>(
+            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator,
             string queueName
         )
-            where TSource : class
-            where TEventArgs : class
+            where TEvent : class
         {
             if (queueName == null) throw new ArgumentNullException(nameof(queueName));
-            return eventPipelineConfigurator.IsQueuedToInternal(queueName);
-        }
 
-        private static EventPipelineConfigurator<TSource, TEventArgs> IsQueuedToInternal<TSource, TEventArgs>(
-            this EventPipelineConfigurator<TSource, TEventArgs> eventPipelineConfigurator,
-            string queueName
-        )
-            where TSource : class
-            where TEventArgs : class
-        {
-            if (queueName != null)
-            {
-                var eventsQueueNamesService = eventPipelineConfigurator
-                    .Get<IServiceProvider>()
-                    .GetRequiredService<IEventsQueueNamesService>();
+            var eventsQueueNamesService = eventPipelineConfigurator
+                .Get<IServiceProvider>()
+                .GetRequiredService<IEventsQueueNamesService>();
 
-                eventsQueueNamesService.RegisterQueueNameIfNotExists(queueName);
-            }
+            eventsQueueNamesService.RegisterQueueNameIfNotExists(queueName);
 
             eventPipelineConfigurator
                 .Get<IPipeline>()

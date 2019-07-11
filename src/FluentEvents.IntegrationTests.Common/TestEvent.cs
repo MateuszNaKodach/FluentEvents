@@ -1,6 +1,6 @@
 ﻿namespace FluentEvents.IntegrationTests.Common
 {
-    public class TestEventArgs
+    public class TestEvent
     {
         public string Value { get; set; } = "Test";
     }

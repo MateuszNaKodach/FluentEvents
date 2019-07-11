@@ -25,16 +25,14 @@ namespace FluentEvents.UnitTests.Config
             _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
 
             _eventConfigurator = new EventConfigurator<TestSource, TestEventArgs>(
-                _serviceProviderMock.Object,
-                _sourceModel,
-                _sourceModelEventField
+                _serviceProviderMock.Object
             );
         }
 
         [Test]
         public void IsWatched_ShouldAddPipelineAndReturnEventPipelineConfigurator()
         {
-            var eventPipelineConfigurator = _eventConfigurator.IsWatched();
+            var eventPipelineConfigurator = _eventConfigurator.IsPiped();
             var pipeline = eventPipelineConfigurator.Get<IPipeline>();
             var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             var sourceModel = eventPipelineConfigurator.Get<SourceModel>();

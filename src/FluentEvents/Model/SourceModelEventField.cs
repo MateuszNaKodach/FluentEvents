@@ -29,16 +29,6 @@ namespace FluentEvents.Model
         public string Name => FieldInfo.Name;
 
         /// <summary>
-        ///     A collection of the configured pipelines for this event field.
-        /// </summary>
-        public ICollection<IPipeline> Pipelines { get; }
-
-        /// <summary>
-        ///     The event args type of the represented event field.
-        /// </summary>
-        public Type EventArgsType => EventHandlerParameters[1].Type;
-
-        /// <summary>
         ///     The return type of the represented event field.
         /// </summary>
         public Type ReturnType { get; }
@@ -59,33 +49,19 @@ namespace FluentEvents.Model
             if (ReturnType != typeof(void) && ReturnType != typeof(Task))
                 throw new InvalidEventHandlerReturnTypeException();
 
-            Pipelines = new List<IPipeline>();
-
             EventHandlerParameters = GetInvokeMethod(fieldInfo)
                 .GetParameters()
                 .Select(parameter => Expression.Parameter(parameter.ParameterType))
                 .ToArray();
 
-            if (EventHandlerParameters.Count != 2)
-                throw new InvalidEventHandlerArgsException();
+            if (EventHandlerParameters.Count != 1)
+                throw new InvalidEventHandlerParametersException();
         }
 
         private static MethodInfo GetInvokeMethod(FieldInfo fieldInfo)
         {
             return fieldInfo.FieldType
                 .GetMethod(nameof(EventHandler.Invoke));
-        }
-
-        /// <summary>
-        ///     Adds a pipeline to this event field.
-        /// </summary>
-        /// <param name="pipeline">The pipeline to add</param>
-        /// <returns>The same <see cref="IPipeline"/> added.</returns>
-        public IPipeline AddPipeline(IPipeline pipeline)
-        {
-            if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
-            Pipelines.Add(pipeline);
-            return pipeline;
         }
     }
 }

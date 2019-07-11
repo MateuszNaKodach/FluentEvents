@@ -21,17 +21,12 @@ namespace FluentEvents.IntegrationTests.Common
             return entity;
         }
 
-        public static void AssertThatEventIsPublishedProperly(object sender, object eventArgs)
+        public static void AssertThatEventIsPublishedProperly(object domainEvent)
         {
-            Assert.That(sender, Is.Not.Null);
-            Assert.That(eventArgs, Is.Not.Null);
+            Assert.That(domainEvent, Is.Not.Null);
             Assert.That(
-                sender,
-                Has.Property(nameof(TestEntity.Id)).EqualTo(_defaultTestEntityId)
-            );
-            Assert.That(
-                eventArgs,
-                Has.Property(nameof(TestEventArgs.Value)).EqualTo(_defaultTestEventArgsValue)
+                domainEvent,
+                Has.Property(nameof(TestEvent.Value)).EqualTo(_defaultTestEventArgsValue)
             );
         }
     }
