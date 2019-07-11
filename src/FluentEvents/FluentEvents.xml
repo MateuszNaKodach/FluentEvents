@@ -463,18 +463,6 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="T:FluentEvents.Infrastructure.IValidableConfig">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Infrastructure.IValidableConfig.Validate">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Model.EventFieldNotFoundException">
             <summary>
                 An exception thrown when trying to get or create an event on a <see cref="T:FluentEvents.Model.SourceModel"/>

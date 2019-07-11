@@ -30,7 +30,6 @@ namespace FluentEvents.UnitTests
 
         private Mock<EventsScope> _eventsScopeMock;
         private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
-        private Mock<IValidableConfig> _validableConfigMock;
         private Mock<IEventSelectionService> _eventSelectionServiceMock;
 
         [SetUp]
@@ -46,7 +45,6 @@ namespace FluentEvents.UnitTests
             _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             _attachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
             _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
-            _validableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
             _eventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
 
             _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
@@ -70,7 +68,6 @@ namespace FluentEvents.UnitTests
             _sourceModelsServiceMock.Verify();
             _attachingServiceMock.Verify();
             _eventsQueuesServiceMock.Verify();
-            _validableConfigMock.Verify();
             _eventSelectionServiceMock.Verify();
         }
 
@@ -293,15 +290,6 @@ namespace FluentEvents.UnitTests
                     _sourceModelsServiceMock.Object,
                     _eventSelectionServiceMock.Object
                 ))
-                .Verifiable();
-
-            _validableConfigMock
-                .Setup(x => x.Validate())
-                .Verifiable();
-
-            _internalServiceProviderMock
-                .Setup(x => x.GetService(typeof(IEnumerable<IValidableConfig>)))
-                .Returns(new [] { _validableConfigMock.Object })
                 .Verifiable();
         }
 

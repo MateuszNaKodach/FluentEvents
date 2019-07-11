@@ -39,7 +39,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
              Assert.That(
                  services,
                  Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType))
-                     .EqualTo(typeof(IValidableConfig))
+                     .EqualTo(typeof(IValidateOptions<AzureSignalRServiceConfig>))
              );
 
              Assert.That(

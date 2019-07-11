@@ -1,54 +1,51 @@
 ﻿using FluentEvents.Azure.SignalR.Client;
 using FluentEvents.Infrastructure;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.SignalR.UnitTests
 {
     [TestFixture]
-    public class AzureSignalRServiceConfigTests
+    public class AzureSignalRServiceConfigValidatorTests
     {
         private const string ValidConnectionString = "Endpoint=123;AccessKey=123;";
 
+        private AzureSignalRServiceConfigValidator _azureSignalRServiceConfigValidator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _azureSignalRServiceConfigValidator = new AzureSignalRServiceConfigValidator();
+        }
+
         [Test]
-        public void ConnectionString_WithValidConnectionString_ShouldSet()
+        public void Validate_WithValidConnectionString_ShouldSucceed()
         {
             var config = new AzureSignalRServiceConfig {ConnectionString = ValidConnectionString};
 
-            Assert.That(config.ConnectionString, Is.EqualTo(ValidConnectionString));
+            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
+
+            Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(false));
         }
 
         [Test]
-        public void ConnectionString_WithInvalidConnectionString_ShouldThrow()
+        public void Validate_WithInvalidConnectionString_ShouldFail()
         {
-            var config = new AzureSignalRServiceConfig();
+            var config = new AzureSignalRServiceConfig {ConnectionString = "abc"};
 
-            Assert.That(() =>
-            {
-                config.ConnectionString = "";
-            }, Throws.TypeOf<ConnectionStringHasMissingPropertiesException>());
+            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
+
+            Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
         }
 
         [Test]
-        public void ConnectionString_WithNullConnectionString_ShouldThrow()
+        public void Validate_WithNullConnectionString_ShouldFail()
         {
             var config = new AzureSignalRServiceConfig();
 
-            Assert.That(() =>
-            {
-                config.ConnectionString = null;
-            }, Throws.TypeOf<ConnectionStringIsNullException>());
-        }
+            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
 
-
-        [Test]
-        public void Validate_WithNullConnectionString_ShouldThrow()
-        {
-            var config = new AzureSignalRServiceConfig();
-
-            Assert.That(() =>
-            {
-                ((IValidableConfig) config).Validate();
-            }, Throws.TypeOf<ConnectionStringIsNullException>());
+            Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
         }
     }
 }

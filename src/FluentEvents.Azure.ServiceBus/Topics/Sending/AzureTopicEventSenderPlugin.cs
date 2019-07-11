@@ -3,6 +3,7 @@ using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Topics.Sending
 {
@@ -24,10 +25,11 @@ namespace FluentEvents.Azure.ServiceBus.Topics.Sending
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureOptions != null)
-                services.Configure(_configureOptions);
+                services.AddOptions<TopicEventSenderConfig>().Configure(_configureOptions);
             else
-                services.Configure<TopicEventSenderConfig>(_configuration);
+                services.AddOptions<TopicEventSenderConfig>().Bind(_configuration);
 
+            services.AddTransient<IValidateOptions<TopicEventSenderConfig>, TopicEventSenderConfigValidator>();
             services.AddSingleton<ITopicClientFactory, TopicClientFactory>();
             services.AddSingleton<IEventSender, TopicEventSender>();
         }

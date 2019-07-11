@@ -5,6 +5,7 @@ using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.ServiceBus.Queues.Receiving
 {
@@ -26,10 +27,11 @@ namespace FluentEvents.Azure.ServiceBus.Queues.Receiving
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureOptions != null)
-                services.Configure(_configureOptions);
+                services.AddOptions<QueueEventReceiverConfig>().Configure(_configureOptions);
             else
-                services.Configure<QueueEventReceiverConfig>(_configuration);
+                services.AddOptions<QueueEventReceiverConfig>().Bind(_configuration);
 
+            services.AddTransient<IValidateOptions<QueueEventReceiverConfig>, QueueEventReceiverConfigValidator>();
             services.TryAddSingleton<IQueueClientFactory, QueueClientFactory>();
             services.AddSingleton<IEventReceiver, QueueEventReceiver>();
         }

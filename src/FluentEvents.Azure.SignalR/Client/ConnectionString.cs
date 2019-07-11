@@ -19,17 +19,12 @@ namespace FluentEvents.Azure.SignalR.Client
             AccessKey = accessKey ?? throw new ArgumentNullException(nameof(accessKey));
         }
 
-        public static implicit operator ConnectionString(string connectionString)
-        {
-            return Parse(connectionString);
-        }
-
         public static implicit operator string(ConnectionString connectionString)
         {
             return connectionString.ToString();
         }
 
-        private static ConnectionString Parse(string connectionString)
+        internal static ConnectionString Parse(string connectionString)
         {
             if (connectionString == null)
                 throw new ConnectionStringIsNullException();
@@ -58,11 +53,20 @@ namespace FluentEvents.Azure.SignalR.Client
             throw new ConnectionStringHasMissingPropertiesException(EndpointProperty, AccessKeyProperty);
         }
 
-        public static string Validate(string connectionString)
+        public static bool IsValid(string connectionString, string connectionStringName, out string errorMessage)
         {
-            Parse(connectionString);
+            try
+            {
+                Parse(connectionString);
+            }
+            catch (FluentEventsAzureSignalRException e)
+            {
+                errorMessage = $"{connectionStringName}: " + e.Message;
+                return false;
+            }
 
-            return connectionString;
+            errorMessage = null;
+            return true;
         }
 
         public override string ToString()
