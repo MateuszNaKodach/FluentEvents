@@ -6,11 +6,15 @@ namespace FluentEvents.Utils
 {
     internal static class TypeExtensions
     {
-        internal static IEnumerable<Type> GetBaseTypesInclusive(this Type type)
+        internal static IEnumerable<Type> GetBaseTypesAndInterfacesInclusive(this Type type)
         {
+            foreach (var typeInterface in type.GetInterfaces())
+                yield return typeInterface;
+
             while (type != null)
             {
                 yield return type;
+
                 type = type.BaseType;
             }
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
@@ -47,18 +49,21 @@ namespace FluentEvents.Subscriptions
             var eventsSubscriptions = _subscriptionsMatchingService
                 .GetMatchingSubscriptionsForEvent(subscriptions, pipelineEvent.Event);
 
+            var exceptions = new List<Exception>();
+
             foreach (var eventsSubscription in eventsSubscriptions)
             {
-                try
+                var exception = await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
+
+                if (exception != null)
                 {
-                    await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
-                }
-                catch (SubscriptionPublishAggregateException ex)
-                {
-                    foreach (var innerException in ex.InnerExceptions)
-                        _logger.EventHandlerThrew(innerException);
+                    exceptions.Add(exception);
+                    _logger.EventHandlerThrew(exception);
                 }
             }
+
+            if (exceptions.Any())
+                throw new SubscriptionPublishAggregateException(exceptions);
         }
     }
 }

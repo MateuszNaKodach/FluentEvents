@@ -10,10 +10,10 @@ namespace FluentEvents.Subscriptions
         /// <inheritdoc />
         public IEnumerable<Subscription> GetMatchingSubscriptionsForEvent(
             IEnumerable<Subscription> subscriptions,
-            object sender
+            object source
         )
         {
-            var types = sender.GetType().GetBaseTypesInclusive();
+            var types = source.GetType().GetBaseTypesAndInterfacesInclusive();
 
             return subscriptions.Where(x => types.Any(y => y == x.EventType));
         }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Pipelines;
@@ -22,29 +20,22 @@ namespace FluentEvents.Subscriptions
             _eventsHandler = eventsHandler;
         }
 
-        internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
+        internal async Task<Exception> PublishEventAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!EventType.IsInstanceOfType(pipelineEvent.Event))
                 throw new EventTypeMismatchException();
 
-            var exceptions = new List<TargetInvocationException>();
-            var invocationList = _eventsHandler.GetInvocationList();
-
-            foreach (var eventHandler in invocationList)
+            try
             {
-                try
-                {
-                    await InvokeEventHandlerAsync(pipelineEvent, eventHandler).ConfigureAwait(false);
-                }
-                catch (TargetInvocationException ex) when (ex.InnerException != null)
-                {
-                    exceptions.Add(ex);
-                }
-            }
+                await InvokeEventHandlerAsync(pipelineEvent, _eventsHandler).ConfigureAwait(false);
 
-            if (exceptions.Any())
-                throw new SubscriptionPublishAggregateException(exceptions);
+                return null;
+            }
+            catch (TargetInvocationException ex)
+            {
+                return ex.InnerException;
+            }
         }
 
         private static Task InvokeEventHandlerAsync(PipelineEvent pipelineEvent, Delegate eventHandler)

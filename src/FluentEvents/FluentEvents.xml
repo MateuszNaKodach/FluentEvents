@@ -4,6 +4,13 @@
         <name>FluentEvents</name>
     </assembly>
     <members>
+        <member name="T:FluentEvents.AsyncDomainEventHandler`1">
+            <summary>
+                Represents the method that will handle a domain event.
+            </summary>
+            <param name="domainEvent">The event.</param>
+            <typeparam name="TDomainEvent">The type of the event.</typeparam>
+        </member>
         <member name="T:FluentEvents.Config.EventArgsTypeMismatchException">
             <summary>
                 An exception throw when configuring an event by specifying the wrong type of the event args.

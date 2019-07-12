@@ -8,7 +8,8 @@ namespace FluentEvents
     ///     <see cref="EventsContext.OnBuildingSubscriptions"/> method.
     /// </summary>
     /// <typeparam name="TDomainEvent">the type of the event arguments.</typeparam>
-    public interface IEventHandler<in TDomainEvent>
+    // ReSharper disable once TypeParameterCanBeVariant (Variant type parameter here would allow invalid subscription configurations)
+    public interface IEventHandler<TDomainEvent>
         where TDomainEvent : class
     {
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using FluentEvents.Utils;
 
 namespace FluentEvents.Pipelines
 {
@@ -53,9 +54,10 @@ namespace FluentEvents.Pipelines
         /// <inheritdoc />
         public IEnumerable<IPipeline> GetPipelines(Type eventType)
         {
-            if (_pipelines.TryGetValue(eventType, out var pipelines))
-                foreach (var pipeline in pipelines)
-                    yield return pipeline;
+            foreach (var type in eventType.GetBaseTypesAndInterfacesInclusive())
+                if (_pipelines.TryGetValue(type, out var pipelines))
+                    foreach (var pipeline in pipelines)
+                        yield return pipeline;
         }
     }
 }

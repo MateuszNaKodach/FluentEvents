@@ -14,7 +14,7 @@ namespace FluentEvents.Subscriptions
         /// </summary>
         IEnumerable<Subscription> GetMatchingSubscriptionsForEvent(
             IEnumerable<Subscription> subscriptions, 
-            object sender
+            object source
         );
     }
 }

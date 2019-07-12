@@ -38,14 +38,11 @@ namespace FluentEvents.Routing
 
             var sourceType = source.GetType();
 
-            foreach (var type in sourceType.GetBaseTypesInclusive())
+            foreach (var baseSourceType in sourceType.GetBaseTypesAndInterfacesInclusive())
             {
-                var sourceModel = _sourceModelsService.GetSourceModel(type);
-                if (sourceModel == null)
-                    continue;
+                var sourceModel = _sourceModelsService.GetOrCreateSourceModel(baseSourceType);
 
                 _forwardingService.ForwardEventsToRouting(sourceModel, source, eventsScope);
-                break;
             }
         }
     }
