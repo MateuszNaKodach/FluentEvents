@@ -16,7 +16,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<TestEvent> _eventPipelineConfigurator;
+        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
        
-            _eventPipelineConfigurator = new EventPipelineConfigurator<TestEvent>(
+            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -119,16 +119,6 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         private class TestEventSender : IEventSender
         {
             public Task SendAsync(PipelineEvent pipelineEvent) => throw new NotImplementedException();
-        }
-
-        private class TestSource
-        {
-            public event EventHandler<TestEvent> TestEvent;
-        }
-
-        private class TestEvent
-        {
-
         }
     }
 }

@@ -40,19 +40,25 @@ namespace FluentEvents.UnitTests.Model
 
         private class TestSourceWithInvalidArgs
         {
+#pragma warning disable 67
             public event EventHandlerWithInvalidArgs<object> EventWithArgs;
+#pragma warning restore 67
         }
 
         private delegate object EventHandlerWithInvalidReturnType<in TEvent>(TEvent e);
 
         private class TestSourceWithInvalidReturnType
         {
+#pragma warning disable 67
             public event EventHandlerWithInvalidReturnType<object> EventWithArgs;
+#pragma warning restore 67
         }
 
         private class TestSourceWithValidEvents
         {
+#pragma warning disable 67
             public event DomainEventHandler<object> ValidEvent;
+#pragma warning restore 67
         }
     }
 }
