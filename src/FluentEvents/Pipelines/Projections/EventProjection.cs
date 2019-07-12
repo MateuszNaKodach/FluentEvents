@@ -2,11 +2,11 @@
 
 namespace FluentEvents.Pipelines.Projections
 {
-    internal class EventArgsProjection<TFrom, TTo> : IEventArgsProjection
+    internal class EventProjection<TFrom, TTo> : IEventProjection
     {
         private readonly Func<TFrom, TTo> _conversionFunc;
 
-        internal EventArgsProjection(Func<TFrom, TTo> conversionFunc)
+        internal EventProjection(Func<TFrom, TTo> conversionFunc)
         {
             _conversionFunc = conversionFunc;
         }

@@ -2,9 +2,9 @@
 {
     internal class ProjectionPipelineModuleConfig
     {
-        internal IEventArgsProjection EventProjection { get; }
+        internal IEventProjection EventProjection { get; }
 
-        internal ProjectionPipelineModuleConfig(IEventArgsProjection eventProjection)
+        internal ProjectionPipelineModuleConfig(IEventProjection eventProjection)
         {
             EventProjection = eventProjection;
         }

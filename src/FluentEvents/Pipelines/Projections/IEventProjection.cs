@@ -1,6 +1,6 @@
 ﻿namespace FluentEvents.Pipelines.Projections
 {
-    internal interface IEventArgsProjection
+    internal interface IEventProjection
     {
         object Convert(object obj);
     }

@@ -37,7 +37,7 @@ namespace FluentEvents.Pipelines.Projections
             if (eventConverter == null) throw new ArgumentNullException(nameof(eventConverter));
             
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
-                new EventArgsProjection<TEvent, TToEvent>(eventConverter)
+                new EventProjection<TEvent, TToEvent>(eventConverter)
             );
 
             eventPipelineConfigurator
