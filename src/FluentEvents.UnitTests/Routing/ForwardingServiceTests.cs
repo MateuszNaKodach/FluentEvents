@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AsyncEvent;
+﻿using System.Threading.Tasks;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Routing;
