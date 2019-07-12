@@ -19,12 +19,12 @@
             </remarks>
             <param name="configureTransmission">
                 The <see cref="T:FluentEvents.Pipelines.Publication.IConfigureTransmission"/> provided by the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                <see cref="!:EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions&lt;TSource,TEventArgs&gt;(Config.EventPipelineConfigurator&lt;TSource,TEventArgs&gt;,System.Func&lt;ConfigureTransmission, IPublishTransmissionConfiguration&gt;)"/>
                 method.
             </param>
             <returns>
                 The <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/> for the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``2(FluentEvents.Config.EventPipelineConfigurator{``0,``1},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                <see cref="!:EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions&lt;TSource,TEventArgs&gt;(Config.EventPipelineConfigurator&lt;TSource,TEventArgs&gt;,System.Func&lt;ConfigureTransmission, IPublishTransmissionConfiguration&gt;)"/>
                 method.
             </returns>
         </member>

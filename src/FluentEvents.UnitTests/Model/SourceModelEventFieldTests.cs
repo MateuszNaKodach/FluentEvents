@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using AsyncEvent;
 using FluentEvents.Model;
-using FluentEvents.Pipelines;
-using Moq;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Model
@@ -13,7 +11,6 @@ namespace FluentEvents.UnitTests.Model
     [TestFixture]
     public class SourceModelEventFieldTests
     {
-        private Mock<IPipeline> _pipelineMock;
         private SourceModel _sourceModel;
         private SourceModelEventField _sourceModelEventField;
         private SourceModelEventField _asyncSourceModelEventField;
@@ -22,19 +19,12 @@ namespace FluentEvents.UnitTests.Model
         [SetUp]
         public void SetUp()
         {
-            _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _sourceModel = new SourceModel(typeof(TestModel));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.TestEvent));
-            _asyncSourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.AsyncTestEvent));
-            _inheritedSourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestModel.InheritedTestEvent));
+            _sourceModelEventField = _sourceModel.EventFields.First(x => x.Name == nameof(TestModel.TestEvent));
+            _asyncSourceModelEventField = _sourceModel.EventFields.First(x => x.Name == nameof(TestModel.AsyncTestEvent));
+            _inheritedSourceModelEventField = _sourceModel.EventFields.First(x => x.Name == nameof(TestModel.InheritedTestEvent));
         }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _pipelineMock.Verify();
-        }
-
+        
         private SourceModelEventField GetSourceModelEventField(string name)
         {
             switch (name)
@@ -85,14 +75,7 @@ namespace FluentEvents.UnitTests.Model
                 eventField, 
                 Has.Property(nameof(SourceModelEventField.EventHandlerParameters))
                     .With.One.Items.With.Property(nameof(ParameterExpression.Type))
-                    .EqualTo(typeof(TestEventArgs))
-            );
-
-            Assert.That(
-                eventField,
-                Has.Property(nameof(SourceModelEventField.EventHandlerParameters))
-                    .With.One.Items.With.Property(nameof(ParameterExpression.Type))
-                    .EqualTo(typeof(object))
+                    .EqualTo(typeof(TestEvent))
             );
         }
 
@@ -132,35 +115,18 @@ namespace FluentEvents.UnitTests.Model
             );
         }
 
-        [Test]
-        public void AddPipeline_ShouldAddNewPipeline()
-        {
-            var pipeline = _sourceModelEventField.AddPipeline(_pipelineMock.Object);
-
-            Assert.That(_sourceModelEventField.Pipelines, Has.One.Items.EqualTo(pipeline));
-        }
-
-        [Test]
-        public void AddPipeline_WithNullPipeline_ShouldThrow()
-        {
-            Assert.That(() =>
-            {
-                _sourceModelEventField.AddPipeline(null);
-            }, Throws.TypeOf<ArgumentNullException>());
-        }
-
         private class TestModel : TestModelBase
         {
-            public event EventHandler<TestEventArgs> TestEvent;
-            public event AsyncEventHandler<TestEventArgs> AsyncTestEvent;
+            public event DomainEventHandler<TestEvent> TestEvent;
+            public event AsyncDomainEventHandler<TestEvent> AsyncTestEvent;
         }
 
         private class TestModelBase
         {
-            public event EventHandler<TestEventArgs> InheritedTestEvent;
+            public event DomainEventHandler<TestEvent> InheritedTestEvent;
         }
 
-        private class TestEventArgs
+        private class TestEvent
         {
         }
     }

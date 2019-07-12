@@ -97,12 +97,10 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             bool isPublishingExpected
         )
         {
-            TestEntity receivedSender = null;
             TestEvent receivedEvent = null;
-            hubConnection.On<TestEntity, TestEvent>(HubMethodName, (sender, eventArgs) =>
+            hubConnection.On<TestEvent>(HubMethodName, domainEvent =>
             {
-                receivedSender = sender;
-                receivedEvent = eventArgs;
+                receivedEvent = domainEvent;
             });
 
             await semaphoreSlim.WaitAsync();
@@ -118,7 +116,6 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             }
             else
             {
-                Assert.That(receivedSender, Is.Null);
                 Assert.That(receivedEvent, Is.Null);
             }
         }

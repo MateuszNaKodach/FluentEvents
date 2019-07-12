@@ -1,4 +1,5 @@
-﻿using FluentEvents.Subscriptions;
+﻿using System;
+using FluentEvents.Subscriptions;
 using NUnit.Framework;
 
 namespace FluentEvents.UnitTests.Subscriptions
@@ -15,40 +16,47 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
-        public void GetMatchingSubscriptionsForSender_ShouldFilterSubscriptionsBasedOnSenderTypeAndInheritance()
+        public void GetMatchingSubscriptionsForSender_ShouldFilterSubscriptionsBasedOnEventTypeAndInheritanceAndInterfaces()
         {
-            var subscription0 = new Subscription(typeof(TestSource1));
-            var subscription1 = new Subscription(typeof(TestSource2));
-            var subscription3 = new Subscription(typeof(TestSource3));
+            Action<object> handler = e => { };
+            var subscription0 = new Subscription(typeof(TestEvent1), handler);
+            var subscription1 = new Subscription(typeof(TestEvent2), handler);
+            var subscription3 = new Subscription(typeof(TestEvent3), handler);
+            var subscription4 = new Subscription(typeof(ITestEvent), handler);
 
             var subscriptions = new[]
             {
                 subscription0,
                 subscription1,
-                subscription3
+                subscription3,
+                subscription4
             };
 
-            var sender = new TestSource2();
+            var testEvent2 = new TestEvent2();
 
             var matchingSubscriptions = _subscriptionsMatchingService
-                .GetMatchingSubscriptionsForEvent(subscriptions, sender);
+                .GetMatchingSubscriptionsForEvent(subscriptions, testEvent2);
 
             Assert.That(matchingSubscriptions, Is.EquivalentTo(new []
             {
                 subscription0,
-                subscription1
+                subscription1,
+                subscription4
             }));
         }
 
-        public class TestSource1
+        private class TestEvent1
         {
         }
 
-        public class TestSource2 : TestSource1
+        private class TestEvent2 : TestEvent1, ITestEvent
         {
         }
 
-        public class TestSource3
+        private class TestEvent3
+        {
+        }
+        private interface ITestEvent
         {
         }
     }

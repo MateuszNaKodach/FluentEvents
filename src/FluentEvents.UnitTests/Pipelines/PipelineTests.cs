@@ -66,14 +66,7 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public async Task ProcessEventAsync_ShouldCreateAndDisposeNewServiceScope()
         {
-            await _pipeline.ProcessEventAsync(new PipelineEvent(
-                    typeof(object),
-                    "f",
-                    new object(),
-                    new object()
-                ),
-                _eventsScope
-            );
+            await _pipeline.ProcessEventAsync(new PipelineEvent(typeof(object)), _eventsScope);
         }
 
         [Test]
@@ -88,12 +81,7 @@ namespace FluentEvents.UnitTests.Pipelines
                 pipelineModuleMocks.Add(pipelineModuleMock);
             }
 
-            await _pipeline.ProcessEventAsync(new PipelineEvent(
-                    typeof(object),
-                    "f",
-                    new object(),
-                    new object()
-                ),
+            await _pipeline.ProcessEventAsync(new PipelineEvent(new object()),
                 _eventsScope
             );
 

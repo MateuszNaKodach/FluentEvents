@@ -64,9 +64,9 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .Event<TestEvent>()
                     .IsPiped()
-                    .ThenIsSentToAzureSignalRGroups((sender, args) => new[] { _groupId1 }, HubName, HubMethodName);
+                    .ThenIsSentToAzureSignalRGroups(e => new[] { _groupId1 }, HubName, HubMethodName);
             }
         }
     }

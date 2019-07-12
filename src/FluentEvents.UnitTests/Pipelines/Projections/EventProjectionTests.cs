@@ -5,24 +5,24 @@ using NUnit.Framework;
 namespace FluentEvents.UnitTests.Pipelines.Projections
 {
     [TestFixture]
-    public class EventArgsProjectionTests
+    public class EventProjectionTests
     {
         private Func<object, object> _conversionFunc;
         private object _convertedEventArgs;
-        private EventArgsProjection<object, object> _eventArgsProjection;
+        private EventProjection<object, object> _eventProjection;
 
         [SetUp]
         public void SetUp()
         {
             _convertedEventArgs = new object();
             _conversionFunc = eventArgs => _convertedEventArgs;
-            _eventArgsProjection = new EventArgsProjection<object, object>(_conversionFunc);
+            _eventProjection = new EventProjection<object, object>(_conversionFunc);
         }
 
         [Test]
         public void Convert_ShouldReturnConvertedEventArgs([Values] bool areEventArgsNull)
         {
-            var convertedEventArgs = _eventArgsProjection.Convert(areEventArgsNull ? null : new object());
+            var convertedEventArgs = _eventProjection.Convert(areEventArgsNull ? null : new object());
 
             Assert.That(convertedEventArgs, Is.EqualTo(_convertedEventArgs));
         }

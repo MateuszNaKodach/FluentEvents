@@ -31,9 +31,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         [Test]
         public async Task InvokeAsync_ShouldPublishEventInScope()
         {
-            var pipelineContext = CreatePipelineContext(
-                new object(),
-                new object()
+            var pipelineContext = CreatePipelineContext(new object()
             );
 
             PipelineContext nextModuleContext = null;

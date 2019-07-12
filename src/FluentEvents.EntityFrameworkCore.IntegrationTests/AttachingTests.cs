@@ -32,7 +32,8 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                     options.UseInMemoryDatabase("test");
                 });
             });
-         
+            services.AddSingleton<SubscribingService>();
+
             _serviceProvider = services.BuildServiceProvider();
 
             using (var serviceScope = _serviceProvider.CreateScope())
@@ -48,14 +49,7 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
         [Test]
         public void AttachFromQueryResultTest()
         {
-            TestEvent testEvent = null;
-            _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
-            {
-                testEntity.Test += (sender, args) =>
-                {
-                    testEvent = args;
-                };
-            });
+            var subscribingService = _serviceProvider.GetRequiredService<SubscribingService>();
 
             using (var serviceScope = _serviceProvider.CreateScope())
             {
@@ -63,8 +57,8 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                 var testEntity = testDbContext.TestEntities.First();
                 testEntity.RaiseEvent("");
             }
-            
-            Assert.That(testEvent, Is.Not.Null);
+
+            Assert.That(subscribingService, Has.Property(nameof(SubscribingService.TestEvents)).With.One.Items);
         }
 
         private class TestDbContext : DbContext
@@ -80,10 +74,17 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
 
         private class TestEventsContext : EventsContext
         {
+            protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                subscriptionsBuilder
+                    .ServiceHandler<SubscribingService, TestEvent>()
+                    .HasGlobalSubscription();
+            }
+
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
             }

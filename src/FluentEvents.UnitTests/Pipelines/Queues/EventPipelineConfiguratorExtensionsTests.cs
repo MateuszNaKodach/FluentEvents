@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Config;
-using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;
@@ -16,24 +15,18 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
 
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
-        private SourceModel _sourceModel;
-        private SourceModelEventField _sourceModelEventField;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
+        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
-            _sourceModel = new SourceModel(typeof(TestSource));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                _sourceModel,
-                _sourceModelEventField,
+            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -76,16 +69,6 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
             {
                 _eventPipelineConfigurator.ThenIsQueuedTo(null);
             }, Throws.TypeOf<ArgumentNullException>());
-        }
-
-        private class TestSource
-        {
-            public event EventHandler<TestEventArgs> TestEvent;
-        }
-
-        private class TestEventArgs
-        {
-
         }
     }
 }

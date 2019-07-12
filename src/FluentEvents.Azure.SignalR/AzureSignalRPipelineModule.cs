@@ -23,11 +23,7 @@ namespace FluentEvents.Azure.SignalR
                 config.PublicationMethod,
                 config.HubName,
                 config.HubMethodName,
-                config.ReceiverIdsProviderAction?.Invoke(
-                    pipelineContext.PipelineEvent.OriginalSender,
-                    pipelineContext.PipelineEvent.Event
-                ),
-                pipelineContext.PipelineEvent.OriginalSender,
+                config.ReceiverIdsProviderAction?.Invoke(pipelineContext.PipelineEvent.Event),
                 pipelineContext.PipelineEvent.Event
             ).ConfigureAwait(false);
 

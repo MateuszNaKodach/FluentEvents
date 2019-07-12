@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
@@ -16,40 +17,32 @@ namespace FluentEvents.IntegrationTests
 
         private IServiceProvider _appServiceProvider;
 
-        private TestEventsContext1 _testEventsContext1;
-        private TestEventsContext2 _testEventsContext2;
-
-        private EventsScope _eventsScope;
-
         [SetUp]
         public void SetUp()
         {
             var services = new ServiceCollection();
             services.AddSingleton<SubscribingService>();
+            services.AddEventsContext<TestEventsContext1>(options => { });
+            services.AddEventsContext<TestEventsContext2>(options => { });
             _appServiceProvider = services.BuildServiceProvider();
-
-            _testEventsContext1 = new TestEventsContext1();
-            _testEventsContext2 = new TestEventsContext2();
-
-            _eventsScope = new EventsScope(
-                new EventsContext[] {_testEventsContext1, _testEventsContext2},
-                _appServiceProvider
-            );
         }
 
         [Test]
-        public void ProcessQueuedEventsAsync_ShouldProcessOnlyTestEventsContext1Events()
+        public async Task ProcessQueuedEventsAsync_ShouldProcessOnlyTestEventsContext1Events()
         {
             var subscribingService = _appServiceProvider.GetRequiredService<SubscribingService>();
+            var testEventsContext1 = _appServiceProvider.GetRequiredService<TestEventsContext1>();
+            var testEventsContext2 = _appServiceProvider.GetRequiredService<TestEventsContext2>();
+            var eventsScope = _appServiceProvider.GetRequiredService<EventsScope>();
 
-            TestUtils.AttachAndRaiseEvent(_testEventsContext1, _eventsScope);
-            TestUtils.AttachAndRaiseEvent(_testEventsContext2, _eventsScope);
+            TestUtils.AttachAndRaiseEvent(testEventsContext1, eventsScope);
+            TestUtils.AttachAndRaiseEvent(testEventsContext2, eventsScope);
 
-            _testEventsContext1.ProcessQueuedEventsAsync(_eventsScope, QueueName);
+            await testEventsContext1.ProcessQueuedEventsAsync(eventsScope, QueueName);
 
-            TestUtils.AssertThatEventIsPublishedProperly(subscribingService.Events.FirstOrDefault());
+            TestUtils.AssertThatEventIsPublishedProperly(subscribingService.TestEvents.FirstOrDefault());
 
-            Assert.That(subscribingService, Has.Property(nameof(SubscribingService.Events)).With.One.Items);
+            Assert.That(subscribingService, Has.Property(nameof(SubscribingService.TestEvents)).With.One.Items);
         }
 
         private class TestEventsContext1 : EventsContext

@@ -63,7 +63,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                 _hubName,
                 _hubMethodName,
                 _receiverIds,
-                _eventSender,
                 _eventArgs
             );
         }
@@ -84,7 +83,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                 _hubName,
                 _hubMethodName,
                 null,
-                _eventSender,
                 _eventArgs
             );
         }
@@ -108,7 +106,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                     _hubName,
                     _hubMethodName,
                     null,
-                    _eventSender,
                     _eventArgs
                 );
             }, Throws.TypeOf<AzureSignalRPublishingFailedException>());
@@ -132,7 +129,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                     _hubName,
                     _hubMethodName,
                     null,
-                    _eventSender,
                     _eventArgs
                 );
             }, Throws.TypeOf<AzureSignalRPublishingFailedException>());
@@ -151,7 +147,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
             var httpRequestMessage = new HttpRequestMessage();
 
             _httpRequestFactoryMock
-                .Setup(x => x.CreateHttpRequest(It.IsAny<ConnectionString>(), _hubMethodName, _eventSender, _eventArgs, url))
+                .Setup(x => x.CreateHttpRequest(It.IsAny<ConnectionString>(), _hubMethodName, _eventArgs, url))
                 .Returns(httpRequestMessage)
                 .Verifiable();
             return httpRequestMessage;

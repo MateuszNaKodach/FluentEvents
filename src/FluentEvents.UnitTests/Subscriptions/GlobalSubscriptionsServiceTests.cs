@@ -11,72 +11,33 @@ namespace FluentEvents.UnitTests.Subscriptions
     public class GlobalSubscriptionsServiceTests
     {
         private Mock<IAppServiceProvider> _appServiceProviderMock;
-        private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
 
         private GlobalSubscriptionsService _globalSubscriptionsService;
 
         [SetUp]
         public void SetUp()
         {
-            _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
             _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
 
-            _globalSubscriptionsService = new GlobalSubscriptionsService(
-                _subscriptionsFactoryMock.Object,
-                _appServiceProviderMock.Object
-            );
+            _globalSubscriptionsService = new GlobalSubscriptionsService(_appServiceProviderMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _subscriptionsFactoryMock.Verify();
             _appServiceProviderMock.Verify();
-        }
-
-        [Test]
-        public void AddGlobalSubscription_ShouldCreateSubscriptionAndAdd()
-        {
-            var (action, subscription) = SetUpSubscriptionsFactory(true);
-
-            var returnedSubscription = _globalSubscriptionsService
-                .AddGlobalSubscription(action);
-
-            Assert.That(subscription, Is.EqualTo(returnedSubscription));
-            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Has.One.Items);
-            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Has.One.Items.EqualTo(returnedSubscription));
-        }
-
-        [Test]
-        public void AddGlobalServiceSubscription_ShouldEnqueueSubscriptionCreation()
-        {
-            _globalSubscriptionsService.AddGlobalServiceSubscription<TestService, object>((x, y) => { });
         }
 
         [Test]
         public void AddGlobalServiceHandlerSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object, object>();
-        }
-
-        [Test]
-        public void RemoveGlobalSubscription_ShouldRemove()
-        {
-            var (action, subscription) = SetUpSubscriptionsFactory(true);
-
-            _globalSubscriptionsService
-                .AddGlobalSubscription(action);
-
-            _globalSubscriptionsService.RemoveGlobalSubscription(subscription);
-
-            Assert.That(_globalSubscriptionsService.GetGlobalSubscriptions(), Is.Empty);
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>();
         }
 
         [Test]
         public void GetGlobalSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
         {
-            _globalSubscriptionsService.AddGlobalServiceSubscription<TestService, object>((x, y) => {});
-            SetUpSubscriptionsFactory(false);
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>();
 
             _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
@@ -89,25 +50,10 @@ namespace FluentEvents.UnitTests.Subscriptions
             var secondCallSubscriptions = _globalSubscriptionsService.GetGlobalSubscriptions();
             Assert.That(secondCallSubscriptions, Has.One.Items);
         }
-
-        private (Action<object>, Subscription) SetUpSubscriptionsFactory(bool isActionMatchable)
+        
+        private class TestService : IEventHandler<object>
         {
-            Action<object> action = x => { };
-            var subscription = new Subscription(typeof(object));
-            var setup = isActionMatchable 
-                    ? _subscriptionsFactoryMock.Setup(x => x.CreateSubscription(action))
-                    : _subscriptionsFactoryMock.Setup(x => x.CreateSubscription(It.IsAny<Action<object>>()));
-
-            setup
-                .Returns(subscription)
-                .Verifiable();
-
-            return (action, subscription);
-        }
-
-        private class TestService : IEventHandler<object, object>
-        {
-            public Task HandleEventAsync(object source, object args)
+            public Task HandleEventAsync(object e)
             {
                 throw new NotImplementedException();
             }

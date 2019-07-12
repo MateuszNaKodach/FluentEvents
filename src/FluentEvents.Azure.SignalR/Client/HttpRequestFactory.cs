@@ -18,11 +18,9 @@ namespace FluentEvents.Azure.SignalR.Client
             _accessTokensService = accessTokensService;
         }
 
-        public HttpRequestMessage CreateHttpRequest(
-            ConnectionString connectionString,
+        public HttpRequestMessage CreateHttpRequest(ConnectionString connectionString,
             string hubMethodName,
-            object eventSender, 
-            object eventArgs,
+            object domainEvent,
             string url
         )
         {
@@ -31,7 +29,7 @@ namespace FluentEvents.Azure.SignalR.Client
                 url,
                 new PayloadMessage
                 {
-                    Arguments = new[] {eventSender, eventArgs},
+                    Arguments = new[] {domainEvent},
                     Target = hubMethodName
                 }
             );

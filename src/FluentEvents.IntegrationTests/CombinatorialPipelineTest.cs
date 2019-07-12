@@ -78,8 +78,8 @@ namespace FluentEvents.IntegrationTests
 
             Assert.That(subscribingService,
                 isProjected
-                    ? Has.Property(nameof(SubscribingService.ProjectedEvents)).With.One.Items
-                    : Has.Property(nameof(SubscribingService.Events)).With.One.Items
+                    ? Has.Property(nameof(SubscribingService.ProjectedTestEvents)).With.One.Items
+                    : Has.Property(nameof(SubscribingService.TestEvents)).With.One.Items
             );
         }
 
@@ -139,7 +139,7 @@ namespace FluentEvents.IntegrationTests
             private void AddGlobalServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
-                    .ServiceHandler<SingletonSubscribingService, ProjectedEvent>();
+                    .ServiceHandler<SingletonSubscribingService, ProjectedTestEvent>();
 
                 serviceConfigurator.HasGlobalSubscription();
             }
@@ -147,7 +147,7 @@ namespace FluentEvents.IntegrationTests
             private void AddScopedServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
-                    .ServiceHandler<ScopedSubscribingService, ProjectedEvent>();
+                    .ServiceHandler<ScopedSubscribingService, ProjectedTestEvent>();
 
                 serviceConfigurator.HasScopedSubscription();
             }
@@ -180,7 +180,7 @@ namespace FluentEvents.IntegrationTests
                 if (_parameters.IsProjected)
                 {
                     var pipelineConfiguratorWithProjection = pipelineConfigurator.ThenIsProjected(
-                        testEvent => new ProjectedEvent()
+                        testEvent => new ProjectedTestEvent()
                     );
 
                     ContinueConfiguration(pipelineConfiguratorWithProjection);

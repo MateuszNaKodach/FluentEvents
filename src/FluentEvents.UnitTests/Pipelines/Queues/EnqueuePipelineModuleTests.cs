@@ -31,7 +31,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
             {
                 QueueName = QueueName
             };
-            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _pipelineEvent = new PipelineEvent(new object());
             _eventsScope = new EventsScope();
             _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
 

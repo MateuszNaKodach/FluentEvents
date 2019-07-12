@@ -18,7 +18,7 @@ namespace FluentEvents.UnitTests.Queues
         public void SetUp()
         {
             _eventsQueue = new EventsQueue(_eventsQueueName);
-            var pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            var pipelineEvent = new PipelineEvent(new object());
             _queuedPipelineEvent = new QueuedPipelineEvent(() => Task.CompletedTask, pipelineEvent);
         }
 

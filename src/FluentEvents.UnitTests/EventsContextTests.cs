@@ -31,7 +31,6 @@ namespace FluentEvents.UnitTests
         private Mock<EventsScope> _eventsScopeMock;
         private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
         private Mock<IValidableConfig> _validableConfigMock;
-        private Mock<IEventSelectionService> _eventSelectionServiceMock;
 
         [SetUp]
         public void SetUp()
@@ -47,7 +46,6 @@ namespace FluentEvents.UnitTests
             _attachingServiceMock = new Mock<IAttachingService>(MockBehavior.Strict);
             _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
             _validableConfigMock = new Mock<IValidableConfig>(MockBehavior.Strict);
-            _eventSelectionServiceMock = new Mock<IEventSelectionService>(MockBehavior.Strict);
 
             _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
 
@@ -71,7 +69,6 @@ namespace FluentEvents.UnitTests
             _attachingServiceMock.Verify();
             _eventsQueuesServiceMock.Verify();
             _validableConfigMock.Verify();
-            _eventSelectionServiceMock.Verify();
         }
 
         [Test]
@@ -212,41 +209,6 @@ namespace FluentEvents.UnitTests
 
             _eventsContext.DiscardQueuedEvents(_eventsScopeMock.Object, queueName);
         }
-
-        [Test]
-        public void MakeGlobalSubscriptionTo_ShouldAddToGlobalSubscriptionCollection()
-        {
-            ConfigureEventsContext();
-
-            Action<object> subscriptionAction = o => { };
-            var subscription = new Subscription(typeof(object));
-
-            _globalSubscriptionsServiceMock
-                .Setup(x => x.AddGlobalSubscription(subscriptionAction))
-                .Returns(subscription)
-                .Verifiable();
-
-            var returnedSubscription = _eventsContext.SubscribeGloballyTo(subscriptionAction);
-
-            Assert.That(
-                returnedSubscription,
-                Has.Property(nameof(UnsubscribeToken.Subscription)).EqualTo(subscription)
-            );
-        }
-
-        [Test]
-        public void Unsubscribe_ShouldRemoveFromGlobalSubscriptionCollection()
-        {
-            ConfigureEventsContext();
-
-            var subscription = new Subscription(typeof(object));
-
-            _globalSubscriptionsServiceMock
-                .Setup(x => x.RemoveGlobalSubscription(subscription))
-                .Verifiable();
-
-            _eventsContext.Unsubscribe(new UnsubscribeToken(subscription));
-        }
         
         private void ConfigureEventsContext()
         {
@@ -280,19 +242,13 @@ namespace FluentEvents.UnitTests
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
                 .Returns(new SubscriptionsBuilder(
                     _globalSubscriptionsServiceMock.Object,
-                    _scopedSubscriptionsServiceMock.Object,
-                    _sourceModelsServiceMock.Object,
-                    _eventSelectionServiceMock.Object
+                    _scopedSubscriptionsServiceMock.Object
                 ))
                 .Verifiable();
 
             _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(new PipelinesBuilder(
-                    _internalServiceProviderMock.Object,
-                    _sourceModelsServiceMock.Object,
-                    _eventSelectionServiceMock.Object
-                ))
+                .Returns(new PipelinesBuilder(_internalServiceProviderMock.Object))
                 .Verifiable();
 
             _validableConfigMock

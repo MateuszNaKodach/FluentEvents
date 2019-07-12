@@ -24,7 +24,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         [SetUp]
         public void SetUp()
         {
-            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _pipelineEvent = new PipelineEvent(new object());
             _topicClientMock = new Mock<ITopicClient>(MockBehavior.Strict);
             _loggerMock = new Mock<ILogger<AzureTopicEventSender>>(MockBehavior.Strict);
             _eventsSerializationServiceMock = new Mock<IEventsSerializationService>(MockBehavior.Strict);

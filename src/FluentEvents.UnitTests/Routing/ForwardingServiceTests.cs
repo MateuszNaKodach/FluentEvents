@@ -43,11 +43,6 @@ namespace FluentEvents.UnitTests.Routing
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            _sourceModel.GetOrCreateEventField(nameof(TestSource.NoArgsEvent));
-            _sourceModel.GetOrCreateEventField(nameof(TestSource.EventWithArgs));
-            _sourceModel.GetOrCreateEventField(nameof(TestSource.AsyncNoArgsEvent));
-            _sourceModel.GetOrCreateEventField(nameof(TestSource.AsyncEventWithArgs));
-
             _forwardingService.ForwardEventsToRouting(
                 _sourceModel,
                 source,
@@ -56,7 +51,7 @@ namespace FluentEvents.UnitTests.Routing
 
             await source.RaiseEvents();
 
-            Assert.That(_routingServiceMock.Invocations, Has.Exactly(4).Items);
+            Assert.That(_routingServiceMock.Invocations, Has.Exactly(2).Items);
         }
 
         [Test]
@@ -76,21 +71,17 @@ namespace FluentEvents.UnitTests.Routing
 
         private class TestSource
         {
-            public event EventHandler NoArgsEvent;
-            public event EventHandler<TestArgs> EventWithArgs;
-            public event AsyncEventHandler AsyncNoArgsEvent;
-            public event AsyncEventHandler<TestArgs> AsyncEventWithArgs;
+            public event DomainEventHandler<TestEvent> Event;
+            public event AsyncDomainEventHandler<TestEvent> AsyncEvent;
 
             public async Task RaiseEvents()
             {
-                NoArgsEvent?.Invoke(this, EventArgs.Empty);
-                EventWithArgs?.Invoke(this, new TestArgs());
-                await (AsyncNoArgsEvent?.InvokeAsync(this, EventArgs.Empty) ?? Task.CompletedTask);
-                await (AsyncEventWithArgs?.InvokeAsync(this, new TestArgs()) ?? Task.CompletedTask);
+                Event?.Invoke(new TestEvent());
+                await (AsyncEvent?.Invoke(new TestEvent()) ?? Task.CompletedTask);
             }
         }
 
-        private class TestArgs
+        private class TestEvent
         {
             public int Prop { get; set; }
         }

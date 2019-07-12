@@ -91,12 +91,12 @@ namespace FluentEvents.UnitTests
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(SubscriptionsBuilder)))
-                .Returns(new SubscriptionsBuilder(null, null, null, null))
+                .Returns(new SubscriptionsBuilder(null, null))
                 .Verifiable();
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(PipelinesBuilder)))
-                .Returns(new PipelinesBuilder(serviceProviderMock.Object, null, null))
+                .Returns(new PipelinesBuilder(serviceProviderMock.Object))
                 .Verifiable();
 
             eventsContextMock.Object.Configure(new EventsContextOptions(), internalServiceCollectionMock.Object);
@@ -127,8 +127,18 @@ namespace FluentEvents.UnitTests
         
         private IEnumerable<Subscription> SetUpSubscriptionsCreation()
         {
-            var scopedSubscriptionsFactory1Subscriptions = new[] { new Subscription(typeof(object)), new Subscription(typeof(object)) };
-            var scopedSubscriptionsFactory2Subscriptions = new[] { new Subscription(typeof(object)) };
+            Action<object> handler = e => { };
+            var scopedSubscriptionsFactory1Subscriptions = new[]
+            {
+                new Subscription(typeof(object), handler),
+                new Subscription(typeof(object), handler)
+            };
+
+            var scopedSubscriptionsFactory2Subscriptions = new[]
+            {
+                new Subscription(typeof(object), handler)
+            };
+
             var allSubscriptions = scopedSubscriptionsFactory1Subscriptions.Concat(scopedSubscriptionsFactory2Subscriptions);
             
             _internalServiceProviderMock1

@@ -109,12 +109,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         public void MessageHandler_ShouldDeserializeAndPublishEventToGlobalSubscriptions()
         {
             var messageBytes = new byte[] { 1, 2, 3, 4, 5 };
-            var pipelineEvent = new PipelineEvent(
-                typeof(object),
-                "",
-                new object(),
-                new object()
-            );
+            var pipelineEvent = new PipelineEvent(typeof(object));
 
             _eventsSerializationServiceMock
                 .Setup(x => x.DeserializeEvent(It.Is<byte[]>(y => y.SequenceEqual(messageBytes))))

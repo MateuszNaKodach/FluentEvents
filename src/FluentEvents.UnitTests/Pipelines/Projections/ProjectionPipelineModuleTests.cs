@@ -9,54 +9,39 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
     [TestFixture]
     public class ProjectionPipelineModuleTests : PipelineModuleTestBase
     {
-        private readonly string _projectedEventFieldName = "eventName";
+        private Mock<IEventProjection> _eventProjectionMock;
+        private ProjectionPipelineModuleConfig _projectionPipelineModuleConfig;
 
         private ProjectionPipelineModule _projectionPipelineModule;
-        private ProjectionPipelineModuleConfig _projectionPipelineModuleConfig;
-        private Mock<IEventsSenderProjection> _eventSenderProjectionMock;
-        private Mock<IEventArgsProjection> _eventArgsProjectionMock;
 
         [SetUp]
         public void SetUp()
         {
-            _eventSenderProjectionMock = new Mock<IEventsSenderProjection>(MockBehavior.Strict);
-            _eventArgsProjectionMock = new Mock<IEventArgsProjection>(MockBehavior.Strict);
-            _projectionPipelineModule = new ProjectionPipelineModule();
+            _eventProjectionMock = new Mock<IEventProjection>(MockBehavior.Strict);
             _projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
-                _eventSenderProjectionMock.Object,
-                _eventArgsProjectionMock.Object,
-                _projectedEventFieldName
+                _eventProjectionMock.Object
             );
+
+            _projectionPipelineModule = new ProjectionPipelineModule();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _eventSenderProjectionMock.Verify();
-            _eventArgsProjectionMock.Verify();
+            _eventProjectionMock.Verify();
         }
 
         [Test]
         public async Task InvokeAsync_ShouldProjectInvokeNextModule()
         {
-            var testSender = new TestSender();
-            var testEventArgs = new TestEventArgs();
-            var projectedTestSender = new ProjectedTestSender();
-            var projectedTestEventArgs = new ProjectedTestEventArgs();
+            var testEventArgs = new TestEvent();
+            var projectedTestEvent = new ProjectedTestEvent();
 
-            var pipelineContext = CreatePipelineContext(
-                testSender, 
-                testEventArgs
-            );
-
-            _eventSenderProjectionMock
-                .Setup(x => x.Convert(testSender))
-                .Returns(projectedTestSender)
-                .Verifiable();
-
-            _eventArgsProjectionMock
+            var pipelineContext = CreatePipelineContext(testEventArgs);
+            
+            _eventProjectionMock
                 .Setup(x => x.Convert(testEventArgs))
-                .Returns(projectedTestEventArgs)
+                .Returns(projectedTestEvent)
                 .Verifiable();
 
             PipelineContext nextModuleContext = null;
@@ -73,32 +58,15 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
             Assert.That(
                 nextModuleContext.PipelineEvent,
-                Has.Property(nameof(PipelineEvent.OriginalSender)).EqualTo(projectedTestSender)
-            );
-            Assert.That(
-                nextModuleContext.PipelineEvent,
-                Has.Property(nameof(PipelineEvent.Event)).EqualTo(projectedTestEventArgs)
-            );
-
-            Assert.That(
-                nextModuleContext.PipelineEvent,
-                Has.Property(nameof(PipelineEvent.OriginalEventFieldName)).EqualTo(_projectedEventFieldName)
+                Has.Property(nameof(PipelineEvent.Event)).EqualTo(projectedTestEvent)
             );
         }
 
-        private class TestSender
+        private class TestEvent
         {
         }
 
-        private class TestEventArgs
-        {
-        }
-
-        private class ProjectedTestSender
-        {
-        }
-
-        private class ProjectedTestEventArgs
+        private class ProjectedTestEvent
         {
         }
     }

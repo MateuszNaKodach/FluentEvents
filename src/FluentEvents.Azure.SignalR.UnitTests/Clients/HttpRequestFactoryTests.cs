@@ -13,12 +13,11 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     public class HttpRequestFactoryTests
     {
         private readonly string _hubMethodName = nameof(_hubMethodName);
-        private string _url = "http://endpoint/";
+        private readonly string _url = "http://endpoint/";
         private readonly ConnectionString _connectionString = "Endpoint=123;AccessKey=123;";
 
         private Mock<IAccessTokensService> _accessTokensServiceMock;
-        private object _eventSender;
-        private object _eventArgs;
+        private object _domainEvent;
 
         private HttpRequestFactory _httpRequestFactory;
 
@@ -26,8 +25,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         public void SetUp()
         {
             _accessTokensServiceMock = new Mock<IAccessTokensService>(MockBehavior.Strict);
-            _eventSender = new object();
-            _eventArgs = new object();
+            _domainEvent = new object();
 
             _httpRequestFactory = new HttpRequestFactory(_accessTokensServiceMock.Object);
         }
@@ -44,8 +42,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
             var httpRequest = _httpRequestFactory.CreateHttpRequest(
                 _connectionString,
                 _hubMethodName,
-                _eventSender,
-                _eventArgs,
+                _domainEvent,
                 _url
             );
 

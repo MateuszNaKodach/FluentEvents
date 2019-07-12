@@ -28,13 +28,11 @@ namespace FluentEvents.Azure.SignalR.Client
             _connectionString = config.Value.ConnectionString;
         }
 
-        public async Task SendEventAsync(
-            PublicationMethod publicationMethod,
+        public async Task SendEventAsync(PublicationMethod publicationMethod,
             string hubName,
             string hubMethodName,
             string[] receiverIds,
-            object eventSender,
-            object eventArgs
+            object domainEvent
         )
         {
             foreach (var receiverId in receiverIds ?? _nullReceiver)
@@ -49,8 +47,7 @@ namespace FluentEvents.Azure.SignalR.Client
                 var request = _httpRequestFactory.CreateHttpRequest(
                     _connectionString,
                     hubMethodName,
-                    eventSender,
-                    eventArgs,
+                    domainEvent,
                     url
                 );
 

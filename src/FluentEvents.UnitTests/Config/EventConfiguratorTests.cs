@@ -12,51 +12,49 @@ namespace FluentEvents.UnitTests.Config
     public class EventConfiguratorTests
     {
         private Mock<IServiceProvider> _serviceProviderMock;
-        private SourceModel _sourceModel;
-        private SourceModelEventField _sourceModelEventField;
+        private Mock<IPipelinesService> _pipelinesServiceMock;
 
-        private EventConfigurator<TestSource, TestEventArgs> _eventConfigurator;
+        private EventConfigurator<object> _eventConfigurator;
 
         [SetUp]
         public void SetUp()
         {
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            _sourceModel = new SourceModel(typeof(TestSource));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
+            _pipelinesServiceMock = new Mock<IPipelinesService>(MockBehavior.Strict);
 
-            _eventConfigurator = new EventConfigurator<TestSource, TestEventArgs>(
+            _eventConfigurator = new EventConfigurator<object>(
                 _serviceProviderMock.Object
             );
         }
 
-        [Test]
-        public void IsWatched_ShouldAddPipelineAndReturnEventPipelineConfigurator()
+        [TearDown]
+        public void TearDown()
         {
+            _serviceProviderMock.Verify();
+            _pipelinesServiceMock.Verify();
+        }
+
+        [Test]
+        public void IsPiped_ShouldAddPipelineAndReturnEventPipelineConfigurator()
+        {
+            _serviceProviderMock
+                .Setup(x => x.GetService(typeof(IPipelinesService)))
+                .Returns(_pipelinesServiceMock.Object)
+                .Verifiable();
+
+            _pipelinesServiceMock
+                .Setup(x => x.AddPipeline(typeof(object), It.IsAny<IPipeline>()))
+                .Verifiable();
+
             var eventPipelineConfigurator = _eventConfigurator.IsPiped();
-            var pipeline = eventPipelineConfigurator.Get<IPipeline>();
-            var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
-            var sourceModel = eventPipelineConfigurator.Get<SourceModel>();
-            var sourceModelEventField = eventPipelineConfigurator.Get<SourceModelEventField>();
 
             Assert.That(eventPipelineConfigurator, Is.Not.Null);
+
+            var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
             Assert.That(serviceProvider, Is.EqualTo(_serviceProviderMock.Object));
-            Assert.That(sourceModel, Is.EqualTo(_sourceModel));
-            Assert.That(sourceModelEventField, Is.EqualTo(_sourceModelEventField));
+
+            var pipeline = eventPipelineConfigurator.Get<IPipeline>();
             Assert.That(pipeline, Is.Not.Null);
-            Assert.That(
-                _sourceModelEventField,
-                Has.Property(nameof(SourceModelEventField.Pipelines)).With.One.Items.EqualTo(pipeline)
-            );
-        }
-
-        private class TestSource
-        {
-            public event EventHandler<TestEventArgs> TestEvent;
-        }
-
-        private class TestEventArgs
-        {
-
         }
     }
 }

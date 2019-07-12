@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Config;
-using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Transmission;
@@ -15,22 +14,17 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
     public class EventPipelineConfiguratorExtensionsTests
     {
         private Mock<IServiceProvider> _serviceProviderMock;
-        private SourceModel _sourceModel;
-        private SourceModelEventField _sourceModelEventField;
         private Mock<IPipeline> _pipelineMock;
-        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
+
+        private EventPipelineConfigurator<TestEvent> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
         {
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            _sourceModel = new SourceModel(typeof(TestSource));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
        
-            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                _sourceModel,
-                _sourceModelEventField,
+            _eventPipelineConfigurator = new EventPipelineConfigurator<TestEvent>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -129,10 +123,10 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
         private class TestSource
         {
-            public event EventHandler<TestEventArgs> TestEvent;
+            public event EventHandler<TestEvent> TestEvent;
         }
 
-        private class TestEventArgs
+        private class TestEvent
         {
 
         }

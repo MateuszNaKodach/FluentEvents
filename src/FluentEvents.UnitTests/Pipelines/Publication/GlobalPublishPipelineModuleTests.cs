@@ -44,9 +44,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             var testSender = new TestSender();
             var testEventArgs = new TestEventArgs();
 
-            var pipelineContext = CreatePipelineContext(
-                testSender,
-                testEventArgs
+            var pipelineContext = CreatePipelineContext(testEventArgs
             );
 
             PipelineContext nextModuleContext = null;
@@ -76,9 +74,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             _globalPublishPipelineModuleConfig.SenderType = _eventSender1Mock.Object.GetType();
 
-            var pipelineContext = CreatePipelineContext(
-                testSender,
-                testEventArgs
+            var pipelineContext = CreatePipelineContext(testEventArgs
             );
 
             PipelineContext nextModuleContext = null;
@@ -108,9 +104,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             _globalPublishPipelineModuleConfig.SenderType = typeof(object);
 
-            var pipelineContext = CreatePipelineContext(
-                testSender,
-                testEventArgs
+            var pipelineContext = CreatePipelineContext(testEventArgs
             );
 
             Task InvokeNextModule(PipelineContext context) => Task.CompletedTask;

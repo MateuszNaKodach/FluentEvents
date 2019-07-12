@@ -7,6 +7,6 @@ namespace FluentEvents.Azure.SignalR
         public PublicationMethod PublicationMethod { get; set; }
         public string HubName { get; set; }
         public string HubMethodName { get; set; }
-        public Func<object, object, string[]> ReceiverIdsProviderAction { get; set; }
+        public Func<object, string[]> ReceiverIdsProviderAction { get; set; }
     }
 }

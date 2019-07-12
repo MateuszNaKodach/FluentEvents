@@ -61,12 +61,7 @@ namespace FluentEvents.UnitTests.Queues
         }
 
         private static PipelineEvent MakeNewPipelineEvent()
-            => new PipelineEvent(
-                typeof(object),
-                "f",
-                new object(),
-                new object()
-            );
+            => new PipelineEvent(typeof(object));
 
         [Test]
         [Sequential]

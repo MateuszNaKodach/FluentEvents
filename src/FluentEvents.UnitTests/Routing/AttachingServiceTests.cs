@@ -15,7 +15,6 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<IAttachingInterceptor> _attachingInterceptorMock2;
         private IAttachingService _attachingService;
         private EventsScope _eventsScope;
-        private SourceModel _source2SourceModel;
 
         [SetUp]
         public void SetUp()
@@ -34,7 +33,6 @@ namespace FluentEvents.UnitTests.Routing
                 }
             );
             _eventsScope = new EventsScope();
-            _source2SourceModel = new SourceModel(typeof(Source2));
         }
 
         [TearDown]
@@ -63,57 +61,33 @@ namespace FluentEvents.UnitTests.Routing
         }
 
         [Test]
-        public void Attach_WithExistingSourceModel_ShouldIterateBaseTypesAndAttach()
+        public void Attach_ShouldIterateBaseTypesAndAttach()
         {
             var source = new Source3();
 
             SetUpInterceptors(source);
-
-            _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(Source3)))
-                .Returns<SourceModel>(null)
-                .Verifiable();
-
-            _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(Source2)))
-                .Returns(_source2SourceModel)
-                .Verifiable();
-
-            _forwardingServiceMock
-                .Setup(x => x.ForwardEventsToRouting(_source2SourceModel, source, _eventsScope))
-                .Verifiable();
-
+            
+            SetUpSourceModelsServiceAndForwardingService(typeof(object), source);
+            SetUpSourceModelsServiceAndForwardingService(typeof(Source3), source);
+            SetUpSourceModelsServiceAndForwardingService(typeof(Source2), source);
+            SetUpSourceModelsServiceAndForwardingService(typeof(Source1), source);
+            SetUpSourceModelsServiceAndForwardingService(typeof(ISource), source);
+            
             _attachingService.Attach(source, _eventsScope);
         }
 
-        [Test]
-        public void Attach_WithNoExistingSourceModel_ShouldIterateBaseTypesAndNotAttach()
+        private void SetUpSourceModelsServiceAndForwardingService(Type type, Source3 source)
         {
-            var source = new Source3();
-
-            SetUpInterceptors(source);
+            var sourceModel = new SourceModel(type);
 
             _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(Source3)))
-                .Returns<SourceModel>(null)
+                .Setup(x => x.GetOrCreateSourceModel(type))
+                .Returns(sourceModel)
                 .Verifiable();
 
-            _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(Source2)))
-                .Returns<SourceModel>(null)
+            _forwardingServiceMock
+                .Setup(x => x.ForwardEventsToRouting(sourceModel, source, _eventsScope))
                 .Verifiable();
-
-            _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(Source1)))
-                .Returns<SourceModel>(null)
-                .Verifiable();
-
-            _sourceModelsServiceMock
-                .Setup(x => x.GetSourceModel(typeof(object)))
-                .Returns<SourceModel>(null)
-                .Verifiable();
-
-            _attachingService.Attach(source, _eventsScope);
         }
 
         private void SetUpInterceptors(object source)
@@ -127,10 +101,14 @@ namespace FluentEvents.UnitTests.Routing
                 .Verifiable();
         }
 
-        public class Source1 { }
+        private class Source1 { }
 
-        public class Source2 : Source1 { }
+        private class Source2 : Source1, ISource { }
 
-        public class Source3 : Source2 { }
+        private class Source3 : Source2 { }
+
+        private interface ISource
+        {
+        }
     }
 }

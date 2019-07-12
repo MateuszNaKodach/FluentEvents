@@ -32,7 +32,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsSentToAllAzureSignalRUsers(HubName, HubMethodName);
             }

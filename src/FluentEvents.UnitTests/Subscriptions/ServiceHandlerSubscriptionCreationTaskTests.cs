@@ -13,8 +13,6 @@ namespace FluentEvents.UnitTests.Subscriptions
         private static readonly string _eventName = nameof(_eventName);
 
         private Mock<IAppServiceProvider> _appServiceProviderMock;
-        private Mock<ISubscriptionsFactory> _subscriptionsFactoryMock;
-        private Subscription _subscription;
 
         private ISubscriptionCreationTask _subscriptionCreationTask;
 
@@ -22,20 +20,14 @@ namespace FluentEvents.UnitTests.Subscriptions
         public void SetUp()
         {
             _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
-            _subscriptionsFactoryMock = new Mock<ISubscriptionsFactory>(MockBehavior.Strict);
-            _subscription = new Subscription(typeof(object));
 
-            _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object, object>(
-                _eventName,
-                _subscriptionsFactoryMock.Object
-            );
+            _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>();
         }
 
         [TearDown]
         public void TearDown()
         {
             _appServiceProviderMock.Verify();
-            _subscriptionsFactoryMock.Verify();
         }
 
         [Test]
@@ -44,11 +36,6 @@ namespace FluentEvents.UnitTests.Subscriptions
             _appServiceProviderMock
                 .Setup(x => x.GetService(typeof(TestService)))
                 .Returns(new TestService())
-                .Verifiable();
-
-            _subscriptionsFactoryMock
-                .Setup(x => x.CreateSubscription<object>(It.Is<SubscribedHandler>(y => y.EventName == _eventName)))
-                .Returns(_subscription)
                 .Verifiable();
 
             var subscription = _subscriptionCreationTask.CreateSubscription(_appServiceProviderMock.Object);
@@ -70,9 +57,9 @@ namespace FluentEvents.UnitTests.Subscriptions
             }, Throws.TypeOf<SubscribingServiceNotFoundException>());
         }
 
-        private class TestService : IEventHandler<object, object>
+        private class TestService : IEventHandler<object>
         {
-            public Task HandleEventAsync(object source, object args)
+            public Task HandleEventAsync(object e)
             {
                 throw new NotImplementedException();
             }

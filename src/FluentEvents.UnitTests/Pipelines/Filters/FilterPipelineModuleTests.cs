@@ -15,19 +15,15 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         public void SetUp()
         {
             _filterPipelineModule = new FilterPipelineModule();
-            _filterPipelineModuleConfig = new FilterPipelineModuleConfig((sender, args) => ((TestSender)sender).IsValid);
+            _filterPipelineModuleConfig = new FilterPipelineModuleConfig(e => ((TestEvent)e).IsValid);
         }
 
         [Test]
         public async Task InvokeAsync_WithoutMatch_ShouldNotInvokeNextModule()
         {
-            var testSender = new TestSender { IsValid = false };
-            var testEventArgs = new TestEventArgs();
+            var testEventArgs = new TestEvent { IsValid = false };
 
-            var pipelineContext = CreatePipelineContext(
-                testSender,
-                testEventArgs
-            );
+            var pipelineContext = CreatePipelineContext(testEventArgs);
 
             var isInvoked = false;
 
@@ -45,13 +41,9 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         [Test]
         public async Task InvokeAsync_WithMatch_ShouldInvokeNextModule()
         {
-            var testSender = new TestSender { IsValid = true };
-            var testEventArgs = new TestEventArgs();
+            var testEventArgs = new TestEvent { IsValid = true };
 
-            var pipelineContext = CreatePipelineContext(
-                testSender,
-                testEventArgs
-            );
+            var pipelineContext = CreatePipelineContext(testEventArgs);
 
             PipelineContext nextModuleContext = null;
 
@@ -67,14 +59,9 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             Assert.That(nextModuleContext, Is.EqualTo(pipelineContext));
         }
         
-        private class TestSender
+        private class TestEvent
         {
             public bool IsValid { get; set; }
-        }
-
-        private class TestEventArgs
-        {
-
         }
     }
 }

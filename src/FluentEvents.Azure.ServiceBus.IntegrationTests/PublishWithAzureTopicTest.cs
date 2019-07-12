@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.IntegrationTests.Common;
@@ -33,7 +34,8 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 options.UseAzureTopicEventReceiver(configuration.GetSection("azureTopicReceiver"));
                 options.UseAzureTopicEventSender(configuration.GetSection("azureTopicSender"));
             });
-
+            services.AddSingleton<SubscribingService>();
+            
             _serviceProvider = services.BuildServiceProvider();
 
             _testEventsContext = _serviceProvider.GetRequiredService<TestEventsContext>();
@@ -45,30 +47,30 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         {
             await _testEventsContext.StartEventReceiversAsync();
 
-            object receivedSender = null;
-            TestEvent receivedEvent = null;
-            _testEventsContext.SubscribeGloballyTo<TestEntity>(testEntity =>
-            {
-                testEntity.Test += (sender, args) =>
-                {
-                    receivedSender = sender;
-                    receivedEvent = args;
-                };
-            });
+            var subscribingService = _serviceProvider.GetRequiredService<SubscribingService>();
 
             TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
 
-            await Watcher.WaitUntilAsync(() => receivedEvent != null);
+            await Watcher.WaitUntilAsync(() => subscribingService.TestEvents.Any());
 
-            TestUtils.AssertThatEventIsPublishedProperly(receivedEvent);
+            Assert.That(subscribingService, Has.Property(nameof(SubscribingService.TestEvents)).With.One.Items);
+
+            TestUtils.AssertThatEventIsPublishedProperly(subscribingService.TestEvents.FirstOrDefault());
         }
 
         private class TestEventsContext : EventsContext
         {
+            protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+            {
+                subscriptionsBuilder
+                    .ServiceHandler<SubscribingService, TestEvent>()
+                    .HasGlobalSubscription();
+            }
+
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
-                    .Event<TestEntity, TestEvent>(nameof(TestEntity.Test))
+                    .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
             }

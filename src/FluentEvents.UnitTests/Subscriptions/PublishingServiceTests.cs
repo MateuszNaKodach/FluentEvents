@@ -11,6 +11,8 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class PublishingServiceTests
     {
+        private readonly Exception _exception = new Exception();
+
         private Mock<ILogger<PublishingService>> _loggerMock;
         private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
         private Mock<ISubscriptionsMatchingService> _subscriptionsMatchingServiceMock;
@@ -19,6 +21,10 @@ namespace FluentEvents.UnitTests.Subscriptions
         private PublishingService _publishingService;
         private Subscription[] _subscriptions;
         private PipelineEvent _pipelineEvent;
+
+        private object _subscription1Event;
+        private object _subscription0Event;
+        private bool _isThrowingEnabled;
 
         [SetUp]
         public void SetUp()
@@ -34,20 +40,30 @@ namespace FluentEvents.UnitTests.Subscriptions
                 _subscriptionsMatchingServiceMock.Object
             );
 
-            _subscriptions = new[]
+            Action<object> subscription0HandlerAction = args =>
             {
-                new Subscription(typeof(object)),
-                new Subscription(typeof(object)),
-                new Subscription(typeof(object)),
+                ThrowIfEnabled();
+                _subscription0Event = args;
             };
 
-            _pipelineEvent = new PipelineEvent(
-                typeof(object),
-                "fieldName",
-                new object(),
-                new object()
-            );
-        }
+            Action<object> subscription1HandlerAction = args =>
+            {
+                ThrowIfEnabled();
+                _subscription1Event = args;
+            };
+
+            _subscriptions = new[]
+            {
+                new Subscription(typeof(object), subscription0HandlerAction.GetInvocationList()[0]),
+                new Subscription(typeof(object), subscription1HandlerAction.GetInvocationList()[0]),
+            };
+
+            _pipelineEvent = new PipelineEvent(typeof(object));
+
+            _subscription1Event = null;
+            _subscription0Event = null;
+            _isThrowingEnabled = false;
+        }   
 
         [TearDown]
         public void TearDown()
@@ -71,15 +87,13 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
-        public async Task PublishEventToScopedSubscriptionsAsync_ShouldHandlePublishingException()
+        public void PublishEventToScopedSubscriptionsAsync_ShouldAggregateAndLogPublishingException()
         {
             SetUpLogger();
             SetUpEventsScopeGetSubscriptions();
             SetUpSubscriptionsMatchingService();
 
-            var exception = new Exception();
-            SetUpSubscriptionEventsHandler(_subscriptions[0], (sender, args) => throw exception);
-            SetUpSubscriptionEventsHandler(_subscriptions[1], (sender, args) => throw exception);
+            _isThrowingEnabled = true;
 
             _loggerMock
                 .Setup(x => x.IsEnabled(LogLevel.Error))
@@ -91,15 +105,18 @@ namespace FluentEvents.UnitTests.Subscriptions
                     LogLevel.Error,
                     SubscriptionsLoggerMessages.EventIds.EventHandlerThrew,
                     It.IsAny<object>(),
-                    exception,
+                    _exception,
                     It.IsAny<Func<object, Exception, string>>()
                 ))
                 .Verifiable();
 
-            await _publishingService.PublishEventToScopedSubscriptionsAsync(
-                _pipelineEvent,
-                _eventsScopeMock.Object
-            );
+            Assert.That(async () =>
+            {
+                await _publishingService.PublishEventToScopedSubscriptionsAsync(
+                    _pipelineEvent,
+                    _eventsScopeMock.Object
+                );
+            }, Throws.TypeOf<SubscriptionPublishAggregateException>());
         }
 
         [Test]
@@ -163,47 +180,24 @@ namespace FluentEvents.UnitTests.Subscriptions
         private async Task TestPublishing(Func<Task> testAction)
         {
             SetUpSubscriptionsMatchingService();
-
-            object subscription0Sender = null;
-            object subscription0Args = null;
-
-            void Subscription0HandlerAction(object sender, object args)
-            {
-                subscription0Sender = sender;
-                subscription0Args = args;
-            }
-
-            object subscription1Sender = null;
-            object subscription1Args = null;
-
-            void Subscription1HandlerAction(object sender, object args)
-            {
-                subscription1Sender = sender;
-                subscription1Args = args;
-            }
-
-            SetUpSubscriptionEventsHandler(_subscriptions[0], Subscription0HandlerAction);
-            SetUpSubscriptionEventsHandler(_subscriptions[1], Subscription1HandlerAction);
-
+            
             await testAction();
 
-            Assert.That(subscription0Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
-            Assert.That(subscription0Args, Is.EqualTo(_pipelineEvent.Event));
-            Assert.That(subscription1Sender, Is.EqualTo(_pipelineEvent.OriginalSender));
-            Assert.That(subscription1Args, Is.EqualTo(_pipelineEvent.Event));
+            Assert.That(_subscription0Event, Is.EqualTo(_pipelineEvent.Event));
+            Assert.That(_subscription1Event, Is.EqualTo(_pipelineEvent.Event));
         }
 
         private void SetUpSubscriptionsMatchingService()
         {
             _subscriptionsMatchingServiceMock
-                .Setup(x => x.GetMatchingSubscriptionsForEvent(_subscriptions, _pipelineEvent.OriginalSender))
-                .Returns(new[] {_subscriptions[0], _subscriptions[1]})
+                .Setup(x => x.GetMatchingSubscriptionsForEvent(_subscriptions, _pipelineEvent.Event))
+                .Returns(_subscriptions)
                 .Verifiable();
         }
-
-        private void SetUpSubscriptionEventsHandler(Subscription subscription, Action<object, object> handlerAction)
+        private void ThrowIfEnabled()
         {
-            subscription.AddHandler(_pipelineEvent.OriginalEventFieldName, handlerAction.GetInvocationList()[0]);
+            if (_isThrowingEnabled)
+                throw _exception;
         }
     }
 }

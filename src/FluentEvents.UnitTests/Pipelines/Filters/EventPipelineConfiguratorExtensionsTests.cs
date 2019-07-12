@@ -15,10 +15,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         private Mock<ISourceModelsService> _sourceModelsServiceMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private SourceModel _sourceModel;
-        private SourceModelEventField _sourceModelEventField;
-
-        private EventPipelineConfigurator<TestSource, TestEventArgs> _eventPipelineConfigurator;
+        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
 
         [SetUp]
         public void SetUp()
@@ -27,12 +24,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            _sourceModel = new SourceModel(typeof(TestSource));
-            _sourceModelEventField = _sourceModel.GetOrCreateEventField(nameof(TestSource.TestEvent));
-
-            _eventPipelineConfigurator = new EventPipelineConfigurator<TestSource, TestEventArgs>(
-                _sourceModel,
-                _sourceModelEventField,
+            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -49,11 +41,11 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 .Callback<FilterPipelineModuleConfig>(paramsConfig => config = paramsConfig)
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered((x, y) => isMatching);
+            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered(e => isMatching);
 
             Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
             Assert.That(config, Is.Not.Null);
-            Assert.That(config.IsMatching(new TestSource(), new TestEventArgs()), Is.EqualTo(isMatching));
+            Assert.That(config.IsMatching(new object()), Is.EqualTo(isMatching));
         }
 
         [Test]
@@ -71,16 +63,6 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             _serviceProviderMock.Verify();
             _sourceModelsServiceMock.Verify();
             _pipelineMock.Verify();
-        }
-
-        private class TestSource
-        {
-            public event EventHandler<TestEventArgs> TestEvent;
-        }
-
-        private class TestEventArgs
-        {
-
         }
     }
 }

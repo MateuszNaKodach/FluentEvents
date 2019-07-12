@@ -4,12 +4,9 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal interface IHttpRequestFactory
     {
-        HttpRequestMessage CreateHttpRequest(
-            ConnectionString connectionString,
+        HttpRequestMessage CreateHttpRequest(ConnectionString connectionString,
             string hubMethodName,
-            object eventSender, 
-            object eventArgs,
-            string url
-        );
+            object domainEvent,
+            string url);
     }
 }

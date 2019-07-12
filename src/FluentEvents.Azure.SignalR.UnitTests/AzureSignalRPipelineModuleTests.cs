@@ -37,10 +37,10 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 HubMethodName = nameof(AzureSignalRPipelineModuleConfig.HubMethodName),
                 HubName = nameof(AzureSignalRPipelineModuleConfig.HubName),
                 PublicationMethod = PublicationMethod.User,
-                ReceiverIdsProviderAction = (o, o1) => _receiverIds
+                ReceiverIdsProviderAction = e => _receiverIds
             };
-            _eventsScope = new EventsScope(new []{_eventsContextMock.Object}, _appServiceProviderMock.Object);
-            _pipelineEvent = new PipelineEvent(typeof(object), "", new object(), new object());
+            _eventsScope = new EventsScope(new[] {_eventsContextMock.Object}, _appServiceProviderMock.Object);
+            _pipelineEvent = new PipelineEvent(typeof(object));
             _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
 
             _azureSignalRPipelineModule = new AzureSignalRPipelineModule(_azureSignalRClientMock.Object);
@@ -60,7 +60,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                     _azureSignalRPipelineModuleConfig.HubName,
                     _azureSignalRPipelineModuleConfig.HubMethodName,
                     isReceiverIdsProviderActionNull ? null : _receiverIds,
-                    _pipelineEvent.OriginalSender,
                     _pipelineEvent.Event)
                 )
                 .Returns(Task.CompletedTask)
