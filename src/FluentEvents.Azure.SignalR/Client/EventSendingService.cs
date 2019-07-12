@@ -32,7 +32,7 @@ namespace FluentEvents.Azure.SignalR.Client
             string hubName,
             string hubMethodName,
             string[] receiverIds,
-            object domainEvent
+            object e
         )
         {
             foreach (var receiverId in receiverIds ?? _nullReceiver)
@@ -47,18 +47,19 @@ namespace FluentEvents.Azure.SignalR.Client
                 var request = _httpRequestFactory.CreateHttpRequest(
                     _connectionString,
                     hubMethodName,
-                    domainEvent,
+                    e,
                     url
                 );
 
                 var response = await _signalRHttpClient.SendAsync(request).ConfigureAwait(false);
+
                 try
                 {
                     response.EnsureSuccessStatusCode();
                 }
-                catch (HttpRequestException e)
+                catch (HttpRequestException ex)
                 {
-                    throw new AzureSignalRPublishingFailedException(e);
+                    throw new AzureSignalRPublishingFailedException(ex);
                 }
 
                 if (response.StatusCode != HttpStatusCode.Accepted)

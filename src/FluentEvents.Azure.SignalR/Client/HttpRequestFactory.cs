@@ -20,7 +20,7 @@ namespace FluentEvents.Azure.SignalR.Client
 
         public HttpRequestMessage CreateHttpRequest(ConnectionString connectionString,
             string hubMethodName,
-            object domainEvent,
+            object e,
             string url
         )
         {
@@ -29,7 +29,7 @@ namespace FluentEvents.Azure.SignalR.Client
                 url,
                 new PayloadMessage
                 {
-                    Arguments = new[] {domainEvent},
+                    Arguments = new[] {e},
                     Target = hubMethodName
                 }
             );

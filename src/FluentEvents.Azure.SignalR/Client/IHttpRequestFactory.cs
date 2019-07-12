@@ -6,7 +6,8 @@ namespace FluentEvents.Azure.SignalR.Client
     {
         HttpRequestMessage CreateHttpRequest(ConnectionString connectionString,
             string hubMethodName,
-            object domainEvent,
-            string url);
+            object e,
+            string url
+        );
     }
 }

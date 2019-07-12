@@ -120,7 +120,7 @@ namespace FluentEvents.Azure.SignalR
                         HubName = hubName,
                         ReceiverIdsProviderAction = receiverIdsProviderAction == null 
                             ? (Func<object, string[]>)null 
-                            : domainEvent => receiverIdsProviderAction((TEvent) domainEvent)
+                            : e => receiverIdsProviderAction((TEvent) e)
                     }
                 );
         }

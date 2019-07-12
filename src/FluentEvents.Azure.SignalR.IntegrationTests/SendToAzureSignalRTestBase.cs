@@ -98,9 +98,9 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         )
         {
             TestEvent receivedEvent = null;
-            hubConnection.On<TestEvent>(HubMethodName, domainEvent =>
+            hubConnection.On<TestEvent>(HubMethodName, testEvent =>
             {
-                receivedEvent = domainEvent;
+                receivedEvent = testEvent;
             });
 
             await semaphoreSlim.WaitAsync();

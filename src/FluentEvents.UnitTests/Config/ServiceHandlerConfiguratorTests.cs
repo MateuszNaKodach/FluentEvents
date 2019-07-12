@@ -58,7 +58,7 @@ namespace FluentEvents.UnitTests.Config
         
         private class SubscribingService : IEventHandler<object>
         {
-            public Task HandleEventAsync(object domainEvent)
+            public Task HandleEventAsync(object e)
             {
                 throw new NotImplementedException();
             }

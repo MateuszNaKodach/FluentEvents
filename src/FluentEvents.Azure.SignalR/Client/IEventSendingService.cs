@@ -8,6 +8,7 @@ namespace FluentEvents.Azure.SignalR.Client
             string hubName,
             string hubMethodName,
             string[] receiverIds,
-            object domainEvent);
+            object e
+        );
     }
 }

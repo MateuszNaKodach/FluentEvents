@@ -25,33 +25,33 @@ namespace FluentEvents.IntegrationTests.Common
             ProjectedTestEvents = new List<ProjectedTestEvent>();
         }
 
-        public Task HandleEventAsync(TestEvent domainEvent)
+        public Task HandleEventAsync(TestEvent e)
         {
-            TestEvents.Add(domainEvent);
+            TestEvents.Add(e);
             return Task.CompletedTask;
         }
 
-        public Task HandleEventAsync(ProjectedTestEvent domainEvent)
+        public Task HandleEventAsync(ProjectedTestEvent e)
         {
-            ProjectedTestEvents.Add(domainEvent);
+            ProjectedTestEvents.Add(e);
             return Task.CompletedTask;
         }
 
-        public Task HandleEventAsync(TestEventBase domainEvent)
+        public Task HandleEventAsync(TestEventBase e)
         {
-            BaseTestEvents.Add(domainEvent);
+            BaseTestEvents.Add(e);
             return Task.CompletedTask;
         }
 
-        public Task HandleEventAsync(TestEvent2 domainEvent)
+        public Task HandleEventAsync(TestEvent2 e)
         {
-            TestEvent2s.Add(domainEvent);
+            TestEvent2s.Add(e);
             return Task.CompletedTask;
         }
 
-        public Task HandleEventAsync(ITestEvent domainEvent)
+        public Task HandleEventAsync(ITestEvent e)
         {
-            ITestEvents.Add(domainEvent);
+            ITestEvents.Add(e);
             return Task.CompletedTask;
         }
     }
