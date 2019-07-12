@@ -26,9 +26,6 @@ namespace FluentEvents.Config
         ///     Subscribes the <see cref="IEventHandler{TEvent}.HandleEventAsync"/> to global events.
         /// </summary>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        /// <exception cref="EventArgsTypeMismatchException">
-        ///     The specified event args type is different from the event args type of the event being selected.
-        /// </exception>
         public ServiceHandlerConfigurator<TService, TEvent> HasGlobalSubscription()
         {
             _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TService, TEvent>();
@@ -40,9 +37,6 @@ namespace FluentEvents.Config
         ///     Subscribes the <see cref="IEventHandler{TEvent}.HandleEventAsync"/> to scoped events.
         /// </summary>
         /// <returns>The configuration object to add more subscriptions.</returns>
-        /// <exception cref="EventArgsTypeMismatchException">
-        ///     The specified event args type is different from the event args type of the event being selected.
-        /// </exception>
         public ServiceHandlerConfigurator<TService, TEvent> HasScopedSubscription()
         {
             _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<TService, TEvent>();

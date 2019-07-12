@@ -15,7 +15,7 @@ namespace FluentEvents.Pipelines.Queues
         ///     Adds module to the current pipeline that queues the event in a queue
         ///     and pauses the execution of the current pipeline until the event is dequeued.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>

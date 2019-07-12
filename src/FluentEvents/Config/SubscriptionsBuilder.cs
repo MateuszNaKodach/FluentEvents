@@ -29,7 +29,7 @@ namespace FluentEvents.Config
         ///     an <see cref="IEventHandler{TEvent}.HandleEventAsync"/> method.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
-        /// <typeparam name="TEvent">The type of the event args</typeparam>
+        /// <typeparam name="TEvent">The type of the event</typeparam>
         /// <returns></returns>
         public ServiceHandlerConfigurator<TService, TEvent> ServiceHandler<TService, TEvent>()
             where TService : class, IEventHandler<TEvent>

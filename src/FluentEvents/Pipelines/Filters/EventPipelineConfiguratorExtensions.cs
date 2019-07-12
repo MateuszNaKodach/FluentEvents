@@ -12,13 +12,13 @@ namespace FluentEvents.Pipelines.Filters
         /// <summary>
         ///     Adds an event filtering module to the current pipeline.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="filter">
-        ///     A <see cref="Func{TEvent, TResult}"/> that takes the event sender and the event args
-        ///     as input and returns false if the event should be filtered
+        ///     A <see cref="Func{TEvent, TResult}"/> that takes the event
+        ///     as input and returns false if it should be filtered
         ///     (When an event is filtered any module configured after the filter won't be invoked).
         /// </param>
         /// <returns>

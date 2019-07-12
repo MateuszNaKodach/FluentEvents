@@ -10,19 +10,19 @@ namespace FluentEvents.Pipelines.Projections
     public static class EventPipelineConfiguratorExtensions
     {
         /// <summary>
-        ///     Adds a module to the current pipeline that replaces the event sender and the event args with a projection.
+        ///     Adds a module to the current pipeline that replaces event with a projection.
         /// </summary>
         /// <remarks>
         ///     Projections are useful when an event needs to be serialized in order to reduce
         ///     the size and the complexity of the serialization output.
         /// </remarks>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
-        /// <typeparam name="TToEvent">The type of the projected event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <typeparam name="TToEvent">The type of the projected event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="eventConverter">
-        ///     A <see cref="Func{TEvent, TToEvent}"/> that takes the event args as input and returns a new object.
+        ///     A <see cref="Func{TEvent, TToEvent}"/> that takes the event as input and returns a new object.
         /// </param>
         /// <returns>
         ///     A new <see cref="EventPipelineConfigurator{TToEvent}"/> instance so that multiple calls can be chained.

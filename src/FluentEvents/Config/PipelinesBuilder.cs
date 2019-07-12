@@ -20,11 +20,11 @@ namespace FluentEvents.Config
         }
 
         /// <summary>
-        ///     Registers a source and an event as part of the model and returns an object that can be used to
-        ///     configure how the event is handled. This method can be called multiple times for the same event to
+        ///     Returns an object that can be used to configure fluently how the event is handled.
+        ///     This method can be called multiple times for the same event to
         ///     configure multiple pipelines.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <returns>The configuration object for the specified event.</returns>
         public EventConfigurator<TEvent> Event<TEvent>()
             where TEvent : class

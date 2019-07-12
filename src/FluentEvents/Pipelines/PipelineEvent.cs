@@ -18,7 +18,7 @@ namespace FluentEvents.Pipelines
         /// </summary>
         public Type EventType { get; }
 
-        /// <param name="event">The instance of the event args.</param>
+        /// <param name="event">The instance of the event.</param>
         public PipelineEvent(object @event)
         {
             Event = @event;

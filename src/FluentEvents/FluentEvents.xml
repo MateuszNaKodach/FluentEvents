@@ -11,11 +11,6 @@
             <param name="domainEvent">The event.</param>
             <typeparam name="TDomainEvent">The type of the event.</typeparam>
         </member>
-        <member name="T:FluentEvents.Config.EventArgsTypeMismatchException">
-            <summary>
-                An exception throw when configuring an event by specifying the wrong type of the event args.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Config.EventConfigurator`1">
             <summary>
                 Provides a simple API surface for configuring an event.
@@ -61,11 +56,11 @@
         </member>
         <member name="M:FluentEvents.Config.PipelinesBuilder.Event``1">
             <summary>
-                Registers a source and an event as part of the model and returns an object that can be used to
-                configure how the event is handled. This method can be called multiple times for the same event to
+                Returns an object that can be used to configure fluently how the event is handled.
+                This method can be called multiple times for the same event to
                 configure multiple pipelines.
             </summary>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
             <returns>The configuration object for the specified event.</returns>
         </member>
         <member name="T:FluentEvents.Config.ServiceHandlerConfigurator`2">
@@ -78,18 +73,12 @@
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> to global events.
             </summary>
             <returns>The configuration object to add more subscriptions.</returns>
-            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
-                The specified event args type is different from the event args type of the event being selected.
-            </exception>
         </member>
         <member name="M:FluentEvents.Config.ServiceHandlerConfigurator`2.HasScopedSubscription">
             <summary>
                 Subscribes the <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> to scoped events.
             </summary>
             <returns>The configuration object to add more subscriptions.</returns>
-            <exception cref="T:FluentEvents.Config.EventArgsTypeMismatchException">
-                The specified event args type is different from the event args type of the event being selected.
-            </exception>
         </member>
         <member name="T:FluentEvents.Config.SubscriptionsBuilder">
             <summary>
@@ -108,7 +97,7 @@
                 an <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> method.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
-            <typeparam name="TEvent">The type of the event args</typeparam>
+            <typeparam name="TEvent">The type of the event</typeparam>
             <returns></returns>
         </member>
         <member name="T:FluentEvents.DomainEventHandler`1">
@@ -430,13 +419,13 @@
             <summary>
                 Adds an event filtering module to the current pipeline.
             </summary>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> for the pipeline being configured.
             </param>
             <param name="filter">
-                A <see cref="T:System.Func`2"/> that takes the event sender and the event args
-                as input and returns false if the event should be filtered
+                A <see cref="T:System.Func`2"/> that takes the event
+                as input and returns false if it should be filtered
                 (When an event is filtered any module configured after the filter won't be invoked).
             </param>
             <returns>
@@ -545,7 +534,7 @@
             </summary>
         </member>
         <member name="M:FluentEvents.Pipelines.PipelineEvent.#ctor(System.Object)">
-            <param name="event">The instance of the event args.</param>
+            <param name="event">The instance of the event.</param>
         </member>
         <member name="T:FluentEvents.Pipelines.PipelineModuleNotFoundException">
             <summary>
@@ -596,19 +585,19 @@
         </member>
         <member name="M:FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions.ThenIsProjected``2(FluentEvents.Config.EventPipelineConfigurator{``0},System.Func{``0,``1})">
             <summary>
-                Adds a module to the current pipeline that replaces the event sender and the event args with a projection.
+                Adds a module to the current pipeline that replaces event with a projection.
             </summary>
             <remarks>
                 Projections are useful when an event needs to be serialized in order to reduce
                 the size and the complexity of the serialization output.
             </remarks>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
-            <typeparam name="TToEvent">The type of the projected event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
+            <typeparam name="TToEvent">The type of the projected event.</typeparam>
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> for the pipeline being configured.
             </param>
             <param name="eventConverter">
-                A <see cref="T:System.Func`2"/> that takes the event args as input and returns a new object.
+                A <see cref="T:System.Func`2"/> that takes the event as input and returns a new object.
             </param>
             <returns>
                 A new <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> instance so that multiple calls can be chained.
@@ -626,7 +615,7 @@
             <summary>
                 Adds a module to the current pipeline that publishes the event to all the subscriptions in scope locally.
             </summary>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> for the pipeline being configured.
             </param>
@@ -640,7 +629,7 @@
             <remarks>
                 This method can be used to configure a publication to multiple application instances with this <see cref="T:FluentEvents.EventsContext"/>
             </remarks>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> for the pipeline being configured.
             </param>
@@ -703,7 +692,7 @@
                 Adds module to the current pipeline that queues the event in a queue
                 and pauses the execution of the current pipeline until the event is dequeued.
             </summary>
-            <typeparam name="TEvent">The type of the event args.</typeparam>
+            <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
                 The <see cref="T:FluentEvents.Config.EventPipelineConfigurator`1"/> for the pipeline being configured.
             </param>

@@ -15,7 +15,7 @@ namespace FluentEvents.Pipelines.Publication
         /// <summary>
         ///     Adds a module to the current pipeline that publishes the event to all the subscriptions in scope locally.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
@@ -41,7 +41,7 @@ namespace FluentEvents.Pipelines.Publication
         /// <remarks>
         ///     This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/>
         /// </remarks>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>

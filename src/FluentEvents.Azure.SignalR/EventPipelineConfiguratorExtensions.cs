@@ -14,7 +14,7 @@ namespace FluentEvents.Azure.SignalR
         ///     Adds a module to the current pipeline that publishes the event to all the users connected to
         ///     the configured Azure SignalR Service.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
@@ -41,7 +41,7 @@ namespace FluentEvents.Azure.SignalR
         ///     Adds a module to the current pipeline that publishes the event to some users connected to
         ///     the configured Azure SignalR Service.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
@@ -72,7 +72,7 @@ namespace FluentEvents.Azure.SignalR
         ///     Adds a module to the current pipeline that publishes the event to some groups connected to
         ///     the configured Azure SignalR Service.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event args.</typeparam>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPipelineConfigurator">
         ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
         /// </param>
