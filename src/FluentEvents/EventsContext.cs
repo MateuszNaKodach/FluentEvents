@@ -124,7 +124,7 @@ namespace FluentEvents
         ///     This method is called only once when the instance of a derived context is created.
         /// </remarks>
         /// <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
-        protected abstract void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder);
+        protected virtual void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder) { }
 
         /// <summary>
         ///     Starts the registered event receivers manually.
