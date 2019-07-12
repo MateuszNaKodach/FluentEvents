@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
-using FluentEvents.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
@@ -16,18 +15,23 @@ namespace FluentEvents
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => InternalServiceProvider;
 
-        private EventsContextOptions _options;
         private IInternalServiceCollection _internalServices;
 
+        private EventsContextOptions _options;
         private IServiceProvider _internalServiceProvider;
         private IEventsContextDependencies _dependencies;
+        private bool _isConfigured;
 
         internal bool IsInitializing => _internalServiceProvider != null && _dependencies == null;
+
 
         private IServiceProvider InternalServiceProvider
         {
             get
             {
+                if (!_isConfigured)
+                    throw new EventsContextIsNotConfiguredException();
+
                 if (_internalServiceProvider == null)
                 {
                     OnConfiguring(_options);
@@ -49,7 +53,6 @@ namespace FluentEvents
         ///     extension method.
         /// </summary>
         protected EventsContext()
-            : this(new EventsContextOptions())
         {
         }
 
@@ -57,12 +60,18 @@ namespace FluentEvents
         ///     This constructor can be used when the <see cref="EventsContext" /> is not configured with
         ///     the <see cref="IServiceCollection" /> extension method.
         /// </summary>
-        protected EventsContext(EventsContextOptions options)
+        /// <param name="options">The options for this context.</param>
+        /// <param name="appServiceProvider">The app service provider.</param>
+        protected EventsContext(EventsContextOptions options, IServiceProvider appServiceProvider)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            
+            if (appServiceProvider == null)
+                throw new ArgumentNullException(nameof(appServiceProvider));
 
-            var emptyAppServiceProvider = new ServiceCollection().BuildServiceProvider();
-            _internalServices = new InternalServiceCollection(new AppServiceProvider(emptyAppServiceProvider));
+            _internalServices = new InternalServiceCollection(new AppServiceProvider(appServiceProvider));
+
+            _isConfigured = true;
         }
 
         internal void Configure(
@@ -77,6 +86,8 @@ namespace FluentEvents
 
             _options = options;
             _internalServices = internalServices;
+
+            _isConfigured = true;
         }
 
         private void Build()

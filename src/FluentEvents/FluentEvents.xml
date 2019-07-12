@@ -131,11 +131,13 @@
                 extension method.
             </summary>
         </member>
-        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions)">
+        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)">
             <summary>
                 This constructor can be used when the <see cref="T:FluentEvents.EventsContext" /> is not configured with
                 the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> extension method.
             </summary>
+            <param name="options">The options for this context.</param>
+            <param name="appServiceProvider">The app service provider.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)">
             <summary>
@@ -206,6 +208,18 @@
             </summary>
             <param name="eventsScope">The scope of the queue.</param>
             <param name="queueName">The name of the queue.</param>
+        </member>
+        <member name="T:FluentEvents.EventsContextIsNotConfiguredException">
+            <summary>
+                An exception thrown when the <see cref="T:FluentEvents.EventsContext"/> wasn't configured
+                with the <see cref="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})"/> extension method
+                or the <see cref="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)"/> constructor.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.EventsContextIsNotConfiguredException.#ctor">
+            <summary>
+                Creates a new instance of <see cref="T:FluentEvents.EventsContextIsNotConfiguredException"/>.
+            </summary>
         </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>

@@ -101,6 +101,15 @@ namespace FluentEvents.UnitTests
         }
 
         [Test]
+        public void Instance_WithoutConfiguration_ShouldThrow()
+        {
+            Assert.That(
+                () => ((IInfrastructure<IServiceProvider>) _eventsContext).Instance,
+                Throws.TypeOf<EventsContextIsNotConfiguredException>()
+            );
+        }
+
+        [Test]
         public void Instance_OnFirstCall_ShouldCallBuilders()
         {
             SetUpServiceProviderAndServiceCollection();
@@ -264,11 +273,7 @@ namespace FluentEvents.UnitTests
         private class EventsContextImpl : EventsContext
         {
             public event EventHandler OnBuildingPipelinesCalled;
-
-            public EventsContextImpl() : base(new EventsContextOptions())
-            {
-            }
-
+            
             protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
             {
                 OnBuildingPipelinesCalled?.Invoke(this, EventArgs.Empty);
