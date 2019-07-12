@@ -40,28 +40,45 @@ namespace FluentEvents.Model
 
         internal IReadOnlyList<ParameterExpression> EventHandlerParameters { get; }
         
-        internal SourceModelEventField(FieldInfo fieldInfo, EventInfo eventInfo)
+        private SourceModelEventField(
+            FieldInfo fieldInfo,
+            EventInfo eventInfo,
+            Type returnType,
+            IReadOnlyList<ParameterExpression> eventHandlerParameters
+        )
         {
-            FieldInfo = fieldInfo ?? throw new ArgumentNullException(nameof(fieldInfo));
+            FieldInfo = fieldInfo;
             EventInfo = eventInfo;
-            ReturnType = GetInvokeMethod(fieldInfo).ReturnType;
-            
-            if (ReturnType != typeof(void) && ReturnType != typeof(Task))
-                throw new InvalidEventHandlerReturnTypeException();
+            ReturnType = returnType;
+            EventHandlerParameters = eventHandlerParameters;
+        }
 
-            EventHandlerParameters = GetInvokeMethod(fieldInfo)
+        internal static SourceModelEventField CreateIfValid(FieldInfo fieldInfo, EventInfo eventInfo)
+        {
+            var invokeMethod = GetInvokeMethod(fieldInfo);
+
+            if (!IsReturnTypeValid(invokeMethod))
+                return null;
+
+            var eventHandlerParameters = invokeMethod
                 .GetParameters()
                 .Select(parameter => Expression.Parameter(parameter.ParameterType))
                 .ToArray();
 
-            if (EventHandlerParameters.Count != 1)
-                throw new InvalidEventHandlerParametersException();
+            if (eventHandlerParameters.Length != 1)
+                return null;
+
+            return new SourceModelEventField(fieldInfo, eventInfo, invokeMethod.ReturnType, eventHandlerParameters);
+        }
+
+        private static bool IsReturnTypeValid(MethodInfo invokeMethod)
+        {
+            return invokeMethod.ReturnType == typeof(void) || invokeMethod.ReturnType == typeof(Task);
         }
 
         private static MethodInfo GetInvokeMethod(FieldInfo fieldInfo)
         {
-            return fieldInfo.FieldType
-                .GetMethod(nameof(EventHandler.Invoke));
+            return fieldInfo.FieldType.GetMethod(nameof(Action.Invoke));
         }
     }
 }

@@ -35,7 +35,8 @@ namespace FluentEvents.Model
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));
             _eventFields = ClrType
                 .GetEvents()
-                .Select(x => CreateEventField(GetEventFieldInfo(clrType, x)))
+                .Select(CreateEventFieldIfValid)
+                .Where(x => x != null)
                 .ToArray();
         }
 
@@ -57,11 +58,10 @@ namespace FluentEvents.Model
             return handler;
         }
 
-        private SourceModelEventField CreateEventField(FieldInfo fieldInfo)
+        private SourceModelEventField CreateEventFieldIfValid(EventInfo eventInfo)
         {
-            var eventInfo = ClrType.GetEvent(fieldInfo.Name);
-            var eventField = new SourceModelEventField(fieldInfo, eventInfo);
-            return eventField;
+            var fieldInfo = GetEventFieldInfo(ClrType, eventInfo);
+            return SourceModelEventField.CreateIfValid(fieldInfo, eventInfo);
         }
 
         private static FieldInfo GetEventFieldInfo(Type type, MemberInfo eventInfo)
