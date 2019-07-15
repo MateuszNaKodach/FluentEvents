@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
@@ -10,18 +12,18 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class ServiceHandlerSubscriptionCreationTaskTests
     {
-        private static readonly string _eventName = nameof(_eventName);
-
         private Mock<IAppServiceProvider> _appServiceProviderMock;
 
         private ISubscriptionCreationTask _subscriptionCreationTask;
+        private ISubscriptionCreationTask _optionalSubscriptionCreationTask;
 
         [SetUp]
         public void SetUp()
         {
             _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
 
-            _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>();
+            _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>(false);
+            _optionalSubscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>(true);
         }
 
         [TearDown]
@@ -31,30 +33,43 @@ namespace FluentEvents.UnitTests.Subscriptions
         }
 
         [Test]
-        public void CreateSubscription_ShouldGetServiceAndCreateSubscription()
+        public void CreateSubscription_ShouldGetServicesAndCreateSubscriptions()
         {
             _appServiceProviderMock
-                .Setup(x => x.GetService(typeof(TestService)))
-                .Returns(new TestService())
+                .Setup(x => x.GetService(typeof(IEnumerable<TestService>)))
+                .Returns(new [] { new TestService(), new TestService() })
                 .Verifiable();
 
-            var subscription = _subscriptionCreationTask.CreateSubscription(_appServiceProviderMock.Object);
+            var subscriptions = _subscriptionCreationTask.CreateSubscriptions(_appServiceProviderMock.Object);
 
-            Assert.That(subscription, Is.Not.Null);
+            Assert.That(subscriptions, Has.Exactly(2).Items);
         }
 
         [Test]
-        public void CreateSubscription_WhenServiceIsNotFound_ShouldThrow()
+        public void CreateSubscription_WhenNotOptionalNoServicesAreFound_ShouldThrow()
         {
             _appServiceProviderMock
-                .Setup(x => x.GetService(typeof(TestService)))
-                .Returns(null)
+                .Setup(x => x.GetService(typeof(IEnumerable<TestService>)))
+                .Returns(new List<TestService>())
                 .Verifiable();
 
             Assert.That(() =>
             {
-                _subscriptionCreationTask.CreateSubscription(_appServiceProviderMock.Object);
+                _subscriptionCreationTask.CreateSubscriptions(_appServiceProviderMock.Object).ToArray();
             }, Throws.TypeOf<SubscribingServiceNotFoundException>());
+        }
+
+        [Test]
+        public void CreateSubscription_WhenOptionalNoServicesAreFound_ShouldReturnEmptyList()
+        {
+            _appServiceProviderMock
+                .Setup(x => x.GetService(typeof(IEnumerable<TestService>)))
+                .Returns(new List<TestService>())
+                .Verifiable();
+
+            var subscriptions = _optionalSubscriptionCreationTask.CreateSubscriptions(_appServiceProviderMock.Object);
+
+            Assert.That(subscriptions, Is.Empty);
         }
 
         private class TestService : IEventHandler<object>

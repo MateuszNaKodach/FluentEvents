@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
@@ -31,7 +32,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void ConfigureScopedServiceHandlerSubscription_ShouldAddCreationTask()
         {
-            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object>();
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object>(false);
         }
 
         [Test]
@@ -40,9 +41,9 @@ namespace FluentEvents.UnitTests.Subscriptions
             SetUpServiceProviderService(new Service1());
             SetUpServiceProviderService(new Service2());
 
-            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object>();
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service1, object>(false);
 
-            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service2, object>();
+            _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service2, object>(false);
 
             var subscriptions = _scopedSubscriptionsService.SubscribeServices(_appServiceProviderMock.Object);
 
@@ -52,8 +53,8 @@ namespace FluentEvents.UnitTests.Subscriptions
         private void SetUpServiceProviderService<T>(T service)
         {
             _appServiceProviderMock
-                .Setup(x => x.GetService(typeof(T)))
-                .Returns(service)
+                .Setup(x => x.GetService(typeof(IEnumerable<T>)))
+                .Returns(new[] {service})
                 .Verifiable();
         }
 

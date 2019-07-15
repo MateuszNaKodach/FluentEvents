@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Subscriptions;
@@ -31,24 +32,24 @@ namespace FluentEvents.UnitTests.Subscriptions
         [Test]
         public void AddGlobalServiceHandlerSubscription_ShouldEnqueueSubscriptionCreation()
         {
-            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>();
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>(false);
         }
 
         [Test]
         public void GetGlobalSubscriptions_ShouldCreateAndReturnQueuedServiceSubscriptionCreations()
         {
-            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>();
+            _globalSubscriptionsService.AddGlobalServiceHandlerSubscription<TestService, object>(false);
 
             _appServiceProviderMock
-                .Setup(x => x.GetService(typeof(TestService)))
-                .Returns(new TestService())
+                .Setup(x => x.GetService(typeof(IEnumerable<TestService>)))
+                .Returns(new[] {new TestService(), new TestService()})
                 .Verifiable();
 
             var subscriptions = _globalSubscriptionsService.GetGlobalSubscriptions();
-            Assert.That(subscriptions, Has.One.Items);
+            Assert.That(subscriptions, Has.Exactly(2).Items);
 
             var secondCallSubscriptions = _globalSubscriptionsService.GetGlobalSubscriptions();
-            Assert.That(secondCallSubscriptions, Has.One.Items);
+            Assert.That(secondCallSubscriptions, Has.Exactly(2).Items);
         }
         
         private class TestService : IEventHandler<object>

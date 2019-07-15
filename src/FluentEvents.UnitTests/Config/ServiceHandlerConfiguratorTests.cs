@@ -14,6 +14,7 @@ namespace FluentEvents.UnitTests.Config
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
 
         private ServiceHandlerConfigurator<SubscribingService, object> _serviceHandlerConfigurator;
+        private ServiceHandlerConfigurator<SubscribingService, object> _optionalServiceHandlerConfigurator;
 
         [SetUp]
         public void SetUp()
@@ -23,7 +24,14 @@ namespace FluentEvents.UnitTests.Config
 
             _serviceHandlerConfigurator = new ServiceHandlerConfigurator<SubscribingService, object>(
                 _scopedSubscriptionsServiceMock.Object,
-                _globalSubscriptionsServiceMock.Object
+                _globalSubscriptionsServiceMock.Object,
+                false
+            );
+
+            _optionalServiceHandlerConfigurator = new ServiceHandlerConfigurator<SubscribingService, object>(
+                _scopedSubscriptionsServiceMock.Object,
+                _globalSubscriptionsServiceMock.Object,
+                true
             );
         }
 
@@ -35,25 +43,29 @@ namespace FluentEvents.UnitTests.Config
         }
 
         [Test]
-        public void HasGlobalSubscription_ShouldConfigureSubscription()
+        public void HasGlobalSubscription_ShouldConfigureSubscription([Values] bool isServiceHandlerOptional)
         {
             _globalSubscriptionsServiceMock
-                .Setup(x => x.AddGlobalServiceHandlerSubscription<SubscribingService, object>()
-                )
+                .Setup(x => x.AddGlobalServiceHandlerSubscription<SubscribingService, object>(isServiceHandlerOptional))
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasGlobalSubscription();
+            if (isServiceHandlerOptional)
+                _optionalServiceHandlerConfigurator.HasGlobalSubscription();
+            else
+                _serviceHandlerConfigurator.HasGlobalSubscription();
         }
         
         [Test]
-        public void HasScopedSubscription_ShouldConfigureSubscription()
+        public void HasScopedSubscription_ShouldConfigureSubscription([Values] bool isServiceHandlerOptional)
         {
             _scopedSubscriptionsServiceMock
-                .Setup(x => x.ConfigureScopedServiceHandlerSubscription<SubscribingService, object>()
-                )
+                .Setup(x => x.ConfigureScopedServiceHandlerSubscription<SubscribingService, object>(isServiceHandlerOptional))
                 .Verifiable();
 
-            _serviceHandlerConfigurator.HasScopedSubscription();
+            if (isServiceHandlerOptional)
+                _optionalServiceHandlerConfigurator.HasScopedSubscription();
+            else
+                _serviceHandlerConfigurator.HasScopedSubscription();
         }
         
         private class SubscribingService : IEventHandler<object>

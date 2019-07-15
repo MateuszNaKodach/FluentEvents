@@ -23,18 +23,19 @@ namespace FluentEvents.Subscriptions
         }
         
         /// <inheritdoc />
-        public void AddGlobalServiceHandlerSubscription<TService, TEvent>()
+        public void AddGlobalServiceHandlerSubscription<TService, TEvent>(bool isOptional)
             where TService : class, IEventHandler<TEvent>
             where TEvent : class
         {
-            _subscriptionCreationTasks.Enqueue(new ServiceHandlerSubscriptionCreationTask<TService, TEvent>());
+            _subscriptionCreationTasks.Enqueue(new ServiceHandlerSubscriptionCreationTask<TService, TEvent>(isOptional));
         }
 
         /// <inheritdoc />
         public IEnumerable<Subscription> GetGlobalSubscriptions()
         {
             while (_subscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
-                _globalSubscriptions.TryAdd(subscriptionCreationTask.CreateSubscription(_appServiceProvider), true);
+                foreach (var subscription in subscriptionCreationTask.CreateSubscriptions(_appServiceProvider))
+                    _globalSubscriptions.TryAdd(subscription, true);
 
             return _globalSubscriptions.Keys;
         }

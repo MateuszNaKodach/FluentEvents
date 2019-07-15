@@ -1,4 +1,5 @@
-﻿using FluentEvents.Model;
+﻿using System;
+using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Config
@@ -25,19 +26,44 @@ namespace FluentEvents.Config
         }
 
         /// <summary>
-        ///     Returns an object that can be used to configure subscriptions for
-        ///     an <see cref="IEventHandler{TEvent}.HandleEventAsync"/> method.
+        ///     Maps required services to the <see cref="EventsContext"/>.
+        ///     If the <see cref="IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TEvent">The type of the event</typeparam>
-        /// <returns></returns>
+        /// <returns>
+        ///     Returns an object that can be used to configure subscriptions for
+        ///     an <see cref="IEventHandler{TEvent}.HandleEventAsync"/> method.
+        /// </returns>
         public ServiceHandlerConfigurator<TService, TEvent> ServiceHandler<TService, TEvent>()
             where TService : class, IEventHandler<TEvent>
             where TEvent : class
         {
             return new ServiceHandlerConfigurator<TService, TEvent>(
                 _scopedSubscriptionsService,
-                _globalSubscriptionsService
+                _globalSubscriptionsService,
+                false
+            );
+        }
+
+        /// <summary>
+        ///     Maps optional services to the <see cref="EventsContext"/>.
+        ///     If the <see cref="IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <typeparam name="TEvent">The type of the event</typeparam>
+        /// <returns>
+        ///     Returns an object that can be used to configure subscriptions for
+        ///     an <see cref="IEventHandler{TEvent}.HandleEventAsync"/> method.
+        /// </returns>
+        public ServiceHandlerConfigurator<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
+            where TService : class, IEventHandler<TEvent>
+            where TEvent : class
+        {
+            return new ServiceHandlerConfigurator<TService, TEvent>(
+                _scopedSubscriptionsService,
+                _globalSubscriptionsService,
+                true
             );
         }
     }

@@ -46,6 +46,18 @@ namespace FluentEvents.UnitTests.Config
             );
         }
 
+        [Test]
+        public void OptionalServiceHandler_ShouldReturnServiceHandlerConfigurator()
+        {
+            var serviceConfigurator = _subscriptionsBuilder.OptionalServiceHandler<SubscribingService, object>();
+
+            Assert.That(serviceConfigurator, Is.Not.Null);
+            Assert.That(
+                serviceConfigurator,
+                Is.TypeOf<ServiceHandlerConfigurator<SubscribingService, object>>()
+            );
+        }
+
         private class SubscribingService : IEventHandler<object>
         {
             public Task HandleEventAsync(object e)

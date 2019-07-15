@@ -14,11 +14,11 @@ namespace FluentEvents.Subscriptions
             _scopedSubscriptionCreationTasks = new ConcurrentDictionary<ISubscriptionCreationTask, bool>();
         }
 
-        public void ConfigureScopedServiceHandlerSubscription<TService, TEvent>()
+        public void ConfigureScopedServiceHandlerSubscription<TService, TEvent>(bool isOptional)
             where TService : class, IEventHandler<TEvent>
             where TEvent : class
         {
-            var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TEvent>();
+            var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TEvent>(isOptional);
 
             _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
@@ -26,7 +26,7 @@ namespace FluentEvents.Subscriptions
         public IEnumerable<Subscription> SubscribeServices(IAppServiceProvider scopedAppServiceProvider)
         {
             return _scopedSubscriptionCreationTasks.Keys
-                .Select(subscriptionCreationTask => subscriptionCreationTask.CreateSubscription(scopedAppServiceProvider))
+                .SelectMany(subscriptionCreationTask => subscriptionCreationTask.CreateSubscriptions(scopedAppServiceProvider))
                 .ToList();
         }
     }
