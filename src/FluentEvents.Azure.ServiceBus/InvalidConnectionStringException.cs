@@ -4,7 +4,7 @@ using FluentEvents.Azure.ServiceBus.Sending;
 namespace FluentEvents.Azure.ServiceBus
 {
     /// <summary>
-    ///     An exception thrown when value of the <see cref="AzureTopicEventSenderConfig.ConnectionString"/> property
+    ///     An exception thrown when value of the <see cref="AzureTopicEventSenderConfig.SendConnectionString"/> property
     ///     is invalid.
     /// </summary>
     public class InvalidConnectionStringException : Exception

@@ -20,19 +20,19 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
         {
             Assert.That(() =>
             {
-                _azureTopicEventSenderConfig.ConnectionString = Constants.InvalidConnectionString;
+                _azureTopicEventSenderConfig.SendConnectionString = Constants.InvalidConnectionString;
             }, Throws.TypeOf<InvalidConnectionStringException>());
         }
 
         [Test]
         public void ConnectionString_WhenConnectionStringIsValid_ShouldSet()
         {
-            _azureTopicEventSenderConfig.ConnectionString = Constants.ValidConnectionString;
+            _azureTopicEventSenderConfig.SendConnectionString = Constants.ValidConnectionString;
 
             Assert.That(
                 _azureTopicEventSenderConfig,
                 Has
-                    .Property(nameof(AzureTopicEventSenderConfig.ConnectionString))
+                    .Property(nameof(AzureTopicEventSenderConfig.SendConnectionString))
                     .EqualTo(Constants.ValidConnectionString)
             );
         }

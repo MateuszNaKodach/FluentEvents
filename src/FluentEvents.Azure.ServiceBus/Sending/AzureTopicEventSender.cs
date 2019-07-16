@@ -23,7 +23,7 @@ namespace FluentEvents.Azure.ServiceBus.Sending
         {
             _logger = logger;
             _eventsSerializationService = eventsSerializationService;
-            _topicClient = topicClientFactory.GetNew(config.Value.ConnectionString);
+            _topicClient = topicClientFactory.GetNew(config.Value.SendConnectionString);
         }
 
         public async Task SendAsync(PipelineEvent pipelineEvent)

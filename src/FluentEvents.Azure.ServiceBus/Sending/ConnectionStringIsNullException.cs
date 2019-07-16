@@ -2,7 +2,7 @@
 {
     /// <inheritdoc />
     /// <summary>
-    ///     An exception thrown when the <see cref="AzureTopicEventSenderConfig.ConnectionString" /> property is null.
+    ///     An exception thrown when the <see cref="AzureTopicEventSenderConfig.SendConnectionString" /> property is null.
     /// </summary>
     public class ConnectionStringIsNullException : FluentEventsServiceBusException
     {
