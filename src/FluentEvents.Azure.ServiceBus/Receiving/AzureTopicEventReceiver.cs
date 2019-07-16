@@ -77,6 +77,8 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             catch (Exception ex)
             {
                 _logger.MessagesProcessingThrew(ex, message.MessageId);
+
+                throw;
             }
         }
 
