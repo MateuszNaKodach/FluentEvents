@@ -162,13 +162,23 @@
             <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.Attach(System.Object)">
-            <inheritdoc />
+            <summary>
+                Manually attach an event source to the context in order to forward it's events to the
+                configured pipelines.
+            </summary>
+            <param name="source">The event source.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.ProcessQueuedEventsAsync(System.String)">
-            <inheritdoc />
+            <summary>
+                Forward the events of a queue to the corresponding pipelines.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.DiscardQueuedEvents(System.String)">
-            <inheritdoc />
+            <summary>
+                Discards all the events of a queue.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.Dispose">
             <inheritdoc />
@@ -221,25 +231,6 @@
                 The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
                 An EventsContext should be treated as a singleton.
             </summary>
-        </member>
-        <member name="M:FluentEvents.IEventsContext.Attach(System.Object)">
-            <summary>
-                Manually attach an event source to the context in order to forward it's events to the
-                configured pipelines.
-            </summary>
-            <param name="source">The event source.</param>
-        </member>
-        <member name="M:FluentEvents.IEventsContext.ProcessQueuedEventsAsync(System.String)">
-            <summary>
-                Forward the events of a queue to the corresponding pipelines.
-            </summary>
-            <param name="queueName">The name of the queue.</param>
-        </member>
-        <member name="M:FluentEvents.IEventsContext.DiscardQueuedEvents(System.String)">
-            <summary>
-                Discards all the events of a queue.
-            </summary>
-            <param name="queueName">The name of the queue.</param>
         </member>
         <member name="T:FluentEvents.Infrastructure.IAppServiceProvider">
             <summary>
@@ -473,6 +464,24 @@
             <param name="invokeNextModule">The delegate to invoke the next module in the pipeline.</param>
             <returns>A task to await.</returns>
         </member>
+        <member name="T:FluentEvents.Pipelines.IPipelinesService">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Pipelines.IPipelinesService.AddPipeline(System.Type,FluentEvents.Pipelines.IPipeline)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Pipelines.IPipelinesService.GetPipelines(System.Type)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Pipelines.NextModuleDelegate">
             <summary>
                 Invokes the next module in the pipeline if exists, otherwise it does nothing.
@@ -547,24 +556,6 @@
             <summary>
                 An exception thrown when the configured pipeline module wasn't registered
                 in the internal <see cref="T:System.IServiceProvider"/>.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Pipelines.IPipelinesService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Pipelines.IPipelinesService.AddPipeline(System.Type,FluentEvents.Pipelines.IPipeline)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Pipelines.IPipelinesService.GetPipelines(System.Type)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
         <member name="T:FluentEvents.Pipelines.PipelinesService">
