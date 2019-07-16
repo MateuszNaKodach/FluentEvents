@@ -25,7 +25,7 @@ namespace FluentEvents.Azure.SignalR.Client
             _signalRHttpClient = signalRHttpClient;
             _httpRequestFactory = httpRequestFactory;
             _urlProvider = urlProvider;
-            _connectionString = config.Value.ConnectionString;
+            _connectionString = ConnectionString.Parse(config.Value.ConnectionString);
         }
 
         public async Task SendEventAsync(PublicationMethod publicationMethod,

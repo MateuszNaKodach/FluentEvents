@@ -14,7 +14,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     {
         private readonly string _hubMethodName = nameof(_hubMethodName);
         private readonly string _url = "http://endpoint/";
-        private readonly ConnectionString _connectionString = "Endpoint=123;AccessKey=123;";
+        private readonly ConnectionString _connectionString = ConnectionString.Parse("Endpoint=123;AccessKey=123;");
 
         private Mock<IAccessTokensService> _accessTokensServiceMock;
         private object _event;

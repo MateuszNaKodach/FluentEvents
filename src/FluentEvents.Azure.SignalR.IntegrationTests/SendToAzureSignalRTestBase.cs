@@ -43,7 +43,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             if (string.IsNullOrEmpty(configConnectionString))
                 Assert.Ignore("Azure SignalR Service settings not found in user secrets.");
 
-            ConnectionString = configConnectionString;
+            ConnectionString = ConnectionString.Parse(configConnectionString);
 
             var hubUrl = $"{ConnectionString.Endpoint.TrimEnd('/')}/client/?hub={HubName}";
 
@@ -71,7 +71,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             });
         }
 
-        private async Task<HubConnection> SetUpHubConnection(string connectionString, string hubUrl, string nameIdentifier)
+        private async Task<HubConnection> SetUpHubConnection(ConnectionString connectionString, string hubUrl, string nameIdentifier)
         {
             var accessTokensService = new AccessTokensService();
             var accessToken = accessTokensService.GenerateAccessToken(connectionString, hubUrl, nameIdentifier);

@@ -6,6 +6,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     [TestFixture]
     public class ConnectionStringTests
     {
+        private string _connectionStringName = "_connectionStringName";
         private const string Endpoint = nameof(Endpoint);
         private const string AccessKey = nameof(AccessKey);
 
@@ -26,7 +27,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
 
         [Test]
         [Sequential]
-        public void Validate_WithMissingProperty_ShouldThrow(
+        public void IsValid_WithMissingProperty_ShouldThrow(
             [Values(true, false, true)] bool isEndpointMissing,
             [Values(true, true, false)] bool isAccessKeyMissing
         )
@@ -37,10 +38,10 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
             if (!isAccessKeyMissing)
                 connectionString += $"{nameof(AccessKey)}={AccessKey};";
 
-            Assert.That(() =>
-            {
-                ConnectionString.Validate(connectionString);
-            }, Throws.TypeOf<ConnectionStringHasMissingPropertiesException>());
+            var isValid = ConnectionString.IsValid(connectionString, _connectionStringName, out var errorMessage);
+
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Is.Not.Null);
         }
 
         [Test]
@@ -56,30 +57,34 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
             if (isAccessKeyDuplicated)
                 connectionString += $"{nameof(AccessKey)}={AccessKey};";
 
-            Assert.That(() =>
-            {
-                ConnectionString.Validate(connectionString);
-            }, Throws.TypeOf<ConnectionStringHasDuplicatedPropertiesException>());
+            var isValid = ConnectionString.IsValid(connectionString, _connectionStringName, out var errorMessage);
+
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Is.Not.Null);
         }
 
         [Test]
         [Sequential]
         public void Validate_WithInvalidChars_ShouldThrow()
         {
-            Assert.That(() =>
-            {
-                ConnectionString.Validate("abc");
-            }, Throws.TypeOf<ConnectionStringHasMissingPropertiesException>());
+            var connectionString = "abc";
+
+            var isValid = ConnectionString.IsValid(connectionString, _connectionStringName, out var errorMessage);
+
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Is.Not.Null);
         }
 
         [Test]
         [Sequential]
         public void Validate_WithNullValue_ShouldThrow()
         {
-            Assert.That(() =>
-            {
-                ConnectionString.Validate(null);
-            }, Throws.TypeOf<ConnectionStringIsNullException>());
+            string connectionString = null;
+
+            var isValid = ConnectionString.IsValid(connectionString, _connectionStringName, out var errorMessage);
+
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Is.Not.Null);
         }
     }
 }

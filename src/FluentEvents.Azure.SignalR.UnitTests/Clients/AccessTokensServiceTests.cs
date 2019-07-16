@@ -10,8 +10,12 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
     public class AccessTokensServiceTests
     {
         private const string Audience = nameof(Audience);
-        private readonly ConnectionString _connectionStringWithValidAccessKey = "Endpoint=123;AccessKey=tBNrNxHRYlTuqAWUUb3Y0YMHgY7iCd9HtA7nCsfANB8;";
-        private readonly ConnectionString _connectionStringWithInvalidAccessKey = "Endpoint=123;AccessKey=123;";
+
+        private readonly ConnectionString _connectionStringWithValidAccessKey 
+            = ConnectionString.Parse("Endpoint=123;AccessKey=tBNrNxHRYlTuqAWUUb3Y0YMHgY7iCd9HtA7nCsfANB8;");
+
+        private readonly ConnectionString _connectionStringWithInvalidAccessKey 
+            = ConnectionString.Parse("Endpoint=123;AccessKey=123;");
 
         private AccessTokensService _accessTokensService;
 
