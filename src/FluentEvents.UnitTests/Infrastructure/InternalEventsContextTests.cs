@@ -1,10 +1,9 @@
-﻿using System;
-using FluentEvents.Config;
+﻿using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests
+namespace FluentEvents.UnitTests.Infrastructure
 {
     [TestFixture]
     public class InternalEventsContextTests
