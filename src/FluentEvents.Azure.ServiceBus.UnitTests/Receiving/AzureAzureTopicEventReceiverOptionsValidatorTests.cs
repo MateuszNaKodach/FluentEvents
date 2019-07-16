@@ -72,11 +72,12 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         }
 
         [Test]
-        public void Validate_WithNullOrEmptyManagementConnectionString_ShouldFail(
-            [Values("", " ", null)] string receiveConnectionString
+        public void Validate_WithNullOrEmptyManagementConnectionStringAndSubscriptionCreationEnabled_ShouldFail(
+            [Values("", " ", null)] string managementConnectionString
         )
         {
-            _topicEventReceiverOptions.ManagementConnectionString = receiveConnectionString;
+            _topicEventReceiverOptions.IsSubscriptionCreationEnabled = true;
+            _topicEventReceiverOptions.ManagementConnectionString = managementConnectionString;
 
             var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
@@ -89,8 +90,22 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         }
 
         [Test]
-        public void Validate_WitInvalidManagementConnectionString_ShouldFail()
+        public void Validate_WithNullOrEmptyOrInvalidManagementConnectionStringAndSubscriptionCreationDisabled_ShouldSucceed(
+            [Values("", " ", null, Constants.InvalidConnectionString)] string managementConnectionString
+        )
         {
+            _topicEventReceiverOptions.ManagementConnectionString = managementConnectionString;
+
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
+
+            Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(false));
+            Assert.That(result, Has.Property(nameof(ValidateOptionsResult.FailureMessage)).Null);
+        }
+
+        [Test]
+        public void Validate_WitInvalidManagementConnectionStringAndSubscriptionCreationEnabled_ShouldFail()
+        {
+            _topicEventReceiverOptions.IsSubscriptionCreationEnabled = true;
             _topicEventReceiverOptions.ManagementConnectionString = Constants.InvalidConnectionString;
 
             var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);

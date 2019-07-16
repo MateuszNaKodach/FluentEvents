@@ -140,6 +140,16 @@
             </summary>
             <remarks>The default implementation returns a GUID.</remarks>
         </member>
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionName">
+            <summary>
+                The name of the topic subscriptions. (If null <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameGenerator"/> will be used)
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.IsSubscriptionCreationEnabled">
+            <summary>
+                Enables automatic subscription creation before listening to messages. (If true the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ManagementConnectionString"/> is required)
+            </summary>
+        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException">
             <inheritdoc />
             <summary>

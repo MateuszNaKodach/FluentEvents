@@ -14,7 +14,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             )
                 return ValidateOptionsResult.Fail(receiveConnectionStringErrorMessage);
 
-            if (!ConnectionStringValidator.IsValid(
+            if (options.IsSubscriptionCreationEnabled && !ConnectionStringValidator.IsValid(
                     options.ManagementConnectionString,
                     nameof(options.ManagementConnectionString),
                     out var managementConnectionStringErrorMessage

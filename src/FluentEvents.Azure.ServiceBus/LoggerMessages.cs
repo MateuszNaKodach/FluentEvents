@@ -30,6 +30,16 @@ namespace FluentEvents.Azure.ServiceBus
             "Sent a message with id: {messageId}"
         );
 
+        
+        internal static void NewSubscriptionCreated(this ILogger logger, string subscriptionName)
+            => _newSubscriptionCreated(logger, subscriptionName, null);
+
+        private static readonly Action<ILogger, string, Exception> _newSubscriptionCreated = LoggerMessage.Define<string>(
+            LogLevel.Information,
+            EventIds.NewSubscriptionCreated,
+            "Created subscription with name: {subscriptionName}"
+        );
+
         internal static void MessageSent(this ILogger logger, string messageId)
             => _messageSent(logger, messageId, null);
 
@@ -38,6 +48,7 @@ namespace FluentEvents.Azure.ServiceBus
             public static EventId ServiceBusExceptionReceived { get; } = new EventId(1, nameof(ServiceBusExceptionReceived));
             public static EventId MessagesProcessingThrew { get; } = new EventId(2, nameof(MessagesProcessingThrew));
             public static EventId MessageSent { get; } = new EventId(3, nameof(MessageSent));
+            public static EventId NewSubscriptionCreated { get; } = new EventId(4, nameof(NewSubscriptionCreated));
         }
     }
 }

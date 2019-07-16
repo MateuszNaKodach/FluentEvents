@@ -39,5 +39,15 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// </summary>
         /// <remarks>The default implementation returns a GUID.</remarks>
         public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
+
+        /// <summary>
+        ///     The name of the topic subscriptions. (If null <see cref="SubscriptionNameGenerator"/> will be used)
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        ///     Enables automatic subscription creation before listening to messages. (If true the <see cref="ManagementConnectionString"/> is required)
+        /// </summary>
+        public bool IsSubscriptionCreationEnabled { get; set; }
     }
 }

@@ -39,15 +39,18 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            var subscriptionName = _options.SubscriptionNameGenerator.Invoke();
+            var subscriptionName = _options.SubscriptionName ?? _options.SubscriptionNameGenerator.Invoke();
 
-            await _topicSubscriptionsService.CreateSubscriptionAsync(
-                _options.ManagementConnectionString,
-                subscriptionName,
-                _options.TopicPath,
-                _options.SubscriptionsAutoDeleteOnIdleTimeout,
-                cancellationToken
-            ).ConfigureAwait(false);
+            if (_options.IsSubscriptionCreationEnabled)
+            {
+                await _topicSubscriptionsService.CreateSubscriptionAsync(
+                    _options.ManagementConnectionString,
+                    subscriptionName,
+                    _options.TopicPath,
+                    _options.SubscriptionsAutoDeleteOnIdleTimeout,
+                    cancellationToken
+                ).ConfigureAwait(false);
+            }
 
             _subscriptionClient = _subscriptionClientFactory.GetNew(
                 _options.ReceiveConnectionString,
