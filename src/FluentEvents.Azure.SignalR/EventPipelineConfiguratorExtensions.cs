@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentEvents.Infrastructure;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Azure.SignalR

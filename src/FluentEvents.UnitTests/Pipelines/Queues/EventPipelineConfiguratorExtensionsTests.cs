@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;

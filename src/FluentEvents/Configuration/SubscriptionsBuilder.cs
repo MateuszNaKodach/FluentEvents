@@ -2,7 +2,7 @@
 using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 
-namespace FluentEvents.Config
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     Provides a simple API surface to select a service and configure it fluently.

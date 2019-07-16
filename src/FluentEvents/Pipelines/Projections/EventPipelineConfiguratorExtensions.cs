@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines.Projections

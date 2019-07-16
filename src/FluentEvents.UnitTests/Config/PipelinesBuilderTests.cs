@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentEvents.Infrastructure;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using Moq;
 using NUnit.Framework;
 

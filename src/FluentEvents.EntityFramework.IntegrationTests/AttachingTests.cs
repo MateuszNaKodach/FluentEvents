@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;

@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentEvents.Model;
 
-namespace FluentEvents.Config
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     Provides a simple API surface to select an event and configure it fluently.

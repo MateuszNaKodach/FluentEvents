@@ -3,7 +3,7 @@ using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FluentEvents.Config
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     Provides a simple API surface for configuring an event.

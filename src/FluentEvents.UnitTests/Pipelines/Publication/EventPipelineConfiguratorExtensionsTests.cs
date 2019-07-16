@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Transmission;

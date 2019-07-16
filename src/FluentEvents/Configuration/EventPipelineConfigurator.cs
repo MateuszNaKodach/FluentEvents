@@ -3,7 +3,7 @@ using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
-namespace FluentEvents.Config
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     Provides a simple API surface for configuring an event pipeline.

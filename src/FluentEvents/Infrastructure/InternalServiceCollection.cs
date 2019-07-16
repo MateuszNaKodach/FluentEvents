@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Filters;

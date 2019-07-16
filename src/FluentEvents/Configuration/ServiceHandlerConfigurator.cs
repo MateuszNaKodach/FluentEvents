@@ -1,6 +1,6 @@
 ﻿using FluentEvents.Subscriptions;
 
-namespace FluentEvents.Config
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     Provides an API surface to configure the subscriptions of a service event handler.

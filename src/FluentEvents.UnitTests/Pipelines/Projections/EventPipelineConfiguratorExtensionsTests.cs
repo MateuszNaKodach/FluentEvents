@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Model;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;

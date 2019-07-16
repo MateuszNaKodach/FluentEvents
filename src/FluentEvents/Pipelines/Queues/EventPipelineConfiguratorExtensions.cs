@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
 using Microsoft.Extensions.DependencyInjection;

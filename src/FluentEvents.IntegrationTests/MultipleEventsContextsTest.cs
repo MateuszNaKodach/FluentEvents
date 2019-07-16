@@ -1,4 +1,4 @@
-﻿using FluentEvents.Config;
+﻿using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using NUnit.Framework;
 
