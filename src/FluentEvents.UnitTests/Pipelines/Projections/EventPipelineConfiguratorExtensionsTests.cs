@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Configuration;
-using FluentEvents.Model;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Projections;
@@ -37,9 +36,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         }
 
         [Test]
-        public void ThenIsProjected_ShouldAddPipelineModule(
-            [Values] bool isEventFieldNameNull
-        )
+        public void ThenIsProjected_ShouldAddPipelineModule()
         {
             ProjectionPipelineModuleConfig config = null;
             SetUpPipeline(callbackConfig => config = callbackConfig);
@@ -79,7 +76,6 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         
         private class ProjectedEvent
         {
-
         }
     }
 }

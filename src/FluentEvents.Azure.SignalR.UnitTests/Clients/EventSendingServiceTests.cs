@@ -15,8 +15,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         private readonly PublicationMethod _publicationMethod = PublicationMethod.Group;
         private readonly string _hubMethodName = "hubMethodName";
         private readonly string[] _receiverIds = { "1", "2" };
-        private readonly object _eventSender = new object();
-        private readonly object _eventArgs = new object();
+        private readonly object _event = new object();
         private readonly string _endpoint = "endpoint";
 
         private AzureSignalRServiceOptions _options;
@@ -63,7 +62,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                 _hubName,
                 _hubMethodName,
                 _receiverIds,
-                _eventArgs
+                _event
             );
         }
 
@@ -83,7 +82,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                 _hubName,
                 _hubMethodName,
                 null,
-                _eventArgs
+                _event
             );
         }
 
@@ -106,7 +105,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                     _hubName,
                     _hubMethodName,
                     null,
-                    _eventArgs
+                    _event
                 );
             }, Throws.TypeOf<AzureSignalRPublishingFailedException>());
         }
@@ -129,7 +128,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
                     _hubName,
                     _hubMethodName,
                     null,
-                    _eventArgs
+                    _event
                 );
             }, Throws.TypeOf<AzureSignalRPublishingFailedException>());
         }
@@ -147,7 +146,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
             var httpRequestMessage = new HttpRequestMessage();
 
             _httpRequestFactoryMock
-                .Setup(x => x.CreateHttpRequest(It.IsAny<ConnectionString>(), _hubMethodName, _eventArgs, url))
+                .Setup(x => x.CreateHttpRequest(It.IsAny<ConnectionString>(), _hubMethodName, _event, url))
                 .Returns(httpRequestMessage)
                 .Verifiable();
             return httpRequestMessage;
