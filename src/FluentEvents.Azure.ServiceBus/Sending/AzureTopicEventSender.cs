@@ -16,7 +16,7 @@ namespace FluentEvents.Azure.ServiceBus.Sending
 
         public AzureTopicEventSender(
             ILogger<AzureTopicEventSender> logger,
-            IOptions<AzureTopicEventSenderConfig> config, 
+            IOptions<AzureTopicEventSenderOptions> config, 
             IEventsSerializationService eventsSerializationService,
             ITopicClientFactory topicClientFactory
         )

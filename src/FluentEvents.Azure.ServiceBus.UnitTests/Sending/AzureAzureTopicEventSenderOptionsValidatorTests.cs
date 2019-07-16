@@ -5,14 +5,14 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
 {
     [TestFixture]
-    public class AzureAzureTopicEventSenderConfigValidatorTests
+    public class AzureAzureTopicEventSenderOptionsValidatorTests
     {
-        private AzureTopicEventSenderConfigValidator _topicEventSenderConfigValidator;
+        private AzureTopicEventSenderOptionsValidator _topicEventSenderOptionsValidator;
 
         [SetUp]
         public void SetUp()
         {
-            _topicEventSenderConfigValidator = new AzureTopicEventSenderConfigValidator();
+            _topicEventSenderOptionsValidator = new AzureTopicEventSenderOptionsValidator();
         }
 
         [Test]
@@ -20,45 +20,45 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
             [Values("", " ", null)] string sendConnectionString
         )
         {
-            var options = new AzureTopicEventSenderConfig { SendConnectionString = sendConnectionString };
+            var options = new AzureTopicEventSenderOptions { SendConnectionString = sendConnectionString };
 
-            var result = _topicEventSenderConfigValidator.Validate(null, options);
+            var result = _topicEventSenderOptionsValidator.Validate(null, options);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventSenderConfig.SendConnectionString)} is null or empty")
+                    .EqualTo($"{nameof(AzureTopicEventSenderOptions.SendConnectionString)} is null or empty")
             );
         }
 
         [Test]
         public void Validate_WitInvalidSendConnectionString_ShouldFail()
         {
-            var options = new AzureTopicEventSenderConfig
+            var options = new AzureTopicEventSenderOptions
             {
                 SendConnectionString = Constants.InvalidConnectionString
             };
 
-            var result = _topicEventSenderConfigValidator.Validate(null, options);
+            var result = _topicEventSenderOptionsValidator.Validate(null, options);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .SupersetOf($"{nameof(AzureTopicEventSenderConfig.SendConnectionString)} is invalid:")
+                    .SupersetOf($"{nameof(AzureTopicEventSenderOptions.SendConnectionString)} is invalid:")
             );
         }
 
         [Test]
         public void Validate_WithValidConfig_ShouldSucceed()
         {
-            var options = new AzureTopicEventSenderConfig
+            var options = new AzureTopicEventSenderOptions
             {
                 SendConnectionString = Constants.ValidConnectionString
             };
 
-            var result = _topicEventSenderConfigValidator.Validate(null, options);
+            var result = _topicEventSenderOptionsValidator.Validate(null, options);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(false));
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.FailureMessage)).Null);

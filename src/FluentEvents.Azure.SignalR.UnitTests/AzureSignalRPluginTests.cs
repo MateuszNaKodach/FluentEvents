@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentEvents.Azure.SignalR.Client;
-using FluentEvents.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -33,13 +32,13 @@ namespace FluentEvents.Azure.SignalR.UnitTests
              Assert.That(
                 services,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType))
-                    .EqualTo(typeof(IConfigureOptions<AzureSignalRServiceConfig>))
+                    .EqualTo(typeof(IConfigureOptions<AzureSignalRServiceOptions>))
             );
 
              Assert.That(
                  services,
                  Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType))
-                     .EqualTo(typeof(IValidateOptions<AzureSignalRServiceConfig>))
+                     .EqualTo(typeof(IValidateOptions<AzureSignalRServiceOptions>))
              );
 
              Assert.That(

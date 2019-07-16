@@ -36,7 +36,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Sending
 
             _azureTopicEventSender = new AzureTopicEventSender(
                 _loggerMock.Object,
-                Options.Create(new AzureTopicEventSenderConfig
+                Options.Create(new AzureTopicEventSenderOptions
                 {
                     SendConnectionString = Constants.ValidConnectionString
                 }),

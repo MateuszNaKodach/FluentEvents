@@ -2,7 +2,7 @@
 {
     /// <inheritdoc />
     /// <summary>
-    ///     An exception thrown when the <see cref="AzureTopicEventReceiverConfig.TopicPath" /> property is null.
+    ///     An exception thrown when the <see cref="AzureTopicEventReceiverOptions.TopicPath" /> property is null.
     /// </summary>
     public class TopicPathIsNullException : FluentEventsServiceBusException
     {

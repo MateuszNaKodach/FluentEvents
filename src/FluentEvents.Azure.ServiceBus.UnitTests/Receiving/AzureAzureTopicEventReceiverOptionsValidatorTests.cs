@@ -6,16 +6,16 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 {
     [TestFixture]
-    public class AzureAzureTopicEventReceiverConfigValidatorTests
+    public class AzureAzureTopicEventReceiverOptionsValidatorTests
     {
-        private AzureTopicEventReceiverConfigValidator _topicEventReceiverConfigValidator;
-        private AzureTopicEventReceiverConfig _topicEventReceiverConfig;
+        private AzureTopicEventReceiverOptionsValidator _topicEventReceiverOptionsValidator;
+        private AzureTopicEventReceiverOptions _topicEventReceiverOptions;
 
         [SetUp]
         public void SetUp()
         {
-            _topicEventReceiverConfigValidator = new AzureTopicEventReceiverConfigValidator();
-            _topicEventReceiverConfig = new AzureTopicEventReceiverConfig
+            _topicEventReceiverOptionsValidator = new AzureTopicEventReceiverOptionsValidator();
+            _topicEventReceiverOptions = new AzureTopicEventReceiverOptions
             {
                 ManagementConnectionString = Constants.ValidConnectionString,
                 ReceiveConnectionString = Constants.ValidConnectionString,
@@ -27,15 +27,15 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [Test]
         public void Validate_WithNullSubscriptionNameGenerator_ShouldFail()
         {
-            _topicEventReceiverConfig.SubscriptionNameGenerator = null;
+            _topicEventReceiverOptions.SubscriptionNameGenerator = null;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventReceiverConfig.SubscriptionNameGenerator)} is null")
+                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.SubscriptionNameGenerator)} is null")
             );
         }
 
@@ -44,30 +44,30 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             [Values("", " ", null)] string receiveConnectionString
         )
         {
-            _topicEventReceiverConfig.ReceiveConnectionString = receiveConnectionString;
+            _topicEventReceiverOptions.ReceiveConnectionString = receiveConnectionString;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventReceiverConfig.ReceiveConnectionString)} is null or empty")
+                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.ReceiveConnectionString)} is null or empty")
             );
         }
 
         [Test]
         public void Validate_WitInvalidReceiveConnectionString_ShouldFail()
         {
-            _topicEventReceiverConfig.ReceiveConnectionString = Constants.InvalidConnectionString;
+            _topicEventReceiverOptions.ReceiveConnectionString = Constants.InvalidConnectionString;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .SupersetOf($"{nameof(AzureTopicEventReceiverConfig.ReceiveConnectionString)} is invalid:")
+                    .SupersetOf($"{nameof(AzureTopicEventReceiverOptions.ReceiveConnectionString)} is invalid:")
             );
         }
 
@@ -76,30 +76,30 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             [Values("", " ", null)] string receiveConnectionString
         )
         {
-            _topicEventReceiverConfig.ManagementConnectionString = receiveConnectionString;
+            _topicEventReceiverOptions.ManagementConnectionString = receiveConnectionString;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventReceiverConfig.ManagementConnectionString)} is null or empty")
+                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.ManagementConnectionString)} is null or empty")
             );
         }
 
         [Test]
         public void Validate_WitInvalidManagementConnectionString_ShouldFail()
         {
-            _topicEventReceiverConfig.ManagementConnectionString = Constants.InvalidConnectionString;
+            _topicEventReceiverOptions.ManagementConnectionString = Constants.InvalidConnectionString;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .SupersetOf($"{nameof(AzureTopicEventReceiverConfig.ManagementConnectionString)} is invalid:")
+                    .SupersetOf($"{nameof(AzureTopicEventReceiverOptions.ManagementConnectionString)} is invalid:")
             );
         }
 
@@ -108,22 +108,22 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             [Values("", " ", null)] string topicPath
         )
         {
-            _topicEventReceiverConfig.TopicPath = topicPath;
+            _topicEventReceiverOptions.TopicPath = topicPath;
 
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventReceiverConfig.TopicPath)} is null or empty")
+                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.TopicPath)} is null or empty")
             );
         }
 
         [Test]
         public void Validate_WithValidConfig_ShouldSucceed()
         {
-            var result = _topicEventReceiverConfigValidator.Validate(null, _topicEventReceiverConfig);
+            var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(false));
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.FailureMessage)).Null);

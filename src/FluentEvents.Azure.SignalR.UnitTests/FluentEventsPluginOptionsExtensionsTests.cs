@@ -61,7 +61,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         {
             Assert.That(() =>
             {
-                _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService((Action<AzureSignalRServiceConfig>)null);
+                _fluentEventsPluginOptionsMock.Object.UseAzureSignalRService((Action<AzureSignalRServiceOptions>)null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 

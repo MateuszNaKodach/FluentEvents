@@ -10,9 +10,9 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     internal class AzureTopicEventReceiverPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration _configuration;
-        private readonly Action<AzureTopicEventReceiverConfig> _configureOptions;
+        private readonly Action<AzureTopicEventReceiverOptions> _configureOptions;
 
-        public AzureTopicEventReceiverPlugin(Action<AzureTopicEventReceiverConfig> configureOptions)
+        public AzureTopicEventReceiverPlugin(Action<AzureTopicEventReceiverOptions> configureOptions)
         {
             _configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
         }
@@ -25,11 +25,11 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureOptions != null)
-                services.AddOptions<AzureTopicEventReceiverConfig>().Configure(_configureOptions);
+                services.AddOptions<AzureTopicEventReceiverOptions>().Configure(_configureOptions);
             else
-                services.AddOptions<AzureTopicEventReceiverConfig>().Bind(_configuration);
+                services.AddOptions<AzureTopicEventReceiverOptions>().Bind(_configuration);
 
-            services.AddTransient<IValidateOptions<AzureTopicEventReceiverConfig>, AzureTopicEventReceiverConfigValidator>();
+            services.AddTransient<IValidateOptions<AzureTopicEventReceiverOptions>, AzureTopicEventReceiverOptionsValidator>();
             services.AddSingleton<ITopicSubscriptionsService, TopicSubscriptionsService>();
             services.AddSingleton<ISubscriptionClientFactory, SubscriptionClientFactory>();
             services.AddSingleton<IEventReceiver, AzureTopicEventReceiver>();

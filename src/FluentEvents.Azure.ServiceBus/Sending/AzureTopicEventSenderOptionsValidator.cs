@@ -2,9 +2,9 @@
 
 namespace FluentEvents.Azure.ServiceBus.Sending
 {
-    internal class AzureTopicEventSenderConfigValidator : IValidateOptions<AzureTopicEventSenderConfig>
+    internal class AzureTopicEventSenderOptionsValidator : IValidateOptions<AzureTopicEventSenderOptions>
     {
-        public ValidateOptionsResult Validate(string name, AzureTopicEventSenderConfig options)
+        public ValidateOptionsResult Validate(string name, AzureTopicEventSenderOptions options)
         {
             if (!ConnectionStringValidator.IsValid(
                     options.SendConnectionString,

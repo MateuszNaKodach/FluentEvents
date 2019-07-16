@@ -3,7 +3,7 @@
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events sender.
     /// </summary>
-    public class AzureTopicEventSenderConfig
+    public class AzureTopicEventSenderOptions
     {
         /// <summary>
         ///     An Azure Service Bus topic connection string for sending messages. 

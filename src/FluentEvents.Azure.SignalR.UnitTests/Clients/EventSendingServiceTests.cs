@@ -19,7 +19,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         private readonly object _eventArgs = new object();
         private readonly string _endpoint = "endpoint";
 
-        private AzureSignalRServiceConfig _options;
+        private AzureSignalRServiceOptions _options;
         private Mock<IAzureSignalRHttpClient> _azureSignalRHttpClientMock;
         private Mock<IUrlProvider> _urlProviderMock;
         private Mock<IHttpRequestFactory> _httpRequestFactoryMock;
@@ -28,7 +28,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests.Clients
         [SetUp]
         public void SetUp()
         {
-            _options = new AzureSignalRServiceConfig
+            _options = new AzureSignalRServiceOptions
             {
                 ConnectionString = new ConnectionString(_endpoint, "key")
             };

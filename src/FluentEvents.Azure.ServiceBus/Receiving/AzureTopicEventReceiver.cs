@@ -11,7 +11,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     internal class AzureTopicEventReceiver : IEventReceiver
     {
-        private readonly AzureTopicEventReceiverConfig _config;
+        private readonly AzureTopicEventReceiverOptions _options;
         private readonly ILogger<AzureTopicEventReceiver> _logger;
         private readonly IPublishingService _publishingService;
         private readonly IEventsSerializationService _eventsSerializationService;
@@ -22,14 +22,14 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         public AzureTopicEventReceiver(
             ILogger<AzureTopicEventReceiver> logger,
-            IOptions<AzureTopicEventReceiverConfig> config,
+            IOptions<AzureTopicEventReceiverOptions> config,
             IPublishingService publishingService,
             IEventsSerializationService eventsSerializationService,
             ITopicSubscriptionsService topicSubscriptionsService,
             ISubscriptionClientFactory subscriptionClientFactory
         )
         {
-            _config = config.Value;
+            _options = config.Value;
             _logger = logger;
             _publishingService = publishingService;
             _eventsSerializationService = eventsSerializationService;
@@ -39,24 +39,24 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            var subscriptionName = _config.SubscriptionNameGenerator.Invoke();
+            var subscriptionName = _options.SubscriptionNameGenerator.Invoke();
 
             await _topicSubscriptionsService.CreateSubscriptionAsync(
-                _config.ManagementConnectionString,
+                _options.ManagementConnectionString,
                 subscriptionName,
-                _config.TopicPath,
-                _config.SubscriptionsAutoDeleteOnIdleTimeout,
+                _options.TopicPath,
+                _options.SubscriptionsAutoDeleteOnIdleTimeout,
                 cancellationToken
             ).ConfigureAwait(false);
 
             _subscriptionClient = _subscriptionClientFactory.GetNew(
-                _config.ReceiveConnectionString,
+                _options.ReceiveConnectionString,
                 subscriptionName
             );
 
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
-                MaxConcurrentCalls = _config.MaxConcurrentMessages,
+                MaxConcurrentCalls = _options.MaxConcurrentMessages,
                 AutoComplete = true
             };
 

@@ -5,9 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.SignalR
 {
-    internal class AzureSignalRServiceConfigValidator : IValidateOptions<AzureSignalRServiceConfig>
+    internal class AzureSignalRServiceOptionsValidator : IValidateOptions<AzureSignalRServiceOptions>
     {
-        public ValidateOptionsResult Validate(string name, AzureSignalRServiceConfig options)
+        public ValidateOptionsResult Validate(string name, AzureSignalRServiceOptions options)
         {
             if (!ConnectionString.IsValid(
                     options.ConnectionString,

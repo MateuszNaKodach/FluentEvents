@@ -1,29 +1,28 @@
 ﻿using FluentEvents.Azure.SignalR.Client;
-using FluentEvents.Infrastructure;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.SignalR.UnitTests
 {
     [TestFixture]
-    public class AzureSignalRServiceConfigValidatorTests
+    public class AzureSignalRServiceOptionsValidatorTests
     {
         private const string ValidConnectionString = "Endpoint=123;AccessKey=123;";
 
-        private AzureSignalRServiceConfigValidator _azureSignalRServiceConfigValidator;
+        private AzureSignalRServiceOptionsValidator _azureSignalRServiceOptionsValidator;
 
         [SetUp]
         public void SetUp()
         {
-            _azureSignalRServiceConfigValidator = new AzureSignalRServiceConfigValidator();
+            _azureSignalRServiceOptionsValidator = new AzureSignalRServiceOptionsValidator();
         }
 
         [Test]
         public void Validate_WithValidConnectionString_ShouldSucceed()
         {
-            var config = new AzureSignalRServiceConfig {ConnectionString = ValidConnectionString};
+            var config = new AzureSignalRServiceOptions {ConnectionString = ValidConnectionString};
 
-            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
+            var result = _azureSignalRServiceOptionsValidator.Validate(null, config);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(false));
         }
@@ -31,9 +30,9 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         [Test]
         public void Validate_WithInvalidConnectionString_ShouldFail()
         {
-            var config = new AzureSignalRServiceConfig {ConnectionString = "abc"};
+            var config = new AzureSignalRServiceOptions {ConnectionString = "abc"};
 
-            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
+            var result = _azureSignalRServiceOptionsValidator.Validate(null, config);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
         }
@@ -41,9 +40,9 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         [Test]
         public void Validate_WithNullConnectionString_ShouldFail()
         {
-            var config = new AzureSignalRServiceConfig();
+            var config = new AzureSignalRServiceOptions();
 
-            var result = _azureSignalRServiceConfigValidator.Validate(null, config);
+            var result = _azureSignalRServiceOptionsValidator.Validate(null, config);
 
             Assert.That(result, Has.Property(nameof(ValidateOptionsResult.Failed)).EqualTo(true));
         }

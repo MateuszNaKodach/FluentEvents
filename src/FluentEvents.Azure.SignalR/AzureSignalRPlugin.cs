@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Azure.SignalR.Client;
-using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +10,11 @@ namespace FluentEvents.Azure.SignalR
     internal class AzureSignalRPlugin : IFluentEventsPlugin
     {
         private readonly IConfiguration _configuration;
-        private readonly Action<AzureSignalRServiceConfig> _configureAction;
+        private readonly Action<AzureSignalRServiceOptions> _configureAction;
         private readonly Action<IHttpClientBuilder> _httpClientBuilderAction;
 
         public AzureSignalRPlugin(
-            Action<AzureSignalRServiceConfig> configureAction,
+            Action<AzureSignalRServiceOptions> configureAction,
             Action<IHttpClientBuilder> httpClientBuilderAction
         )
         {
@@ -35,14 +34,14 @@ namespace FluentEvents.Azure.SignalR
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureAction != null)
-                services.AddOptions<AzureSignalRServiceConfig>().Configure(_configureAction);
+                services.AddOptions<AzureSignalRServiceOptions>().Configure(_configureAction);
             else
-                services.AddOptions<AzureSignalRServiceConfig>().Bind(_configuration);
+                services.AddOptions<AzureSignalRServiceOptions>().Bind(_configuration);
 
             var httpClientBuilder = services.AddHttpClient<IAzureSignalRHttpClient, AzureSignalRHttpClient>();
             _httpClientBuilderAction?.Invoke(httpClientBuilder);
 
-            services.AddTransient<IValidateOptions<AzureSignalRServiceConfig>, AzureSignalRServiceConfigValidator>();
+            services.AddTransient<IValidateOptions<AzureSignalRServiceOptions>, AzureSignalRServiceOptionsValidator>();
             services.AddSingleton<AzureSignalRPipelineModule>();            
             services.AddSingleton<IEventSendingService, EventSendingService>();
             services.AddSingleton<IUrlProvider, UrlProvider>();

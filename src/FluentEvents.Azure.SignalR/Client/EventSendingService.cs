@@ -16,7 +16,7 @@ namespace FluentEvents.Azure.SignalR.Client
         private readonly ConnectionString _connectionString;
 
         public EventSendingService(
-            IOptions<AzureSignalRServiceConfig> config,
+            IOptions<AzureSignalRServiceOptions> config,
             IAzureSignalRHttpClient signalRHttpClient,
             IUrlProvider urlProvider,
             IHttpRequestFactory httpRequestFactory

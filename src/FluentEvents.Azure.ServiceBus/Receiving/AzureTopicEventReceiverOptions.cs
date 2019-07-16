@@ -5,7 +5,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events receiver.
     /// </summary>
-    public class AzureTopicEventReceiverConfig
+    public class AzureTopicEventReceiverOptions
     {
         /// <summary>
         ///     Path of the Azure Service Bus topic relative to the namespace base address.

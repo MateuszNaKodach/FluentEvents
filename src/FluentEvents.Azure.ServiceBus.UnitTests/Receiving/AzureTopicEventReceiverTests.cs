@@ -22,7 +22,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         private const string ReceiveConnectionString = "Endpoint=sb://sb.net/;SharedAccessKeyName=read;SharedAccessKey=0;EntityPath=0";
         private const string SubscriptionName = "SubscriptionName";
 
-        private AzureTopicEventReceiverConfig _config;
+        private AzureTopicEventReceiverOptions _options;
 
         private Mock<ILogger<AzureTopicEventReceiver>> _loggerMock;
         private Mock<IPublishingService> _publishingServiceMock;
@@ -38,7 +38,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [SetUp]
         public async Task SetUp()
         {
-            _config = new AzureTopicEventReceiverConfig
+            _options = new AzureTopicEventReceiverOptions
             {
                 ReceiveConnectionString = ReceiveConnectionString,
                 ManagementConnectionString = ManagementConnectionString,
@@ -56,7 +56,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 
             _azureTopicEventReceiver = new AzureTopicEventReceiver(
                 _loggerMock.Object,
-                Options.Create(_config),
+                Options.Create(_options),
                 _publishingServiceMock.Object,
                 _eventsSerializationServiceMock.Object,
                 _topicSubscriptionsServiceMock.Object,
@@ -67,17 +67,17 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
 
             _topicSubscriptionsServiceMock
                 .Setup(x => x.CreateSubscriptionAsync(
-                    _config.ManagementConnectionString,
+                    _options.ManagementConnectionString,
                     SubscriptionName,
-                    _config.TopicPath,
-                    _config.SubscriptionsAutoDeleteOnIdleTimeout,
+                    _options.TopicPath,
+                    _options.SubscriptionsAutoDeleteOnIdleTimeout,
                     cts.Token
                 ))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
             _subscriptionClientFactoryMock
-                .Setup(x => x.GetNew(_config.ReceiveConnectionString, SubscriptionName))
+                .Setup(x => x.GetNew(_options.ReceiveConnectionString, SubscriptionName))
                 .Returns(_subscriptionClientMock.Object)
                 .Verifiable();
 
@@ -87,7 +87,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             _subscriptionClientMock
                 .Setup(x => x.RegisterMessageHandler(
                     It.IsAny<Func<Message, CancellationToken, Task>>(),
-                    It.Is<MessageHandlerOptions>(y => y.MaxConcurrentCalls == _config.MaxConcurrentMessages)
+                    It.Is<MessageHandlerOptions>(y => y.MaxConcurrentCalls == _options.MaxConcurrentMessages)
                 ))
                 .Callback<Func<Message, CancellationToken, Task>, MessageHandlerOptions>((x, y) =>
                 {

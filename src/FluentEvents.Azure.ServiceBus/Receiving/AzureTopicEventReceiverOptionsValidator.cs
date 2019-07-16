@@ -2,9 +2,9 @@
 
 namespace FluentEvents.Azure.ServiceBus.Receiving
 {
-    internal class AzureTopicEventReceiverConfigValidator : IValidateOptions<AzureTopicEventReceiverConfig>
+    internal class AzureTopicEventReceiverOptionsValidator : IValidateOptions<AzureTopicEventReceiverOptions>
     {
-        public ValidateOptionsResult Validate(string name, AzureTopicEventReceiverConfig options)
+        public ValidateOptionsResult Validate(string name, AzureTopicEventReceiverOptions options)
         {
             if (!ConnectionStringValidator.IsValid(
                     options.ReceiveConnectionString,
@@ -24,12 +24,12 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
             if (options.SubscriptionNameGenerator == null)
                 return ValidateOptionsResult.Fail(
-                    $"{nameof(AzureTopicEventReceiverConfig.SubscriptionNameGenerator)} is null"
+                    $"{nameof(AzureTopicEventReceiverOptions.SubscriptionNameGenerator)} is null"
                 );
 
             if (string.IsNullOrWhiteSpace(options.TopicPath))
                 return ValidateOptionsResult.Fail(
-                    $"{nameof(AzureTopicEventReceiverConfig.TopicPath)} is null or empty"
+                    $"{nameof(AzureTopicEventReceiverOptions.TopicPath)} is null or empty"
                 );
 
             return ValidateOptionsResult.Success;

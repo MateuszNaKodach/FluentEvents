@@ -6,7 +6,7 @@ namespace FluentEvents.Azure.SignalR
     /// <summary>
     ///     The configuration of the Azure SignalR Service plugin.
     /// </summary>
-    public class AzureSignalRServiceConfig
+    public class AzureSignalRServiceOptions
     {
         /// <summary>
         ///     The connection string of the Azure SignalR Service.

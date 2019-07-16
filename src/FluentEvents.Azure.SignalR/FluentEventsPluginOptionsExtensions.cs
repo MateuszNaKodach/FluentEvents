@@ -16,7 +16,7 @@ namespace FluentEvents.Azure.SignalR
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureAction">
-        ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceConfig"/> for
+        ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceOptions"/> for
         ///     the topic sender plugin.
         /// </param>
         /// <param name="httpClientBuilderAction">
@@ -26,7 +26,7 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
         public static IFluentEventsPluginOptions UseAzureSignalRService(
             this IFluentEventsPluginOptions pluginOptions,
-            Action<AzureSignalRServiceConfig> configureAction,
+            Action<AzureSignalRServiceOptions> configureAction,
             Action<IHttpClientBuilder> httpClientBuilderAction = null
         )
         {
@@ -42,7 +42,7 @@ namespace FluentEvents.Azure.SignalR
         /// </summary>
         /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
-        ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceConfig"/> type.
+        ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceOptions"/> type.
         /// </param>
         /// <param name="httpClientBuilderAction">
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
