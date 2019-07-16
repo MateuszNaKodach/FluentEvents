@@ -43,7 +43,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             }
 
             _publishingServiceMock
-                .Setup(x => x.PublishEventToScopedSubscriptionsAsync(pipelineContext.PipelineEvent, EventsScope.Object))
+                .Setup(x => x.PublishEventToScopedSubscriptionsAsync(pipelineContext.PipelineEvent, EventsScopeMock.Object))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 

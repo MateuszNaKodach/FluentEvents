@@ -16,27 +16,37 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
 
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
-        private EnqueuePipelineModuleConfig _enqueuePipelineModuleConfig;
+        private Mock<IEventsScope> _eventsScopeMock;
 
-        private EnqueuePipelineModule _enqueuePipelineModule;
+        private EnqueuePipelineModuleConfig _enqueuePipelineModuleConfig;
         private PipelineEvent _pipelineEvent;
         private PipelineContext _pipelineContext;
-        private Mock<IEventsScope> _eventsScope;
+
+        private EnqueuePipelineModule _enqueuePipelineModule;
 
         [SetUp]
         public void SetUp()
         {
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
+            _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
+
             _enqueuePipelineModuleConfig = new EnqueuePipelineModuleConfig
             {
                 QueueName = QueueName
             };
             _pipelineEvent = new PipelineEvent(new object());
-            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
-            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope.Object, _serviceProviderMock.Object);
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScopeMock.Object, _serviceProviderMock.Object);
 
             _enqueuePipelineModule = new EnqueuePipelineModule(_eventsQueuesServiceMock.Object);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _serviceProviderMock.Verify();
+            _eventsQueuesServiceMock.Verify();
+            _eventsScopeMock.Verify();
         }
 
         [Test]
@@ -47,7 +57,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
             Func<Task> invokeNextModule = null;
 
             _eventsQueuesServiceMock
-                .Setup(x => x.EnqueueEvent(_eventsScope.Object, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
+                .Setup(x => x.EnqueueEvent(_eventsScopeMock.Object, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
                 .Callback<IEventsScope, PipelineEvent, string, Func<Task>>((_, __, ___, func) =>
                 {
                     invokeNextModule = func;

@@ -17,7 +17,7 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<IDisposable> _loggerScopeMock;
         private Mock<IPipelinesService> _pipelinesServiceMock;
         private Mock<IPipeline> _pipelineMock;
-        private Mock<IEventsScope> _eventsScope;
+        private Mock<IEventsScope> _eventsScopeMock;
 
         private RoutingService _routingService;
         private PipelineEvent _pipelineEvent;
@@ -29,7 +29,7 @@ namespace FluentEvents.UnitTests.Routing
             _loggerScopeMock = new Mock<IDisposable>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _pipelinesServiceMock = new Mock<IPipelinesService>(MockBehavior.Strict);
-            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
+            _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
 
             _routingService = new RoutingService(
                 _loggerMock.Object,
@@ -51,7 +51,7 @@ namespace FluentEvents.UnitTests.Routing
         public async Task RouteEventAsync_ShouldProcessEvent()
         {
             _pipelineMock
-                .Setup(x => x.ProcessEventAsync(_pipelineEvent, _eventsScope.Object))
+                .Setup(x => x.ProcessEventAsync(_pipelineEvent, _eventsScopeMock.Object))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
             
@@ -84,7 +84,7 @@ namespace FluentEvents.UnitTests.Routing
                 ))
                 .Verifiable();
 
-            await _routingService.RouteEventAsync(_pipelineEvent, _eventsScope.Object);
+            await _routingService.RouteEventAsync(_pipelineEvent, _eventsScopeMock.Object);
         }
     }
 }
