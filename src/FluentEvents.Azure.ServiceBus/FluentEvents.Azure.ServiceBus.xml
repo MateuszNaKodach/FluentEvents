@@ -102,23 +102,6 @@
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
             </summary>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException">
-            <summary>
-                An exception thrown when value of the <see cref="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig.ConnectionString"/> property
-                is invalid.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException.#ctor">
-            <summary>
-                Creates a new <see cref="T:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException"/>
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException.#ctor(System.Exception)">
-            <summary>
-                Creates a new <see cref="T:FluentEvents.Azure.ServiceBus.InvalidConnectionStringException"/>
-            </summary>
-            <param name="innerException">The inner exception.</param>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig">
             <summary>
                 The configuration for the Azure Service Bus topic events receiver.
@@ -157,18 +140,6 @@
             </summary>
             <remarks>The default implementation returns a GUID.</remarks>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ManagementConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.ManagementConnectionString" /> property is null.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ReceiveConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.ReceiveConnectionString" /> property is null.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException">
             <inheritdoc />
             <summary>
@@ -193,15 +164,9 @@
                 The configuration for the Azure Service Bus topic events sender.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig.ConnectionString">
+        <member name="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig.SendConnectionString">
             <summary>
                 An Azure Service Bus topic connection string for sending messages. 
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Sending.ConnectionStringIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig.ConnectionString" /> property is null.
             </summary>
         </member>
     </members>

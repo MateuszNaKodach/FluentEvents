@@ -5,23 +5,44 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests
     [TestFixture]
     public class ConnectionStringValidatorTests
     {
-        [Test]
-        public void ValidateOrThrow_WithValidConnectionString_ShouldReturnConnectionString()
-        {
-            var connectionString = ConnectionStringValidator.ValidateOrThrow(Constants.ValidConnectionString);
+        private string _connectionStringName = "connectionStringName";
 
-            Assert.That(connectionString, Is.EqualTo(Constants.ValidConnectionString));
+        [Test]
+        public void IsValid_WithValidConnectionString_ShouldReturnTrueAndNullErrorMessage()
+        {
+            var result = ConnectionStringValidator.IsValid(
+                Constants.ValidConnectionString,
+                _connectionStringName,
+                out var errorMessage
+            );
+
+            Assert.That(result, Is.True);
+            Assert.That(errorMessage, Is.Null);
         }
 
         [Test]
-        public void ValidateOrThrow_WithInvalidConnectionString_ShouldReturnConnectionString(
-            [Values(Constants.InvalidConnectionString, "", " ", null)] string connectionString
+        public void IsValid_WithNullOrEmptyConnectionString_ShouldReturnFalseAndEmptyErrorMessage(
+            [Values("", " ", null)] string connectionString
         )
         {
-           Assert.That(() =>
-           {
-               ConnectionStringValidator.ValidateOrThrow(connectionString);
-           }, Throws.TypeOf<InvalidConnectionStringException>());
+            var result = ConnectionStringValidator.IsValid(connectionString, _connectionStringName, out var errorMessage);
+
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.EqualTo(_connectionStringName + " is null or empty"));
+        }
+
+
+        [Test]
+        public void IsValid_WithInvalidConnectionString_ShouldReturnFalseAndEmptyErrorMessage()
+        {
+            var result = ConnectionStringValidator.IsValid(
+                Constants.InvalidConnectionString,
+                _connectionStringName,
+                out var errorMessage
+            );
+
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.SupersetOf(_connectionStringName + " is invalid: "));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
@@ -26,13 +25,11 @@ namespace FluentEvents.Azure.ServiceBus.Sending
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureOptions != null)
-                services.Configure(_configureOptions);
+                services.AddOptions<AzureTopicEventSenderConfig>().Configure(_configureOptions);
             else
-                services.Configure<AzureTopicEventSenderConfig>(_configuration);
+                services.AddOptions<AzureTopicEventSenderConfig>().Bind(_configuration);
 
-            services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureTopicEventSenderConfig>>().Value
-            );
+            services.AddTransient<IValidateOptions<AzureTopicEventSenderConfig>, AzureTopicEventSenderConfigValidator>();
             services.AddSingleton<ITopicClientFactory, TopicClientFactory>();
             services.AddSingleton<IEventSender, AzureTopicEventSender>();
         }

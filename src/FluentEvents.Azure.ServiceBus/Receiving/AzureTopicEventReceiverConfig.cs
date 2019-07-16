@@ -1,17 +1,12 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Azure.ServiceBus.Receiving
 {
     /// <summary>
     ///     The configuration for the Azure Service Bus topic events receiver.
     /// </summary>
-    public class AzureTopicEventReceiverConfig : IValidableConfig
+    public class AzureTopicEventReceiverConfig
     {
-        private string _managementConnectionString;
-        private string _receiveConnectionString;
-        private Func<string> _subscriptionNameGenerator = () => Guid.NewGuid().ToString();
-
         /// <summary>
         ///     Path of the Azure Service Bus topic relative to the namespace base address.
         /// </summary>
@@ -20,20 +15,12 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         /// <summary>
         ///     A connection string that can be used to dynamically create topic subscriptions.
         /// </summary>
-        public string ManagementConnectionString
-        {
-            get => _managementConnectionString;
-            set => _managementConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
-        }
+        public string ManagementConnectionString { get; set; }
 
         /// <summary>
         ///     A connection string that can be used to receive messages from a topic subscription.
         /// </summary>
-        public string ReceiveConnectionString
-        {
-            get => _receiveConnectionString;
-            set => _receiveConnectionString = ConnectionStringValidator.ValidateOrThrow(value);
-        }
+        public string ReceiveConnectionString { get; set; }
 
         /// <summary>
         ///     The <see cref="TimeSpan"/> idle interval after which the subscription is automatically deleted.
@@ -51,20 +38,6 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         ///     A <see cref="Func{TResult}" /> that returns unique names for subscriptions.
         /// </summary>
         /// <remarks>The default implementation returns a GUID.</remarks>
-        public Func<string> SubscriptionNameGenerator
-        {
-            get => _subscriptionNameGenerator;
-            set => _subscriptionNameGenerator = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        void IValidableConfig.Validate()
-        {
-            if (ReceiveConnectionString == null)
-                throw new ReceiveConnectionStringIsNullException();
-            if (ManagementConnectionString == null)
-                throw new ManagementConnectionStringIsNullException();
-            if (TopicPath == null)
-                throw new TopicPathIsNullException();
-        }
+        public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
     }
 }

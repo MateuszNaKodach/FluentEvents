@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentEvents.Infrastructure;
 using FluentEvents.Plugins;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
@@ -26,13 +25,11 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         public void ApplyServices(IServiceCollection services)
         {
             if (_configureOptions != null)
-                services.Configure(_configureOptions);
+                services.AddOptions<AzureTopicEventReceiverConfig>().Configure(_configureOptions);
             else
-                services.Configure<AzureTopicEventReceiverConfig>(_configuration);
+                services.AddOptions<AzureTopicEventReceiverConfig>().Bind(_configuration);
 
-            services.AddSingleton<IValidableConfig>(x =>
-                x.GetRequiredService<IOptions<AzureTopicEventReceiverConfig>>().Value
-            );
+            services.AddTransient<IValidateOptions<AzureTopicEventReceiverConfig>, AzureTopicEventReceiverConfigValidator>();
             services.AddSingleton<ITopicSubscriptionsService, TopicSubscriptionsService>();
             services.AddSingleton<ISubscriptionClientFactory, SubscriptionClientFactory>();
             services.AddSingleton<IEventReceiver, AzureTopicEventReceiver>();
