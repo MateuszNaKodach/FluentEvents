@@ -27,7 +27,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                 .AddUserSecrets<PublishWithAzureTopicTest>()
                 .Build();
 
-            if (string.IsNullOrEmpty(configuration["azureTopicSender:connectionString"]))
+            if (string.IsNullOrEmpty(configuration["azureTopicSender:sendConnectionString"]))
                 Assert.Ignore("Azure Service Bus settings not found in user secrets.");
 
             var services = new ServiceCollection();
