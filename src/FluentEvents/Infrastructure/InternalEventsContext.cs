@@ -41,9 +41,6 @@ namespace FluentEvents.Infrastructure
         {
             _onBuildingPipelines(InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
             _onBuildingSubscriptions(InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
-
-            foreach (var validableConfig in InternalServiceProvider.GetServices<IValidableConfig>())
-                validableConfig.Validate();
         }
     }
 }
