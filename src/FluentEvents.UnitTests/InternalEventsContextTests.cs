@@ -32,15 +32,17 @@ namespace FluentEvents.UnitTests
             var isOnBuildingPipelinesInvoked = false;
             var isOnBuildingSubscriptionsInvoked = false;
 
-            Action<EventsContextOptions> onConfiguring = x => { isOnConfiguringInvoked = true; };
-            Action<PipelinesBuilder> onBuildingPipelines = x => { isOnBuildingPipelinesInvoked = true; };
-            Action<SubscriptionsBuilder> onBuildingSubscriptions = x => { isOnBuildingSubscriptionsInvoked = true; };
+            void OnConfiguring(EventsContextOptions x) => isOnConfiguringInvoked = true;
+
+            void OnBuildingPipelines(PipelinesBuilder x) => isOnBuildingPipelinesInvoked = true;
+
+            void OnBuildingSubscriptions(SubscriptionsBuilder x) => isOnBuildingSubscriptionsInvoked = true;
 
             var internalEventsContext = new InternalEventsContext(
                 _options,
-                onConfiguring,
-                onBuildingPipelines,
-                onBuildingSubscriptions,
+                OnConfiguring,
+                OnBuildingPipelines,
+                OnBuildingSubscriptions,
                 _appServiceProvider.Object
             );
 
@@ -48,7 +50,10 @@ namespace FluentEvents.UnitTests
             Assert.That(isOnBuildingPipelinesInvoked, Is.True);
             Assert.That(isOnBuildingSubscriptionsInvoked, Is.True);
 
-            Assert.That(internalEventsContext, Has.Property(nameof(internalEventsContext.InternalServiceProvider)).Not.Null);
+            Assert.That(
+                internalEventsContext,
+                Has.Property(nameof(internalEventsContext.InternalServiceProvider)).Not.Null
+            );
         }
     }
 }
