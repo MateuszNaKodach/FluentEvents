@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
@@ -18,7 +17,7 @@ namespace FluentEvents.Subscriptions
             _isOptional = isOptional;
         }
 
-        public IEnumerable<Subscription> CreateSubscriptions(IAppServiceProvider appServiceProvider)
+        public IEnumerable<Subscription> CreateSubscriptions(IServiceProvider appServiceProvider)
         {
             var services = appServiceProvider.GetService<IEnumerable<TService>>();
 

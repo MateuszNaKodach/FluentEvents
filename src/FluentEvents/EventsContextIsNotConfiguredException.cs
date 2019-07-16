@@ -14,7 +14,7 @@ namespace FluentEvents
         ///     Creates a new instance of <see cref="EventsContextIsNotConfiguredException"/>.
         /// </summary>
         public EventsContextIsNotConfiguredException() 
-            : base($"Please configure the {nameof(EventsContext)} with the {nameof(IServiceCollection)} extension method or use the constructor with arguments.")
+            : base($"Please configure the {nameof(EventsScope)} with the {nameof(IServiceCollection)} extension method or use the constructor with arguments.")
         {
         }
     }

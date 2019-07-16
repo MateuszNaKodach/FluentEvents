@@ -22,11 +22,11 @@ namespace FluentEvents
         ///     <para>
         ///         An action to configure the <see cref="EventsContextOptions" /> for the context. This provides an
         ///         alternative to performing configuration of the context by overriding the
-        ///         <see cref="EventsContext.OnConfiguring" /> method in your derived context.
+        ///         <see cref="EventsScope.OnConfiguring" /> method in your derived context.
         ///     </para>
         ///     <para>
-        ///         If an action is supplied here, the <see cref="EventsContext.OnConfiguring" /> method will still be run if it has
-        ///         been overridden on the derived context. <see cref="EventsContext.OnConfiguring" /> configuration will be applied
+        ///         If an action is supplied here, the <see cref="EventsScope.OnConfiguring" /> method will still be run if it has
+        ///         been overridden on the derived context. <see cref="EventsScope.OnConfiguring" /> configuration will be applied
         ///         in addition to configuration performed here.
         ///     </para>
         /// </param>
@@ -35,20 +35,15 @@ namespace FluentEvents
             this IServiceCollection services,
             Action<EventsContextOptions> optionsBuilder
         )
-            where T : EventsContext
+            where T : EventsScope
         {
             var options = new EventsContextOptions();
             optionsBuilder(options);
 
-            services.TryAddScoped<EventsScope>();
-            services.AddSingleton(x =>
-            {
-                var context = ActivatorUtilities.CreateInstance<T>(x);
-                context.Configure(options, new InternalServiceCollection(new AppServiceProvider(x)));
-                return context;
-            });
+            services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
+            services.AddSingleton<IAppServiceProvider, AppServiceProvider>();
+            services.AddScoped(x => ActivatorUtilities.CreateInstance<T>(x, options));
 
-            services.AddSingleton<EventsContext, T>(x => x.GetRequiredService<T>());
             services.AddTransient<IHostedService>(x =>
             {
                 var eventReceiversService = x.GetRequiredService<T>()
@@ -86,7 +81,7 @@ namespace FluentEvents
             this IServiceCollection services,
             Action addServicesAction
         )
-            where TEventsContext : EventsContext
+            where TEventsContext : EventsScope
         {
             var originalServices = services.ToArray();
             addServicesAction();
@@ -103,7 +98,7 @@ namespace FluentEvents
             this IServiceCollection services, 
             ServiceDescriptor serviceDescriptor
         )
-            where TEventsContext : EventsContext
+            where TEventsContext : EventsScope
         {
             ServiceImplementation serviceImplementation;
             if (serviceDescriptor.ImplementationType != null)
@@ -140,13 +135,12 @@ namespace FluentEvents
         }
 
         private static void AttachService<TEventsContext>(IServiceProvider x, object service)
-            where TEventsContext : EventsContext
+            where TEventsContext : EventsScope
         {
             var eventsContext = x.GetRequiredService<TEventsContext>();
-            var eventsScope = x.GetRequiredService<EventsScope>();
 
-            if (!eventsContext.IsInitializing)
-                eventsContext.Attach(service, eventsScope);
+            if (!eventsContext.GetCurrentContext().IsInitializing)
+                eventsContext.Attach(service);
         }
 
         private enum ServiceImplementation

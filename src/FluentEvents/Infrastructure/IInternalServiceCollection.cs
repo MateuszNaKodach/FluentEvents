@@ -5,6 +5,6 @@ namespace FluentEvents.Infrastructure
 {
     internal interface IInternalServiceCollection
     {
-        IServiceProvider BuildServiceProvider(EventsContext eventsContext, IFluentEventsPluginOptions options);
+        IServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options);
     }
 }

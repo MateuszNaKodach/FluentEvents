@@ -27,7 +27,7 @@ namespace FluentEvents.Infrastructure
             _appServiceProvider = appServiceProvider;
         }
 
-        public IServiceProvider BuildServiceProvider(EventsContext eventsContext, IFluentEventsPluginOptions options)
+        public IServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
                 x => _appServiceProvider.GetService<ILoggerFactory>() ??

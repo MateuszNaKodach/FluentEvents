@@ -93,7 +93,7 @@
         </member>
         <member name="M:FluentEvents.Config.SubscriptionsBuilder.ServiceHandler``2">
             <summary>
-                Maps required services to the <see cref="T:FluentEvents.EventsContext"/>.
+                Maps required services to the <see cref="!:EventsContext"/>.
                 If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
@@ -105,7 +105,7 @@
         </member>
         <member name="M:FluentEvents.Config.SubscriptionsBuilder.OptionalServiceHandler``2">
             <summary>
-                Maps optional services to the <see cref="T:FluentEvents.EventsContext"/>.
+                Maps optional services to the <see cref="!:EventsContext"/>.
                 If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
@@ -122,102 +122,32 @@
             <param name="domainEvent">The event.</param>
             <typeparam name="TDomainEvent">The type of the event.</typeparam>
         </member>
-        <member name="T:FluentEvents.EventsContext">
+        <member name="T:FluentEvents.InternalEventsContext">
             <summary>
                 The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
                 An EventsContext should be treated as a singleton.
             </summary>
         </member>
-        <member name="M:FluentEvents.EventsContext.#ctor">
+        <member name="M:FluentEvents.InternalEventsContext.#ctor">
             <summary>
-                This constructor can be used when the <see cref="T:FluentEvents.EventsContext" /> is configured with
+                This constructor can be used when the <see cref="!:EventsContext" /> is configured with
                 the <see cref="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})" />
                 extension method.
             </summary>
         </member>
-        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)">
+        <member name="M:FluentEvents.InternalEventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)">
             <summary>
-                This constructor can be used when the <see cref="T:FluentEvents.EventsContext" /> is not configured with
+                This constructor can be used when the <see cref="!:EventsContext" /> is not configured with
                 the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> extension method.
             </summary>
             <param name="options">The options for this context.</param>
             <param name="appServiceProvider">The app service provider.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to override the options supplied in the constructor or with DI.
-            </summary>
-            <param name="options">The options of the <see cref="T:FluentEvents.EventsContext"/>.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to configure the subscriptions that should be created automatically.
-            </summary>
-            <remarks>
-                This method is called only once when the instance of a derived context is created.
-            </remarks>
-            <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to configure the pipelines needed for handling the events.
-            </summary>
-            <remarks>
-                This method is called only once when the instance of a derived context is created.
-            </remarks>
-            <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.StartEventReceiversAsync(System.Threading.CancellationToken)">
-            <summary>
-                Starts the registered event receivers manually.
-            </summary>
-            <remarks>
-                Event receivers lifetime is controlled by an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>.
-                This method should to be called only if the application isn't using the <see cref="T:Microsoft.Extensions.Hosting.HostBuilder"/>.
-            </remarks>
-            <param name="cancellationToken">The cancellation token for the async operation.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.StopEventReceiversAsync(System.Threading.CancellationToken)">
-            <summary>
-                Stops the registered event receivers manually.
-            </summary>
-            <remarks>
-                Event receivers lifetime is controlled by an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>.
-                This method should to be called only if the application isn't using
-                the <see cref="T:Microsoft.Extensions.Hosting.HostBuilder"/>.
-            </remarks>
-            <param name="cancellationToken">The cancellation token for the async operation.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.Attach(System.Object,FluentEvents.EventsScope)">
-            <summary>
-                Manually attach an event source to the context in order to forward it's events to the
-                configured pipelines.
-            </summary>
-            <param name="source">The event source.</param>
-            <param name="eventsScope">The scope where the events should be queued and published.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope,System.String)">
-            <summary>
-                Forward the events of a queue to the corresponding pipelines.
-            </summary>
-            <param name="eventsScope">The scope of the queue.</param>
-            <param name="queueName">The name of the queue.</param>
-        </member>
-        <member name="M:FluentEvents.EventsContext.DiscardQueuedEvents(FluentEvents.EventsScope,System.String)">
-            <summary>
-                Discards all the events of a queue.
-            </summary>
-            <param name="eventsScope">The scope of the queue.</param>
-            <param name="queueName">The name of the queue.</param>
-        </member>
         <member name="T:FluentEvents.EventsContextIsNotConfiguredException">
             <summary>
-                An exception thrown when the <see cref="T:FluentEvents.EventsContext"/> wasn't configured
+                An exception thrown when the <see cref="!:EventsContext"/> wasn't configured
                 with the <see cref="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})"/> extension method
-                or the <see cref="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)"/> constructor.
+                or the <see cref="!:EventsContext(EventsContextOptions, IServiceProvider)"/> constructor.
             </summary>
         </member>
         <member name="M:FluentEvents.EventsContextIsNotConfiguredException.#ctor">
@@ -227,24 +157,13 @@
         </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>
-                The options used by an <see cref="T:FluentEvents.EventsContext"/>
+                The options used by an <see cref="!:EventsContext"/>
             </summary>
         </member>
         <member name="M:FluentEvents.EventsContextOptions.#ctor">
             <summary>
                 Initializes a new instance.
             </summary>
-        </member>
-        <member name="T:FluentEvents.EventsScope">
-            <summary>
-                The <see cref="T:FluentEvents.EventsScope"/> represents the scope where entities are attached and the events
-                are handled or queued.
-                An <see cref="T:FluentEvents.EventsScope"/> should be treated as scoped and should be short-lived.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.EventsScope.#ctor(System.Collections.Generic.IEnumerable{FluentEvents.EventsContext},System.IServiceProvider)">
-            <param name="eventsContexts">A list of the <see cref="T:FluentEvents.EventsContext"/>s in the current scope.</param>
-            <param name="scopedAppServiceProvider">The application service provider.</param>
         </member>
         <member name="T:FluentEvents.FluentEventsException">
             <inheritdoc />
@@ -268,7 +187,7 @@
             <summary>
                 An interface implemented by a service to handle an event.
                 Note: the subscription should be configured in the
-                <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)"/> method.
+                <see cref="!:EventsContext.OnBuildingSubscriptions"/> method.
             </summary>
             <typeparam name="TDomainEvent">the type of the event.</typeparam>
         </member>
@@ -294,6 +213,11 @@
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Infrastructure.IScopedAppServiceProvider">
+            <summary>
+                Represents a scoped application service provider.
             </summary>
         </member>
         <member name="T:FluentEvents.Infrastructure.IValidableConfig">
@@ -424,6 +348,52 @@
         </member>
         <member name="M:FluentEvents.Model.SourceModelsService.GetSourceModels">
             <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)">
+            <summary>
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to override the options supplied in the constructor or with DI.
+            </summary>
+            <param name="options">The options of the <see cref="!:EventsContext"/>.</param>
+        </member>
+        <member name="M:FluentEvents.EventsScope.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)">
+            <summary>
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to configure the subscriptions that should be created automatically.
+            </summary>
+            <remarks>
+                This method is called only once when the instance of a derived context is created.
+            </remarks>
+            <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
+        </member>
+        <member name="M:FluentEvents.EventsScope.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)">
+            <summary>
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to configure the pipelines needed for handling the events.
+            </summary>
+            <remarks>
+                This method is called only once when the instance of a derived context is created.
+            </remarks>
+            <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
+        </member>
+        <member name="M:FluentEvents.EventsScope.Attach(System.Object)">
+            <summary>
+                Manually attach an event source to the context in order to forward it's events to the
+                configured pipelines.
+            </summary>
+            <param name="source">The event source.</param>
+        </member>
+        <member name="M:FluentEvents.EventsScope.ProcessQueuedEventsAsync(System.String)">
+            <summary>
+                Forward the events of a queue to the corresponding pipelines.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
+        </member>
+        <member name="M:FluentEvents.EventsScope.DiscardQueuedEvents(System.String)">
+            <summary>
+                Discards all the events of a queue.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
         </member>
         <member name="T:FluentEvents.Pipelines.Filters.EventPipelineConfiguratorExtensions">
             <summary>
@@ -642,7 +612,7 @@
                 configurable with the configurePublishTransmission parameter.
             </summary>
             <remarks>
-                This method can be used to configure a publication to multiple application instances with this <see cref="T:FluentEvents.EventsContext"/>
+                This method can be used to configure a publication to multiple application instances with this <see cref="!:EventsContext"/>
             </remarks>
             <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
@@ -783,7 +753,7 @@
         </member>
         <member name="T:FluentEvents.Routing.IAttachingInterceptor">
             <summary>
-                This interface can be implemented to intercept every attaching made to the <see cref="T:FluentEvents.EventsContext"/>.
+                This interface can be implemented to intercept every attaching made to the <see cref="!:EventsContext"/>.
             </summary>
         </member>
         <member name="M:FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService,System.Object,FluentEvents.EventsScope)">
@@ -844,12 +814,12 @@
         </member>
         <member name="T:FluentEvents.ServiceCollectionExtensions">
             <summary>
-                Extension methods for configuring an <see cref="T:FluentEvents.EventsContext"/> with Dependency Injection.
+                Extension methods for configuring an <see cref="!:EventsContext"/> with Dependency Injection.
             </summary>
         </member>
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})">
             <summary>
-                Registers the given <see cref="T:FluentEvents.EventsContext"/> as a service in the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
+                Registers the given <see cref="!:EventsContext"/> as a service in the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
             </summary>
             <typeparam name="T">The type of context to be registered.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
@@ -857,11 +827,11 @@
                 <para>
                     An action to configure the <see cref="T:FluentEvents.EventsContextOptions" /> for the context. This provides an
                     alternative to performing configuration of the context by overriding the
-                    <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> method in your derived context.
+                    <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> method in your derived context.
                 </para>
                 <para>
-                    If an action is supplied here, the <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> method will still be run if it has
-                    been overridden on the derived context. <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> configuration will be applied
+                    If an action is supplied here, the <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> method will still be run if it has
+                    been overridden on the derived context. <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> configuration will be applied
                     in addition to configuration performed here.
                 </para>
             </param>
@@ -870,7 +840,7 @@
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)">
             <summary>
                 This method watches the services registered inside of the addServicesAction
-                and makes sure that they are attached to the <see cref="T:FluentEvents.EventsContext"/>
+                and makes sure that they are attached to the <see cref="!:EventsContext"/>
                 when they are resolved by the <see cref="T:System.IServiceProvider"/>.
             </summary>
             <example>
@@ -885,7 +855,7 @@
                     }
                 </code>
             </example>
-            <typeparam name="TEventsContext">The <see cref="T:FluentEvents.EventsContext"/> where the services are attached.</typeparam>
+            <typeparam name="TEventsContext">The <see cref="!:EventsContext"/> where the services are attached.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
             <param name="addServicesAction">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
@@ -961,7 +931,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(FluentEvents.Infrastructure.IAppServiceProvider)">
+        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(FluentEvents.Infrastructure.IScopedAppServiceProvider)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

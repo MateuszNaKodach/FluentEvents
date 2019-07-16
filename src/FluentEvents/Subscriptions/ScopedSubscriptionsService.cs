@@ -23,7 +23,7 @@ namespace FluentEvents.Subscriptions
             _scopedSubscriptionCreationTasks.TryAdd(serviceSubscriptionTask, true);
         }
 
-        public IEnumerable<Subscription> SubscribeServices(IAppServiceProvider scopedAppServiceProvider)
+        public IEnumerable<Subscription> SubscribeServices(IScopedAppServiceProvider scopedAppServiceProvider)
         {
             return _scopedSubscriptionCreationTasks.Keys
                 .SelectMany(subscriptionCreationTask => subscriptionCreationTask.CreateSubscriptions(scopedAppServiceProvider))
