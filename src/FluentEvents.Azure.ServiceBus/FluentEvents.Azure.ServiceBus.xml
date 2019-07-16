@@ -33,14 +33,14 @@
                 Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
             </summary>
         </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventSender(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig})">
+        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventSender(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions})">
             <summary>
                 Adds a plugin that sends publishes events to different instances of the application
                 using an Azure Service Bus topic.
             </summary>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configureOptions">
-                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig"/> for
+                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions"/> for
                 the topic sender plugin.
             </param>
             <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
@@ -52,11 +52,11 @@
             </summary>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configuration">
-                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig"/> type.
+                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions"/> type.
             </param>
             <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
         </member>
-        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventReceiver(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig})">
+        <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventReceiver(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions})">
             <summary>
                 Adds a plugin that receives events published from other instances of the application
                 using an Azure Service Bus topic.
@@ -66,7 +66,7 @@
             </remarks>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configureOptions">
-                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig"/> for the receiving plugin.
+                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions"/> for the receiving plugin.
             </param>
             <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
         </member>
@@ -80,7 +80,7 @@
             </remarks>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configuration">
-                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig"/> type.
+                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions"/> type.
             </param>
             <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
         </member>
@@ -102,39 +102,39 @@
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
             </summary>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig">
+        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions">
             <summary>
                 The configuration for the Azure Service Bus topic events receiver.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.TopicPath">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.TopicPath">
             <summary>
                 Path of the Azure Service Bus topic relative to the namespace base address.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.ManagementConnectionString">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ManagementConnectionString">
             <summary>
                 A connection string that can be used to dynamically create topic subscriptions.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.ReceiveConnectionString">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ReceiveConnectionString">
             <summary>
                 A connection string that can be used to receive messages from a topic subscription.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.SubscriptionsAutoDeleteOnIdleTimeout">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionsAutoDeleteOnIdleTimeout">
             <summary>
                 The <see cref="T:System.TimeSpan"/> idle interval after which the subscription is automatically deleted.
             </summary>
             <remarks>The minimum duration is 5 minutes. Default value is <see cref="F:System.TimeSpan.MaxValue"/>.</remarks>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.MaxConcurrentMessages">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.MaxConcurrentMessages">
             <summary>
                 Gets or sets the maximum number of concurrent calls to the callback the message pump should initiate.
             </summary>
             <remarks>The default value is 1.</remarks>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.SubscriptionNameGenerator">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameGenerator">
             <summary>
                 A <see cref="T:System.Func`1" /> that returns unique names for subscriptions.
             </summary>
@@ -156,15 +156,15 @@
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.TopicPathIsNullException">
             <inheritdoc />
             <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverConfig.TopicPath" /> property is null.
+                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.TopicPath" /> property is null.
             </summary>
         </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig">
+        <member name="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions">
             <summary>
                 The configuration for the Azure Service Bus topic events sender.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderConfig.SendConnectionString">
+        <member name="P:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions.SendConnectionString">
             <summary>
                 An Azure Service Bus topic connection string for sending messages. 
             </summary>

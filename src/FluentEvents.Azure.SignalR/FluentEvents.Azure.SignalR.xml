@@ -4,12 +4,12 @@
         <name>FluentEvents.Azure.SignalR</name>
     </assembly>
     <members>
-        <member name="T:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig">
+        <member name="T:FluentEvents.Azure.SignalR.AzureSignalRServiceOptions">
             <summary>
                 The configuration of the Azure SignalR Service plugin.
             </summary>
         </member>
-        <member name="P:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig.ConnectionString">
+        <member name="P:FluentEvents.Azure.SignalR.AzureSignalRServiceOptions.ConnectionString">
             <summary>
                 The connection string of the Azure SignalR Service.
             </summary>
@@ -33,7 +33,7 @@
         </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.ConnectionStringIsNullException">
             <summary>
-                An exception thrown when <see cref="P:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig.ConnectionString"/> is null.
+                An exception thrown when <see cref="P:FluentEvents.Azure.SignalR.AzureSignalRServiceOptions.ConnectionString"/> is null.
             </summary>
         </member>
         <member name="T:FluentEvents.Azure.SignalR.Client.InvalidConnectionStringAccessKeyException">
@@ -126,13 +126,13 @@
                 Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
             </summary>
         </member>
-        <member name="M:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalRService(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.SignalR.AzureSignalRServiceConfig},System.Action{Microsoft.Extensions.DependencyInjection.IHttpClientBuilder})">
+        <member name="M:FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalRService(FluentEvents.Plugins.IFluentEventsPluginOptions,System.Action{FluentEvents.Azure.SignalR.AzureSignalRServiceOptions},System.Action{Microsoft.Extensions.DependencyInjection.IHttpClientBuilder})">
             <summary>
                 Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
             </summary>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configureAction">
-                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig"/> for
+                An <see cref="T:System.Action"/> to configure the <see cref="T:FluentEvents.Azure.SignalR.AzureSignalRServiceOptions"/> for
                 the topic sender plugin.
             </param>
             <param name="httpClientBuilderAction">
@@ -147,7 +147,7 @@
             </summary>
             <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <param name="configuration">
-                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.SignalR.AzureSignalRServiceConfig"/> type.
+                A configuration section with the same structure of the <see cref="T:FluentEvents.Azure.SignalR.AzureSignalRServiceOptions"/> type.
             </param>
             <param name="httpClientBuilderAction">
                 An <see cref="T:System.Action`1"/> to further configure the <see cref="T:System.Net.Http.HttpClient"/> used to make requests to
