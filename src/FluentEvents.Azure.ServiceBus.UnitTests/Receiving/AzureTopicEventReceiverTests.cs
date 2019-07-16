@@ -96,6 +96,37 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             _subscriptionClientMock.Verify();
         }
 
+        private void SetUpSubscriptionCreation()
+        {
+            _topicSubscriptionsServiceMock
+                .Setup(x => x.CreateSubscriptionAsync(
+                    _options.ManagementConnectionString,
+                    SubscriptionName,
+                    _options.TopicPath,
+                    _options.SubscriptionsAutoDeleteOnIdleTimeout,
+                    CancellationToken.None
+                ))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+        }
+
+        [Test]
+        public async Task StartReceivingAsync_WithSubscriptionCreationEnabled_ShouldCreateSubscription()
+        {
+            _options.IsSubscriptionCreationEnabled = true;
+
+            SetUpSubscriptionCreation();
+
+            await _azureTopicEventReceiver.StartReceivingAsync(CancellationToken.None);
+        }
+
+        [Test]
+        public async Task StartReceivingAsync_WithSubscriptionCreationDisabled_ShouldNotCreateSubscription()
+        {
+            _options.IsSubscriptionCreationEnabled = false;
+
+            await _azureTopicEventReceiver.StartReceivingAsync(CancellationToken.None);
+        }
 
         [Test]
         public async Task MessageHandler_ShouldDeserializeAndPublishEventToGlobalSubscriptions()
