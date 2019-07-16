@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Utils;
 
@@ -28,7 +29,7 @@ namespace FluentEvents.Routing
         }
 
         /// <inheritdoc />
-        public void Attach(object source, EventsScope eventsScope)
+        public void Attach(object source, IEventsScope eventsScope)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));

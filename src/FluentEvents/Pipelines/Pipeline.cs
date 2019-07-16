@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -45,7 +46,7 @@ namespace FluentEvents.Pipelines
         /// <inheritdoc />
         public Task ProcessEventAsync(
             PipelineEvent pipelineEvent,
-            EventsScope eventsScope
+            IEventsScope eventsScope
         )
         {
             var pipeline = _nextModule ?? (_nextModule = Build());

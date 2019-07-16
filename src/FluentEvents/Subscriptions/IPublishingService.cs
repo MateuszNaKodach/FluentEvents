@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Subscriptions
@@ -14,7 +15,7 @@ namespace FluentEvents.Subscriptions
         /// <param name="pipelineEvent">The event to publish.</param>
         /// <param name="eventsScope">The scope of the event and the subscriptions.</param>
         /// <returns>An awaitable task.</returns>
-        Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope);
+        Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope);
 
         /// <summary>
         ///     Publishes an event to all the global subscriptions.

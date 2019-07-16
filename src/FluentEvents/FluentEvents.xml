@@ -93,7 +93,7 @@
         </member>
         <member name="M:FluentEvents.Config.SubscriptionsBuilder.ServiceHandler``2">
             <summary>
-                Maps required services to the <see cref="!:EventsContext"/>.
+                Maps required services to the <see cref="T:FluentEvents.EventsContext"/>.
                 If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
@@ -105,7 +105,7 @@
         </member>
         <member name="M:FluentEvents.Config.SubscriptionsBuilder.OptionalServiceHandler``2">
             <summary>
-                Maps optional services to the <see cref="!:EventsContext"/>.
+                Maps optional services to the <see cref="T:FluentEvents.EventsContext"/>.
                 If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
             </summary>
             <typeparam name="TService">The type of the service.</typeparam>
@@ -122,42 +122,60 @@
             <param name="domainEvent">The event.</param>
             <typeparam name="TDomainEvent">The type of the event.</typeparam>
         </member>
-        <member name="T:FluentEvents.InternalEventsContext">
-            <summary>
-                The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
-                An EventsContext should be treated as a singleton.
-            </summary>
+        <member name="T:FluentEvents.EventsContext">
+            <inheritdoc cref="T:FluentEvents.IEventsContext"/>
         </member>
-        <member name="M:FluentEvents.InternalEventsContext.#ctor">
+        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,FluentEvents.Infrastructure.IAppServiceProvider,FluentEvents.Infrastructure.IScopedAppServiceProvider)">
             <summary>
-                This constructor can be used when the <see cref="!:EventsContext" /> is configured with
-                the <see cref="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})" />
-                extension method.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.InternalEventsContext.#ctor(FluentEvents.EventsContextOptions,System.IServiceProvider)">
-            <summary>
-                This constructor can be used when the <see cref="!:EventsContext" /> is not configured with
+                This constructor can be used when the <see cref="T:FluentEvents.EventsContext" /> is not configured with
                 the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> extension method.
             </summary>
             <param name="options">The options for this context.</param>
             <param name="appServiceProvider">The app service provider.</param>
+            <param name="scopedAppServiceProvider">The scoped app service provider.</param>
         </member>
-        <member name="T:FluentEvents.EventsContextIsNotConfiguredException">
+        <member name="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)">
             <summary>
-                An exception thrown when the <see cref="!:EventsContext"/> wasn't configured
-                with the <see cref="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})"/> extension method
-                or the <see cref="!:EventsContext(EventsContextOptions, IServiceProvider)"/> constructor.
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to override the options supplied in the constructor or with DI.
             </summary>
+            <param name="options">The options of the <see cref="T:FluentEvents.EventsContext"/>.</param>
         </member>
-        <member name="M:FluentEvents.EventsContextIsNotConfiguredException.#ctor">
+        <member name="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)">
             <summary>
-                Creates a new instance of <see cref="T:FluentEvents.EventsContextIsNotConfiguredException"/>.
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to configure the subscriptions that should be created automatically.
             </summary>
+            <remarks>
+                This method is called only once when the instance of a derived context is created.
+            </remarks>
+            <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
+        </member>
+        <member name="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)">
+            <summary>
+                The default implementation of this method does nothing, but it can be overridden in a derived class
+                to configure the pipelines needed for handling the events.
+            </summary>
+            <remarks>
+                This method is called only once when the instance of a derived context is created.
+            </remarks>
+            <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
+        </member>
+        <member name="M:FluentEvents.EventsContext.Attach(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.EventsContext.ProcessQueuedEventsAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.EventsContext.DiscardQueuedEvents(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:FluentEvents.EventsContext.Dispose">
+            <inheritdoc />
         </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>
-                The options used by an <see cref="!:EventsContext"/>
+                The options used by an <see cref="T:FluentEvents.EventsContext"/>
             </summary>
         </member>
         <member name="M:FluentEvents.EventsContextOptions.#ctor">
@@ -187,7 +205,7 @@
             <summary>
                 An interface implemented by a service to handle an event.
                 Note: the subscription should be configured in the
-                <see cref="!:EventsContext.OnBuildingSubscriptions"/> method.
+                <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)"/> method.
             </summary>
             <typeparam name="TDomainEvent">the type of the event.</typeparam>
         </member>
@@ -198,10 +216,60 @@
             <param name="e">The event.</param>
             <returns></returns>
         </member>
+        <member name="T:FluentEvents.IEventsContext">
+            <summary>
+                The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
+                An EventsContext should be treated as a singleton.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.Attach(System.Object)">
+            <summary>
+                Manually attach an event source to the context in order to forward it's events to the
+                configured pipelines.
+            </summary>
+            <param name="source">The event source.</param>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.ProcessQueuedEventsAsync(System.String)">
+            <summary>
+                Forward the events of a queue to the corresponding pipelines.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.DiscardQueuedEvents(System.String)">
+            <summary>
+                Discards all the events of a queue.
+            </summary>
+            <param name="queueName">The name of the queue.</param>
+        </member>
         <member name="T:FluentEvents.Infrastructure.IAppServiceProvider">
             <summary>
                 Represents the application service provider.
             </summary>
+        </member>
+        <member name="T:FluentEvents.Infrastructure.IEventsScope">
+            <summary>
+                The <see cref="T:FluentEvents.Infrastructure.IEventsScope"/> represents the scope where entities are attached and the events
+                are handled or queued.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Infrastructure.IEventsScope.GetOrAddEventsQueue(System.String)">
+            <summary>
+                Gets or creates a new queue with the given name
+            </summary>
+            <param name="queueName">The name of the queue</param>
+            <returns></returns>
+        </member>
+        <member name="M:FluentEvents.Infrastructure.IEventsScope.GetSubscriptions">
+            <summary>
+                Gets or creates all the scoped subscriptions.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of subscriptions.</returns>
+        </member>
+        <member name="M:FluentEvents.Infrastructure.IEventsScope.GetEventsQueues">
+            <summary>
+                Gets all the event queues created.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of event queues.</returns>
         </member>
         <member name="T:FluentEvents.Infrastructure.IInfrastructure`1">
             <summary>
@@ -349,52 +417,6 @@
         <member name="M:FluentEvents.Model.SourceModelsService.GetSourceModels">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to override the options supplied in the constructor or with DI.
-            </summary>
-            <param name="options">The options of the <see cref="!:EventsContext"/>.</param>
-        </member>
-        <member name="M:FluentEvents.EventsScope.OnBuildingSubscriptions(FluentEvents.Config.SubscriptionsBuilder)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to configure the subscriptions that should be created automatically.
-            </summary>
-            <remarks>
-                This method is called only once when the instance of a derived context is created.
-            </remarks>
-            <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
-        </member>
-        <member name="M:FluentEvents.EventsScope.OnBuildingPipelines(FluentEvents.Config.PipelinesBuilder)">
-            <summary>
-                The default implementation of this method does nothing, but it can be overridden in a derived class
-                to configure the pipelines needed for handling the events.
-            </summary>
-            <remarks>
-                This method is called only once when the instance of a derived context is created.
-            </remarks>
-            <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
-        </member>
-        <member name="M:FluentEvents.EventsScope.Attach(System.Object)">
-            <summary>
-                Manually attach an event source to the context in order to forward it's events to the
-                configured pipelines.
-            </summary>
-            <param name="source">The event source.</param>
-        </member>
-        <member name="M:FluentEvents.EventsScope.ProcessQueuedEventsAsync(System.String)">
-            <summary>
-                Forward the events of a queue to the corresponding pipelines.
-            </summary>
-            <param name="queueName">The name of the queue.</param>
-        </member>
-        <member name="M:FluentEvents.EventsScope.DiscardQueuedEvents(System.String)">
-            <summary>
-                Discards all the events of a queue.
-            </summary>
-            <param name="queueName">The name of the queue.</param>
-        </member>
         <member name="T:FluentEvents.Pipelines.Filters.EventPipelineConfiguratorExtensions">
             <summary>
                 Extension methods for adding an events filter to a pipeline.
@@ -423,7 +445,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -472,7 +494,7 @@
             <typeparam name="TConfig">The type of the module configuration.</typeparam>
             <param name="moduleConfig">An instance of the module configuration</param>
         </member>
-        <member name="M:FluentEvents.Pipelines.Pipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Pipelines.Pipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Pipelines.PipelineContext">
@@ -495,7 +517,7 @@
                 The current events scope.
             </summary>
         </member>
-        <member name="M:FluentEvents.Pipelines.PipelineContext.#ctor(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope,System.IServiceProvider)">
+        <member name="M:FluentEvents.Pipelines.PipelineContext.#ctor(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope,System.IServiceProvider)">
             <summary>
                 Creates a new instance of a <see cref="T:FluentEvents.Pipelines.PipelineContext"/>.
             </summary>
@@ -612,7 +634,7 @@
                 configurable with the configurePublishTransmission parameter.
             </summary>
             <remarks>
-                This method can be used to configure a publication to multiple application instances with this <see cref="!:EventsContext"/>
+                This method can be used to configure a publication to multiple application instances with this <see cref="T:FluentEvents.EventsContext"/>
             </remarks>
             <typeparam name="TEvent">The type of the event.</typeparam>
             <param name="eventPipelineConfigurator">
@@ -727,6 +749,60 @@
                 An exception that is thrown when the events queue with the specified name does not exists.
             </summary>
         </member>
+        <member name="T:FluentEvents.Queues.IEventsQueue">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Queues.IEventsQueue.DiscardQueuedEvents">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Queues.IEventsQueue.Enqueue(FluentEvents.Queues.QueuedPipelineEvent)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Queues.IEventsQueue.DequeueAll">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Queues.IEventsQueue.Name">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Queues.QueuedPipelineEvent">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Queues.QueuedPipelineEvent.InvokeNextModule">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="P:FluentEvents.Queues.QueuedPipelineEvent.PipelineEvent">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Queues.QueuedPipelineEvent.#ctor(System.Func{System.Threading.Tasks.Task},FluentEvents.Pipelines.PipelineEvent)">
+            <summary>
+                This API supports the FluentEvents infrastructure and is not intended to be used
+                directly from your code. This API may change or be removed in future releases.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Routing.AttachingService">
             <inheritdoc />
         </member>
@@ -736,7 +812,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.AttachingService.Attach(System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.AttachingService.Attach(System.Object,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Routing.ForwardingService">
@@ -748,21 +824,21 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.ForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel,System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.ForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel,System.Object,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.Routing.IAttachingInterceptor">
             <summary>
-                This interface can be implemented to intercept every attaching made to the <see cref="!:EventsContext"/>.
+                This interface can be implemented to intercept every attaching made to the <see cref="T:FluentEvents.EventsContext"/>.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService,System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService,System.Object,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 This method can be used to handle complex attaching situations (For example attaching to the entities of an ORM).
             </summary>
             <param name="attachingService">The attaching service that invokes the interceptor.</param>
             <param name="source">The events source being attached.</param>
-            <param name="eventsScope">The current <see cref="T:FluentEvents.EventsScope"/></param>
+            <param name="eventsScope">The current <see cref="T:FluentEvents.Infrastructure.IEventsScope"/></param>
         </member>
         <member name="T:FluentEvents.Routing.IAttachingService">
             <summary>
@@ -770,7 +846,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.IAttachingService.Attach(System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.IAttachingService.Attach(System.Object,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -782,7 +858,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.IForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel,System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.IForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel,System.Object,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -794,7 +870,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.IRoutingService.RouteEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.IRoutingService.RouteEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -809,17 +885,17 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Routing.RoutingService.RouteEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Routing.RoutingService.RouteEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
         </member>
         <member name="T:FluentEvents.ServiceCollectionExtensions">
             <summary>
-                Extension methods for configuring an <see cref="!:EventsContext"/> with Dependency Injection.
+                Extension methods for configuring an <see cref="T:FluentEvents.EventsContext"/> with Dependency Injection.
             </summary>
         </member>
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddEventsContext``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentEvents.EventsContextOptions})">
             <summary>
-                Registers the given <see cref="!:EventsContext"/> as a service in the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
+                Registers the given <see cref="T:FluentEvents.EventsContext"/> as a service in the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
             </summary>
             <typeparam name="T">The type of context to be registered.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
@@ -827,11 +903,11 @@
                 <para>
                     An action to configure the <see cref="T:FluentEvents.EventsContextOptions" /> for the context. This provides an
                     alternative to performing configuration of the context by overriding the
-                    <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> method in your derived context.
+                    <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> method in your derived context.
                 </para>
                 <para>
-                    If an action is supplied here, the <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> method will still be run if it has
-                    been overridden on the derived context. <see cref="M:FluentEvents.EventsScope.OnConfiguring(FluentEvents.EventsContextOptions)" /> configuration will be applied
+                    If an action is supplied here, the <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> method will still be run if it has
+                    been overridden on the derived context. <see cref="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)" /> configuration will be applied
                     in addition to configuration performed here.
                 </para>
             </param>
@@ -840,7 +916,7 @@
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)">
             <summary>
                 This method watches the services registered inside of the addServicesAction
-                and makes sure that they are attached to the <see cref="!:EventsContext"/>
+                and makes sure that they are attached to the <see cref="T:FluentEvents.EventsContext"/>
                 when they are resolved by the <see cref="T:System.IServiceProvider"/>.
             </summary>
             <example>
@@ -855,7 +931,7 @@
                     }
                 </code>
             </example>
-            <typeparam name="TEventsContext">The <see cref="!:EventsContext"/> where the services are attached.</typeparam>
+            <typeparam name="TEventsContext">The <see cref="T:FluentEvents.EventsContext"/> where the services are attached.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
             <param name="addServicesAction">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
@@ -904,7 +980,7 @@
                 Provides APIs to publish events.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
                 Publish an events to all the scoped subscriptions.
             </summary>
@@ -958,7 +1034,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.PublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.Subscriptions.PublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
         </member>
         <member name="M:FluentEvents.Subscriptions.PublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent)">
@@ -993,7 +1069,7 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Transmission.EventReceiversHostedService.#ctor(FluentEvents.Transmission.IEventReceiversService)">
+        <member name="M:FluentEvents.Transmission.EventReceiversHostedService.#ctor(FluentEvents.IEventsContext)">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.

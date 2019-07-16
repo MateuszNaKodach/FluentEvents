@@ -20,6 +20,8 @@ namespace FluentEvents.Infrastructure
 {
     internal class InternalServiceCollection : IInternalServiceCollection
     {
+        public static readonly Type[] ServicesToIgnoreWhenAttaching = {typeof(ILoggerFactory)};
+
         private readonly IAppServiceProvider _appServiceProvider;
 
         public InternalServiceCollection(IAppServiceProvider appServiceProvider)
@@ -42,8 +44,6 @@ namespace FluentEvents.Infrastructure
             ));
 
             services.AddSingleton(_appServiceProvider);
-            services.AddSingleton(eventsContext);
-            services.AddSingleton<EventsQueuesContext>();
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();

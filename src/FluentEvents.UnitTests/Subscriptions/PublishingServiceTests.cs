@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         private Mock<ILogger<PublishingService>> _loggerMock;
         private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
         private Mock<ISubscriptionsMatchingService> _subscriptionsMatchingServiceMock;
-        private Mock<EventsScope> _eventsScopeMock;
+        private Mock<IEventsScope> _eventsScopeMock;
 
         private PublishingService _publishingService;
         private Subscription[] _subscriptions;
@@ -32,7 +33,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             _loggerMock = new Mock<ILogger<PublishingService>>(MockBehavior.Strict);
             _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
             _subscriptionsMatchingServiceMock = new Mock<ISubscriptionsMatchingService>(MockBehavior.Strict);
-            _eventsScopeMock = new Mock<EventsScope>(MockBehavior.Strict);
+            _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
 
             _publishingService = new PublishingService(
                 _loggerMock.Object,

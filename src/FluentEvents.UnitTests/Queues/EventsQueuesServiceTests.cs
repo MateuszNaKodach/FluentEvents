@@ -15,15 +15,13 @@ namespace FluentEvents.UnitTests.Queues
     {
         private static readonly string _queueName = "queueName";
 
-        private Mock<IEventsQueueCollection> _eventQueueCollectionMock;
         private Mock<IAppServiceProvider> _appServiceProviderMock;
         private Mock<EventsContext> _eventsContextMock;
         private Mock<IPipeline> _pipelineMock;
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
+        private Mock<IEventsScope> _eventsScope;
 
         private EventsQueue _eventsQueue;
-        private EventsQueuesContext _eventsQueuesContext;
-        private EventsScope _eventsScope;
         private PipelineEvent _pipelineEvent;
 
         private EventsQueuesService _eventsQueuesService;
@@ -31,28 +29,21 @@ namespace FluentEvents.UnitTests.Queues
         [SetUp]
         public void SetUp()
         {
-            _eventQueueCollectionMock = new Mock<IEventsQueueCollection>(MockBehavior.Strict);
             _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
             _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
             _eventsQueue = new EventsQueue(_queueName);
-            _eventsQueuesContext = new EventsQueuesContext();
-            _eventsScope = new EventsScope(
-                new[] {_eventsContextMock.Object},
-                _appServiceProviderMock.Object,
-                _eventQueueCollectionMock.Object
-            );
 
             _pipelineEvent = MakeNewPipelineEvent();
 
-            _eventsQueuesService = new EventsQueuesService(_eventsQueuesContext, _eventsQueueNamesServiceMock.Object);
+            _eventsQueuesService = new EventsQueuesService(_eventsQueueNamesServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
-            _eventQueueCollectionMock.Verify();
             _appServiceProviderMock.Verify();
             _eventsContextMock.Verify();
             _pipelineMock.Verify();
@@ -84,12 +75,12 @@ namespace FluentEvents.UnitTests.Queues
                 queues.Add(new EventsQueue(queueName));
             }
 
-            _eventQueueCollectionMock
-                .Setup(x => x.GetEnumerator())
-                .Returns(queues.GetEnumerator())
+            _eventsScope
+                .Setup(x => x.GetEventsQueues())
+                .Returns(queues)
                 .Verifiable();
 
-            await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope, null);
+            await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope.Object, null);
         }
 
         [Test]
@@ -107,9 +98,9 @@ namespace FluentEvents.UnitTests.Queues
                 return Task.CompletedTask;
             }
 
-            _eventsQueuesService.EnqueueEvent(_eventsScope, pipelineEvent, _queueName, InvokeNextModule);
+            _eventsQueuesService.EnqueueEvent(_eventsScope.Object, pipelineEvent, _queueName, InvokeNextModule);
 
-            await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope, _queueName);
+            await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope.Object, _queueName);
 
             Assert.That(isNextModuleInvoked, Is.True);
         }
@@ -124,7 +115,7 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(async () =>
             {
-                await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope, _queueName);
+                await _eventsQueuesService.ProcessQueuedEventsAsync(_eventsScope.Object, _queueName);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
@@ -148,12 +139,12 @@ namespace FluentEvents.UnitTests.Queues
                 queues.Add(new EventsQueue(queueName));
             }
 
-            _eventQueueCollectionMock
-                .Setup(x => x.GetEnumerator())
-                .Returns(queues.GetEnumerator())
+            _eventsScope
+                .Setup(x => x.GetEventsQueues())
+                .Returns(queues)
                 .Verifiable();
 
-            _eventsQueuesService.DiscardQueuedEvents(_eventsScope, null);
+            _eventsQueuesService.DiscardQueuedEvents(_eventsScope.Object, null);
         }
 
         [Test]
@@ -164,14 +155,14 @@ namespace FluentEvents.UnitTests.Queues
                 .Returns(true)
                 .Verifiable();
 
-            _eventQueueCollectionMock
-                .Setup(x => x.GetOrAddEventsQueue(_eventsQueuesContext, _queueName))
+            _eventsScope
+                .Setup(x => x.GetOrAddEventsQueue(_queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 
             _eventsQueue.Enqueue(new QueuedPipelineEvent(null, null));
 
-            _eventsQueuesService.DiscardQueuedEvents(_eventsScope, _queueName);
+            _eventsQueuesService.DiscardQueuedEvents(_eventsScope.Object, _queueName);
 
             Assert.That(_eventsQueue.DequeueAll(), Has.Exactly(0).Items);
         }
@@ -186,7 +177,7 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(() =>
             {
-                _eventsQueuesService.DiscardQueuedEvents(_eventsScope, _queueName);
+                _eventsQueuesService.DiscardQueuedEvents(_eventsScope.Object, _queueName);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
@@ -201,7 +192,7 @@ namespace FluentEvents.UnitTests.Queues
             Assert.That(() =>
             {
                 _eventsQueuesService.EnqueueEvent(
-                    isEventsScopeNull ? null : _eventsScope,
+                    isEventsScopeNull ? null : _eventsScope.Object,
                     isPipelineEventNull ? null : _pipelineEvent,
                     isQueueNameNull ? null : _queueName,
                     () => Task.CompletedTask
@@ -219,7 +210,7 @@ namespace FluentEvents.UnitTests.Queues
 
             Assert.That(() =>
             {
-                _eventsQueuesService.EnqueueEvent(_eventsScope, _pipelineEvent, _queueName, () => Task.CompletedTask);
+                _eventsQueuesService.EnqueueEvent(_eventsScope.Object, _pipelineEvent, _queueName, () => Task.CompletedTask);
             }, Throws.TypeOf<EventsQueueNotFoundException>());
         }
 
@@ -229,7 +220,7 @@ namespace FluentEvents.UnitTests.Queues
             SetUpGetQueue();
 
             Func<Task> invokeNextModule = () => Task.CompletedTask;
-            _eventsQueuesService.EnqueueEvent(_eventsScope, _pipelineEvent, _queueName, invokeNextModule);
+            _eventsQueuesService.EnqueueEvent(_eventsScope.Object, _pipelineEvent, _queueName, invokeNextModule);
 
             var queuedPipelineEvents = _eventsQueue.DequeueAll().ToList();
 
@@ -240,8 +231,8 @@ namespace FluentEvents.UnitTests.Queues
 
         private void SetUpGetQueue()
         {
-            _eventQueueCollectionMock
-                .Setup(x => x.GetOrAddEventsQueue(_eventsQueuesContext, _queueName))
+            _eventsScope
+                .Setup(x => x.GetOrAddEventsQueue(_queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 

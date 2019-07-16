@@ -1,36 +1,38 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentEvents.Config;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
-using FluentEvents.Subscriptions;
+using FluentEvents.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents
 {
-    public abstract class EventsScope : IInfrastructure<IServiceProvider>
+    /// <inheritdoc cref="IEventsContext"/>
+    public abstract class EventsContext : IEventsContext, IDisposable
     {
-        private static readonly ConcurrentDictionary<Type, InternalEventsContext> _eventsContexts;
+        private static readonly ConcurrentDictionary<(Type, EventsContextOptions), InternalEventsContext> _eventsContexts;
 
         private readonly EventsContextOptions _options;
         private readonly IAppServiceProvider _appServiceProvider;
-        private readonly IScopedAppServiceProvider _scopedAppServiceProvider;
+        private readonly Lazy<IEventsScope> _eventsScope;
 
-        private readonly object _syncSubscriptions = new object();
-        private IEnumerable<Subscription> _subscriptions;
+        IServiceProvider IInfrastructure<IServiceProvider>.Instance => GetCurrentInternalServiceProvider();
 
-        internal IEventsQueueCollection EventsQueues { get; }
-
-        IServiceProvider IInfrastructure<IServiceProvider>.Instance => GetCurrentContext().Get<IServiceProvider>();
-
-        static EventsScope()
+        static EventsContext()
         {
-            _eventsContexts = new ConcurrentDictionary<Type, InternalEventsContext>();
+            _eventsContexts = new ConcurrentDictionary<(Type, EventsContextOptions), InternalEventsContext>();
         }
 
-        public EventsScope(
+        /// <summary>
+        ///     This constructor can be used when the <see cref="EventsContext" /> is not configured with
+        ///     the <see cref="IServiceCollection" /> extension method.
+        /// </summary>
+        /// <param name="options">The options for this context.</param>
+        /// <param name="appServiceProvider">The app service provider.</param>
+        /// <param name="scopedAppServiceProvider">The scoped app service provider.</param>
+        protected EventsContext(
             EventsContextOptions options,
             IAppServiceProvider appServiceProvider,
             IScopedAppServiceProvider scopedAppServiceProvider
@@ -38,11 +40,13 @@ namespace FluentEvents
         {
             _options = options;
             _appServiceProvider = appServiceProvider;
-            _scopedAppServiceProvider = scopedAppServiceProvider;
+            _eventsScope = new Lazy<IEventsScope>(
+                () => new EventsScope(GetCurrentInternalServiceProvider(), scopedAppServiceProvider)
+            );
         }
 
-        internal InternalEventsContext GetCurrentContext() => _eventsContexts.GetOrAdd(
-            GetType(),
+        private InternalEventsContext GetCurrentContext() => _eventsContexts.GetOrAdd(
+            (GetType(), _options),
             x => new InternalEventsContext(
                 _options,
                 OnConfiguring,
@@ -51,6 +55,8 @@ namespace FluentEvents
                 _appServiceProvider
             )
         );
+
+        private IServiceProvider GetCurrentInternalServiceProvider() => GetCurrentContext().InternalServiceProvider;
 
         /// <summary>
         ///     The default implementation of this method does nothing, but it can be overridden in a derived class
@@ -85,42 +91,29 @@ namespace FluentEvents
         /// </summary>
         /// <param name="source">The event source.</param>
         public virtual void Attach(object source)
-            => GetCurrentContext().Dependencies.AttachingService.Attach(source, this);
+            => GetCurrentInternalServiceProvider()
+                .GetRequiredService<IAttachingService>()
+                .Attach(source, _eventsScope.Value);
 
         /// <summary>
         ///     Forward the events of a queue to the corresponding pipelines.
         /// </summary>
         /// <param name="queueName">The name of the queue.</param>
         public virtual Task ProcessQueuedEventsAsync(string queueName = null)
-            => GetCurrentContext().Dependencies.EventsQueuesService.ProcessQueuedEventsAsync(this, queueName);
+            => GetCurrentInternalServiceProvider()
+                .GetRequiredService<IEventsQueuesService>()
+                .ProcessQueuedEventsAsync(_eventsScope.Value, queueName);
 
         /// <summary>
         ///     Discards all the events of a queue.
         /// </summary>
         /// <param name="queueName">The name of the queue.</param>
         public virtual void DiscardQueuedEvents(string queueName = null)
-            => GetCurrentContext().Dependencies.EventsQueuesService.DiscardQueuedEvents(this, queueName);
+            => GetCurrentInternalServiceProvider()
+                .GetRequiredService<IEventsQueuesService>()
+                .DiscardQueuedEvents(_eventsScope.Value, queueName);
 
-        internal virtual IEnumerable<Subscription> GetSubscriptions()
-        {
-            lock (_syncSubscriptions)
-            {
-                if (_subscriptions == null)
-                {
-                    var subscriptions = new List<Subscription>();
-                    var scopedSubscriptionsService = GetCurrentContext()
-                        .Get<IServiceProvider>()
-                        .GetRequiredService<IScopedSubscriptionsService>();
-
-                    subscriptions.AddRange(
-                        scopedSubscriptionsService.SubscribeServices(_scopedAppServiceProvider)
-                    );
-
-                    _subscriptions = subscriptions;
-                }
-
-                return _subscriptions;
-            }
-        }
+        /// <inheritdoc />
+        public void Dispose() { }
     }
 }

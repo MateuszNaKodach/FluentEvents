@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
 
@@ -24,7 +25,7 @@ namespace FluentEvents.Routing
         }
 
         /// <inheritdoc />
-        public async Task RouteEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
+        public async Task RouteEventAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope)
         {
             using (_logger.BeginEventRoutingScope(pipelineEvent))
             {

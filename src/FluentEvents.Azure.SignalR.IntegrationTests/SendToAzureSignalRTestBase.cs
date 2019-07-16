@@ -22,7 +22,6 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
         private protected ConnectionString ConnectionString { get; private set; }
 
         private protected TEventsContext EventsContext { get; private set; }
-        private protected EventsScope Scope { get; private set; }
         private protected HubConnection HubConnection1 { get; private set; }
         private protected HubConnection HubConnection2 { get; private set; }
         private protected HubConnection HubConnection3 { get; private set; }
@@ -55,8 +54,6 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             _serviceProvider = services.BuildServiceProvider();
 
             EventsContext = _serviceProvider.GetRequiredService<TEventsContext>();
-
-            Scope = _serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
 
             HubConnection1 = await SetUpHubConnection(ConnectionString, hubUrl, UserId1);
             HubConnection2 = await SetUpHubConnection(ConnectionString, hubUrl, UserId2);

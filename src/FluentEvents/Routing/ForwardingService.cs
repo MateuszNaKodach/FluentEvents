@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
@@ -20,7 +21,7 @@ namespace FluentEvents.Routing
         }
 
         /// <inheritdoc />
-        public void ForwardEventsToRouting(SourceModel sourceModel, object source, EventsScope eventsScope)
+        public void ForwardEventsToRouting(SourceModel sourceModel, object source, IEventsScope eventsScope)
         {
             if (!sourceModel.ClrType.IsInstanceOfType(source))
                 throw new SourceDoesNotMatchModelTypeException();

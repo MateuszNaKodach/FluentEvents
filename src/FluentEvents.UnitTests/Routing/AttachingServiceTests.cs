@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Routing;
 using Moq;
@@ -14,7 +15,7 @@ namespace FluentEvents.UnitTests.Routing
         private Mock<IAttachingInterceptor> _attachingInterceptorMock1;
         private Mock<IAttachingInterceptor> _attachingInterceptorMock2;
         private IAttachingService _attachingService;
-        private EventsScope _eventsScope;
+        private Mock<IEventsScope> _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -32,7 +33,7 @@ namespace FluentEvents.UnitTests.Routing
                     _attachingInterceptorMock2.Object
                 }
             );
-            _eventsScope = new EventsScope();
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
         }
 
         [TearDown]
@@ -52,7 +53,7 @@ namespace FluentEvents.UnitTests.Routing
         )
         {
             var source = isSourceNull ? null : new object();
-            var eventsScope = isEventsScopeNull ? null : _eventsScope;
+            var eventsScope = isEventsScopeNull ? null : _eventsScope.Object;
             
             Assert.That(() =>
             {
@@ -73,7 +74,7 @@ namespace FluentEvents.UnitTests.Routing
             SetUpSourceModelsServiceAndForwardingService(typeof(Source1), source);
             SetUpSourceModelsServiceAndForwardingService(typeof(ISource), source);
             
-            _attachingService.Attach(source, _eventsScope);
+            _attachingService.Attach(source, _eventsScope.Object);
         }
 
         private void SetUpSourceModelsServiceAndForwardingService(Type type, Source3 source)
@@ -86,18 +87,18 @@ namespace FluentEvents.UnitTests.Routing
                 .Verifiable();
 
             _forwardingServiceMock
-                .Setup(x => x.ForwardEventsToRouting(sourceModel, source, _eventsScope))
+                .Setup(x => x.ForwardEventsToRouting(sourceModel, source, _eventsScope.Object))
                 .Verifiable();
         }
 
         private void SetUpInterceptors(object source)
         {
             _attachingInterceptorMock1
-                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScope))
+                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScope.Object))
                 .Verifiable();
 
             _attachingInterceptorMock2
-                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScope))
+                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScope.Object))
                 .Verifiable();
         }
 

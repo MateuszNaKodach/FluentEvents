@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,6 +85,14 @@ namespace FluentEvents.EntityFramework.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options, 
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
     }

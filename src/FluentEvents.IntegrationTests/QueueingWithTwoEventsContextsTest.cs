@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
@@ -33,12 +34,11 @@ namespace FluentEvents.IntegrationTests
             var subscribingService = _appServiceProvider.GetRequiredService<SubscribingService>();
             var testEventsContext1 = _appServiceProvider.GetRequiredService<TestEventsContext1>();
             var testEventsContext2 = _appServiceProvider.GetRequiredService<TestEventsContext2>();
-            var eventsScope = _appServiceProvider.GetRequiredService<EventsScope>();
 
-            TestUtils.AttachAndRaiseEvent(testEventsContext1, eventsScope);
-            TestUtils.AttachAndRaiseEvent(testEventsContext2, eventsScope);
+            TestUtils.AttachAndRaiseEvent(testEventsContext1);
+            TestUtils.AttachAndRaiseEvent(testEventsContext2);
 
-            await testEventsContext1.ProcessQueuedEventsAsync(eventsScope, QueueName);
+            await testEventsContext1.ProcessQueuedEventsAsync(QueueName);
 
             TestUtils.AssertThatEventIsPublishedProperly(subscribingService.TestEvents.FirstOrDefault());
 
@@ -62,6 +62,14 @@ namespace FluentEvents.IntegrationTests
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
             }
+
+            public TestEventsContext1(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
+            }
         }
 
         private class TestEventsContext2 : EventsContext
@@ -80,6 +88,14 @@ namespace FluentEvents.IntegrationTests
                     .IsPiped()
                     .ThenIsQueuedTo(QueueName)
                     .ThenIsPublishedToGlobalSubscriptions();
+            }
+
+            public TestEventsContext2(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
     }

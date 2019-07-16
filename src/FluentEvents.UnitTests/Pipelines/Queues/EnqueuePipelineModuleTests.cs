@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Queues;
 using FluentEvents.Queues;
@@ -20,7 +21,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         private EnqueuePipelineModule _enqueuePipelineModule;
         private PipelineEvent _pipelineEvent;
         private PipelineContext _pipelineContext;
-        private EventsScope _eventsScope;
+        private Mock<IEventsScope> _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -32,8 +33,8 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
                 QueueName = QueueName
             };
             _pipelineEvent = new PipelineEvent(new object());
-            _eventsScope = new EventsScope();
-            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope.Object, _serviceProviderMock.Object);
 
             _enqueuePipelineModule = new EnqueuePipelineModule(_eventsQueuesServiceMock.Object);
         }
@@ -46,8 +47,8 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
             Func<Task> invokeNextModule = null;
 
             _eventsQueuesServiceMock
-                .Setup(x => x.EnqueueEvent(_eventsScope, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
-                .Callback<EventsScope, PipelineEvent, string, Func<Task>>((_, __, ___, func) =>
+                .Setup(x => x.EnqueueEvent(_eventsScope.Object, _pipelineEvent, QueueName, It.IsAny<Func<Task>>()))
+                .Callback<IEventsScope, PipelineEvent, string, Func<Task>>((_, __, ___, func) =>
                 {
                     invokeNextModule = func;
                 })

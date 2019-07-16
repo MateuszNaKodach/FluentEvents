@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentEvents.Azure.SignalR.Client;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Moq;
 using NUnit.Framework;
@@ -14,11 +15,9 @@ namespace FluentEvents.Azure.SignalR.UnitTests
 
         private Mock<IEventSendingService> _azureSignalRClientMock;
         private Mock<IServiceProvider> _serviceProviderMock;
-        private Mock<IServiceProvider> _appServiceProviderMock;
-        private Mock<EventsContext> _eventsContextMock;
 
         private AzureSignalRPipelineModuleConfig _azureSignalRPipelineModuleConfig;
-        private EventsScope _eventsScope;
+        private Mock<IEventsScope> _eventsScope;
         private PipelineEvent _pipelineEvent;
         private PipelineContext _pipelineContext;
 
@@ -29,8 +28,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         {
             _azureSignalRClientMock = new Mock<IEventSendingService>(MockBehavior.Strict);
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            _appServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
 
             _azureSignalRPipelineModuleConfig = new AzureSignalRPipelineModuleConfig
             {
@@ -39,9 +37,8 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 PublicationMethod = PublicationMethod.User,
                 ReceiverIdsProviderAction = e => _receiverIds
             };
-            _eventsScope = new EventsScope(new[] {_eventsContextMock.Object}, _appServiceProviderMock.Object);
             _pipelineEvent = new PipelineEvent(typeof(object));
-            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope, _serviceProviderMock.Object);
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScope.Object, _serviceProviderMock.Object);
 
             _azureSignalRPipelineModule = new AzureSignalRPipelineModule(_azureSignalRClientMock.Object);
         }

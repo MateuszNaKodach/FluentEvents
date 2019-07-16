@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines
 {
@@ -12,7 +13,7 @@ namespace FluentEvents.Pipelines
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        Task ProcessEventAsync(PipelineEvent pipelineEvent, EventsScope eventsScope);
+        Task ProcessEventAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope);
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used

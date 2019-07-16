@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,6 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
     [TestFixture]
     public class AttachingTests
     {
-        private TestEventsContext _testEventsContext;
         private TestDbContext _testDbContext;
         private ServiceProvider _serviceProvider;
 
@@ -38,7 +38,6 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
 
             using (var serviceScope = _serviceProvider.CreateScope())
             {
-                _testEventsContext = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
                 _testDbContext = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
 
                 _testDbContext.TestEntities.Add(new TestEntity());
@@ -87,6 +86,14 @@ namespace FluentEvents.EntityFrameworkCore.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options, 
+                IAppServiceProvider appServiceProvider, 
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
     }

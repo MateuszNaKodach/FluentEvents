@@ -12,7 +12,6 @@ namespace FluentEvents.IntegrationTests
     public class UnknownPipelineModuleTest
     {
         private TestEventsContext _testEventsContext;
-        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -23,7 +22,6 @@ namespace FluentEvents.IntegrationTests
 
             var serviceProvider = services.BuildServiceProvider();
             _testEventsContext = serviceProvider.GetService<TestEventsContext>();
-            _eventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
         }
 
         [Test]
@@ -31,7 +29,7 @@ namespace FluentEvents.IntegrationTests
         {
             Assert.That(() =>
             {
-                TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
+                TestUtils.AttachAndRaiseEvent(_testEventsContext);
             }, Throws.TypeOf<PipelineModuleNotFoundException>());
         }
 
@@ -46,6 +44,14 @@ namespace FluentEvents.IntegrationTests
                 var pipeline = pipelineBuilder.Get<IPipeline>();
 
                 pipeline.AddModule<TestPipelineModule, TestPipelineModuleConfig>(new TestPipelineModuleConfig());
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
 

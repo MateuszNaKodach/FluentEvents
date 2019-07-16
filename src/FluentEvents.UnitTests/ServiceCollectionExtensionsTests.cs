@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
@@ -32,14 +33,6 @@ namespace FluentEvents.UnitTests
             Assert.That(isOptionsActionInvoked, Is.True);
             Assert.That(
                 _serviceCollection,
-                Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsScope))
-            );
-            Assert.That(
-                _serviceCollection,
-                Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsContext))
-            );
-            Assert.That(
-                _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(TestEventsContext))
             );
             Assert.That(
@@ -56,20 +49,14 @@ namespace FluentEvents.UnitTests
         {
             var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             var eventsContextMock = new Mock<TestEventsContext>(MockBehavior.Strict);
-            var eventsScope = new EventsScope();
 
             eventsContextMock
-                .Setup(x => x.Attach(It.IsAny<TestService1>(), eventsScope))
+                .Setup(x => x.Attach(It.IsAny<TestService1>()))
                 .Verifiable();
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(TestEventsContext)))
                 .Returns(eventsContextMock.Object)
-                .Verifiable();
-
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(EventsScope)))
-                .Returns(eventsScope)
                 .Verifiable();
 
             _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
@@ -215,9 +202,15 @@ namespace FluentEvents.UnitTests
         private class TestService2 { }
         private class TestService3<T> { }
 
+        // ReSharper disable once MemberCanBePrivate.Global this class needs to be public in order to work with Moq
         public class TestEventsContext : EventsContext
         {
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            // ReSharper disable once UnusedMember.Global this constructor is needed for Moq
+            public TestEventsContext() : this(null)
+            {
+            }
+
+            public TestEventsContext(EventsContextOptions options) : base(options, null, null)
             {
             }
         }

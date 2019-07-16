@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines
 {
@@ -20,7 +21,7 @@ namespace FluentEvents.Pipelines
         /// <summary>
         ///     The current events scope.
         /// </summary>
-        public EventsScope EventsScope { get; }
+        public IEventsScope EventsScope { get; }
 
         /// <summary>
         ///     Creates a new instance of a <see cref="PipelineContext"/>.
@@ -28,7 +29,7 @@ namespace FluentEvents.Pipelines
         /// <param name="pipelineEvent">The event being processed.</param>
         /// <param name="eventsScope">The current events scope.</param>
         /// <param name="serviceProvider">The internal service provider.</param>
-        public PipelineContext(PipelineEvent pipelineEvent, EventsScope eventsScope, IServiceProvider serviceProvider)
+        public PipelineContext(PipelineEvent pipelineEvent, IEventsScope eventsScope, IServiceProvider serviceProvider)
         {
             PipelineEvent = pipelineEvent ?? throw new ArgumentNullException(nameof(pipelineEvent));
             EventsScope = eventsScope ?? throw new ArgumentNullException(nameof(eventsScope));

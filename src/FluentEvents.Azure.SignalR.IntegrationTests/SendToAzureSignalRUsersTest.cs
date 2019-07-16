@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using NUnit.Framework;
 
@@ -19,7 +20,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             var task3 = CheckEventPublishing(HubConnection3, semaphoreSlim, false);
             var allTasks = Task.WhenAll(task1, task2, task3);
 
-            TestUtils.AttachAndRaiseEvent(EventsContext, Scope);
+            TestUtils.AttachAndRaiseEvent(EventsContext);
             semaphoreSlim.Release(3);
 
             await allTasks;
@@ -35,6 +36,14 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsSentToAzureSignalRUsers(e => new[] { UserId1, UserId2 }, HubName, HubMethodName);
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
     }

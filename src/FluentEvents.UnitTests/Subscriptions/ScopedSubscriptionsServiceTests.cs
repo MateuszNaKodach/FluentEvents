@@ -11,14 +11,14 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class ScopedSubscriptionsServiceTests
     {
-        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<IScopedAppServiceProvider> _scopedAppServiceProviderMock;
 
         private ScopedSubscriptionsService _scopedSubscriptionsService;
 
         [SetUp]
         public void SetUp()
         {
-            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _scopedAppServiceProviderMock = new Mock<IScopedAppServiceProvider>(MockBehavior.Strict);
 
             _scopedSubscriptionsService = new ScopedSubscriptionsService();
         }
@@ -26,7 +26,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [TearDown]
         public void TearDown()
         {
-            _appServiceProviderMock.Verify();
+            _scopedAppServiceProviderMock.Verify();
         }
 
         [Test]
@@ -45,14 +45,14 @@ namespace FluentEvents.UnitTests.Subscriptions
 
             _scopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription<Service2, object>(false);
 
-            var subscriptions = _scopedSubscriptionsService.SubscribeServices(_appServiceProviderMock.Object);
+            var subscriptions = _scopedSubscriptionsService.SubscribeServices(_scopedAppServiceProviderMock.Object);
 
             Assert.That(subscriptions, Has.Exactly(2).Items);
         }
 
         private void SetUpServiceProviderService<T>(T service)
         {
-            _appServiceProviderMock
+            _scopedAppServiceProviderMock
                 .Setup(x => x.GetService(typeof(IEnumerable<T>)))
                 .Returns(new[] {service})
                 .Verifiable();

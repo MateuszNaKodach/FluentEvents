@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Routing;
@@ -11,18 +12,18 @@ namespace FluentEvents.UnitTests.Routing
     public class ForwardingServiceTests
     {
         private Mock<IRoutingService> _routingServiceMock;
+        private Mock<IEventsScope> _eventsScope;
 
         private SourceModel _sourceModel;
-        private EventsScope _eventsScope;
         private ForwardingService _forwardingService;
 
         [SetUp]
         public void SetUp()
         {
             _routingServiceMock = new Mock<IRoutingService>(MockBehavior.Strict);
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
 
             _sourceModel = new SourceModel(typeof(TestSource));
-            _eventsScope = new EventsScope();
             _forwardingService = new ForwardingService(_routingServiceMock.Object);
         }
 
@@ -37,14 +38,14 @@ namespace FluentEvents.UnitTests.Routing
         {
             var source = new TestSource();
             _routingServiceMock
-                .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), _eventsScope))
+                .Setup(x => x.RouteEventAsync(It.IsAny<PipelineEvent>(), _eventsScope.Object))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
             _forwardingService.ForwardEventsToRouting(
                 _sourceModel,
                 source,
-                _eventsScope
+                _eventsScope.Object
             );
 
             await source.RaiseEvents();
@@ -62,7 +63,7 @@ namespace FluentEvents.UnitTests.Routing
                 _forwardingService.ForwardEventsToRouting(
                     _sourceModel,
                     source,
-                    _eventsScope
+                    _eventsScope.Object
                 );
             }, Throws.TypeOf<SourceDoesNotMatchModelTypeException>());
         }

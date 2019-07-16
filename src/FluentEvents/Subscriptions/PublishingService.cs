@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
 
@@ -31,7 +32,7 @@ namespace FluentEvents.Subscriptions
         }
 
         /// <inheritdoc />
-        public Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, EventsScope eventsScope)
+        public Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope)
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 

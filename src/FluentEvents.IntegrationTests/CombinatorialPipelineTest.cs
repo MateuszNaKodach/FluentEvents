@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Filters;
 using FluentEvents.Pipelines.Projections;
@@ -21,7 +22,6 @@ namespace FluentEvents.IntegrationTests
         private SubscribingService _scopedSubscribingService;
         private SubscribingService _singletonSubscribingService;
         private IServiceProvider _serviceProvider;
-        private EventsScope _scope;
 
         private void SetUpContext(TestRunParameters testRunParameters)
         {
@@ -40,10 +40,9 @@ namespace FluentEvents.IntegrationTests
             var serviceScope = _serviceProvider.CreateScope();
             _scopedSubscribingService = serviceScope.ServiceProvider.GetRequiredService<ScopedSubscribingService>();
             _singletonSubscribingService = serviceScope.ServiceProvider.GetRequiredService<SingletonSubscribingService>();
-            _context = _serviceProvider.GetRequiredService<TestEventsContext>();
-            _scope = serviceScope.ServiceProvider.GetRequiredService<EventsScope>();
+            _context = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
 
-            _context.Attach(_entity, _scope);
+            _context.Attach(_entity);
         }
 
         [Test]
@@ -70,7 +69,7 @@ namespace FluentEvents.IntegrationTests
             await RaiseEvent(isAsync);
 
             if (isQueued)
-                await _context.ProcessQueuedEventsAsync(_scope);
+                await _context.ProcessQueuedEventsAsync();
 
             var subscribingService = publicationType == PublicationType.ScopedWithServiceHandlerSubscription
                 ? _scopedSubscribingService
@@ -110,7 +109,12 @@ namespace FluentEvents.IntegrationTests
         {
             private readonly TestRunParameters _parameters;
 
-            public TestEventsContext(TestRunParameters parameters)
+            public TestEventsContext(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider,
+                TestRunParameters parameters
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
             {
                 _parameters = parameters;
             }

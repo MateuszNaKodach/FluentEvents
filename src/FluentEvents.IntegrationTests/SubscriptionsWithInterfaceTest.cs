@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,9 +27,8 @@ namespace FluentEvents.IntegrationTests
         {
             var subscribingService = _appServiceProvider.GetRequiredService<SubscribingService>();
             var testEventsContext = _appServiceProvider.GetRequiredService<TestEventsContext>();
-            var eventsScope = _appServiceProvider.GetRequiredService<EventsScope>();
 
-            TestUtils.AttachAndRaiseEvent(testEventsContext, eventsScope);
+            TestUtils.AttachAndRaiseEvent(testEventsContext);
             
             Assert.That(subscribingService, Has.Property(nameof(SubscribingService.ITestEvents)).With.One.Items);
             Assert.That(subscribingService, Has.Property(nameof(SubscribingService.ITestEvents)).With.One.Items.TypeOf<TestEvent>());
@@ -49,6 +49,14 @@ namespace FluentEvents.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions();
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
     }

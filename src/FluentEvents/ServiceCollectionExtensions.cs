@@ -22,11 +22,11 @@ namespace FluentEvents
         ///     <para>
         ///         An action to configure the <see cref="EventsContextOptions" /> for the context. This provides an
         ///         alternative to performing configuration of the context by overriding the
-        ///         <see cref="EventsScope.OnConfiguring" /> method in your derived context.
+        ///         <see cref="EventsContext.OnConfiguring" /> method in your derived context.
         ///     </para>
         ///     <para>
-        ///         If an action is supplied here, the <see cref="EventsScope.OnConfiguring" /> method will still be run if it has
-        ///         been overridden on the derived context. <see cref="EventsScope.OnConfiguring" /> configuration will be applied
+        ///         If an action is supplied here, the <see cref="EventsContext.OnConfiguring" /> method will still be run if it has
+        ///         been overridden on the derived context. <see cref="EventsContext.OnConfiguring" /> configuration will be applied
         ///         in addition to configuration performed here.
         ///     </para>
         /// </param>
@@ -35,23 +35,27 @@ namespace FluentEvents
             this IServiceCollection services,
             Action<EventsContextOptions> optionsBuilder
         )
-            where T : EventsScope
+            where T : EventsContext
         {
             var options = new EventsContextOptions();
             optionsBuilder(options);
 
             services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
             services.AddSingleton<IAppServiceProvider, AppServiceProvider>();
-            services.AddScoped(x => ActivatorUtilities.CreateInstance<T>(x, options));
 
-            services.AddTransient<IHostedService>(x =>
-            {
-                var eventReceiversService = x.GetRequiredService<T>()
-                    .Get<IServiceProvider>()
-                    .GetRequiredService<IEventReceiversService>();
+            var eventsContextFactory = ActivatorUtilities.CreateFactory(typeof(T), new[] {typeof(EventsContextOptions)});
+            var eventsContextFactoryArgs = new object[] {options};
+            services.AddScoped(x => (T) eventsContextFactory(x, eventsContextFactoryArgs));
 
-                return new EventReceiversHostedService(eventReceiversService);
-            });
+            var eventReceiversHostedServiceFactory = ActivatorUtilities.CreateFactory(
+                typeof(EventReceiversHostedService), new[] {typeof(IEventsContext) }
+            );
+            services.AddTransient<IHostedService>(
+                x => (EventReceiversHostedService) eventReceiversHostedServiceFactory(
+                    x,
+                    new object[] {x.GetRequiredService<T>()}
+                )
+            );
         
             return services;
         }
@@ -81,7 +85,7 @@ namespace FluentEvents
             this IServiceCollection services,
             Action addServicesAction
         )
-            where TEventsContext : EventsScope
+            where TEventsContext : EventsContext
         {
             var originalServices = services.ToArray();
             addServicesAction();
@@ -98,7 +102,7 @@ namespace FluentEvents
             this IServiceCollection services, 
             ServiceDescriptor serviceDescriptor
         )
-            where TEventsContext : EventsScope
+            where TEventsContext : EventsContext
         {
             ServiceImplementation serviceImplementation;
             if (serviceDescriptor.ImplementationType != null)
@@ -128,19 +132,21 @@ namespace FluentEvents
                             break;
                     }
 
-                    AttachService<TEventsContext>(x, service);
+                    AttachService<TEventsContext>(x, service, serviceDescriptor.ServiceType);
 
                     return service;
                 }, serviceDescriptor.Lifetime));
         }
 
-        private static void AttachService<TEventsContext>(IServiceProvider x, object service)
-            where TEventsContext : EventsScope
+        private static void AttachService<TEventsContext>(IServiceProvider serviceProvider, object service, Type serviceType)
+            where TEventsContext : EventsContext
         {
-            var eventsContext = x.GetRequiredService<TEventsContext>();
 
-            if (!eventsContext.GetCurrentContext().IsInitializing)
+            if (InternalServiceCollection.ServicesToIgnoreWhenAttaching.All(x => x != serviceType))
+            {
+                var eventsContext = serviceProvider.GetRequiredService<TEventsContext>();
                 eventsContext.Attach(service);
+            }
         }
 
         private enum ServiceImplementation

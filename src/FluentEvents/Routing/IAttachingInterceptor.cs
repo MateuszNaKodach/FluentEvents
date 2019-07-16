@@ -1,4 +1,6 @@
-﻿namespace FluentEvents.Routing
+﻿using FluentEvents.Infrastructure;
+
+namespace FluentEvents.Routing
 {
     /// <summary>
     ///     This interface can be implemented to intercept every attaching made to the <see cref="EventsContext"/>.
@@ -10,7 +12,7 @@
         /// </summary>
         /// <param name="attachingService">The attaching service that invokes the interceptor.</param>
         /// <param name="source">The events source being attached.</param>
-        /// <param name="eventsScope">The current <see cref="EventsScope"/></param>
-        void OnAttaching(IAttachingService attachingService, object source, EventsScope eventsScope);
+        /// <param name="eventsScope">The current <see cref="IEventsScope"/></param>
+        void OnAttaching(IAttachingService attachingService, object source, IEventsScope eventsScope);
     }
 }

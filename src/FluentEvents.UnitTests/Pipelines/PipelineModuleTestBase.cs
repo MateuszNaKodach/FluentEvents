@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Moq;
 using NUnit.Framework;
@@ -9,27 +10,27 @@ namespace FluentEvents.UnitTests.Pipelines
     {
         private Mock<IServiceProvider> _internalServiceProviderMock;
 
-        protected EventsScope EventsScope { get; private set; }
+        protected Mock<IEventsScope> EventsScope { get; private set; }
 
         [SetUp]
         public void BaseSetUp()
         {
             _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-
-            EventsScope = new EventsScope();
+            EventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
         }
 
         [TearDown]
         public void BaseTearDown()
         {
             _internalServiceProviderMock.Verify();
+            EventsScope.Verify();
         }
 
         protected PipelineContext CreatePipelineContext(object e)
         {
             return new PipelineContext(
                 new PipelineEvent(e),
-                EventsScope,
+                EventsScope.Object,
                 _internalServiceProviderMock.Object
             );
         }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FluentEvents.Config;
+using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
@@ -12,7 +13,6 @@ namespace FluentEvents.IntegrationTests
     public class UnknownEventSenderTest
     {
         private TestEventsContext _testEventsContext;
-        private EventsScope _eventsScope;
 
         [SetUp]
         public void SetUp()
@@ -23,7 +23,6 @@ namespace FluentEvents.IntegrationTests
 
             var serviceProvider = services.BuildServiceProvider();
             _testEventsContext = serviceProvider.GetService<TestEventsContext>();
-            _eventsScope = serviceProvider.CreateScope().ServiceProvider.GetService<EventsScope>();
         }
 
         [Test]
@@ -31,7 +30,7 @@ namespace FluentEvents.IntegrationTests
         {
             Assert.That(() =>
             {
-                _testEventsContext.Attach(new TestEntity(), _eventsScope);
+                _testEventsContext.Attach(new TestEntity());
             }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());
         }
 
@@ -44,6 +43,14 @@ namespace FluentEvents.IntegrationTests
                     .IsPiped();
 
                 pipelineBuilder.ThenIsPublishedToGlobalSubscriptions(x => new PublishTransmissionConfiguration(typeof(object)));
+            }
+
+            public TestEventsContext(
+                EventsContextOptions options,
+                IAppServiceProvider appServiceProvider,
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            {
             }
         }
 

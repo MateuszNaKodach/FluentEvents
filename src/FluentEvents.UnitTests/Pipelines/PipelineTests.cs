@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,14 +12,14 @@ namespace FluentEvents.UnitTests.Pipelines
     [TestFixture]
     public class PipelineTests
     {
-        private EventsScope _eventsScope;
+        private Mock<IEventsScope> _eventsScope;
         private Mock<IServiceProvider> _internalServiceProviderMock;
         private Pipeline _pipeline;
 
         [SetUp]
         public void SetUp()
         {
-            _eventsScope = new EventsScope();
+            _eventsScope = new Mock<IEventsScope>(MockBehavior.Strict);
             _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipeline = new Pipeline(_internalServiceProviderMock.Object);
         }
@@ -26,6 +27,7 @@ namespace FluentEvents.UnitTests.Pipelines
         [TearDown]
         public void TearDown()
         {
+            _eventsScope.Verify();
             _internalServiceProviderMock.Verify();
         }
 
@@ -66,7 +68,7 @@ namespace FluentEvents.UnitTests.Pipelines
         [Test]
         public async Task ProcessEventAsync_ShouldCreateAndDisposeNewServiceScope()
         {
-            await _pipeline.ProcessEventAsync(new PipelineEvent(typeof(object)), _eventsScope);
+            await _pipeline.ProcessEventAsync(new PipelineEvent(typeof(object)), _eventsScope.Object);
         }
 
         [Test]
@@ -81,9 +83,7 @@ namespace FluentEvents.UnitTests.Pipelines
                 pipelineModuleMocks.Add(pipelineModuleMock);
             }
 
-            await _pipeline.ProcessEventAsync(new PipelineEvent(new object()),
-                _eventsScope
-            );
+            await _pipeline.ProcessEventAsync(new PipelineEvent(new object()), _eventsScope.Object);
 
             foreach (var pipelineModuleMock in pipelineModuleMocks)
                 pipelineModuleMock.Verify();
