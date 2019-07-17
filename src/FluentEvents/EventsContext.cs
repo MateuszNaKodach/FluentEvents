@@ -60,35 +60,32 @@ namespace FluentEvents
         private IServiceProvider GetCurrentInternalServiceProvider() => GetCurrentContext().InternalServiceProvider;
 
         /// <summary>
-        ///     The default implementation of this method does nothing, but it can be overridden in a derived class
-        ///     to override the options supplied in the constructor or with DI.
-        /// </summary>
+        ///     Override this method to override the options supplied in the constructor. The resulting configuration may be cached
+        ///     and re-used for subsequent instances of your derived context with the same <see cref="EventsContextsRoot"/>.
+        /// </summary> 
+        /// <remarks>The default implementation of this method does nothing.</remarks>
         /// <param name="options">The options of the <see cref="EventsContext"/>.</param>
         protected virtual void OnConfiguring(EventsContextOptions options) { }
 
         /// <summary>
-        ///     The default implementation of this method does nothing, but it can be overridden in a derived class
-        ///     to configure the subscriptions that should be created automatically.
+        ///     Override this method to configure the event subscriptions. The resulting configuration may be cached
+        ///     and re-used for subsequent instances of your derived context with the same <see cref="EventsContextsRoot"/>.
         /// </summary>
-        /// <remarks>
-        ///     This method is called only once when the instance of a derived context is created.
-        /// </remarks>
+        /// <remarks>The default implementation of this method does nothing.</remarks>
         /// <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
         protected virtual void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder) { }
 
         /// <summary>
-        ///     The default implementation of this method does nothing, but it can be overridden in a derived class
-        ///     to configure the pipelines needed for handling the events.
+        ///     Override this method to configure the pipelines needed for handling the events.
+        ///     The resulting configuration may be cached and re-used for subsequent instances of
+        ///     your derived context with the same <see cref="EventsContextsRoot"/>.
         /// </summary>
-        /// <remarks>
-        ///     This method is called only once when the instance of a derived context is created.
-        /// </remarks>
+        /// <remarks>The default implementation of this method does nothing.</remarks>
         /// <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
         protected virtual void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder) { }
 
         /// <summary>
-        ///     Manually attach an event source to the context in order to forward it's events to the
-        ///     configured pipelines.
+        ///     Attach an event source to the context in order to forward it's events to the configured pipelines.
         /// </summary>
         /// <param name="source">The event source.</param>
         public virtual void Attach(object source)
@@ -97,9 +94,12 @@ namespace FluentEvents
                 .Attach(source, _eventsScope.Value);
 
         /// <summary>
-        ///     Forward the events of a queue to the corresponding pipelines.
+        ///     Continues the processing of the events that have been queued.
         /// </summary>
-        /// <param name="queueName">The name of the queue.</param>
+        /// <param name="queueName">
+        ///     The name of the queue.
+        ///     If null all the events will be processed.
+        /// </param>
         public virtual Task ProcessQueuedEventsAsync(string queueName = null)
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
@@ -108,7 +108,10 @@ namespace FluentEvents
         /// <summary>
         ///     Discards all the events of a queue.
         /// </summary>
-        /// <param name="queueName">The name of the queue.</param>
+        /// <param name="queueName">
+        ///     The name of the queue.
+        ///     If null all the events will be discarded.
+        /// </param>
         public virtual void DiscardQueuedEvents(string queueName = null)
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
