@@ -134,7 +134,7 @@
             </summary>
             <remarks>The default value is 1.</remarks>
         </member>
-        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameGenerator">
+        <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameProvider">
             <summary>
                 A <see cref="T:System.Func`1" /> that returns unique names for subscriptions.
             </summary>
@@ -142,7 +142,7 @@
         </member>
         <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionName">
             <summary>
-                The name of the topic subscriptions. (If null <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameGenerator"/> will be used)
+                The name of the topic subscriptions. (If null <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameProvider"/> will be used)
             </summary>
         </member>
         <member name="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.IsSubscriptionCreationEnabled">
@@ -162,12 +162,6 @@
                 Creates a new instance of <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException" />
             </summary>
             <param name="innerException">The inner exception.</param>
-        </member>
-        <member name="T:FluentEvents.Azure.ServiceBus.Receiving.TopicPathIsNullException">
-            <inheritdoc />
-            <summary>
-                An exception thrown when the <see cref="P:FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.TopicPath" /> property is null.
-            </summary>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions">
             <summary>

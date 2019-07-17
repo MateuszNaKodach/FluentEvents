@@ -22,14 +22,15 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
             )
                 return ValidateOptionsResult.Fail(managementConnectionStringErrorMessage);
 
-            if (options.SubscriptionNameGenerator == null)
+            if (string.IsNullOrWhiteSpace(options.SubscriptionName) && options.SubscriptionNameProvider == null)
                 return ValidateOptionsResult.Fail(
-                    $"{nameof(AzureTopicEventReceiverOptions.SubscriptionNameGenerator)} is null"
+                    $"{nameof(options.SubscriptionName)} and {nameof(options.SubscriptionNameProvider)} are null or empty," +
+                    $" please specify at least one of the parameters"
                 );
 
             if (string.IsNullOrWhiteSpace(options.TopicPath))
                 return ValidateOptionsResult.Fail(
-                    $"{nameof(AzureTopicEventReceiverOptions.TopicPath)} is null or empty"
+                    $"{nameof(options.TopicPath)} is null or empty"
                 );
 
             return ValidateOptionsResult.Success;

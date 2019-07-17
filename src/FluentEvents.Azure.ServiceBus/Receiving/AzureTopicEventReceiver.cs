@@ -39,7 +39,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
 
         public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
         {
-            var subscriptionName = _options.SubscriptionName ?? _options.SubscriptionNameGenerator.Invoke();
+            var subscriptionName = _options.SubscriptionName ?? _options.SubscriptionNameProvider.Invoke();
 
             if (_options.IsSubscriptionCreationEnabled)
             {

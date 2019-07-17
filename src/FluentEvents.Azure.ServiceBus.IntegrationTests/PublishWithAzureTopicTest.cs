@@ -9,6 +9,7 @@ using FluentEvents.Pipelines.Publication;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.ServiceBus.IntegrationTests
@@ -24,6 +25,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         public void SetUp()
         {
             var configuration = new ConfigurationBuilder()
+                .AddJsonFile("testsettings.json")
                 .AddUserSecrets<PublishWithAzureTopicTest>()
                 .Build();
 
@@ -42,7 +44,8 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
             _serviceProvider = services.BuildServiceProvider();
 
             _testEventsContext = _serviceProvider.GetRequiredService<TestEventsContext>();
-            _eventReceiversHostedService = _serviceProvider.GetRequiredService<EventReceiversHostedService>();
+            _eventReceiversHostedService = (EventReceiversHostedService) _serviceProvider
+                .GetRequiredService<IHostedService>();
         }
 
         [Test]

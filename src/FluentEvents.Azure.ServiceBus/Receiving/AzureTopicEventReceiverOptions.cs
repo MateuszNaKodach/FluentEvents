@@ -38,10 +38,10 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         ///     A <see cref="Func{TResult}" /> that returns unique names for subscriptions.
         /// </summary>
         /// <remarks>The default implementation returns a GUID.</remarks>
-        public Func<string> SubscriptionNameGenerator { get; set; } = () => Guid.NewGuid().ToString();
+        public Func<string> SubscriptionNameProvider { get; set; } = () => Guid.NewGuid().ToString();
 
         /// <summary>
-        ///     The name of the topic subscriptions. (If null <see cref="SubscriptionNameGenerator"/> will be used)
+        ///     The name of the topic subscriptions. (If null <see cref="SubscriptionNameProvider"/> will be used)
         /// </summary>
         public string SubscriptionName { get; set; }
 

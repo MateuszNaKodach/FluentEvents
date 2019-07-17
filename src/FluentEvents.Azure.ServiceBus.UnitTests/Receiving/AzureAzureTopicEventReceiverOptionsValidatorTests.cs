@@ -25,9 +25,12 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         }
 
         [Test]
-        public void Validate_WithNullSubscriptionNameGenerator_ShouldFail()
+        public void Validate_WithNullSubscriptionNameAndSubscriptionNameProvider_ShouldFail(
+            [Values("", " ", null)] string subscriptionName
+        )
         {
-            _topicEventReceiverOptions.SubscriptionNameGenerator = null;
+            _topicEventReceiverOptions.SubscriptionName = subscriptionName;
+            _topicEventReceiverOptions.SubscriptionNameProvider = null;
 
             var result = _topicEventReceiverOptionsValidator.Validate(null, _topicEventReceiverOptions);
 
@@ -35,7 +38,11 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
             Assert.That(result,
                 Has
                     .Property(nameof(ValidateOptionsResult.FailureMessage))
-                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.SubscriptionNameGenerator)} is null")
+                    .EqualTo($"{nameof(AzureTopicEventReceiverOptions.SubscriptionName)}" +
+                             $" and {nameof(AzureTopicEventReceiverOptions.SubscriptionNameProvider)}" +
+                             $" are null or empty," +
+                             $" please specify at least one of the parameters"
+                    )
             );
         }
 

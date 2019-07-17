@@ -44,7 +44,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
                 ManagementConnectionString = ManagementConnectionString,
                 SubscriptionsAutoDeleteOnIdleTimeout = TimeSpan.FromDays(1),
                 TopicPath = TopicPath,
-                SubscriptionNameGenerator = () => SubscriptionName,
+                SubscriptionNameProvider = () => SubscriptionName,
                 MaxConcurrentMessages = 10
             };
             _loggerMock = new Mock<ILogger<AzureTopicEventReceiver>>(MockBehavior.Strict);
@@ -152,6 +152,7 @@ namespace FluentEvents.Azure.ServiceBus.UnitTests.Receiving
         [Test]
         public async Task MessageHandler_ShouldLogExceptions()
         {
+
             await _azureTopicEventReceiver.StartReceivingAsync(CancellationToken.None);
 
             var messageBytes = new byte[5];
