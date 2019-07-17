@@ -27,8 +27,11 @@ namespace FluentEvents
         /// </param>
         /// <param name="options">The options for this context.</param>
         /// <param name="scopedAppServiceProvider">The scoped app service provider.</param>
-        public EventsContext(EventsContextsRoot eventsContextsRoot, EventsContextOptions options,
-            IScopedAppServiceProvider scopedAppServiceProvider)
+        protected EventsContext(
+            EventsContextsRoot eventsContextsRoot, 
+            EventsContextOptions options,
+            IScopedAppServiceProvider scopedAppServiceProvider
+        )
         {
             _options = options;
             _eventsContextsRoot = eventsContextsRoot;
