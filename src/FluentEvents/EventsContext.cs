@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
@@ -37,7 +38,8 @@ namespace FluentEvents
             _eventsContextsRoot = eventsContextsRoot;
 
             _eventsScope = new Lazy<IEventsScope>(
-                () => new EventsScope(GetCurrentInternalServiceProvider(), scopedAppServiceProvider)
+                () => new EventsScope(GetCurrentInternalServiceProvider(), scopedAppServiceProvider),
+                LazyThreadSafetyMode.PublicationOnly
             );
         }
 
