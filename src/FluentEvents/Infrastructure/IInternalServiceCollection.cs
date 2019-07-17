@@ -1,10 +1,10 @@
-﻿using System;
-using FluentEvents.Plugins;
+﻿using FluentEvents.Plugins;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Infrastructure
 {
     internal interface IInternalServiceCollection
     {
-        IServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options);
+        ServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options);
     }
 }

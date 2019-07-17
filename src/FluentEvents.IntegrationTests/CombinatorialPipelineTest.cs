@@ -110,15 +110,15 @@ namespace FluentEvents.IntegrationTests
             private readonly TestRunParameters _parameters;
 
             public TestEventsContext(
+                EventsContextsRoot eventsContextsRoot,
                 EventsContextOptions options,
-                IAppServiceProvider appServiceProvider,
                 IScopedAppServiceProvider scopedAppServiceProvider,
                 TestRunParameters parameters
-            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
             {
                 _parameters = parameters;
             }
-
+         
             protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
             {
                 if (!_parameters.IsProjected)

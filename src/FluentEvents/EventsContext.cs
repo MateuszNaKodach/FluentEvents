@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
@@ -10,51 +9,48 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FluentEvents
 {
     /// <inheritdoc cref="IEventsContext"/>
-    public abstract class EventsContext : IEventsContext, IDisposable
+    public abstract class EventsContext : IEventsContext
     {
-        private static readonly ConcurrentDictionary<(Type, EventsContextOptions), InternalEventsContext> _eventsContexts;
-
         private readonly EventsContextOptions _options;
-        private readonly IAppServiceProvider _appServiceProvider;
+        private readonly EventsContextsRoot _eventsContextsRoot;
+
         private readonly Lazy<IEventsScope> _eventsScope;
 
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => GetCurrentInternalServiceProvider();
-
-        static EventsContext()
-        {
-            _eventsContexts = new ConcurrentDictionary<(Type, EventsContextOptions), InternalEventsContext>();
-        }
 
         /// <summary>
         ///     This constructor can be used when the <see cref="EventsContext" /> is not configured with
         ///     the <see cref="IServiceCollection" /> extension method.
         /// </summary>
+        /// <param name="eventsContextsRoot">
+        ///     The events context root used for sharing the context configuration across different instances.
+        /// </param>
         /// <param name="options">The options for this context.</param>
-        /// <param name="appServiceProvider">The app service provider.</param>
         /// <param name="scopedAppServiceProvider">The scoped app service provider.</param>
-        protected EventsContext(
-            EventsContextOptions options,
-            IAppServiceProvider appServiceProvider,
-            IScopedAppServiceProvider scopedAppServiceProvider
-        )
+        public EventsContext(EventsContextsRoot eventsContextsRoot, EventsContextOptions options,
+            IScopedAppServiceProvider scopedAppServiceProvider)
         {
             _options = options;
-            _appServiceProvider = appServiceProvider;
+            _eventsContextsRoot = eventsContextsRoot;
+
             _eventsScope = new Lazy<IEventsScope>(
                 () => new EventsScope(GetCurrentInternalServiceProvider(), scopedAppServiceProvider)
             );
         }
 
-        private InternalEventsContext GetCurrentContext() => _eventsContexts.GetOrAdd(
-            (GetType(), _options),
-            x => new InternalEventsContext(
-                _options,
-                OnConfiguring,
-                OnBuildingPipelines,
-                OnBuildingSubscriptions,
-                _appServiceProvider
-            )
-        );
+        private InternalEventsContext GetCurrentContext()
+        {
+            return _eventsContextsRoot.GetOrCreateContext(
+                GetType(), _options,
+                () => new InternalEventsContext(
+                    _options,
+                    OnConfiguring,
+                    OnBuildingPipelines,
+                    OnBuildingSubscriptions,
+                    _eventsContextsRoot.AppServiceProvider
+                )
+            );
+        }
 
         private IServiceProvider GetCurrentInternalServiceProvider() => GetCurrentContext().InternalServiceProvider;
 
@@ -112,8 +108,5 @@ namespace FluentEvents
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
                 .DiscardQueuedEvents(_eventsScope.Value, queueName);
-
-        /// <inheritdoc />
-        public void Dispose() { }
     }
 }

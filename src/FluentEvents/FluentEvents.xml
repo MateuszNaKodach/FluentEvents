@@ -125,13 +125,15 @@
         <member name="T:FluentEvents.EventsContext">
             <inheritdoc cref="T:FluentEvents.IEventsContext"/>
         </member>
-        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,FluentEvents.Infrastructure.IAppServiceProvider,FluentEvents.Infrastructure.IScopedAppServiceProvider)">
+        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextsRoot,FluentEvents.EventsContextOptions,FluentEvents.Infrastructure.IScopedAppServiceProvider)">
             <summary>
                 This constructor can be used when the <see cref="T:FluentEvents.EventsContext" /> is not configured with
                 the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> extension method.
             </summary>
+            <param name="eventsContextsRoot">
+                The events context root used for sharing the context configuration across different instances.
+            </param>
             <param name="options">The options for this context.</param>
-            <param name="appServiceProvider">The app service provider.</param>
             <param name="scopedAppServiceProvider">The scoped app service provider.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions)">
@@ -180,9 +182,6 @@
             </summary>
             <param name="queueName">The name of the queue.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.Dispose">
-            <inheritdoc />
-        </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>
                 The options used by an <see cref="T:FluentEvents.EventsContext"/>
@@ -192,6 +191,19 @@
             <summary>
                 Initializes a new instance.
             </summary>
+        </member>
+        <member name="T:FluentEvents.EventsContextsRoot">
+            <summary>
+                 Allows <see cref="T:FluentEvents.EventsContext"/>s to persist their configuration when they are disposed.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.EventsContextsRoot.#ctor(FluentEvents.Infrastructure.IAppServiceProvider)">
+            <summary>
+                Creates a new <see cref="T:FluentEvents.EventsContextsRoot"/>.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.EventsContextsRoot.Dispose">
+            <inheritdoc />
         </member>
         <member name="T:FluentEvents.FluentEventsException">
             <inheritdoc />

@@ -42,6 +42,7 @@ namespace FluentEvents
 
             services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
             services.AddSingleton<IAppServiceProvider, AppServiceProvider>();
+            services.TryAddSingleton<EventsContextsRoot>();
 
             var eventsContextFactory = ActivatorUtilities.CreateFactory(typeof(T), new[] {typeof(EventsContextOptions)});
             var eventsContextFactoryArgs = new object[] {options};

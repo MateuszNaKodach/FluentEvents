@@ -4,14 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Infrastructure
 {
-    internal class InternalEventsContext
+    internal class InternalEventsContext : IDisposable
     {
         private readonly EventsContextOptions _options;
         private readonly Action<EventsContextOptions> _onConfiguring;
         private readonly Action<PipelinesBuilder> _onBuildingPipelines;
         private readonly Action<SubscriptionsBuilder> _onBuildingSubscriptions;
+        private readonly ServiceProvider _internalServiceProvider;
 
-        public IServiceProvider InternalServiceProvider { get; }
+        public IServiceProvider InternalServiceProvider => _internalServiceProvider;
 
         public InternalEventsContext(
             EventsContextOptions options,
@@ -28,7 +29,7 @@ namespace FluentEvents.Infrastructure
 
             Configure();
             var internalServices = new InternalServiceCollection(appServiceProvider);
-            InternalServiceProvider = internalServices.BuildServiceProvider(this, _options);
+            _internalServiceProvider = internalServices.BuildServiceProvider(this, _options);
             Build();
         }
 
@@ -41,6 +42,11 @@ namespace FluentEvents.Infrastructure
         {
             _onBuildingPipelines(InternalServiceProvider.GetRequiredService<PipelinesBuilder>());
             _onBuildingSubscriptions(InternalServiceProvider.GetRequiredService<SubscriptionsBuilder>());
+        }
+
+        public void Dispose()
+        {
+            _internalServiceProvider?.Dispose();
         }
     }
 }

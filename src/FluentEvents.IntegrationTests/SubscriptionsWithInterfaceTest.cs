@@ -52,10 +52,10 @@ namespace FluentEvents.IntegrationTests
             }
 
             public TestEventsContext(
+                EventsContextsRoot eventsContextsRoot,
                 EventsContextOptions options,
-                IAppServiceProvider appServiceProvider,
                 IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(options, appServiceProvider, scopedAppServiceProvider)
+            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
             {
             }
         }

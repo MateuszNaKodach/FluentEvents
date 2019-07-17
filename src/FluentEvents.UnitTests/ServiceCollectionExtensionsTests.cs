@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using FluentEvents.Configuration;
-using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
@@ -34,6 +32,10 @@ namespace FluentEvents.UnitTests
             Assert.That(
                 _serviceCollection,
                 Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(TestEventsContext))
+            );
+            Assert.That(
+                _serviceCollection,
+                Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsContextsRoot))
             );
             Assert.That(
                 _serviceCollection,
@@ -210,7 +212,7 @@ namespace FluentEvents.UnitTests
             {
             }
 
-            public TestEventsContext(EventsContextOptions options) : base(options, null, null)
+            public TestEventsContext(EventsContextOptions options) : base(null, options, null)
             {
             }
         }

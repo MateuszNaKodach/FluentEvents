@@ -66,6 +66,14 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 
         private class TestEventsContext : EventsContext
         {
+            public TestEventsContext(
+                EventsContextsRoot eventsContextsRoot, 
+                EventsContextOptions options, 
+                IScopedAppServiceProvider scopedAppServiceProvider
+            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            {
+            }
+
             protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
             {
                 subscriptionsBuilder
@@ -79,14 +87,6 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
-            }
-
-            public TestEventsContext(
-                EventsContextOptions options,
-                IAppServiceProvider appServiceProvider, 
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(options, appServiceProvider, scopedAppServiceProvider)
-            {
             }
         }
     }

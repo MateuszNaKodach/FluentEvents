@@ -29,7 +29,7 @@ namespace FluentEvents.Infrastructure
             _appServiceProvider = appServiceProvider;
         }
 
-        public IServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options)
+        public ServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
                 x => _appServiceProvider.GetService<ILoggerFactory>() ??
@@ -47,7 +47,6 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
-            services.AddSingleton<IEventsContextDependencies, EventsContextDependencies>();
             services.AddSingleton<IScopedSubscriptionsService, ScopedSubscriptionsService>();
             services.AddSingleton<IRoutingService, RoutingService>();
             services.AddSingleton<IForwardingService, ForwardingService>();
