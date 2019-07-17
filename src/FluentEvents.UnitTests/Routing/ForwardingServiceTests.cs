@@ -70,8 +70,8 @@ namespace FluentEvents.UnitTests.Routing
 
         private class TestSource
         {
-            public event DomainEventHandler<TestEvent> Event;
-            public event AsyncDomainEventHandler<TestEvent> AsyncEvent;
+            public event EventPublisher<TestEvent> Event;
+            public event AsyncEventPublisher<TestEvent> AsyncEvent;
 
             public async Task RaiseEvents()
             {

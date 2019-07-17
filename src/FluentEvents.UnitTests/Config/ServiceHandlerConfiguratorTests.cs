@@ -68,7 +68,7 @@ namespace FluentEvents.UnitTests.Config
                 _serviceHandlerConfigurator.HasScopedSubscription();
         }
         
-        private class SubscribingService : IEventHandler<object>
+        private class SubscribingService : IAsyncEventHandler<object>
         {
             public Task HandleEventAsync(object e)
             {

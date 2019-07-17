@@ -58,14 +58,14 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Verifiable();
         }
 
-        private class Service1 : IEventHandler<object> {
+        private class Service1 : IAsyncEventHandler<object> {
             public Task HandleEventAsync(object e)
             {
                 throw new NotImplementedException();
             }
         }
 
-        private class Service2 : IEventHandler<object>
+        private class Service2 : IAsyncEventHandler<object>
         {
             public Task HandleEventAsync(object e)
             {

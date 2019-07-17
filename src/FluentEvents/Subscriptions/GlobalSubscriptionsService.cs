@@ -24,7 +24,7 @@ namespace FluentEvents.Subscriptions
         
         /// <inheritdoc />
         public void AddGlobalServiceHandlerSubscription<TService, TEvent>(bool isOptional)
-            where TService : class, IEventHandler<TEvent>
+            where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class
         {
             _subscriptionCreationTasks.Enqueue(new ServiceHandlerSubscriptionCreationTask<TService, TEvent>(isOptional));

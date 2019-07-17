@@ -15,7 +15,7 @@ namespace FluentEvents.Subscriptions
         }
 
         public void ConfigureScopedServiceHandlerSubscription<TService, TEvent>(bool isOptional)
-            where TService : class, IEventHandler<TEvent>
+            where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class
         {
             var serviceSubscriptionTask = new ServiceHandlerSubscriptionCreationTask<TService, TEvent>(isOptional);

@@ -7,16 +7,16 @@ namespace FluentEvents
     ///     Note: the subscription should be configured in the
     ///     <see cref="EventsContext.OnBuildingSubscriptions"/> method.
     /// </summary>
-    /// <typeparam name="TDomainEvent">the type of the event.</typeparam>
+    /// <typeparam name="TEvent">the type of the event.</typeparam>
     // ReSharper disable once TypeParameterCanBeVariant (Variant type parameter here would allow invalid subscription configurations)
-    public interface IEventHandler<TDomainEvent>
-        where TDomainEvent : class
+    public interface IAsyncEventHandler<TEvent>
+        where TEvent : class
     {
         /// <summary>
         ///     Handles an event.
         /// </summary>
         /// <param name="e">The event.</param>
         /// <returns></returns>
-        Task HandleEventAsync(TDomainEvent e);
+        Task HandleEventAsync(TEvent e);
     }
 }

@@ -57,7 +57,7 @@ namespace FluentEvents.UnitTests.Model
         private class TestSourceWithValidEvents
         {
 #pragma warning disable 67
-            public event DomainEventHandler<object> ValidEvent;
+            public event EventPublisher<object> ValidEvent;
 #pragma warning restore 67
         }
     }

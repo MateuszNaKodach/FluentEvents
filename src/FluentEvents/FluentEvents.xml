@@ -4,12 +4,12 @@
         <name>FluentEvents</name>
     </assembly>
     <members>
-        <member name="T:FluentEvents.AsyncDomainEventHandler`1">
+        <member name="T:FluentEvents.AsyncEventPublisher`1">
             <summary>
-                Represents the method that will handle a domain event.
+                Represents a method that publishes events with FluentEvents.
             </summary>
-            <param name="domainEvent">The event.</param>
-            <typeparam name="TDomainEvent">The type of the event.</typeparam>
+            <param name="e">The event.</param>
+            <typeparam name="TEvent">The type of the event.</typeparam>
         </member>
         <member name="T:FluentEvents.Configuration.EventConfigurator`1">
             <summary>
@@ -70,13 +70,13 @@
         </member>
         <member name="M:FluentEvents.Configuration.ServiceHandlerConfigurator`2.HasGlobalSubscription">
             <summary>
-                Subscribes the <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> to global events.
+                Subscribes the <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> to global events.
             </summary>
             <returns>The configuration object to add more subscriptions.</returns>
         </member>
         <member name="M:FluentEvents.Configuration.ServiceHandlerConfigurator`2.HasScopedSubscription">
             <summary>
-                Subscribes the <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> to scoped events.
+                Subscribes the <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> to scoped events.
             </summary>
             <returns>The configuration object to add more subscriptions.</returns>
         </member>
@@ -100,7 +100,7 @@
             <typeparam name="TEvent">The type of the event</typeparam>
             <returns>
                 Returns an object that can be used to configure subscriptions for
-                an <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> method.
+                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
             </returns>
         </member>
         <member name="M:FluentEvents.Configuration.SubscriptionsBuilder.OptionalServiceHandler``2">
@@ -112,15 +112,15 @@
             <typeparam name="TEvent">The type of the event</typeparam>
             <returns>
                 Returns an object that can be used to configure subscriptions for
-                an <see cref="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)"/> method.
+                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
             </returns>
         </member>
-        <member name="T:FluentEvents.DomainEventHandler`1">
+        <member name="T:FluentEvents.EventPublisher`1">
             <summary>
-                Represents the method that will handle a domain event.
+                Represents a method that publishes events with FluentEvents.
             </summary>
-            <param name="domainEvent">The event.</param>
-            <typeparam name="TDomainEvent">The type of the event.</typeparam>
+            <param name="e">The event.</param>
+            <typeparam name="TEvent">The type of the event.</typeparam>
         </member>
         <member name="T:FluentEvents.EventsContext">
             <inheritdoc cref="T:FluentEvents.IEventsContext"/>
@@ -226,15 +226,15 @@
                 Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
             </summary>
         </member>
-        <member name="T:FluentEvents.IEventHandler`1">
+        <member name="T:FluentEvents.IAsyncEventHandler`1">
             <summary>
                 An interface implemented by a service to handle an event.
                 Note: the subscription should be configured in the
                 <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.SubscriptionsBuilder)"/> method.
             </summary>
-            <typeparam name="TDomainEvent">the type of the event.</typeparam>
+            <typeparam name="TEvent">the type of the event.</typeparam>
         </member>
-        <member name="M:FluentEvents.IEventHandler`1.HandleEventAsync(`0)">
+        <member name="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)">
             <summary>
                 Handles an event.
             </summary>

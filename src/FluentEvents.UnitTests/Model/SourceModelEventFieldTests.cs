@@ -117,13 +117,13 @@ namespace FluentEvents.UnitTests.Model
 
         private class TestModel : TestModelBase
         {
-            public event DomainEventHandler<TestEvent> TestEvent;
-            public event AsyncDomainEventHandler<TestEvent> AsyncTestEvent;
+            public event EventPublisher<TestEvent> TestEvent;
+            public event AsyncEventPublisher<TestEvent> AsyncTestEvent;
         }
 
         private class TestModelBase
         {
-            public event DomainEventHandler<TestEvent> InheritedTestEvent;
+            public event EventPublisher<TestEvent> InheritedTestEvent;
         }
 
         private class TestEvent

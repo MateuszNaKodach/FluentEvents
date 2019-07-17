@@ -52,7 +52,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             Assert.That(secondCallSubscriptions, Has.Exactly(2).Items);
         }
         
-        private class TestService : IEventHandler<object>
+        private class TestService : IAsyncEventHandler<object>
         {
             public Task HandleEventAsync(object e)
             {

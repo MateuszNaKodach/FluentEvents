@@ -5,8 +5,8 @@ namespace FluentEvents.IntegrationTests.Common
     public class TestEntity
     {
         public int Id { get; set; }
-        public event DomainEventHandler<TestEvent> Test;
-        public event AsyncDomainEventHandler<TestEvent> AsyncTest;
+        public event EventPublisher<TestEvent> Test;
+        public event AsyncEventPublisher<TestEvent> AsyncTest;
 
         public void RaiseEvent(string value)
         {

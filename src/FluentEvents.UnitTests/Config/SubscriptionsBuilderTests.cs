@@ -58,7 +58,7 @@ namespace FluentEvents.UnitTests.Config
             );
         }
 
-        private class SubscribingService : IEventHandler<object>
+        private class SubscribingService : IAsyncEventHandler<object>
         {
             public Task HandleEventAsync(object e)
             {

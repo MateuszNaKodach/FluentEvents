@@ -72,7 +72,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             Assert.That(subscriptions, Is.Empty);
         }
 
-        private class TestService : IEventHandler<object>
+        private class TestService : IAsyncEventHandler<object>
         {
             public Task HandleEventAsync(object e)
             {

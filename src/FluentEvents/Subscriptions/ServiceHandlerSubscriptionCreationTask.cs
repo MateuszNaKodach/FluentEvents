@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FluentEvents.Subscriptions
 {
     internal class ServiceHandlerSubscriptionCreationTask<TService, TEvent> : ISubscriptionCreationTask
-        where TService : class, IEventHandler<TEvent>
+        where TService : class, IAsyncEventHandler<TEvent>
         where TEvent : class
     {
         private readonly bool _isOptional;

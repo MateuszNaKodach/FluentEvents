@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 namespace FluentEvents.IntegrationTests.Common
 {
     public class SubscribingService
-        : IEventHandler<TestEvent>,
-            IEventHandler<ProjectedTestEvent>,
-            IEventHandler<TestEventBase>,
-            IEventHandler<TestEvent2>,
-            IEventHandler<ITestEvent>
+        : IAsyncEventHandler<TestEvent>,
+            IAsyncEventHandler<ProjectedTestEvent>,
+            IAsyncEventHandler<TestEventBase>,
+            IAsyncEventHandler<TestEvent2>,
+            IAsyncEventHandler<ITestEvent>
     {
         public IList<TestEventBase> BaseTestEvents { get; }
         public IList<TestEvent> TestEvents { get; }

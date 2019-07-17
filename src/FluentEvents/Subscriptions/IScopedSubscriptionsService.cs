@@ -15,7 +15,7 @@ namespace FluentEvents.Subscriptions
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         void ConfigureScopedServiceHandlerSubscription<TService, TEvent>(bool isOptional)
-            where TService : class, IEventHandler<TEvent>
+            where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class;
 
         /// <summary>
