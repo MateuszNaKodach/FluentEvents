@@ -879,12 +879,6 @@
                 An exception that aggregates all exceptions thrown by the handlers of an event.
             </summary>
         </member>
-        <member name="M:FluentEvents.Subscriptions.SubscriptionPublishAggregateException.#ctor(System.Collections.Generic.IEnumerable{System.Exception})">
-            <summary>
-                Creates a new <see cref="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException"/>
-            </summary>
-            <param name="exceptions">The exceptions to aggregate.</param>
-        </member>
         <member name="T:FluentEvents.Transmission.EventReceiversHostedService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used

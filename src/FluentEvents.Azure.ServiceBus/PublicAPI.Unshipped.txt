@@ -1,0 +1,33 @@
+﻿FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions
+FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions
+FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException
+FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.FluentEventsServiceBusException(string message) -> void
+FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.FluentEventsServiceBusException(string message, System.Exception inner) -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.AzureTopicEventReceiverOptions() -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.IsSubscriptionCreationEnabled.get -> bool
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.IsSubscriptionCreationEnabled.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ManagementConnectionString.get -> string
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ManagementConnectionString.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.MaxConcurrentMessages.get -> int
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.MaxConcurrentMessages.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ReceiveConnectionString.get -> string
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.ReceiveConnectionString.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionName.get -> string
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionName.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameProvider.get -> System.Func<string>
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionNameProvider.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionsAutoDeleteOnIdleTimeout.get -> System.TimeSpan
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.SubscriptionsAutoDeleteOnIdleTimeout.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.TopicPath.get -> string
+FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions.TopicPath.set -> void
+FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException
+FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions
+FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions.AzureTopicEventSenderOptions() -> void
+FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions.SendConnectionString.get -> string
+FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions.SendConnectionString.set -> void
+static FluentEvents.Azure.ServiceBus.ConfigureTransmissionExtensions.WithAzureTopic(this FluentEvents.Pipelines.Publication.IConfigureTransmission configureTransmission) -> FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration
+static FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventReceiver(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, Microsoft.Extensions.Configuration.IConfiguration configuration) -> FluentEvents.Plugins.IFluentEventsPluginOptions
+static FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventReceiver(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, System.Action<FluentEvents.Azure.ServiceBus.Receiving.AzureTopicEventReceiverOptions> configureOptions) -> FluentEvents.Plugins.IFluentEventsPluginOptions
+static FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventSender(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, Microsoft.Extensions.Configuration.IConfiguration configuration) -> FluentEvents.Plugins.IFluentEventsPluginOptions
+static FluentEvents.Azure.ServiceBus.FluentEventsPluginOptionsExtensions.UseAzureTopicEventSender(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, System.Action<FluentEvents.Azure.ServiceBus.Sending.AzureTopicEventSenderOptions> configureOptions) -> FluentEvents.Plugins.IFluentEventsPluginOptions

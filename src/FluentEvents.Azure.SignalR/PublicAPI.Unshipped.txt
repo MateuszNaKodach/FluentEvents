@@ -1,0 +1,15 @@
+﻿FluentEvents.Azure.SignalR.AzureSignalRServiceOptions
+FluentEvents.Azure.SignalR.AzureSignalRServiceOptions.AzureSignalRServiceOptions() -> void
+FluentEvents.Azure.SignalR.AzureSignalRServiceOptions.ConnectionString.get -> string
+FluentEvents.Azure.SignalR.AzureSignalRServiceOptions.ConnectionString.set -> void
+FluentEvents.Azure.SignalR.Client.AzureSignalRPublishingFailedException
+FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions
+FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException
+FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.FluentEventsAzureSignalRException(string message) -> void
+FluentEvents.Azure.SignalR.FluentEventsAzureSignalRException.FluentEventsAzureSignalRException(string message, System.Exception inner) -> void
+FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions
+static FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAllAzureSignalRUsers<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, string hubName, string hubMethodName = null) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAzureSignalRGroups<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, System.Func<TEvent, string[]> groupIdsProviderAction, string hubName, string hubMethodName = null) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Azure.SignalR.EventPipelineConfiguratorExtensions.ThenIsSentToAzureSignalRUsers<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, System.Func<TEvent, string[]> userIdsProviderAction, string hubName, string hubMethodName = null) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalRService(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, Microsoft.Extensions.Configuration.IConfiguration configuration, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilderAction = null) -> FluentEvents.Plugins.IFluentEventsPluginOptions
+static FluentEvents.Azure.SignalR.FluentEventsPluginOptionsExtensions.UseAzureSignalRService(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions, System.Action<FluentEvents.Azure.SignalR.AzureSignalRServiceOptions> configureAction, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilderAction = null) -> FluentEvents.Plugins.IFluentEventsPluginOptions

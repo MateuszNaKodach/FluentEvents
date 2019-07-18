@@ -1,0 +1,144 @@
+﻿FluentEvents.AsyncEventPublisher<TEvent>
+FluentEvents.Configuration.EventConfigurator<TEvent>
+FluentEvents.Configuration.EventConfigurator<TEvent>.IsPiped() -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+FluentEvents.Configuration.EventPipelineConfigurator<TEvent>.EventPipelineConfigurator(FluentEvents.Pipelines.IPipeline pipeline, FluentEvents.Configuration.EventConfigurator<TEvent> eventConfigurator) -> void
+FluentEvents.Configuration.EventPipelineConfigurator<TEvent>.EventPipelineConfigurator(System.IServiceProvider serviceProvider, FluentEvents.Pipelines.IPipeline pipeline) -> void
+FluentEvents.Configuration.IPipelinesBuilder
+FluentEvents.Configuration.IPipelinesBuilder.Event<TEvent>() -> FluentEvents.Configuration.EventConfigurator<TEvent>
+FluentEvents.Configuration.ISubscriptionsBuilder
+FluentEvents.Configuration.ISubscriptionsBuilder.OptionalServiceHandler<TService, TEvent>() -> FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>
+FluentEvents.Configuration.ISubscriptionsBuilder.ServiceHandler<TService, TEvent>() -> FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>
+FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>
+FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>.HasGlobalSubscription() -> FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>
+FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>.HasScopedSubscription() -> FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>
+FluentEvents.EventPublisher<TEvent>
+FluentEvents.EventsContext
+FluentEvents.EventsContext.EventsContext(FluentEvents.EventsContextOptions options, FluentEvents.Infrastructure.IRootAppServiceProvider rootAppServiceProvider) -> void
+FluentEvents.EventsContextOptions
+FluentEvents.EventsContextOptions.EventsContextOptions() -> void
+FluentEvents.EventsScope
+FluentEvents.EventsScope.EventsScope(FluentEvents.Infrastructure.IScopedAppServiceProvider scopedAppServiceProvider) -> void
+FluentEvents.FluentEventsException
+FluentEvents.FluentEventsException.FluentEventsException(string message) -> void
+FluentEvents.FluentEventsException.FluentEventsException(string message, System.Exception inner) -> void
+FluentEvents.IAsyncEventHandler<TEvent>
+FluentEvents.IAsyncEventHandler<TEvent>.HandleEventAsync(TEvent e) -> System.Threading.Tasks.Task
+FluentEvents.IEventsContext
+FluentEvents.Infrastructure.IEventsScope
+FluentEvents.Infrastructure.IEventsScope.GetOrAddFeature<T>(System.Func<FluentEvents.Infrastructure.IScopedAppServiceProvider, T> factory) -> T
+FluentEvents.Infrastructure.IInfrastructure<T>
+FluentEvents.Infrastructure.IInfrastructure<T>.Instance.get -> T
+FluentEvents.Infrastructure.IRootAppServiceProvider
+FluentEvents.Infrastructure.IScopedAppServiceProvider
+FluentEvents.Model.ISourceModelsService
+FluentEvents.Model.ISourceModelsService.GetOrCreateSourceModel(System.Type clrType) -> FluentEvents.Model.SourceModel
+FluentEvents.Model.ISourceModelsService.GetSourceModel(System.Type crlType) -> FluentEvents.Model.SourceModel
+FluentEvents.Model.ISourceModelsService.GetSourceModels() -> System.Collections.Generic.IEnumerable<FluentEvents.Model.SourceModel>
+FluentEvents.Model.SourceDoesNotMatchModelTypeException
+FluentEvents.Model.SourceModel
+FluentEvents.Model.SourceModel.ClrType.get -> System.Type
+FluentEvents.Model.SourceModel.EventFields.get -> System.Collections.Generic.IEnumerable<FluentEvents.Model.SourceModelEventField>
+FluentEvents.Model.SourceModel.SourceModel(System.Type clrType) -> void
+FluentEvents.Model.SourceModelEventField
+FluentEvents.Model.SourceModelEventField.EventInfo.get -> System.Reflection.EventInfo
+FluentEvents.Model.SourceModelEventField.FieldInfo.get -> System.Reflection.FieldInfo
+FluentEvents.Model.SourceModelEventField.IsAsync.get -> bool
+FluentEvents.Model.SourceModelEventField.Name.get -> string
+FluentEvents.Model.SourceModelEventField.ReturnType.get -> System.Type
+FluentEvents.Model.SourceModelsService
+FluentEvents.Model.SourceModelsService.GetOrCreateSourceModel(System.Type clrType) -> FluentEvents.Model.SourceModel
+FluentEvents.Model.SourceModelsService.GetSourceModel(System.Type crlType) -> FluentEvents.Model.SourceModel
+FluentEvents.Model.SourceModelsService.GetSourceModels() -> System.Collections.Generic.IEnumerable<FluentEvents.Model.SourceModel>
+FluentEvents.Model.SourceModelsService.SourceModelsService() -> void
+FluentEvents.Pipelines.Filters.EventPipelineConfiguratorExtensions
+FluentEvents.Pipelines.IPipeline
+FluentEvents.Pipelines.IPipeline.AddModule<TModule, TConfig>(TConfig moduleConfig) -> void
+FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
+FluentEvents.Pipelines.IPipelineModule<TConfig>
+FluentEvents.Pipelines.IPipelineModule<TConfig>.InvokeAsync(TConfig config, FluentEvents.Pipelines.PipelineContext pipelineContext, FluentEvents.Pipelines.NextModuleDelegate invokeNextModule) -> System.Threading.Tasks.Task
+FluentEvents.Pipelines.IPipelinesService
+FluentEvents.Pipelines.IPipelinesService.AddPipeline(System.Type eventType, FluentEvents.Pipelines.IPipeline pipeline) -> void
+FluentEvents.Pipelines.IPipelinesService.GetPipelines(System.Type eventType) -> System.Collections.Generic.IEnumerable<FluentEvents.Pipelines.IPipeline>
+FluentEvents.Pipelines.NextModuleDelegate
+FluentEvents.Pipelines.Pipeline
+FluentEvents.Pipelines.Pipeline.AddModule<TModule, TConfig>(TConfig moduleConfig) -> void
+FluentEvents.Pipelines.Pipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
+FluentEvents.Pipelines.PipelineContext
+FluentEvents.Pipelines.PipelineContext.EventsScope.get -> FluentEvents.Infrastructure.IEventsScope
+FluentEvents.Pipelines.PipelineContext.PipelineContext(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope, System.IServiceProvider serviceProvider) -> void
+FluentEvents.Pipelines.PipelineContext.PipelineEvent.get -> FluentEvents.Pipelines.PipelineEvent
+FluentEvents.Pipelines.PipelineContext.PipelineEvent.set -> void
+FluentEvents.Pipelines.PipelineContext.ServiceProvider.get -> System.IServiceProvider
+FluentEvents.Pipelines.PipelineEvent
+FluentEvents.Pipelines.PipelineEvent.Event.get -> object
+FluentEvents.Pipelines.PipelineEvent.EventType.get -> System.Type
+FluentEvents.Pipelines.PipelineEvent.PipelineEvent(object event) -> void
+FluentEvents.Pipelines.PipelineModuleNotFoundException
+FluentEvents.Pipelines.PipelinesService
+FluentEvents.Pipelines.PipelinesService.AddPipeline(System.Type eventType, FluentEvents.Pipelines.IPipeline pipeline) -> void
+FluentEvents.Pipelines.PipelinesService.GetPipelines(System.Type eventType) -> System.Collections.Generic.IEnumerable<FluentEvents.Pipelines.IPipeline>
+FluentEvents.Pipelines.PipelinesService.PipelinesService() -> void
+FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions
+FluentEvents.Pipelines.Publication.ConfigureTransmission
+FluentEvents.Pipelines.Publication.ConfigureTransmission.ConfigureTransmission() -> void
+FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions
+FluentEvents.Pipelines.Publication.EventSenderNotFoundException
+FluentEvents.Pipelines.Publication.EventTransmissionPluginIsNotConfiguredException
+FluentEvents.Pipelines.Publication.IConfigureTransmission
+FluentEvents.Pipelines.Publication.IConfigureTransmission.With<T>() -> FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration
+FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration
+FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration.SenderType.get -> System.Type
+FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions
+FluentEvents.Plugins.DuplicatePluginException
+FluentEvents.Plugins.IFluentEventsPlugin
+FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services) -> void
+FluentEvents.Plugins.IFluentEventsPluginOptions
+FluentEvents.Plugins.IFluentEventsPluginOptions.AddPlugin(FluentEvents.Plugins.IFluentEventsPlugin plugin) -> void
+FluentEvents.Plugins.IFluentEventsPluginOptions.Plugins.get -> System.Collections.Generic.IEnumerable<FluentEvents.Plugins.IFluentEventsPlugin>
+FluentEvents.Queues.EventsQueueNotFoundException
+FluentEvents.Routing.IAttachingInterceptor
+FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService attachingService, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
+FluentEvents.Routing.IAttachingService
+FluentEvents.Routing.IAttachingService.Attach(object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
+FluentEvents.Routing.IForwardingService
+FluentEvents.Routing.IForwardingService.ForwardEventsToRouting(FluentEvents.Model.SourceModel sourceModel, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
+FluentEvents.Routing.IRoutingService
+FluentEvents.Routing.IRoutingService.RouteEventAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
+FluentEvents.ServiceCollectionExtensions
+FluentEvents.Subscriptions.EventTypeMismatchException
+FluentEvents.Subscriptions.IPublishingService
+FluentEvents.Subscriptions.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> System.Threading.Tasks.Task
+FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
+FluentEvents.Subscriptions.SubscribingServiceNotFoundException
+FluentEvents.Subscriptions.SubscribingServiceNotFoundException.ServiceType.get -> System.Type
+FluentEvents.Subscriptions.SubscriptionPublishAggregateException
+FluentEvents.Transmission.EventReceiversHostedService
+FluentEvents.Transmission.EventReceiversHostedService.EventReceiversHostedService(FluentEvents.IEventsContext eventsContext) -> void
+FluentEvents.Transmission.EventReceiversHostedService.StartAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.EventReceiversHostedService.StopAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventReceiver
+FluentEvents.Transmission.IEventReceiver.StartReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventReceiver.StopReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventReceiversService
+FluentEvents.Transmission.IEventReceiversService.StartReceiversAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventReceiversService.StopReceiversAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventSender
+FluentEvents.Transmission.IEventSender.SendAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> System.Threading.Tasks.Task
+FluentEvents.Transmission.IEventsSerializationService
+FluentEvents.Transmission.IEventsSerializationService.DeserializeEvent(byte[] eventData) -> FluentEvents.Pipelines.PipelineEvent
+FluentEvents.Transmission.IEventsSerializationService.SerializeEvent(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> byte[]
+static FluentEvents.Pipelines.Filters.EventPipelineConfiguratorExtensions.ThenIsFiltered<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, System.Func<TEvent, bool> filter) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Pipelines.Projections.EventPipelineConfiguratorExtensions.ThenIsProjected<TEvent, TToEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, System.Func<TEvent, TToEvent> eventConverter) -> FluentEvents.Configuration.EventPipelineConfigurator<TToEvent>
+static FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, System.Func<FluentEvents.Pipelines.Publication.ConfigureTransmission, FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration> configurePublishTransmission) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToScopedSubscriptions<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions.ThenIsQueuedTo<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, string queueName) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
+static FluentEvents.ServiceCollectionExtensions.AddEventsContext<T>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<FluentEvents.EventsContextOptions> optionsBuilder) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+static FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo<TEventsContext>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action addServicesAction) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+virtual FluentEvents.EventsContext.Attach(object source, FluentEvents.EventsScope eventsScope) -> void
+virtual FluentEvents.EventsContext.DiscardQueuedEvents(FluentEvents.EventsScope eventsScope, string queueName = null) -> void
+virtual FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Configuration.IPipelinesBuilder pipelinesBuilder) -> void
+virtual FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.ISubscriptionsBuilder subscriptionsBuilder) -> void
+virtual FluentEvents.EventsContext.OnConfiguring(FluentEvents.EventsContextOptions options) -> void
+virtual FluentEvents.EventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope eventsScope, string queueName = null) -> System.Threading.Tasks.Task
