@@ -11,7 +11,7 @@ namespace FluentEvents.UnitTests.Config
     {
         private Mock<IServiceProvider> _serviceProviderMock;
 
-        private PipelinesBuilder _pipelinesBuilder;
+        private IPipelinesBuilder _pipelinesBuilder;
 
         [SetUp]
         public void SetUp()

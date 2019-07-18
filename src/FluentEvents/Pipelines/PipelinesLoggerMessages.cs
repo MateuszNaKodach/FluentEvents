@@ -11,7 +11,7 @@ namespace FluentEvents.Pipelines
             "Invoking pipeline module {pipelineModuleTypeName} for event of type: {eventType}"
         );
 
-        internal static void InvokingPipelineModule(this ILogger logger, Type pipelineModuleType, PipelineEvent pipelineEvent)
+        public static void InvokingPipelineModule(this ILogger logger, Type pipelineModuleType, PipelineEvent pipelineEvent)
             => _invokingPipelineModule(
                 logger,
                 pipelineModuleType.Name,
@@ -19,7 +19,7 @@ namespace FluentEvents.Pipelines
                 null
             );
 
-        internal static class EventIds
+        public static class EventIds
         {
             public static EventId InvokingPipelineModule { get; } = new EventId(1, nameof(InvokingPipelineModule));
         }

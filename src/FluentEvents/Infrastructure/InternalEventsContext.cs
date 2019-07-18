@@ -8,7 +8,7 @@ namespace FluentEvents.Infrastructure
     {
         private readonly EventsContextOptions _options;
         private readonly Action<EventsContextOptions> _onConfiguring;
-        private readonly Action<PipelinesBuilder> _onBuildingPipelines;
+        private readonly Action<IPipelinesBuilder> _onBuildingPipelines;
         private readonly Action<SubscriptionsBuilder> _onBuildingSubscriptions;
         private readonly ServiceProvider _internalServiceProvider;
 
@@ -17,7 +17,7 @@ namespace FluentEvents.Infrastructure
         public InternalEventsContext(
             EventsContextOptions options,
             Action<EventsContextOptions> onConfiguring,
-            Action<PipelinesBuilder> onBuildingPipelines,
+            Action<IPipelinesBuilder> onBuildingPipelines,
             Action<SubscriptionsBuilder> onBuildingSubscriptions,
             IRootAppServiceProvider rootAppServiceProvider,
             IEventsContext eventsContext

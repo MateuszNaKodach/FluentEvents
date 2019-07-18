@@ -2,13 +2,12 @@
 
 namespace FluentEvents.Pipelines.Publication
 {
-    /// <inheritdoc />
-    public class PublishTransmissionConfiguration : IPublishTransmissionConfiguration
+    internal class PublishTransmissionConfiguration : IPublishTransmissionConfiguration
     {
         private readonly Type _senderType;
         Type IPublishTransmissionConfiguration.SenderType => _senderType;
 
-        internal PublishTransmissionConfiguration(Type senderType)
+        public PublishTransmissionConfiguration(Type senderType)
         {
             _senderType = senderType;
         }

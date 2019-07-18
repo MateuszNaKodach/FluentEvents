@@ -36,7 +36,7 @@ namespace FluentEvents.UnitTests.Infrastructure
 
             void OnConfiguring(EventsContextOptions x) => isOnConfiguringInvoked = true;
 
-            void OnBuildingPipelines(PipelinesBuilder x) => isOnBuildingPipelinesInvoked = true;
+            void OnBuildingPipelines(IPipelinesBuilder x) => isOnBuildingPipelinesInvoked = true;
 
             void OnBuildingSubscriptions(SubscriptionsBuilder x) => isOnBuildingSubscriptionsInvoked = true;
 
@@ -66,7 +66,7 @@ namespace FluentEvents.UnitTests.Infrastructure
             {
             }
 
-            void OnBuildingPipelines(PipelinesBuilder x)
+            void OnBuildingPipelines(IPipelinesBuilder x)
             {
             }
 

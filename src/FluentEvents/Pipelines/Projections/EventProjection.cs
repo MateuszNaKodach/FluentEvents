@@ -6,7 +6,7 @@ namespace FluentEvents.Pipelines.Projections
     {
         private readonly Func<TFrom, TTo> _conversionFunc;
 
-        internal EventProjection(Func<TFrom, TTo> conversionFunc)
+        public EventProjection(Func<TFrom, TTo> conversionFunc)
         {
             _conversionFunc = conversionFunc;
         }

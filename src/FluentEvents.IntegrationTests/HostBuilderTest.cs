@@ -33,7 +33,7 @@ namespace FluentEvents.IntegrationTests
 
         private class TestEventsContext : EventsContext
         {
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
             {
                 pipelinesBuilder
                     .Event<TestEvent>()

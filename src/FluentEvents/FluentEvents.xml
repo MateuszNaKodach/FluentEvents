@@ -43,18 +43,12 @@
             <param name="serviceProvider">The events context.</param>
             <param name="pipeline">The pipeline to configure.</param>
         </member>
-        <member name="T:FluentEvents.Configuration.PipelinesBuilder">
+        <member name="T:FluentEvents.Configuration.IPipelinesBuilder">
             <summary>
                 Provides a simple API surface to select an event and configure it fluently.
             </summary>
         </member>
-        <member name="M:FluentEvents.Configuration.PipelinesBuilder.#ctor(System.IServiceProvider)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Configuration.PipelinesBuilder.Event``1">
+        <member name="M:FluentEvents.Configuration.IPipelinesBuilder.Event``1">
             <summary>
                 Returns an object that can be used to configure fluently how the event is handled.
                 This method can be called multiple times for the same event to
@@ -62,6 +56,35 @@
             </summary>
             <typeparam name="TEvent">The type of the event.</typeparam>
             <returns>The configuration object for the specified event.</returns>
+        </member>
+        <member name="T:FluentEvents.Configuration.ISubscriptionsBuilder">
+            <summary>
+                Provides a simple API surface to select a service and configure it fluently.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Configuration.ISubscriptionsBuilder.ServiceHandler``2">
+            <summary>
+                Maps required services to the <see cref="T:FluentEvents.EventsContext"/>.
+                If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TEvent">The type of the event</typeparam>
+            <returns>
+                Returns an object that can be used to configure subscriptions for
+                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
+            </returns>
+        </member>
+        <member name="M:FluentEvents.Configuration.ISubscriptionsBuilder.OptionalServiceHandler``2">
+            <summary>
+                Maps optional services to the <see cref="T:FluentEvents.EventsContext"/>.
+                If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TEvent">The type of the event</typeparam>
+            <returns>
+                Returns an object that can be used to configure subscriptions for
+                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
+            </returns>
         </member>
         <member name="T:FluentEvents.Configuration.ServiceHandlerConfigurator`2">
             <summary>
@@ -79,41 +102,6 @@
                 Subscribes the <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> to scoped events.
             </summary>
             <returns>The configuration object to add more subscriptions.</returns>
-        </member>
-        <member name="T:FluentEvents.Configuration.SubscriptionsBuilder">
-            <summary>
-                Provides a simple API surface to select a service and configure it fluently.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Configuration.SubscriptionsBuilder.#ctor(FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.IScopedSubscriptionsService)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Configuration.SubscriptionsBuilder.ServiceHandler``2">
-            <summary>
-                Maps required services to the <see cref="T:FluentEvents.EventsContext"/>.
-                If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <typeparam name="TEvent">The type of the event</typeparam>
-            <returns>
-                Returns an object that can be used to configure subscriptions for
-                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
-            </returns>
-        </member>
-        <member name="M:FluentEvents.Configuration.SubscriptionsBuilder.OptionalServiceHandler``2">
-            <summary>
-                Maps optional services to the <see cref="T:FluentEvents.EventsContext"/>.
-                If the <see cref="T:System.IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <typeparam name="TEvent">The type of the event</typeparam>
-            <returns>
-                Returns an object that can be used to configure subscriptions for
-                an <see cref="M:FluentEvents.IAsyncEventHandler`1.HandleEventAsync(`0)"/> method.
-            </returns>
         </member>
         <member name="T:FluentEvents.EventPublisher`1">
             <summary>
@@ -143,7 +131,7 @@
             <remarks>The default implementation of this method does nothing.</remarks>
             <param name="options">The options of the <see cref="T:FluentEvents.EventsContext"/>.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.SubscriptionsBuilder)">
+        <member name="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.ISubscriptionsBuilder)">
             <summary>
                 Override this method to configure the event subscriptions.
                 The resulting configuration may be cached and re-used during the entire lifespan of the context.
@@ -151,7 +139,7 @@
             <remarks>The default implementation of this method does nothing.</remarks>
             <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Configuration.PipelinesBuilder)">
+        <member name="M:FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Configuration.IPipelinesBuilder)">
             <summary>
                 Override this method to configure the pipelines needed for handling the events.
                 The resulting configuration may be cached and re-used during the entire lifespan of the context.
@@ -227,7 +215,7 @@
             <summary>
                 An interface implemented by a service to handle an event.
                 Note: the subscription should be configured in the
-                <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.SubscriptionsBuilder)"/> method.
+                <see cref="M:FluentEvents.EventsContext.OnBuildingSubscriptions(FluentEvents.Configuration.ISubscriptionsBuilder)"/> method.
             </summary>
             <typeparam name="TEvent">the type of the event.</typeparam>
         </member>
@@ -404,17 +392,21 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="M:FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
         <member name="M:FluentEvents.Pipelines.IPipeline.AddModule``2(``1)">
             <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
+                Adds a module with the associated configuration to the pipeline.
             </summary>
+            <typeparam name="TModule">The type of the module.</typeparam>
+            <typeparam name="TConfig">The type of the module configuration.</typeparam>
+            <param name="moduleConfig">An instance of the module configuration</param>
+        </member>
+        <member name="M:FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
+            <summary>
+                Invokes the modules added with <see cref="M:FluentEvents.Pipelines.IPipeline.AddModule``2(``1)"/>.
+            </summary>
+            <param name="pipelineEvent">The event.</param>
+            <param name="eventsScope">The scope of the event.</param>
+            <returns></returns>
         </member>
         <member name="T:FluentEvents.Pipelines.IPipelineModule`1">
             <summary>
@@ -458,18 +450,10 @@
             <returns>An awaitable task.</returns>
         </member>
         <member name="T:FluentEvents.Pipelines.Pipeline">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:FluentEvents.Pipelines.Pipeline.AddModule``2(``1)">
-            <summary>
-                Adds a module with the associated configuration to the pipeline.
-            </summary>
-            <typeparam name="TModule">The type of the module.</typeparam>
-            <typeparam name="TConfig">The type of the module configuration.</typeparam>
-            <param name="moduleConfig">An instance of the module configuration</param>
+            <inheritdoc />
         </member>
         <member name="M:FluentEvents.Pipelines.Pipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <inheritdoc />
@@ -527,10 +511,7 @@
             </summary>
         </member>
         <member name="T:FluentEvents.Pipelines.PipelinesService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:FluentEvents.Pipelines.PipelinesService.#ctor">
             <summary>
@@ -644,9 +625,6 @@
             <summary>
                 The type of the event sender.
             </summary>
-        </member>
-        <member name="T:FluentEvents.Pipelines.Publication.PublishTransmissionConfiguration">
-            <inheritdoc />
         </member>
         <member name="T:FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions">
             <summary>
@@ -847,21 +825,6 @@
                 is not an instance of <see cref="P:FluentEvents.Subscriptions.Subscription.EventType"/>.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.GlobalSubscriptionsService">
-            <inheritdoc />
-        </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.#ctor(FluentEvents.Infrastructure.IRootAppServiceProvider)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.AddGlobalServiceHandlerSubscription``2(System.Boolean)">
-            <inheritdoc />
-        </member>
-        <member name="M:FluentEvents.Subscriptions.GlobalSubscriptionsService.GetGlobalSubscriptions">
-            <inheritdoc />
-        </member>
         <member name="T:FluentEvents.Subscriptions.IGlobalSubscriptionsService">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
@@ -900,51 +863,6 @@
             <param name="pipelineEvent"> event to publish.</param>
             <returns>An awaitable task.</returns>
         </member>
-        <member name="T:FluentEvents.Subscriptions.IScopedSubscriptionsService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.ConfigureScopedServiceHandlerSubscription``2(System.Boolean)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.IScopedSubscriptionsService.SubscribeServices(FluentEvents.Infrastructure.IScopedAppServiceProvider)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Subscriptions.ISubscriptionsMatchingService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.ISubscriptionsMatchingService.GetMatchingSubscriptionsForEvent(System.Collections.Generic.IEnumerable{FluentEvents.Subscriptions.Subscription},System.Object)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Subscriptions.PublishingService">
-            <inheritdoc />
-        </member>
-        <member name="M:FluentEvents.Subscriptions.PublishingService.#ctor(Microsoft.Extensions.Logging.ILogger{FluentEvents.Subscriptions.PublishingService},FluentEvents.IEventsContext,FluentEvents.Subscriptions.IGlobalSubscriptionsService,FluentEvents.Subscriptions.ISubscriptionsMatchingService)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.PublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
-            <inheritdoc />
-        </member>
-        <member name="M:FluentEvents.Subscriptions.PublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent)">
-            <inheritdoc />
-        </member>
         <member name="T:FluentEvents.Subscriptions.SubscribingServiceNotFoundException">
             <summary>
                 An exception thrown when the application's <see cref="T:System.IServiceProvider"/> can't resolve a service
@@ -956,17 +874,16 @@
                 The type of the service that wasn't found.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.Subscription">
+        <member name="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException">
             <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
+                An exception that aggregates all exceptions thrown by the handlers of an event.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.SubscriptionsMatchingService">
-            <inheritdoc />
-        </member>
-        <member name="M:FluentEvents.Subscriptions.SubscriptionsMatchingService.GetMatchingSubscriptionsForEvent(System.Collections.Generic.IEnumerable{FluentEvents.Subscriptions.Subscription},System.Object)">
-            <inheritdoc />
+        <member name="M:FluentEvents.Subscriptions.SubscriptionPublishAggregateException.#ctor(System.Collections.Generic.IEnumerable{System.Exception})">
+            <summary>
+                Creates a new <see cref="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException"/>
+            </summary>
+            <param name="exceptions">The exceptions to aggregate.</param>
         </member>
         <member name="T:FluentEvents.Transmission.EventReceiversHostedService">
             <summary>

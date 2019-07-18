@@ -57,7 +57,7 @@ namespace FluentEvents
         /// </summary>
         /// <remarks>The default implementation of this method does nothing.</remarks>
         /// <param name="subscriptionsBuilder">The builder that defines the model for the context being created.</param>
-        protected virtual void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder) { }
+        protected virtual void OnBuildingSubscriptions(ISubscriptionsBuilder subscriptionsBuilder) { }
 
         /// <summary>
         ///     Override this method to configure the pipelines needed for handling the events.
@@ -65,7 +65,7 @@ namespace FluentEvents
         /// </summary>
         /// <remarks>The default implementation of this method does nothing.</remarks>
         /// <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
-        protected virtual void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder) { }
+        protected virtual void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder) { }
 
         /// <summary>
         ///     Attach an event source to the context in order to forward it's events to the configured pipelines.

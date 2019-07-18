@@ -3,10 +3,17 @@ using System.Collections.Generic;
 
 namespace FluentEvents.Subscriptions
 {
-    internal class SubscriptionPublishAggregateException : AggregateException
+    /// <summary>
+    ///     An exception that aggregates all exceptions thrown by the handlers of an event.
+    /// </summary>
+    public class SubscriptionPublishAggregateException : AggregateException
     {
-        internal SubscriptionPublishAggregateException(IEnumerable<Exception> targetInvocationExceptions) 
-            : base(targetInvocationExceptions)
+        /// <summary>
+        ///     Creates a new <see cref="SubscriptionPublishAggregateException"/>
+        /// </summary>
+        /// <param name="exceptions">The exceptions to aggregate.</param>
+        public SubscriptionPublishAggregateException(IEnumerable<Exception> exceptions) 
+            : base(exceptions)
         {
         }
     }

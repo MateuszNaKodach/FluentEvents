@@ -121,7 +121,7 @@ namespace FluentEvents.IntegrationTests
                 _parameters = parameters;
             }
 
-            protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+            protected override void OnBuildingSubscriptions(ISubscriptionsBuilder subscriptionsBuilder)
             {
                 if (!_parameters.IsProjected)
                 {
@@ -142,7 +142,7 @@ namespace FluentEvents.IntegrationTests
                 }
             }
 
-            private void AddGlobalServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            private void AddGlobalServiceHandlerSubscriptionToProjection(ISubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
                     .ServiceHandler<SingletonSubscribingService, ProjectedTestEvent>();
@@ -150,7 +150,7 @@ namespace FluentEvents.IntegrationTests
                 serviceConfigurator.HasGlobalSubscription();
             }
             
-            private void AddScopedServiceHandlerSubscriptionToProjection(SubscriptionsBuilder subscriptionsBuilder)
+            private void AddScopedServiceHandlerSubscriptionToProjection(ISubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
                     .ServiceHandler<ScopedSubscribingService, ProjectedTestEvent>();
@@ -158,7 +158,7 @@ namespace FluentEvents.IntegrationTests
                 serviceConfigurator.HasScopedSubscription();
             }
 
-            private void AddGlobalServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            private void AddGlobalServiceHandlerSubscription(ISubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
                     .ServiceHandler<SingletonSubscribingService, TestEvent>();
@@ -166,7 +166,7 @@ namespace FluentEvents.IntegrationTests
                 serviceConfigurator.HasGlobalSubscription();
             }
 
-            private void AddScopedServiceHandlerSubscription(SubscriptionsBuilder subscriptionsBuilder)
+            private void AddScopedServiceHandlerSubscription(ISubscriptionsBuilder subscriptionsBuilder)
             {
                 var serviceConfigurator = subscriptionsBuilder
                     .ServiceHandler<ScopedSubscribingService, TestEvent>();
@@ -174,7 +174,7 @@ namespace FluentEvents.IntegrationTests
                 serviceConfigurator.HasScopedSubscription();
             }
 
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
             {
                 var pipelineConfigurator = pipelinesBuilder
                     .Event<TestEvent>()

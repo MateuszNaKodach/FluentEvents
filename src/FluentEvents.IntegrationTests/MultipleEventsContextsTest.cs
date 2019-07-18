@@ -10,7 +10,7 @@ namespace FluentEvents.IntegrationTests
 
         private class TestEventsContext1 : EventsContext
         {
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
             {
             }
 
@@ -22,7 +22,7 @@ namespace FluentEvents.IntegrationTests
 
         private class TestEventsContext2 : EventsContext
         {
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
             {
             }
 
@@ -34,7 +34,7 @@ namespace FluentEvents.IntegrationTests
 
         private class TestEventsContext3 : EventsContext
         {
-            protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+            protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
             {
             }
 

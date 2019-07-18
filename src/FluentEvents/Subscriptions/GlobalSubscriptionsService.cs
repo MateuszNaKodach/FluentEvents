@@ -4,17 +4,13 @@ using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Subscriptions
 {
-    /// <inheritdoc />
-    public class GlobalSubscriptionsService : IGlobalSubscriptionsService
+    internal class GlobalSubscriptionsService : IGlobalSubscriptionsService
     {
         private readonly ConcurrentDictionary<Subscription, bool> _globalSubscriptions;
         private readonly ConcurrentQueue<ISubscriptionCreationTask> _subscriptionCreationTasks;
         private readonly IRootAppServiceProvider _rootAppServiceProvider;
 
-        /// <summary>
-        ///     This API supports the FluentEvents infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
+        
         public GlobalSubscriptionsService(IRootAppServiceProvider rootAppServiceProvider)
         {
             _globalSubscriptions = new ConcurrentDictionary<Subscription, bool>();
@@ -22,7 +18,6 @@ namespace FluentEvents.Subscriptions
             _rootAppServiceProvider = rootAppServiceProvider;
         }
         
-        /// <inheritdoc />
         public void AddGlobalServiceHandlerSubscription<TService, TEvent>(bool isOptional)
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class
@@ -30,7 +25,6 @@ namespace FluentEvents.Subscriptions
             _subscriptionCreationTasks.Enqueue(new ServiceHandlerSubscriptionCreationTask<TService, TEvent>(isOptional));
         }
 
-        /// <inheritdoc />
         public IEnumerable<Subscription> GetGlobalSubscriptions()
         {
             while (_subscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
