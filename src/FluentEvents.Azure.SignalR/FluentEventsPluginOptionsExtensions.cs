@@ -19,7 +19,24 @@ namespace FluentEvents.Azure.SignalR
         ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceOptions"/> for
         ///     the topic sender plugin.
         /// </param>
-        /// <param name="httpClientBuilderAction">
+        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
+        public static IFluentEventsPluginOptions UseAzureSignalRService(
+            this IFluentEventsPluginOptions pluginOptions,
+            Action<AzureSignalRServiceOptions> configureAction
+        )
+        {
+            return pluginOptions.UseAzureSignalRService(configureAction, null);
+        }
+
+        /// <summary>
+        ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
+        /// </summary>
+        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="configureAction">
+        ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceOptions"/> for
+        ///     the topic sender plugin.
+        /// </param>
+        /// <param name="httpClientBuilder">
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
         ///     the Azure SignalR Service.
         /// </param>
@@ -27,12 +44,12 @@ namespace FluentEvents.Azure.SignalR
         public static IFluentEventsPluginOptions UseAzureSignalRService(
             this IFluentEventsPluginOptions pluginOptions,
             Action<AzureSignalRServiceOptions> configureAction,
-            Action<IHttpClientBuilder> httpClientBuilderAction = null
+            Action<IHttpClientBuilder> httpClientBuilder
         )
         {
             if (configureAction == null) throw new ArgumentNullException(nameof(configureAction));
 
-            pluginOptions.AddPlugin(new AzureSignalRPlugin(configureAction, httpClientBuilderAction));
+            pluginOptions.AddPlugin(new AzureSignalRPlugin(configureAction, httpClientBuilder));
 
             return pluginOptions;
         }
@@ -44,7 +61,23 @@ namespace FluentEvents.Azure.SignalR
         /// <param name="configuration">
         ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceOptions"/> type.
         /// </param>
-        /// <param name="httpClientBuilderAction">
+        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
+        public static IFluentEventsPluginOptions UseAzureSignalRService(
+            this IFluentEventsPluginOptions pluginOptions,
+            IConfiguration configuration
+        )
+        {
+            return pluginOptions.UseAzureSignalRService(configuration, null);
+        }
+
+        /// <summary>
+        ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
+        /// </summary>
+        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="configuration">
+        ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceOptions"/> type.
+        /// </param>
+        /// <param name="httpClientBuilder">
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
         ///     the Azure SignalR Service.
         /// </param>
@@ -52,12 +85,12 @@ namespace FluentEvents.Azure.SignalR
         public static IFluentEventsPluginOptions UseAzureSignalRService(
             this IFluentEventsPluginOptions pluginOptions,
             IConfiguration configuration,
-            Action<IHttpClientBuilder> httpClientBuilderAction = null
+            Action<IHttpClientBuilder> httpClientBuilder
         )
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
-            pluginOptions.AddPlugin(new AzureSignalRPlugin(configuration, httpClientBuilderAction));
+            pluginOptions.AddPlugin(new AzureSignalRPlugin(configuration, httpClientBuilder));
 
             return pluginOptions;
         }
