@@ -71,7 +71,7 @@ namespace FluentEvents.Queues
 
             var queue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
 
-            queue.Enqueue(new QueuedPipelineEvent(invokeNextModule, pipelineEvent));
+            queue.Enqueue(new QueuedPipelineEvent(invokeNextModule));
         }
     }
 }

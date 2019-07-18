@@ -179,7 +179,7 @@ namespace FluentEvents.UnitTests.Queues
                 .Returns(_eventsQueue)
                 .Verifiable();
 
-            _eventsQueue.Enqueue(new QueuedPipelineEvent(null, null));
+            _eventsQueue.Enqueue(new QueuedPipelineEvent(null));
 
             _eventsQueuesService.DiscardQueuedEvents(_eventsScopeMock.Object, _queueName);
 
@@ -244,7 +244,6 @@ namespace FluentEvents.UnitTests.Queues
             var queuedPipelineEvents = _eventsQueue.DequeueAll().ToList();
 
             Assert.That(queuedPipelineEvents, Has.One.Items);
-            Assert.That(queuedPipelineEvents, Has.One.Items.With.Property(nameof(QueuedPipelineEvent.PipelineEvent)).EqualTo(_pipelineEvent));
             Assert.That(queuedPipelineEvents, Has.One.Items.With.Property(nameof(QueuedPipelineEvent.InvokeNextModule)).EqualTo(invokeNextModule));
         }
 

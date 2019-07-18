@@ -708,60 +708,6 @@
                 An exception that is thrown when the events queue with the specified name does not exists.
             </summary>
         </member>
-        <member name="T:FluentEvents.Queues.IEventsQueue">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Queues.IEventsQueue.DiscardQueuedEvents">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Queues.IEventsQueue.Enqueue(FluentEvents.Queues.QueuedPipelineEvent)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Queues.IEventsQueue.DequeueAll">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="P:FluentEvents.Queues.IEventsQueue.Name">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Queues.QueuedPipelineEvent">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="P:FluentEvents.Queues.QueuedPipelineEvent.InvokeNextModule">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="P:FluentEvents.Queues.QueuedPipelineEvent.PipelineEvent">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Queues.QueuedPipelineEvent.#ctor(System.Func{System.Threading.Tasks.Task},FluentEvents.Pipelines.PipelineEvent)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
         <member name="T:FluentEvents.Routing.AttachingService">
             <inheritdoc />
         </member>

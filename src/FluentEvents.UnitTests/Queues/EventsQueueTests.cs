@@ -19,7 +19,7 @@ namespace FluentEvents.UnitTests.Queues
         {
             _eventsQueue = new EventsQueue(_eventsQueueName);
             var pipelineEvent = new PipelineEvent(new object());
-            _queuedPipelineEvent = new QueuedPipelineEvent(() => Task.CompletedTask, pipelineEvent);
+            _queuedPipelineEvent = new QueuedPipelineEvent(() => Task.CompletedTask);
         }
 
         [Test]
