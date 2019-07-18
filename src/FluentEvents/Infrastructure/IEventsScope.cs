@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentEvents.Queues;
-using FluentEvents.Subscriptions;
+﻿using System;
 
 namespace FluentEvents.Infrastructure
 {
@@ -11,22 +9,9 @@ namespace FluentEvents.Infrastructure
     public interface IEventsScope
     {
         /// <summary>
-        ///     Gets or creates a new queue with the given name
+        ///     This API supports the FluentEvents infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        /// <param name="queueName">The name of the queue</param>
-        /// <returns></returns>
-        IEventsQueue GetOrAddEventsQueue(string queueName);
-
-        /// <summary>
-        ///     Gets or creates all the scoped subscriptions.
-        /// </summary>
-        /// <returns>An <see cref="IEnumerable{Subscription}"/> of subscriptions.</returns>
-        IEnumerable<Subscription> GetSubscriptions();
-
-        /// <summary>
-        ///     Gets all the event queues created.
-        /// </summary>
-        /// <returns>An <see cref="IEnumerable{IEventsQueue}"/> of event queues.</returns>
-        IEnumerable<IEventsQueue> GetEventsQueues();
+        T GetOrAddFeature<T>(Func<IScopedAppServiceProvider, T> factory);
     }
 }

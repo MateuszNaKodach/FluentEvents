@@ -19,7 +19,8 @@ namespace FluentEvents.Infrastructure
             Action<EventsContextOptions> onConfiguring,
             Action<PipelinesBuilder> onBuildingPipelines,
             Action<SubscriptionsBuilder> onBuildingSubscriptions,
-            IAppServiceProvider appServiceProvider
+            IRootAppServiceProvider rootAppServiceProvider,
+            IEventsContext eventsContext
         )
         {
             _options = options;
@@ -28,8 +29,8 @@ namespace FluentEvents.Infrastructure
             _onBuildingSubscriptions = onBuildingSubscriptions;
 
             Configure();
-            var internalServices = new InternalServiceCollection(appServiceProvider);
-            _internalServiceProvider = internalServices.BuildServiceProvider(this, _options);
+            var internalServices = new InternalServiceCollection(rootAppServiceProvider);
+            _internalServiceProvider = internalServices.BuildServiceProvider(eventsContext, _options);
             Build();
         }
 

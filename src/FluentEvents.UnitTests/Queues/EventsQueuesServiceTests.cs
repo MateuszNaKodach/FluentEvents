@@ -15,11 +15,12 @@ namespace FluentEvents.UnitTests.Queues
     {
         private static readonly string _queueName = "queueName";
 
-        private Mock<IAppServiceProvider> _appServiceProviderMock;
-        private Mock<EventsContext> _eventsContextMock;
+        private Mock<IRootAppServiceProvider> _appServiceProviderMock;
+        private Mock<IEventsContext> _eventsContextMock;
         private Mock<IPipeline> _pipelineMock;
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
         private Mock<IEventsScope> _eventsScopeMock;
+        private Mock<IEventsScopeQueuesFeature> _eventsScopeQueuesFeatureMock;
 
         private EventsQueue _eventsQueue;
         private PipelineEvent _pipelineEvent;
@@ -29,16 +30,17 @@ namespace FluentEvents.UnitTests.Queues
         [SetUp]
         public void SetUp()
         {
-            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
-            _eventsContextMock = new Mock<EventsContext>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IRootAppServiceProvider>(MockBehavior.Strict);
+            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
             _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
+            _eventsScopeQueuesFeatureMock = new Mock<IEventsScopeQueuesFeature>(MockBehavior.Strict);
 
             _eventsQueue = new EventsQueue(_queueName);
             _pipelineEvent = MakeNewPipelineEvent();
 
-            _eventsQueuesService = new EventsQueuesService(_eventsQueueNamesServiceMock.Object);
+            _eventsQueuesService = new EventsQueuesService(_eventsContextMock.Object, _eventsQueueNamesServiceMock.Object);
         }
 
         [TearDown]
@@ -49,6 +51,8 @@ namespace FluentEvents.UnitTests.Queues
             _pipelineMock.Verify();
             _eventsContextMock.Verify();
             _eventsQueueNamesServiceMock.Verify();
+            _eventsScopeMock.Verify();
+            _eventsScopeQueuesFeatureMock.Verify();
         }
 
         private static PipelineEvent MakeNewPipelineEvent()
@@ -76,7 +80,12 @@ namespace FluentEvents.UnitTests.Queues
             }
 
             _eventsScopeMock
-                .Setup(x => x.GetEventsQueues())
+                .Setup(x => x.GetOrAddFeature(It.IsAny<Func<IScopedAppServiceProvider, IEventsScopeQueuesFeature>>()))
+                .Returns(_eventsScopeQueuesFeatureMock.Object)
+                .Verifiable();
+
+            _eventsScopeQueuesFeatureMock
+                .Setup(x => x.GetEventsQueues(_eventsContextMock.Object))
                 .Returns(queues)
                 .Verifiable();
 
@@ -140,7 +149,12 @@ namespace FluentEvents.UnitTests.Queues
             }
 
             _eventsScopeMock
-                .Setup(x => x.GetEventsQueues())
+                .Setup(x => x.GetOrAddFeature(It.IsAny<Func<IScopedAppServiceProvider, IEventsScopeQueuesFeature>>()))
+                .Returns(_eventsScopeQueuesFeatureMock.Object)
+                .Verifiable();
+
+            _eventsScopeQueuesFeatureMock
+                .Setup(x => x.GetEventsQueues(_eventsContextMock.Object))
                 .Returns(queues)
                 .Verifiable();
 
@@ -156,7 +170,12 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
 
             _eventsScopeMock
-                .Setup(x => x.GetOrAddEventsQueue(_queueName))
+                .Setup(x => x.GetOrAddFeature(It.IsAny<Func<IScopedAppServiceProvider, IEventsScopeQueuesFeature>>()))
+                .Returns(_eventsScopeQueuesFeatureMock.Object)
+                .Verifiable();
+
+            _eventsScopeQueuesFeatureMock
+                .Setup(x => x.GetOrAddEventsQueue(_eventsContextMock.Object, _queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 
@@ -232,7 +251,12 @@ namespace FluentEvents.UnitTests.Queues
         private void SetUpGetQueue()
         {
             _eventsScopeMock
-                .Setup(x => x.GetOrAddEventsQueue(_queueName))
+                .Setup(x => x.GetOrAddFeature(It.IsAny<Func<IScopedAppServiceProvider, IEventsScopeQueuesFeature>>()))
+                .Returns(_eventsScopeQueuesFeatureMock.Object)
+                .Verifiable();
+
+            _eventsScopeQueuesFeatureMock
+                .Setup(x => x.GetOrAddEventsQueue(_eventsContextMock.Object, _queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 

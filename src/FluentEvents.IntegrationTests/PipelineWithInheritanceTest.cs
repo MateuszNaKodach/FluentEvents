@@ -27,8 +27,9 @@ namespace FluentEvents.IntegrationTests
         {
             var subscribingService = _appServiceProvider.GetRequiredService<SubscribingService>();
             var testEventsContext = _appServiceProvider.GetRequiredService<TestEventsContext>();
+            var eventsScope = _appServiceProvider.CreateScope().ServiceProvider.GetRequiredService<EventsScope>();
 
-            TestUtils.AttachAndRaiseEvent(testEventsContext);
+            TestUtils.AttachAndRaiseEvent(testEventsContext, eventsScope);
             
             Assert.That(subscribingService, Has.Property(nameof(SubscribingService.BaseTestEvents)).Empty);
             Assert.That(subscribingService, Has.Property(nameof(SubscribingService.TestEvents)).With.One.Items);
@@ -52,11 +53,8 @@ namespace FluentEvents.IntegrationTests
                     .ThenIsPublishedToGlobalSubscriptions();
             }
 
-            public TestEventsContext(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider)
+                : base(options, rootAppServiceProvider)
             {
             }
         }

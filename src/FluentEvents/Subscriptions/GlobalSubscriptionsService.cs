@@ -9,17 +9,17 @@ namespace FluentEvents.Subscriptions
     {
         private readonly ConcurrentDictionary<Subscription, bool> _globalSubscriptions;
         private readonly ConcurrentQueue<ISubscriptionCreationTask> _subscriptionCreationTasks;
-        private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IRootAppServiceProvider _rootAppServiceProvider;
 
         /// <summary>
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public GlobalSubscriptionsService(IAppServiceProvider appServiceProvider)
+        public GlobalSubscriptionsService(IRootAppServiceProvider rootAppServiceProvider)
         {
             _globalSubscriptions = new ConcurrentDictionary<Subscription, bool>();
             _subscriptionCreationTasks = new ConcurrentQueue<ISubscriptionCreationTask>();
-            _appServiceProvider = appServiceProvider;
+            _rootAppServiceProvider = rootAppServiceProvider;
         }
         
         /// <inheritdoc />
@@ -34,7 +34,7 @@ namespace FluentEvents.Subscriptions
         public IEnumerable<Subscription> GetGlobalSubscriptions()
         {
             while (_subscriptionCreationTasks.TryDequeue(out var subscriptionCreationTask))
-                foreach (var subscription in subscriptionCreationTask.CreateSubscriptions(_appServiceProvider))
+                foreach (var subscription in subscriptionCreationTask.CreateSubscriptions(_rootAppServiceProvider))
                     _globalSubscriptions.TryAdd(subscription, true);
 
             return _globalSubscriptions.Keys;

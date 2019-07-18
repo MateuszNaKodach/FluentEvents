@@ -14,11 +14,8 @@ namespace FluentEvents.IntegrationTests
             {
             }
 
-            public TestEventsContext1(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext1(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+                : base(options, rootAppServiceProvider)
             {
             }
         }
@@ -29,11 +26,8 @@ namespace FluentEvents.IntegrationTests
             {
             }
 
-            public TestEventsContext2(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext2(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider)
+                : base(options, rootAppServiceProvider)
             {
             }
         }
@@ -44,11 +38,8 @@ namespace FluentEvents.IntegrationTests
             {
             }
 
-            public TestEventsContext3(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext3(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider)
+                : base(options, rootAppServiceProvider)
             {
             }
         }

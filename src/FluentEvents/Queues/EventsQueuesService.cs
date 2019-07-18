@@ -7,10 +7,12 @@ namespace FluentEvents.Queues
 {
     internal class EventsQueuesService : IEventsQueuesService
     {
+        private readonly IEventsContext _eventsContext;
         private readonly IEventsQueueNamesService _eventsQueueNamesService;
 
-        public EventsQueuesService(IEventsQueueNamesService eventsQueueNamesService)
+        public EventsQueuesService(IEventsContext eventsContext, IEventsQueueNamesService eventsQueueNamesService)
         {
+            _eventsContext = eventsContext;
             _eventsQueueNamesService = eventsQueueNamesService;
         }
 
@@ -23,12 +25,12 @@ namespace FluentEvents.Queues
                 if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.GetOrAddEventsQueue(queueName);
+                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
                 await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.GetEventsQueues())
+                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_eventsContext))
                     await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
         }
@@ -48,12 +50,12 @@ namespace FluentEvents.Queues
                 if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.GetOrAddEventsQueue(queueName);
+                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
                 eventsQueue.DiscardQueuedEvents();
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.GetEventsQueues())
+                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_eventsContext))
                     eventsQueue.DiscardQueuedEvents();
             }
         }
@@ -67,7 +69,7 @@ namespace FluentEvents.Queues
             if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                 throw new EventsQueueNotFoundException();
 
-            var queue = eventsScope.GetOrAddEventsQueue(queueName);
+            var queue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
 
             queue.Enqueue(new QueuedPipelineEvent(invokeNextModule, pipelineEvent));
         }

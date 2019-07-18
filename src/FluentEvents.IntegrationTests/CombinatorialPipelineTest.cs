@@ -22,6 +22,7 @@ namespace FluentEvents.IntegrationTests
         private SubscribingService _scopedSubscribingService;
         private SubscribingService _singletonSubscribingService;
         private IServiceProvider _serviceProvider;
+        private EventsScope _eventsScope;
 
         private void SetUpContext(TestRunParameters testRunParameters)
         {
@@ -41,8 +42,9 @@ namespace FluentEvents.IntegrationTests
             _scopedSubscribingService = serviceScope.ServiceProvider.GetRequiredService<ScopedSubscribingService>();
             _singletonSubscribingService = serviceScope.ServiceProvider.GetRequiredService<SingletonSubscribingService>();
             _context = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
+            _eventsScope = serviceScope.ServiceProvider.GetRequiredService<EventsScope>();
 
-            _context.Attach(_entity);
+            _context.Attach(_entity, _eventsScope);
         }
 
         [Test]
@@ -69,7 +71,7 @@ namespace FluentEvents.IntegrationTests
             await RaiseEvent(isAsync);
 
             if (isQueued)
-                await _context.ProcessQueuedEventsAsync();
+                await _context.ProcessQueuedEventsAsync(_eventsScope);
 
             var subscribingService = publicationType == PublicationType.ScopedWithServiceHandlerSubscription
                 ? _scopedSubscribingService
@@ -108,17 +110,17 @@ namespace FluentEvents.IntegrationTests
         private sealed class TestEventsContext : EventsContext
         {
             private readonly TestRunParameters _parameters;
-
+            
             public TestEventsContext(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider,
+                EventsContextOptions options, 
+                IRootAppServiceProvider rootAppServiceProvider,
                 TestRunParameters parameters
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            )
+                : base(options, rootAppServiceProvider)
             {
                 _parameters = parameters;
             }
-         
+
             protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
             {
                 if (!_parameters.IsProjected)

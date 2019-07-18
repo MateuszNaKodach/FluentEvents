@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentEvents.Infrastructure;
+using NUnit.Framework;
 
 namespace FluentEvents.IntegrationTests.Common
 {
@@ -7,14 +8,14 @@ namespace FluentEvents.IntegrationTests.Common
         private static readonly int _defaultTestEntityId = 5;
         private static readonly string _defaultTestEventArgsValue = nameof(_defaultTestEventArgsValue);
 
-        public static TestEntity AttachAndRaiseEvent(EventsContext eventsContext)
+        public static TestEntity AttachAndRaiseEvent(EventsContext eventsContext, EventsScope eventsScope)
         {
             var entity = new TestEntity
             {
                 Id = _defaultTestEntityId
             };
 
-            eventsContext.Attach(entity);
+            eventsContext.Attach(entity, eventsScope);
 
             entity.RaiseEvent(_defaultTestEventArgsValue);
 

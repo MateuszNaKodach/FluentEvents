@@ -17,8 +17,9 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
     [TestFixture]
     public class PublishWithAzureTopicTest
     {
-        private TestEventsContext _testEventsContext;
         private IServiceProvider _serviceProvider;
+        private TestEventsContext _testEventsContext;
+        private EventsScope _eventsScope;
         private EventReceiversHostedService _eventReceiversHostedService;
 
         [SetUp]
@@ -44,6 +45,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
             _serviceProvider = services.BuildServiceProvider();
 
             _testEventsContext = _serviceProvider.GetRequiredService<TestEventsContext>();
+            _eventsScope = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<EventsScope>();
             _eventReceiversHostedService = (EventReceiversHostedService) _serviceProvider
                 .GetRequiredService<IHostedService>();
         }
@@ -55,7 +57,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 
             var subscribingService = _serviceProvider.GetRequiredService<SubscribingService>();
 
-            TestUtils.AttachAndRaiseEvent(_testEventsContext);
+            TestUtils.AttachAndRaiseEvent(_testEventsContext, _eventsScope);
 
             await Watcher.WaitUntilAsync(() => subscribingService.TestEvents.Any());
 
@@ -66,14 +68,6 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 
         private class TestEventsContext : EventsContext
         {
-            public TestEventsContext(
-                EventsContextsRoot eventsContextsRoot, 
-                EventsContextOptions options, 
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
-            {
-            }
-
             protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
             {
                 subscriptionsBuilder
@@ -87,6 +81,11 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
                     .Event<TestEvent>()
                     .IsPiped()
                     .ThenIsPublishedToGlobalSubscriptions(x => x.WithAzureTopic());
+            }
+
+            public TestEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+                : base(options, rootAppServiceProvider)
+            {
             }
         }
     }

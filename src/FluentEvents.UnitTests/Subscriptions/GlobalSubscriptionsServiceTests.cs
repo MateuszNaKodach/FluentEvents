@@ -11,14 +11,14 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class GlobalSubscriptionsServiceTests
     {
-        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<IRootAppServiceProvider> _appServiceProviderMock;
 
         private GlobalSubscriptionsService _globalSubscriptionsService;
 
         [SetUp]
         public void SetUp()
         {
-            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IRootAppServiceProvider>(MockBehavior.Strict);
 
             _globalSubscriptionsService = new GlobalSubscriptionsService(_appServiceProviderMock.Object);
         }

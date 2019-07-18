@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using FluentEvents.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
@@ -35,7 +36,7 @@ namespace FluentEvents.UnitTests
             );
             Assert.That(
                 _serviceCollection,
-                Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsContextsRoot))
+                Has.One.Items.With.Property(nameof(ServiceDescriptor.ServiceType)).EqualTo(typeof(EventsScope))
             );
             Assert.That(
                 _serviceCollection,
@@ -51,14 +52,21 @@ namespace FluentEvents.UnitTests
         {
             var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             var eventsContextMock = new Mock<TestEventsContext>(MockBehavior.Strict);
+            var scopedAppServiceProviderMock = new Mock<IScopedAppServiceProvider>(MockBehavior.Strict);
+            var eventsScope = new EventsScope(scopedAppServiceProviderMock.Object);
 
             eventsContextMock
-                .Setup(x => x.Attach(It.IsAny<TestService1>()))
+                .Setup(x => x.Attach(It.IsAny<TestService1>(), eventsScope))
                 .Verifiable();
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(TestEventsContext)))
                 .Returns(eventsContextMock.Object)
+                .Verifiable();
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(EventsScope)))
+                .Returns(eventsScope)
                 .Verifiable();
 
             _serviceCollection.AddWithEventsAttachedTo<TestEventsContext>(() =>
@@ -208,11 +216,13 @@ namespace FluentEvents.UnitTests
         public class TestEventsContext : EventsContext
         {
             // ReSharper disable once UnusedMember.Global this constructor is needed for Moq
-            public TestEventsContext() : this(null)
+            public TestEventsContext() : this(null, null)
             {
             }
 
-            public TestEventsContext(EventsContextOptions options) : base(null, options, null)
+            // ReSharper disable once MemberCanBePrivate.Global this constructor is needed for DI
+            public TestEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+                : base(options, rootAppServiceProvider)
             {
             }
         }

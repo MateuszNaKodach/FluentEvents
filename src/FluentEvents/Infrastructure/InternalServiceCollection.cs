@@ -22,17 +22,17 @@ namespace FluentEvents.Infrastructure
     {
         public static readonly Type[] ServicesToIgnoreWhenAttaching = {typeof(ILoggerFactory)};
 
-        private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IRootAppServiceProvider _rootAppServiceProvider;
 
-        public InternalServiceCollection(IAppServiceProvider appServiceProvider)
+        public InternalServiceCollection(IRootAppServiceProvider rootAppServiceProvider)
         {
-            _appServiceProvider = appServiceProvider;
+            _rootAppServiceProvider = rootAppServiceProvider;
         }
 
-        public ServiceProvider BuildServiceProvider(InternalEventsContext eventsContext, IFluentEventsPluginOptions options)
+        public ServiceProvider BuildServiceProvider(IEventsContext eventsContext, IFluentEventsPluginOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
-                x => _appServiceProvider.GetService<ILoggerFactory>() ??
+                x => _rootAppServiceProvider.GetService<ILoggerFactory>() ??
                      new LoggerFactory(x.GetService<IEnumerable<ILoggerProvider>>());
 
             var services = new ServiceCollection();
@@ -43,7 +43,8 @@ namespace FluentEvents.Infrastructure
                 ServiceLifetime.Singleton
             ));
 
-            services.AddSingleton(_appServiceProvider);
+            services.AddSingleton(_rootAppServiceProvider);
+            services.AddSingleton(eventsContext);
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();

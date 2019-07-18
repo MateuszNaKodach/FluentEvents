@@ -8,7 +8,7 @@ namespace FluentEvents
     /// <summary>
     ///     The options used by an <see cref="EventsContext"/>
     /// </summary>
-    public sealed class EventsContextOptions : IFluentEventsPluginOptions
+    public class EventsContextOptions : IFluentEventsPluginOptions
     {
         private readonly IList<IFluentEventsPlugin> _plugins;
         IEnumerable<IFluentEventsPlugin> IFluentEventsPluginOptions.Plugins => _plugins;
@@ -16,7 +16,7 @@ namespace FluentEvents
         /// <summary>
         ///     Initializes a new instance.
         /// </summary>
-        internal EventsContextOptions()
+        public EventsContextOptions()
         {
             _plugins = new List<IFluentEventsPlugin>();
         }

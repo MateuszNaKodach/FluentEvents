@@ -20,7 +20,7 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
             var task3 = CheckEventPublishing(HubConnection3, semaphoreSlim, false);
             var allTasks = Task.WhenAll(task1, task2, task3);
 
-            TestUtils.AttachAndRaiseEvent(EventsContext);
+            TestUtils.AttachAndRaiseEvent(EventsContext, EventsScope);
             semaphoreSlim.Release(3);
 
             await allTasks;
@@ -38,11 +38,8 @@ namespace FluentEvents.Azure.SignalR.IntegrationTests
                     .ThenIsSentToAzureSignalRUsers(e => new[] { UserId1, UserId2 }, HubName, HubMethodName);
             }
 
-            public TestEventsContext(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+                : base(options, rootAppServiceProvider)
             {
             }
         }

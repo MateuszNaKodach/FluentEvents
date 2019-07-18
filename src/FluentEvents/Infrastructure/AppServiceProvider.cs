@@ -2,7 +2,7 @@
 
 namespace FluentEvents.Infrastructure
 {
-    internal class AppServiceProvider : IAppServiceProvider, IScopedAppServiceProvider
+    internal class AppServiceProvider : IRootAppServiceProvider, IScopedAppServiceProvider
     {
         private readonly IServiceProvider _serviceProvider;
 

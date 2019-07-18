@@ -33,6 +33,17 @@ namespace FluentEvents.UnitTests.Pipelines
         }
 
         [Test]
+        public void AddPipeline_TwiceWithSameType_ShouldAdd()
+        {
+            _pipelinesService.AddPipeline(typeof(object), _pipelineMock.Object);
+            _pipelinesService.AddPipeline(typeof(object), _pipelineMock.Object);
+
+            var pipelines = _pipelinesService.GetPipelines(typeof(object));
+
+            Assert.That(pipelines, Has.Exactly(2).Items);
+        }
+
+        [Test]
         public void GetPipelines_WithEventImplementingInterface_ShouldReturnPipelinesWithThatInterface()
         {
             _pipelinesService.AddPipeline(typeof(Event4), _pipelineMock.Object);

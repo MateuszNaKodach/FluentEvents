@@ -40,16 +40,21 @@ namespace FluentEvents
             var options = new EventsContextOptions();
             optionsBuilder(options);
 
-            services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
-            services.AddSingleton<IAppServiceProvider, AppServiceProvider>();
-            services.TryAddSingleton<EventsContextsRoot>();
+            services.TryAddScoped<EventsScope>();
 
-            var eventsContextFactory = ActivatorUtilities.CreateFactory(typeof(T), new[] {typeof(EventsContextOptions)});
+            var eventsContextFactory = ActivatorUtilities.CreateFactory(
+                typeof(T),
+                new[] {typeof(EventsContextOptions)}
+            );
             var eventsContextFactoryArgs = new object[] {options};
-            services.AddScoped(x => (T) eventsContextFactory(x, eventsContextFactoryArgs));
+            services.AddSingleton(x => (T) eventsContextFactory(x, eventsContextFactoryArgs));
+
+            services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
+            services.AddSingleton<IRootAppServiceProvider, AppServiceProvider>();
 
             var eventReceiversHostedServiceFactory = ActivatorUtilities.CreateFactory(
-                typeof(EventReceiversHostedService), new[] {typeof(IEventsContext) }
+                typeof(EventReceiversHostedService),
+                new[] {typeof(IEventsContext)}
             );
             services.AddTransient<IHostedService>(
                 x => (EventReceiversHostedService) eventReceiversHostedServiceFactory(
@@ -146,7 +151,8 @@ namespace FluentEvents
             if (InternalServiceCollection.ServicesToIgnoreWhenAttaching.All(x => x != serviceType))
             {
                 var eventsContext = serviceProvider.GetRequiredService<TEventsContext>();
-                eventsContext.Attach(service);
+                var eventsScope = serviceProvider.GetRequiredService<EventsScope>();
+                eventsContext.Attach(service, eventsScope);
             }
         }
 

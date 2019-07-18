@@ -12,7 +12,7 @@ namespace FluentEvents.UnitTests.Subscriptions
     [TestFixture]
     public class ServiceHandlerSubscriptionCreationTaskTests
     {
-        private Mock<IAppServiceProvider> _appServiceProviderMock;
+        private Mock<IRootAppServiceProvider> _appServiceProviderMock;
 
         private ISubscriptionCreationTask _subscriptionCreationTask;
         private ISubscriptionCreationTask _optionalSubscriptionCreationTask;
@@ -20,7 +20,7 @@ namespace FluentEvents.UnitTests.Subscriptions
         [SetUp]
         public void SetUp()
         {
-            _appServiceProviderMock = new Mock<IAppServiceProvider>(MockBehavior.Strict);
+            _appServiceProviderMock = new Mock<IRootAppServiceProvider>(MockBehavior.Strict);
 
             _subscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>(false);
             _optionalSubscriptionCreationTask = new ServiceHandlerSubscriptionCreationTask<TestService, object>(true);

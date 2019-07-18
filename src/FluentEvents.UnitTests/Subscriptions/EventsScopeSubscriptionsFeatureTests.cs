@@ -6,16 +6,17 @@ using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Infrastructure
+namespace FluentEvents.UnitTests.Subscriptions
 {
     [TestFixture]
-    public class EventsScopeTests
+    public class EventsScopeSubscriptionsFeatureTests
     {
         private Mock<IScopedAppServiceProvider> _scopedAppServiceProviderMock;
         private Mock<IServiceProvider> _internalServiceProviderMock;
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
+        private Mock<IEventsContext> _eventsContextMock;
 
-        private EventsScope _eventsScope;
+        private EventsScopeSubscriptionsFeature _eventsScopeSubscriptionsFeature;
 
         [SetUp]
         public void SetUp()
@@ -23,8 +24,18 @@ namespace FluentEvents.UnitTests.Infrastructure
             _scopedAppServiceProviderMock = new Mock<IScopedAppServiceProvider>(MockBehavior.Strict);
             _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
+            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
 
-            _eventsScope = new EventsScope(_internalServiceProviderMock.Object, _scopedAppServiceProviderMock.Object);
+            _eventsScopeSubscriptionsFeature = new EventsScopeSubscriptionsFeature(_scopedAppServiceProviderMock.Object);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _scopedAppServiceProviderMock.Verify();
+            _internalServiceProviderMock.Verify();
+            _scopedSubscriptionsServiceMock.Verify();
+            _eventsContextMock.Verify();
         }
 
         [Test]
@@ -32,7 +43,7 @@ namespace FluentEvents.UnitTests.Infrastructure
         {
             var allSubscriptions = SetUpSubscriptionsCreation().ToArray();
 
-            var createdSubscriptions = _eventsScope.GetSubscriptions().ToArray();
+            var createdSubscriptions = _eventsScopeSubscriptionsFeature.GetSubscriptions(_eventsContextMock.Object).ToArray();
 
             Assert.That(createdSubscriptions, Is.EquivalentTo(allSubscriptions));
         }
@@ -42,36 +53,14 @@ namespace FluentEvents.UnitTests.Infrastructure
         {
             var allSubscriptions = SetUpSubscriptionsCreation().ToArray();
 
-            var createdSubscriptions = _eventsScope.GetSubscriptions().ToArray();
+            var createdSubscriptions = _eventsScopeSubscriptionsFeature.GetSubscriptions(_eventsContextMock.Object).ToArray();
 
-            var storedSubscriptions = _eventsScope.GetSubscriptions().ToArray();
+            var storedSubscriptions = _eventsScopeSubscriptionsFeature.GetSubscriptions(_eventsContextMock.Object).ToArray();
 
             Assert.That(createdSubscriptions, Is.EquivalentTo(allSubscriptions));
             Assert.That(storedSubscriptions, Is.EquivalentTo(createdSubscriptions));
         }
 
-        [Test]
-        public void GetOrAddEventsQueue_WithExistingQueue_ShouldOnlyReturn()
-        {
-            var eventsQueue1 = _eventsScope.GetOrAddEventsQueue("1");
-            var eventsQueue2 = _eventsScope.GetOrAddEventsQueue("1");
-
-            var eventsQueues = _eventsScope.GetEventsQueues();
-
-            Assert.That(eventsQueues, Has.One.Items);
-            Assert.That(eventsQueue1, Is.EqualTo(eventsQueue2));
-        }
-
-        [Test]
-        public void GetEventsQueues_ShouldReturnAllQueues()
-        {
-            _eventsScope.GetOrAddEventsQueue("1");
-            _eventsScope.GetOrAddEventsQueue("2");
-
-            var eventsQueues = _eventsScope.GetEventsQueues();
-
-            Assert.That(eventsQueues, Has.Exactly(2).Items);
-        }
 
         private IEnumerable<Subscription> SetUpSubscriptionsCreation()
         {
@@ -82,6 +71,11 @@ namespace FluentEvents.UnitTests.Infrastructure
                 new Subscription(typeof(object), handler),
                 new Subscription(typeof(object), handler)
             };
+
+            _eventsContextMock
+                .As<IInfrastructure<IServiceProvider>>()
+                .Setup(x => x.Instance)
+                .Returns(_internalServiceProviderMock.Object);
 
             _internalServiceProviderMock
                 .Setup(x => x.GetService(typeof(IScopedSubscriptionsService)))
@@ -96,5 +90,4 @@ namespace FluentEvents.UnitTests.Infrastructure
             return scopedSubscriptions;
         }
     }
-
 }

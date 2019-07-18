@@ -4,8 +4,7 @@ using FluentEvents.Infrastructure;
 namespace FluentEvents
 {
     /// <summary>
-    ///     The EventsContext provides the API surface to configure how events are handled and to create global subscriptions.
-    ///     An EventsContext should be treated as a singleton.
+    ///     An interface for <see cref="EventsContext"/>s.
     /// </summary>
     public interface IEventsContext : IInfrastructure<IServiceProvider>
     {

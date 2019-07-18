@@ -87,11 +87,8 @@ namespace FluentEvents.EntityFramework.IntegrationTests
                     .ThenIsPublishedToGlobalSubscriptions();
             }
 
-            public TestEventsContext(
-                EventsContextsRoot eventsContextsRoot,
-                EventsContextOptions options,
-                IScopedAppServiceProvider scopedAppServiceProvider
-            ) : base(eventsContextsRoot, options, scopedAppServiceProvider)
+            public TestEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+                : base(options, rootAppServiceProvider)
             {
             }
         }
