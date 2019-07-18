@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace FluentEvents.Transmission
 {
     /// <inheritdoc />
-    public class EventReceiversService : IEventReceiversService
+    internal class EventReceiversService : IEventReceiversService
     {
         private readonly ILogger<EventReceiversService> _logger;
         private readonly IEnumerable<IEventReceiver> _eventReceivers;

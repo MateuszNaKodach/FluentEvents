@@ -8,11 +8,7 @@ namespace FluentEvents.Subscriptions
     /// </summary>
     public class SubscriptionPublishAggregateException : AggregateException
     {
-        /// <summary>
-        ///     Creates a new <see cref="SubscriptionPublishAggregateException"/>
-        /// </summary>
-        /// <param name="exceptions">The exceptions to aggregate.</param>
-        public SubscriptionPublishAggregateException(IEnumerable<Exception> exceptions) 
+        internal SubscriptionPublishAggregateException(IEnumerable<Exception> exceptions) 
             : base(exceptions)
         {
         }

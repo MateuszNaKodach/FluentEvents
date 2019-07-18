@@ -7,7 +7,7 @@ using FluentEvents.Pipelines;
 namespace FluentEvents.Routing
 {
     /// <inheritdoc />
-    public class ForwardingService : IForwardingService
+    internal class ForwardingService : IForwardingService
     {
         private readonly IRoutingService _routingService;
 

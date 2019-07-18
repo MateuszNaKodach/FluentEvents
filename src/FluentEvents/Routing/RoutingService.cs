@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace FluentEvents.Routing
 {
     /// <inheritdoc />
-    public class RoutingService : IRoutingService
+    internal class RoutingService : IRoutingService
     {
         private readonly ILogger<RoutingService> _logger;
         private readonly IPipelinesService _pipelinesService;

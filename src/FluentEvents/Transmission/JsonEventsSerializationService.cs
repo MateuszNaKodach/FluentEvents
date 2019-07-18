@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 namespace FluentEvents.Transmission
 {
     /// <inheritdoc />
-    public class JsonEventsSerializationService : IEventsSerializationService
+    internal class JsonEventsSerializationService : IEventsSerializationService
     {
         private readonly JsonSerializerSettings _serializerSettings;
 

@@ -7,7 +7,7 @@ using FluentEvents.Utils;
 namespace FluentEvents.Routing
 {
     /// <inheritdoc />
-    public class AttachingService : IAttachingService
+    internal class AttachingService : IAttachingService
     {
         private readonly ISourceModelsService _sourceModelsService;
         private readonly IForwardingService _forwardingService;

@@ -13,7 +13,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
         ///     Creates a new instance of <see cref="ServiceBusSubscriptionCreationException" />
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
-        public ServiceBusSubscriptionCreationException(Exception innerException) 
+        internal ServiceBusSubscriptionCreationException(Exception innerException) 
             : base("Failed to create a subscription to the Azure Service Bus topic", innerException)
         {
         }
