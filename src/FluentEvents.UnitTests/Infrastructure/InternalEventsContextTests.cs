@@ -1,4 +1,5 @@
-﻿using FluentEvents.Configuration;
+﻿using System;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using Moq;
 using NUnit.Framework;
@@ -56,6 +57,38 @@ namespace FluentEvents.UnitTests.Infrastructure
                 internalEventsContext,
                 Has.Property(nameof(internalEventsContext.InternalServiceProvider)).Not.Null
             );
+        }
+
+        [Test]
+        public void Dispose_ShouldDisposeInternalServiceProvider()
+        {
+            void OnConfiguring(EventsContextOptions x)
+            {
+            }
+
+            void OnBuildingPipelines(PipelinesBuilder x)
+            {
+            }
+
+            void OnBuildingSubscriptions(SubscriptionsBuilder x)
+            {
+            }
+
+            var internalEventsContext = new InternalEventsContext(
+                _options,
+                OnConfiguring,
+                OnBuildingPipelines,
+                OnBuildingSubscriptions,
+                _appServiceProviderMock.Object,
+                _eventsContextMock.Object
+            );
+
+            internalEventsContext.Dispose();
+
+            Assert.That(() =>
+            {
+                internalEventsContext.InternalServiceProvider.GetService(typeof(object));
+            }, Throws.TypeOf<ObjectDisposedException>());
         }
     }
 }
