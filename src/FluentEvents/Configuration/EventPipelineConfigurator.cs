@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Infrastructure;
-using FluentEvents.Model;
 using FluentEvents.Pipelines;
 
 namespace FluentEvents.Configuration

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentEvents.Configuration;
-using FluentEvents.Model;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;

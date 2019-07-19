@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentEvents.Configuration;
-using FluentEvents.Model;
 using FluentEvents.Pipelines;
 using FluentEvents.Infrastructure;
 using Moq;

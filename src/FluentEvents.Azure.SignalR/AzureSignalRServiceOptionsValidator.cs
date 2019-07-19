@@ -1,6 +1,4 @@
-﻿using System;
-using FluentEvents.Azure.SignalR.Client;
-using FluentEvents.Infrastructure;
+﻿using FluentEvents.Azure.SignalR.Client;
 using Microsoft.Extensions.Options;
 
 namespace FluentEvents.Azure.SignalR

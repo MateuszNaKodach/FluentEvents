@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentEvents.Pipelines;
+﻿using FluentEvents.Pipelines;
 using Moq;
 using NUnit.Framework;
 

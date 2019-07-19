@@ -1,5 +1,4 @@
-﻿using FluentEvents.Azure.SignalR.Client;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.SignalR.UnitTests
