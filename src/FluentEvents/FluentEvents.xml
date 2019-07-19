@@ -174,6 +174,11 @@
                 If null all the events will be discarded.
             </param>
         </member>
+        <member name="M:FluentEvents.EventsContext.GetEventReceiversHostedService">
+            <summary>
+                Returns an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/> that can start or stop the configured event receivers.
+            </summary>
+        </member>
         <member name="T:FluentEvents.EventsContextOptions">
             <summary>
                 The options used by an <see cref="T:FluentEvents.EventsContext"/>
@@ -229,6 +234,38 @@
         <member name="T:FluentEvents.IEventsContext">
             <summary>
                 An interface for <see cref="T:FluentEvents.EventsContext"/>s.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.Attach(System.Object,FluentEvents.EventsScope)">
+            <summary>
+                Attach an event source to the context in order to forward it's events to the configured pipelines.
+            </summary>
+            <param name="source">The event source.</param>
+            <param name="eventsScope">The scope of the events published from this source.</param>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope,System.String)">
+            <summary>
+                Continues the processing of the events that have been queued.
+            </summary>
+            <param name="eventsScope">The scope where the queued events were published.</param>
+            <param name="queueName">
+                The name of the queue.
+                If null all the events will be processed.
+            </param>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.DiscardQueuedEvents(FluentEvents.EventsScope,System.String)">
+            <summary>
+                Discards all the events of a queue.
+            </summary>
+            <param name="eventsScope">The scope where the queued events were published.</param>
+            <param name="queueName">
+                The name of the queue.
+                If null all the events will be discarded.
+            </param>
+        </member>
+        <member name="M:FluentEvents.IEventsContext.GetEventReceiversHostedService">
+            <summary>
+                Returns an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/> that can start or stop the configured event receivers.
             </summary>
         </member>
         <member name="T:FluentEvents.Infrastructure.IEventsScope">
@@ -441,6 +478,9 @@
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
             </summary>
+            <exception cref="T:System.ArgumentNullException">
+                 <paramref name="eventType"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="T:FluentEvents.Pipelines.NextModuleDelegate">
             <summary>
@@ -501,8 +541,13 @@
                 The instance of the event.
             </summary>
         </member>
+        <member name="M:FluentEvents.Pipelines.PipelineEvent.#ctor">
+            <summary>
+                Empty constructor for serialization.
+            </summary>
+        </member>
         <member name="M:FluentEvents.Pipelines.PipelineEvent.#ctor(System.Object)">
-            <param name="event">The instance of the event.</param>
+            <param name="e">The instance of the event.</param>
         </member>
         <member name="T:FluentEvents.Pipelines.PipelineModuleNotFoundException">
             <summary>
@@ -816,7 +861,7 @@
             </example>
             <typeparam name="TEventsContext">The <see cref="T:FluentEvents.EventsContext"/> where the services are attached.</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
-            <param name="addServicesAction">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="addServices">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
         <member name="T:FluentEvents.Subscriptions.EventTypeMismatchException">
@@ -890,18 +935,6 @@
                 An exception that aggregates all exceptions thrown by the handlers of an event.
             </summary>
         </member>
-        <member name="T:FluentEvents.Transmission.EventReceiversHostedService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Transmission.EventReceiversHostedService.#ctor(FluentEvents.IEventsContext)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
         <member name="M:FluentEvents.Transmission.EventReceiversHostedService.StartAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -939,24 +972,6 @@
                 This method should stop the worker that receives events transmitted from an <see cref="T:FluentEvents.Transmission.IEventSender"/>. 
             </summary>
             <param name="cancellationToken">Indicates that the start receiving process has been aborted.</param>
-        </member>
-        <member name="T:FluentEvents.Transmission.IEventReceiversService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Transmission.IEventReceiversService.StartReceiversAsync(System.Threading.CancellationToken)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Transmission.IEventReceiversService.StopReceiversAsync(System.Threading.CancellationToken)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
         </member>
         <member name="T:FluentEvents.Transmission.IEventSender">
             <summary>

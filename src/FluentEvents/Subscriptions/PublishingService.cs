@@ -11,20 +11,20 @@ namespace FluentEvents.Subscriptions
     internal class PublishingService : IPublishingService
     {
         private readonly ILogger<PublishingService> _logger;
-        private readonly IEventsContext _eventsContext;
         private readonly IGlobalSubscriptionsService _globalSubscriptionsService;
+        private readonly IScopedSubscriptionsService _scopedSubscriptionsService;
         private readonly ISubscriptionsMatchingService _subscriptionsMatchingService;
 
         public PublishingService(
             ILogger<PublishingService> logger,
-            IEventsContext eventsContext,
             IGlobalSubscriptionsService globalSubscriptionsService,
+            IScopedSubscriptionsService scopedSubscriptionsService,
             ISubscriptionsMatchingService subscriptionsMatchingService
         )
         {
             _logger = logger;
-            _eventsContext = eventsContext;
             _globalSubscriptionsService = globalSubscriptionsService;
+            _scopedSubscriptionsService = scopedSubscriptionsService;
             _subscriptionsMatchingService = subscriptionsMatchingService;
         }
 
@@ -32,7 +32,9 @@ namespace FluentEvents.Subscriptions
         {
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
-            return PublishInternalAsync(pipelineEvent, eventsScope.GetSubscriptionsFeature().GetSubscriptions(_eventsContext));
+            var subscriptions = eventsScope.GetSubscriptionsFeature().GetSubscriptions(_scopedSubscriptionsService);
+
+            return PublishInternalAsync(pipelineEvent, subscriptions);
         }
 
         public Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)

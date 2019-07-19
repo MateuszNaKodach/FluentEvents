@@ -32,6 +32,8 @@ namespace FluentEvents.Pipelines
         /// <inheritdoc />
         public IEnumerable<IPipeline> GetPipelines(Type eventType)
         {
+            if (eventType == null) throw new ArgumentNullException(nameof(eventType));
+
             foreach (var type in eventType.GetBaseTypesAndInterfacesInclusive())
                 if (_pipelines.TryGetValue(type, out var pipelines))
                     foreach (var pipeline in pipelines)

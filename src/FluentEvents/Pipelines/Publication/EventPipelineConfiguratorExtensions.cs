@@ -25,6 +25,8 @@ namespace FluentEvents.Pipelines.Publication
         )
             where TEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
+
             eventPipelineConfigurator
                 .Get<IPipeline>()
                 .AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
@@ -96,6 +98,6 @@ namespace FluentEvents.Pipelines.Publication
         )
             where TEvent : class
 
-            => eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(x => x.Locally());
+            => eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(x => ConfigureTransmission.Locally());
     }
 }

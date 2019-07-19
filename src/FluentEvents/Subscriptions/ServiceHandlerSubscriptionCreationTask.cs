@@ -20,7 +20,7 @@ namespace FluentEvents.Subscriptions
         /// <inheritdoc />
         public IEnumerable<Subscription> CreateSubscriptions(IServiceProvider appServiceProvider)
         {
-            var services = appServiceProvider.GetService<IEnumerable<TService>>();
+            var services = appServiceProvider.GetService<IEnumerable<TService>>().ToArray();
 
             if (!_isOptional && !services.Any())
                 throw new SubscribingServiceNotFoundException(typeof(TService));

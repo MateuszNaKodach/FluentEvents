@@ -37,6 +37,8 @@ namespace FluentEvents
         )
             where T : EventsContext
         {
+            if (optionsBuilder == null) throw new ArgumentNullException(nameof(optionsBuilder));
+
             var options = new EventsContextOptions();
             optionsBuilder(options);
 
@@ -52,16 +54,7 @@ namespace FluentEvents
             services.AddScoped<IScopedAppServiceProvider, AppServiceProvider>();
             services.AddSingleton<IRootAppServiceProvider, AppServiceProvider>();
 
-            var eventReceiversHostedServiceFactory = ActivatorUtilities.CreateFactory(
-                typeof(EventReceiversHostedService),
-                new[] {typeof(IEventsContext)}
-            );
-            services.AddTransient<IHostedService>(
-                x => (EventReceiversHostedService) eventReceiversHostedServiceFactory(
-                    x,
-                    new object[] {x.GetRequiredService<T>()}
-                )
-            );
+            services.AddTransient(x => x.GetRequiredService<T>().GetEventReceiversHostedService());
         
             return services;
         }
@@ -85,16 +78,18 @@ namespace FluentEvents
         /// </example>
         /// <typeparam name="TEventsContext">The <see cref="EventsContext"/> where the services are attached.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to register with.</param>
-        /// <param name="addServicesAction">An <see cref="Action"/> that add services to the <see cref="IServiceCollection"/>.</param>
+        /// <param name="addServices">An <see cref="Action"/> that add services to the <see cref="IServiceCollection"/>.</param>
         /// <returns>The original <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddWithEventsAttachedTo<TEventsContext>(
             this IServiceCollection services,
-            Action addServicesAction
+            Action addServices
         )
             where TEventsContext : EventsContext
         {
+            if (addServices == null) throw new ArgumentNullException(nameof(addServices));
+
             var originalServices = services.ToArray();
-            addServicesAction();
+            addServices();
             var addedServices = services.Where(x => originalServices.All(y => y != x)).ToArray();
 
             foreach (var addedService in addedServices)

@@ -47,6 +47,7 @@ namespace FluentEvents.Azure.SignalR
             Action<IHttpClientBuilder> httpClientBuilder
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
             if (configureAction == null) throw new ArgumentNullException(nameof(configureAction));
 
             pluginOptions.AddPlugin(new AzureSignalRPlugin(configureAction, httpClientBuilder));
@@ -88,6 +89,7 @@ namespace FluentEvents.Azure.SignalR
             Action<IHttpClientBuilder> httpClientBuilder
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
             pluginOptions.AddPlugin(new AzureSignalRPlugin(configuration, httpClientBuilder));

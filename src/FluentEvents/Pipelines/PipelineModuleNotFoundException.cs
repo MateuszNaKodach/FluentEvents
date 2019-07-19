@@ -6,6 +6,7 @@ namespace FluentEvents.Pipelines
     ///     An exception thrown when the configured pipeline module wasn't registered
     ///     in the internal <see cref="IServiceProvider"/>.
     /// </summary>
+    [Serializable]
     public class PipelineModuleNotFoundException : FluentEventsException
     {
         internal PipelineModuleNotFoundException()

@@ -7,7 +7,7 @@ namespace FluentEvents.Azure.SignalR.Client
 {
     internal class EventSendingService : IEventSendingService
     {
-        private static readonly string[] _nullReceiver = {null};
+        private static readonly string[] _nullReceiver = { null };
 
         private readonly IAzureSignalRHttpClient _signalRHttpClient;
         private readonly IUrlProvider _urlProvider;
@@ -51,19 +51,20 @@ namespace FluentEvents.Azure.SignalR.Client
                     url
                 );
 
-                var response = await _signalRHttpClient.SendAsync(request).ConfigureAwait(false);
-
-                try
+                using (var response = await _signalRHttpClient.SendAsync(request).ConfigureAwait(false))
                 {
-                    response.EnsureSuccessStatusCode();
-                }
-                catch (HttpRequestException ex)
-                {
-                    throw new AzureSignalRPublishingFailedException(ex);
-                }
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        throw new AzureSignalRPublishingFailedException(ex);
+                    }
 
-                if (response.StatusCode != HttpStatusCode.Accepted)
-                    throw new AzureSignalRPublishingFailedException(response.StatusCode);
+                    if (response.StatusCode != HttpStatusCode.Accepted)
+                        throw new AzureSignalRPublishingFailedException(response.StatusCode);
+                }
             }
         }
     }

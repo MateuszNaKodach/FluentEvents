@@ -16,12 +16,14 @@
 
   <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\FluentEvents.ruleset" Pack="false" PackagePath="" />
   </ItemGroup>
    
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>FluentEvents.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>..\..\FluentEvents.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
+   
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />

@@ -8,6 +8,8 @@ namespace FluentEvents.Utils
     {
         internal static IEnumerable<Type> GetBaseTypesAndInterfacesInclusive(this Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             foreach (var typeInterface in type.GetInterfaces())
                 yield return typeInterface;
 
@@ -21,6 +23,9 @@ namespace FluentEvents.Utils
 
         internal static FieldInfo GetFieldFromBaseTypesInclusive(this Type type, string name, BindingFlags bindingFlags)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             FieldInfo eventFieldInfo = null;
             while (eventFieldInfo == null && type != null)
             {

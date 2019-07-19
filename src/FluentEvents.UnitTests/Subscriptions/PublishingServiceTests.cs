@@ -16,8 +16,9 @@ namespace FluentEvents.UnitTests.Subscriptions
 
         private Mock<ILogger<PublishingService>> _loggerMock;
         private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
+        private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
         private Mock<ISubscriptionsMatchingService> _subscriptionsMatchingServiceMock;
-        private Mock<IEventsContext> _eventsContextMock;
+
         private Mock<IEventsScope> _eventsScopeMock;
         private Mock<IEventsScopeSubscriptionsFeature> _eventsScopeSubscriptionsFeatureMock;
 
@@ -34,15 +35,16 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             _loggerMock = new Mock<ILogger<PublishingService>>(MockBehavior.Strict);
             _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
+            _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
             _subscriptionsMatchingServiceMock = new Mock<ISubscriptionsMatchingService>(MockBehavior.Strict);
-            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+
             _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
             _eventsScopeSubscriptionsFeatureMock = new Mock<IEventsScopeSubscriptionsFeature>(MockBehavior.Strict);
 
             _publishingService = new PublishingService(
                 _loggerMock.Object,
-                _eventsContextMock.Object,
                 _globalSubscriptionsServiceMock.Object,
+                _scopedSubscriptionsServiceMock.Object,
                 _subscriptionsMatchingServiceMock.Object
             );
 
@@ -76,8 +78,9 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             _loggerMock.Verify();
             _globalSubscriptionsServiceMock.Verify();
+            _scopedSubscriptionsServiceMock.Verify();
             _subscriptionsMatchingServiceMock.Verify();
-            _eventsContextMock.Verify();
+
             _eventsScopeMock.Verify();
             _eventsScopeSubscriptionsFeatureMock.Verify();
         }
@@ -185,7 +188,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                 .Verifiable();
 
             _eventsScopeSubscriptionsFeatureMock
-                .Setup(x => x.GetSubscriptions(_eventsContextMock.Object))
+                .Setup(x => x.GetSubscriptions(_scopedSubscriptionsServiceMock.Object))
                 .Returns(_subscriptions)
                 .Verifiable();
         }

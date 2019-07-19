@@ -11,18 +11,27 @@ namespace FluentEvents.Pipelines
         /// <summary>
         ///     The instance of the event.
         /// </summary>
-        public object Event { get; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local The setter is needed for serialization.
+        public object Event { get; private set; }
 
         /// <summary>
         ///     The instance of the event.
         /// </summary>
-        public Type EventType { get; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local The setter is needed for serialization.
+        public Type EventType { get; private set; }
 
-        /// <param name="event">The instance of the event.</param>
-        public PipelineEvent(object @event)
+        /// <summary>
+        ///     Empty constructor for serialization.
+        /// </summary>
+        public PipelineEvent()
         {
-            Event = @event;
-            EventType = @event.GetType();
+        }
+
+        /// <param name="e">The instance of the event.</param>
+        public PipelineEvent(object e)
+        {
+            Event = e ?? throw new ArgumentNullException(nameof(e));
+            EventType = e.GetType();
         }
     }
 }

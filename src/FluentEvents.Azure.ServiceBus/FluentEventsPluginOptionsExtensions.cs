@@ -26,7 +26,10 @@ namespace FluentEvents.Azure.ServiceBus
             Action<AzureTopicEventSenderOptions> configureOptions
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+
             pluginOptions.AddPlugin(new AzureTopicEventSenderPlugin(configureOptions));
+
             return pluginOptions;
         }
 
@@ -44,7 +47,10 @@ namespace FluentEvents.Azure.ServiceBus
             IConfiguration configuration
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+
             pluginOptions.AddPlugin(new AzureTopicEventSenderPlugin(configuration));
+
             return pluginOptions;
         }
 
@@ -65,7 +71,10 @@ namespace FluentEvents.Azure.ServiceBus
             Action<AzureTopicEventReceiverOptions> configureOptions
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+
             pluginOptions.AddPlugin(new AzureTopicEventReceiverPlugin(configureOptions));
+
             return pluginOptions;
         }
 
@@ -86,7 +95,10 @@ namespace FluentEvents.Azure.ServiceBus
             IConfiguration configuration
         )
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+
             pluginOptions.AddPlugin(new AzureTopicEventReceiverPlugin(configuration));
+
             return pluginOptions;
         }
     }

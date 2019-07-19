@@ -30,6 +30,7 @@ namespace FluentEvents.Pipelines.Filters
         )
             where TEvent : class 
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (filter == null) throw new ArgumentNullException(nameof(filter));
 
             eventPipelineConfigurator.Get<IPipeline>()

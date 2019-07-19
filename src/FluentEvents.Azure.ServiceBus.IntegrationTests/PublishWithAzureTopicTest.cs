@@ -6,7 +6,6 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
-using FluentEvents.Transmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +19,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
         private IServiceProvider _serviceProvider;
         private TestEventsContext _testEventsContext;
         private EventsScope _eventsScope;
-        private EventReceiversHostedService _eventReceiversHostedService;
+        private IHostedService _eventReceiversHostedService;
 
         [SetUp]
         public void SetUp()
@@ -46,8 +45,7 @@ namespace FluentEvents.Azure.ServiceBus.IntegrationTests
 
             _testEventsContext = _serviceProvider.GetRequiredService<TestEventsContext>();
             _eventsScope = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<EventsScope>();
-            _eventReceiversHostedService = (EventReceiversHostedService) _serviceProvider
-                .GetRequiredService<IHostedService>();
+            _eventReceiversHostedService = _serviceProvider.GetRequiredService<IHostedService>();
         }
 
         [Test]

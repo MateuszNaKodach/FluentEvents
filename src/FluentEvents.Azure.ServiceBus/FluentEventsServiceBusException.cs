@@ -6,6 +6,7 @@ namespace FluentEvents.Azure.ServiceBus
     /// <summary>
     ///     An exception thrown by the FluentEvents.Azure.ServiceBus plugin.
     /// </summary>
+    [Serializable]
     public abstract class FluentEventsServiceBusException : FluentEventsException
     {
         /// <inheritdoc />

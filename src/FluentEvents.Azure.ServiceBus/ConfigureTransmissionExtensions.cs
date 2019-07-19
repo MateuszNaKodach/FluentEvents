@@ -1,4 +1,6 @@
-﻿using FluentEvents.Azure.ServiceBus.Sending;
+﻿using System;
+using FluentEvents.Azure.ServiceBus.Sending;
+using FluentEvents.Configuration;
 using FluentEvents.Pipelines.Publication;
 
 namespace FluentEvents.Azure.ServiceBus
@@ -17,18 +19,20 @@ namespace FluentEvents.Azure.ServiceBus
         /// </remarks>
         /// <param name="configureTransmission">
         ///     The <see cref="IConfigureTransmission"/> provided by the
-        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(FluentEvents.Configuration.EventPipelineConfigurator{TEvent},System.Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfigurator{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
         ///     method.
         /// </param>
         /// <returns>
         ///     The <see cref="IPublishTransmissionConfiguration"/> for the
-        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(FluentEvents.Configuration.EventPipelineConfigurator{TEvent},System.Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfigurator{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
         ///     method.
         /// </returns>
         public static IPublishTransmissionConfiguration WithAzureTopic(
             this IConfigureTransmission configureTransmission
         )
         {
+            if (configureTransmission == null) throw new ArgumentNullException(nameof(configureTransmission));
+
             return configureTransmission.With<AzureTopicEventSender>();
         }
     }

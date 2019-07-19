@@ -19,7 +19,7 @@ namespace FluentEvents
 
         /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:FluentEvents.FluentEventsException" /> class.
+        ///     Initializes a new instance of the <see cref="FluentEventsException" /> class.
         /// </summary>
         protected FluentEventsException(string message, Exception inner) : base(message, inner)
         {

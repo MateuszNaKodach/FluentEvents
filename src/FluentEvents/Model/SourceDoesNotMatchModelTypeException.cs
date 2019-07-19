@@ -1,9 +1,12 @@
-﻿namespace FluentEvents.Model
+﻿using System;
+
+namespace FluentEvents.Model
 {
     /// <summary>
     ///     An exception thrown when trying to route an event with a source type different from
     ///     the <see cref="SourceModel.ClrType"/>.
     /// </summary>
+    [Serializable]
     public class SourceDoesNotMatchModelTypeException : FluentEventsException
     {
         internal SourceDoesNotMatchModelTypeException()

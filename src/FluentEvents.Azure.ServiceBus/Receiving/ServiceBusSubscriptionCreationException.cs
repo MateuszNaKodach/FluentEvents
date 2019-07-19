@@ -6,6 +6,7 @@ namespace FluentEvents.Azure.ServiceBus.Receiving
     /// <summary>
     ///     An exception thrown when the creation of an Azure Service Bus topic subscription fails.
     /// </summary>
+    [Serializable]
     public class ServiceBusSubscriptionCreationException : FluentEventsServiceBusException
     {
         /// <inheritdoc />

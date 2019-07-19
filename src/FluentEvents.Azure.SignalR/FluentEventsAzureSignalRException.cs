@@ -6,6 +6,7 @@ namespace FluentEvents.Azure.SignalR
     /// <summary>
     ///     An exception thrown by the FluentEvents.Azure.SignalR plugin.
     /// </summary>
+    [Serializable]
     public abstract class FluentEventsAzureSignalRException : FluentEventsException
     {
         /// <inheritdoc />

@@ -1,4 +1,6 @@
-﻿namespace FluentEvents.Infrastructure
+﻿using System.ComponentModel;
+
+namespace FluentEvents.Infrastructure
 {
     /// <summary>
     ///     This API supports the FluentEvents infrastructure and is not intended to be used
@@ -10,6 +12,7 @@
         ///     This API supports the FluentEvents infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         T Instance { get; }
     }
 }

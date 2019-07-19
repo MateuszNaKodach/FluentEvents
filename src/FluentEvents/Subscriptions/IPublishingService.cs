@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 
@@ -15,7 +16,7 @@ namespace FluentEvents.Subscriptions
         /// <param name="pipelineEvent">The event to publish.</param>
         /// <param name="eventsScope">The scope of the event and the subscriptions.</param>
         /// <returns>An awaitable task.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         ///     <paramref name="eventsScope"/> is <see langword="null"/>
         /// </exception>
         Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope);

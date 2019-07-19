@@ -34,6 +34,7 @@ namespace FluentEvents.Pipelines.Projections
             where TEvent : class
             where TToEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (eventConverter == null) throw new ArgumentNullException(nameof(eventConverter));
             
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(

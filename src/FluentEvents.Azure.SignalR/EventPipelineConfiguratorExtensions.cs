@@ -30,6 +30,7 @@ namespace FluentEvents.Azure.SignalR
         )
             where TEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (hubName == null) throw new ArgumentNullException(nameof(hubName));
 
             AddModule(eventPipelineConfigurator, PublicationMethod.Broadcast, hubName, hubMethodName, null);
@@ -61,6 +62,7 @@ namespace FluentEvents.Azure.SignalR
         )
             where TEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (hubName == null) throw new ArgumentNullException(nameof(hubName));
 
             AddModule(eventPipelineConfigurator, PublicationMethod.User, hubName, hubMethodName, userIdsProviderAction);
@@ -92,6 +94,7 @@ namespace FluentEvents.Azure.SignalR
         )
             where TEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (hubName == null) throw new ArgumentNullException(nameof(hubName));
 
             AddModule(eventPipelineConfigurator, PublicationMethod.Group, hubName, hubMethodName, groupIdsProviderAction);

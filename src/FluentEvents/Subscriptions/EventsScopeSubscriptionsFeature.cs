@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentEvents.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Subscriptions
 {
@@ -17,16 +15,13 @@ namespace FluentEvents.Subscriptions
             _scopedAppServiceProvider = scopedAppServiceProvider;
         }
 
-        public IEnumerable<Subscription> GetSubscriptions(IEventsContext eventsContext)
+        public IEnumerable<Subscription> GetSubscriptions(IScopedSubscriptionsService scopedSubscriptionsService)
         {
             lock (_syncSubscriptions)
             {
                 if (_subscriptions == null)
                 {
                     var subscriptions = new List<Subscription>();
-                    var scopedSubscriptionsService = eventsContext
-                        .Get<IServiceProvider>()
-                        .GetRequiredService<IScopedSubscriptionsService>();
 
                     subscriptions.AddRange(
                         scopedSubscriptionsService.SubscribeServices(_scopedAppServiceProvider)

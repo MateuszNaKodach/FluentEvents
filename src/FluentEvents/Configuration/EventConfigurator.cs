@@ -8,7 +8,7 @@ namespace FluentEvents.Configuration
     /// <summary>
     ///     Provides a simple API surface for configuring an event.
     /// </summary>
-    public class EventConfigurator<TEvent> : IInfrastructure<IServiceProvider>
+    public sealed class EventConfigurator<TEvent> : IInfrastructure<IServiceProvider>
         where TEvent : class 
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;

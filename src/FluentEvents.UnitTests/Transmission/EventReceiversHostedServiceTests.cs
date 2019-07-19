@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using FluentEvents.Infrastructure;
 using FluentEvents.Transmission;
 using Moq;
 using NUnit.Framework;
@@ -11,8 +9,6 @@ namespace FluentEvents.UnitTests.Transmission
     [TestFixture]
     public class EventReceiversHostedServiceTests
     {
-        private Mock<IEventsContext> _eventsContextMock;
-        private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IEventReceiversService> _eventReceiversServiceMock;
 
         private EventReceiversHostedService _eventReceiversHostedService;
@@ -20,30 +16,15 @@ namespace FluentEvents.UnitTests.Transmission
         [SetUp]
         public void SetUp()
         {
-            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
-            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventReceiversServiceMock = new Mock<IEventReceiversService>(MockBehavior.Strict);
 
-            _eventsContextMock
-                .As<IInfrastructure<IServiceProvider>>()
-                .Setup(x => x.Instance)
-                .Returns(_serviceProviderMock.Object)
-                .Verifiable();
-
-            _serviceProviderMock
-                .Setup(x => x.GetService(typeof(IEventReceiversService)))
-                .Returns(_eventReceiversServiceMock.Object)
-                .Verifiable();
-
-            _eventReceiversHostedService = new EventReceiversHostedService(_eventsContextMock.Object);
+            _eventReceiversHostedService = new EventReceiversHostedService(_eventReceiversServiceMock.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
             _eventReceiversServiceMock.Verify();
-            _eventsContextMock.Verify();
-            _serviceProviderMock.Verify();
         }
 
         [Test]

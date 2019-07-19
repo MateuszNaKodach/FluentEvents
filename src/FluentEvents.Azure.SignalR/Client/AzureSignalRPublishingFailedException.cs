@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 
 namespace FluentEvents.Azure.SignalR.Client
@@ -6,6 +7,7 @@ namespace FluentEvents.Azure.SignalR.Client
     /// <summary>
     ///     An exception thrown when a request to an Azure SignalR Service API fails.
     /// </summary>
+    [Serializable]
     public class AzureSignalRPublishingFailedException : FluentEventsAzureSignalRException
     {
         internal AzureSignalRPublishingFailedException(HttpRequestException httpRequestException)

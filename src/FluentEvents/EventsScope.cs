@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 using FluentEvents.Infrastructure;
 
 namespace FluentEvents
 {
     /// <inheritdoc />
-    public class EventsScope : IEventsScope
+    public sealed class EventsScope : IEventsScope
     {
         private readonly IScopedAppServiceProvider _scopedAppServiceProvider;
         private readonly ConcurrentDictionary<Type, object> _features;
@@ -20,7 +21,7 @@ namespace FluentEvents
             _features = new ConcurrentDictionary<Type, object>();
         }
 
-        T IEventsScope.GetOrAddFeature<T>(Func<IScopedAppServiceProvider, T> factory) 
+        T IEventsScope.GetOrAddFeature<T>(Func<IScopedAppServiceProvider, T> factory)
             => (T)_features.GetOrAdd(typeof(T), x => factory(_scopedAppServiceProvider));
     }
 }

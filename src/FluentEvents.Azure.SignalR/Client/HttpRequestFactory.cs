@@ -53,7 +53,7 @@ namespace FluentEvents.Azure.SignalR.Client
             return request;
         }
 
-        private Uri GetUri(string baseUrl) => new UriBuilder(baseUrl).Uri;
+        private static Uri GetUri(string baseUrl) => new UriBuilder(baseUrl).Uri;
 
         private class PayloadMessage
         {

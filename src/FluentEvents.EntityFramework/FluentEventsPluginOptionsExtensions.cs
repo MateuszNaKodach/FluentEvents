@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using FluentEvents.Plugins;
 
 namespace FluentEvents.EntityFramework
@@ -35,7 +36,10 @@ namespace FluentEvents.EntityFramework
         )
             where TDbContext : DbContext
         {
+            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+
             pluginOptions.AddPlugin(new EntityFrameworkPlugin<TDbContext>());
+
             return pluginOptions;
         }
     }

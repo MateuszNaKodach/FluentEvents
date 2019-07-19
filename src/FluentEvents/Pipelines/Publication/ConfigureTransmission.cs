@@ -1,10 +1,10 @@
 ﻿namespace FluentEvents.Pipelines.Publication
 {
     /// <inheritdoc />
-    public class ConfigureTransmission : IConfigureTransmission
+    public sealed class ConfigureTransmission : IConfigureTransmission
     {
         IPublishTransmissionConfiguration IConfigureTransmission.With<T>() => new PublishTransmissionConfiguration(typeof(T));
 
-        internal PublishTransmissionConfiguration Locally() => new PublishTransmissionConfiguration(null);
+        internal static PublishTransmissionConfiguration Locally() => new PublishTransmissionConfiguration(null);
     }
 }

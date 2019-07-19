@@ -7,6 +7,7 @@ namespace FluentEvents.Pipelines.Publication
     ///     An exception thrown when the configured <see cref="IEventSender"/>
     ///     wasn't registered in the internal <see cref="IServiceProvider"/>.
     /// </summary>
+    [Serializable]
     public class EventSenderNotFoundException : FluentEventsException
     {
         internal EventSenderNotFoundException()

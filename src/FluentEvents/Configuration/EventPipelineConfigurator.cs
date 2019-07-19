@@ -7,7 +7,7 @@ namespace FluentEvents.Configuration
     /// <summary>
     ///     Provides a simple API surface for configuring an event pipeline.
     /// </summary>
-    public class EventPipelineConfigurator<TEvent> : IInfrastructure<IServiceProvider>, IInfrastructure<IPipeline>
+    public sealed class EventPipelineConfigurator<TEvent> : IInfrastructure<IServiceProvider>, IInfrastructure<IPipeline>
         where TEvent : class
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;
@@ -26,6 +26,8 @@ namespace FluentEvents.Configuration
             EventConfigurator<TEvent> eventConfigurator
         )
         {
+            if (eventConfigurator == null) throw new ArgumentNullException(nameof(eventConfigurator));
+
             _serviceProvider = eventConfigurator.Get<IServiceProvider>();
             _pipeline = pipeline;
         }

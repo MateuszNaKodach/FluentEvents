@@ -15,6 +15,7 @@ FluentEvents.Configuration.ServiceHandlerConfigurator<TService, TEvent>.HasScope
 FluentEvents.EventPublisher<TEvent>
 FluentEvents.EventsContext
 FluentEvents.EventsContext.EventsContext(FluentEvents.EventsContextOptions options, FluentEvents.Infrastructure.IRootAppServiceProvider rootAppServiceProvider) -> void
+FluentEvents.EventsContext.GetEventReceiversHostedService() -> Microsoft.Extensions.Hosting.IHostedService
 FluentEvents.EventsContextOptions
 FluentEvents.EventsContextOptions.EventsContextOptions() -> void
 FluentEvents.EventsScope
@@ -25,6 +26,10 @@ FluentEvents.FluentEventsException.FluentEventsException(string message, System.
 FluentEvents.IAsyncEventHandler<TEvent>
 FluentEvents.IAsyncEventHandler<TEvent>.HandleEventAsync(TEvent e) -> System.Threading.Tasks.Task
 FluentEvents.IEventsContext
+FluentEvents.IEventsContext.Attach(object source, FluentEvents.EventsScope eventsScope) -> void
+FluentEvents.IEventsContext.DiscardQueuedEvents(FluentEvents.EventsScope eventsScope, string queueName = null) -> void
+FluentEvents.IEventsContext.GetEventReceiversHostedService() -> Microsoft.Extensions.Hosting.IHostedService
+FluentEvents.IEventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope eventsScope, string queueName = null) -> System.Threading.Tasks.Task
 FluentEvents.Infrastructure.IEventsScope
 FluentEvents.Infrastructure.IEventsScope.GetOrAddFeature<T>(System.Func<FluentEvents.Infrastructure.IScopedAppServiceProvider, T> factory) -> T
 FluentEvents.Infrastructure.IInfrastructure<T>
@@ -73,7 +78,8 @@ FluentEvents.Pipelines.PipelineContext.ServiceProvider.get -> System.IServicePro
 FluentEvents.Pipelines.PipelineEvent
 FluentEvents.Pipelines.PipelineEvent.Event.get -> object
 FluentEvents.Pipelines.PipelineEvent.EventType.get -> System.Type
-FluentEvents.Pipelines.PipelineEvent.PipelineEvent(object event) -> void
+FluentEvents.Pipelines.PipelineEvent.PipelineEvent() -> void
+FluentEvents.Pipelines.PipelineEvent.PipelineEvent(object e) -> void
 FluentEvents.Pipelines.PipelineModuleNotFoundException
 FluentEvents.Pipelines.PipelinesService
 FluentEvents.Pipelines.PipelinesService.AddPipeline(System.Type eventType, FluentEvents.Pipelines.IPipeline pipeline) -> void
@@ -113,16 +119,9 @@ FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsA
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException.ServiceType.get -> System.Type
 FluentEvents.Subscriptions.SubscriptionPublishAggregateException
-FluentEvents.Transmission.EventReceiversHostedService
-FluentEvents.Transmission.EventReceiversHostedService.EventReceiversHostedService(FluentEvents.IEventsContext eventsContext) -> void
-FluentEvents.Transmission.EventReceiversHostedService.StartAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task
-FluentEvents.Transmission.EventReceiversHostedService.StopAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task
 FluentEvents.Transmission.IEventReceiver
 FluentEvents.Transmission.IEventReceiver.StartReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
 FluentEvents.Transmission.IEventReceiver.StopReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
-FluentEvents.Transmission.IEventReceiversService
-FluentEvents.Transmission.IEventReceiversService.StartReceiversAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
-FluentEvents.Transmission.IEventReceiversService.StopReceiversAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
 FluentEvents.Transmission.IEventSender
 FluentEvents.Transmission.IEventSender.SendAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> System.Threading.Tasks.Task
 FluentEvents.Transmission.IEventsSerializationService
@@ -135,7 +134,7 @@ static FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.Th
 static FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToScopedSubscriptions<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
 static FluentEvents.Pipelines.Queues.EventPipelineConfiguratorExtensions.ThenIsQueuedTo<TEvent>(this FluentEvents.Configuration.EventPipelineConfigurator<TEvent> eventPipelineConfigurator, string queueName) -> FluentEvents.Configuration.EventPipelineConfigurator<TEvent>
 static FluentEvents.ServiceCollectionExtensions.AddEventsContext<T>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<FluentEvents.EventsContextOptions> optionsBuilder) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
-static FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo<TEventsContext>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action addServicesAction) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+static FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo<TEventsContext>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action addServices) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
 virtual FluentEvents.EventsContext.Attach(object source, FluentEvents.EventsScope eventsScope) -> void
 virtual FluentEvents.EventsContext.DiscardQueuedEvents(FluentEvents.EventsScope eventsScope, string queueName = null) -> void
 virtual FluentEvents.EventsContext.OnBuildingPipelines(FluentEvents.Configuration.IPipelinesBuilder pipelinesBuilder) -> void

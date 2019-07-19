@@ -29,6 +29,7 @@ namespace FluentEvents.Pipelines.Queues
         )
             where TEvent : class
         {
+            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
             if (queueName == null) throw new ArgumentNullException(nameof(queueName));
 
             var eventsQueueNamesService = eventPipelineConfigurator

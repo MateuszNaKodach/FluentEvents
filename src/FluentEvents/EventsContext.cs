@@ -5,7 +5,9 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
 using FluentEvents.Routing;
+using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace FluentEvents
 {
@@ -16,8 +18,6 @@ namespace FluentEvents
     public abstract class EventsContext : IEventsContext
     {
         private readonly Lazy<InternalEventsContext> _internalEventsContext;
-
-        IServiceProvider IInfrastructure<IServiceProvider>.Instance => GetCurrentInternalServiceProvider();
 
         /// <summary>
         ///     Creates a new <see cref="EventsContext"/>
@@ -102,5 +102,12 @@ namespace FluentEvents
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
                 .DiscardQueuedEvents(eventsScope, queueName);
+
+        /// <summary>
+        ///     Returns an <see cref="IHostedService"/> that can start or stop the configured event receivers.
+        /// </summary>
+        public IHostedService GetEventReceiversHostedService()
+            => GetCurrentInternalServiceProvider()
+                .GetRequiredService<EventReceiversHostedService>();
     }
 }

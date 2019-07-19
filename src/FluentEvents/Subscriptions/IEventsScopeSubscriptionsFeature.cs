@@ -4,6 +4,6 @@ namespace FluentEvents.Subscriptions
 {
     internal interface IEventsScopeSubscriptionsFeature
     {
-        IEnumerable<Subscription> GetSubscriptions(IEventsContext eventsContext);
+        IEnumerable<Subscription> GetSubscriptions(IScopedSubscriptionsService scopedSubscriptionsService);
     }
 }
