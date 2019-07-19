@@ -29,7 +29,9 @@ public class User
         FriendRequestAccepted?.Invoke(new FriendRequestAccepted(requestingUser));
     }
 }
+```
 
+```csharp
 public class MyEventsContext : EventsContext
 {
     protected override void OnBuildingSubscriptions(ISubscriptionsBuilder subscriptionsBuilder)
