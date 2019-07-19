@@ -15,6 +15,21 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 #### How it works:
 
 ```csharp
+public class User
+{
+    public string Id { get; }
+    public string EmailAddress { get; }
+    public string Name { get; }
+    
+    public event EventPublisher<FriendRequestAccepted> FriendRequestAccepted;
+    
+    public void AcceptFriendRequest(User requestingUser)
+    {
+        // Accept logic [...]
+        FriendRequestAccepted?.Invoke(new FriendRequestAccepted(requestingUser));
+    }
+}
+
 public class MyEventsContext : EventsContext
 {
     protected override void OnBuildingSubscriptions(ISubscriptionsBuilder subscriptionsBuilder)
@@ -50,7 +65,7 @@ public class NotificationsService : IAsyncEventHandler<FriendRequestAccepted>
 
     public async Task HandleEventAsync(FriendRequestAccepted e)
     {
-        await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
+        await _mailService.SendFriendRequestAcceptedEmail(e.RequestingUser.EmailAddress, user.Id, user.Name);
     }
 }
 ```
