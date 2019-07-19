@@ -1,20 +1,20 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     
     function bindConnectionMessage(connection) {
-        var powerStatusChangedCallback = function (sender, args) {
-            if (args.IsOn) {
+        var onLightBulbPowerStatusChanged = function (event) {
+            if (event.IsOn) {
                 $(document.getElementById("light-bulb")).addClass("is-on").removeClass("is-off");
             } else {
                 $(document.getElementById("light-bulb")).addClass("is-off").removeClass("is-on");
             }
 
             var logArea = document.getElementById("log-area");
-            logArea.value += "Light " + (args.IsOn ? "ON" : "OFF") + ": " + args.Notes + "\r\n";
+            logArea.value += "Light " + (event.IsOn ? "ON" : "OFF") + ": " + event.Notes + "\r\n";
             logArea.scrollTop = logArea.scrollHeight;
         };
 
         // Create a function that the hub can call to broadcast messages.
-        connection.on("powerStatusChanged", powerStatusChangedCallback);
+        connection.on("lightBulbPowerStatusChanged", onLightBulbPowerStatusChanged);
 
         connection.onclose(onConnectionError);
     }

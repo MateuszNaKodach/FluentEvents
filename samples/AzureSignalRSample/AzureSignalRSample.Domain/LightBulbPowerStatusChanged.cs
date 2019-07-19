@@ -1,11 +1,11 @@
 ﻿namespace AzureSignalRSample.Domain
 {
-    public class LightBulbPowerStatusChangedEventArgs
+    public class LightBulbPowerStatusChanged
     {
         public bool IsOn { get; }
         public string Notes { get; }
 
-        public LightBulbPowerStatusChangedEventArgs(bool isOn, string notes)
+        public LightBulbPowerStatusChanged(bool isOn, string notes)
         {
             IsOn = isOn;
             Notes = notes;

@@ -1,7 +1,8 @@
 ﻿using AzureSignalRSample.Domain;
 using FluentEvents;
 using FluentEvents.Azure.SignalR;
-using FluentEvents.Config;
+using FluentEvents.Configuration;
+using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines.Queues;
 
 namespace AzureSignalRSample.Events
@@ -10,14 +11,17 @@ namespace AzureSignalRSample.Events
     {
         public static string AfterSaveChangesQueueName { get; } = "AfterSaveChangesQueue";
 
-        protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+        protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
         {
             pipelinesBuilder
-                .Event<LightBulb, LightBulbPowerStatusChangedEventArgs>((source, h) => source.PowerStatusChanged += h)
-                .IsWatched()
+                .Event<LightBulbPowerStatusChanged>()
+                .IsPiped()
                 .ThenIsQueuedTo(AfterSaveChangesQueueName)
-                .ThenIsSentToAllAzureSignalRUsers();
+                .ThenIsSentToAllAzureSignalRUsers("lightBulbHub");
         }
 
+        public AppEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) : base(options, rootAppServiceProvider)
+        {
+        }
     }
 }

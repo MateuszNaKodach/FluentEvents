@@ -1,4 +1,4 @@
-﻿using System;
+﻿using FluentEvents;
 
 namespace AzureSignalRSample.Domain
 {
@@ -6,13 +6,13 @@ namespace AzureSignalRSample.Domain
     {
         public bool IsOn { get; set; }
 
-        public event EventHandler<LightBulbPowerStatusChangedEventArgs> PowerStatusChanged;
+        public event EventPublisher<LightBulbPowerStatusChanged> PowerStatusChanged;
 
         public void Toggle(string notes)
         {
             IsOn = !IsOn;
 
-            PowerStatusChanged?.Invoke(this, new LightBulbPowerStatusChangedEventArgs(IsOn, notes));
+            PowerStatusChanged?.Invoke(new LightBulbPowerStatusChanged(IsOn, notes));
         }
     }
 }
