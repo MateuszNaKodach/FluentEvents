@@ -17,25 +17,29 @@ FluentEvents is an [event aggregation](https://martinfowler.com/eaaDev/EventAggr
 ```csharp
 public class MyEventsContext : EventsContext
 {
-    protected override void OnBuildingSubscriptions(SubscriptionsBuilder subscriptionsBuilder)
+    protected override void OnBuildingSubscriptions(ISubscriptionsBuilder subscriptionsBuilder)
     {
         subscriptionsBuilder
-            .ServiceHandler<NotificationsService, User, FriendRequestAcceptedEventArgs>()
-            .HasGlobalSubscription((user, h) => user.FriendRequestAccepted += h);
+            .ServiceHandler<NotificationsService, FriendRequestAccepted>()
+            .HasGlobalSubscription();
     }
 
-    protected override void OnBuildingPipelines(PipelinesBuilder pipelinesBuilder)
+    protected override void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder)
     {
         pipelinesBuilder
-            .Event<User, FriendRequestAcceptedEventArgs>((user, h) => user.FriendRequestAccepted += h)
-            .IsWatched()
+            .Event<FriendRequestAccepted>()
+            .IsPiped()
             .ThenIsPublishedToGlobalSubscriptions();
     }
+    
+    public MyEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) 
+        : base(options, rootAppServiceProvider)
+    { }
 }
 ```
 
 ```csharp
-public class NotificationsService : IEventHandler<User, FriendRequestAcceptedEventArgs>
+public class NotificationsService : IAsyncEventHandler<FriendRequestAccepted>
 {
     private readonly IMailService _mailService;
 
@@ -44,7 +48,7 @@ public class NotificationsService : IEventHandler<User, FriendRequestAcceptedEve
         _mailService = mailService;
     }
 
-    public async Task HandleEventAsync(User user, FriendRequestAcceptedEventArgs e)
+    public async Task HandleEventAsync(FriendRequestAccepted e)
     {
         await _mailService.SendFriendRequestAcceptedEmail(e.RequestSender.EmailAddress, user.Id, user.Name);
     }
