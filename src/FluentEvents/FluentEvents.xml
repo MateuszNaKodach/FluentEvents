@@ -855,6 +855,9 @@
             <param name="pipelineEvent">The event to publish.</param>
             <param name="eventsScope">The scope of the event and the subscriptions.</param>
             <returns>An awaitable task.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventsScope"/> is <see langword="null"/>
+            </exception>
         </member>
         <member name="M:FluentEvents.Subscriptions.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent)">
             <summary>
@@ -862,6 +865,14 @@
             </summary>
             <param name="pipelineEvent"> event to publish.</param>
             <returns>An awaitable task.</returns>
+        </member>
+        <member name="M:FluentEvents.Subscriptions.ISubscriptionCreationTask.CreateSubscriptions(System.IServiceProvider)">
+            <exception cref="T:FluentEvents.Subscriptions.SubscribingServiceNotFoundException">
+                The service provider cannot resolve the subscribing service.
+            </exception>
+        </member>
+        <member name="M:FluentEvents.Subscriptions.ServiceHandlerSubscriptionCreationTask`2.CreateSubscriptions(System.IServiceProvider)">
+            <inheritdoc />
         </member>
         <member name="T:FluentEvents.Subscriptions.SubscribingServiceNotFoundException">
             <summary>
