@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using AzureSignalRSample.Domain;
 
-namespace AzureSignalRSample.Application
+namespace AzureSignalRSample.Domain
 {
     public interface ILightBulbRepository
     {

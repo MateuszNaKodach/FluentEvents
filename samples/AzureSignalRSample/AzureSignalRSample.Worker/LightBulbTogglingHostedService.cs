@@ -2,8 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AzureSignalRSample.Application;
-using AzureSignalRSample.Domain;
-using AzureSignalRSample.Persistence;
+using AzureSignalRSample.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -44,7 +43,7 @@ namespace AzureSignalRSample.Worker
 
                 var appDbContext = serviceScope
                     .ServiceProvider
-                    .GetRequiredService<AppDbContext>();
+                    .GetRequiredService<LightBulbsDbContext>();
 
                 await lightBulbTogglingService.ToggleLightBulbAsync("Toggled by worker");
 

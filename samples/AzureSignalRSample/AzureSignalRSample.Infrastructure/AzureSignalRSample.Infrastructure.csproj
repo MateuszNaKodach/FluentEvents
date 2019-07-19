@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AzureSignalRSample.Application\AzureSignalRSample.Application.csproj" />
+    <ProjectReference Include="..\AzureSignalRSample.Domain\AzureSignalRSample.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentEvents.Azure.SignalR" Version="2019.7.19.2" />
+    <PackageReference Include="FluentEvents.EntityFrameworkCore" Version="2019.7.19.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+  </ItemGroup>
+
+</Project>

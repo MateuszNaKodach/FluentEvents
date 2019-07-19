@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AzureSignalRSample.Application;
 using AzureSignalRSample.Domain;
-using AzureSignalRSample.Events;
-using AzureSignalRSample.Persistence;
-using AzureSignalRSample.Repositories;
+using AzureSignalRSample.Infrastructure;
 using FluentEvents;
 using FluentEvents.Azure.SignalR;
 using FluentEvents.EntityFrameworkCore;
@@ -29,20 +27,21 @@ namespace AzureSignalRSample.Worker
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddEventsContext<AppEventsContext>(options =>
+                    services.AddEventsContext<LightBulbsEventsContext>(options =>
                     {
-                        options.AttachToDbContextEntities<AppDbContext>();
+                        options.AttachToDbContextEntities<LightBulbsDbContext>();
                         options.UseAzureSignalRService(hostContext.Configuration.GetSection("Azure:SignalR"));
                     });
 
-                    services.AddWithEventsAttachedTo<AppEventsContext>(() =>
+                    services.AddWithEventsAttachedTo<LightBulbsEventsContext>(() =>
                     {
-                        services.AddDbContext<AppDbContext>(options =>
+                        services.AddDbContext<LightBulbsDbContext>(options =>
                         {
                             options.UseSqlServer(hostContext.Configuration.GetSection("Database:ConnectionString").Value);
                         });
                     });
 
+                    services.AddScoped<ILightBulbsTransaction>(x => x.GetRequiredService<LightBulbsDbContext>());
                     services.AddScoped<ILightBulbRepository, LightBulbRepository>();
                     services.AddScoped<ILightBulbTogglingService, LightBulbTogglingService>();
                     services.AddHostedService<LightBulbTogglingHostedService>();

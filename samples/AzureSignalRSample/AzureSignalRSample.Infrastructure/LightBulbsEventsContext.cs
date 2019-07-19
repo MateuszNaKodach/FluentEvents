@@ -5,9 +5,9 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines.Queues;
 
-namespace AzureSignalRSample.Events
+namespace AzureSignalRSample.Infrastructure
 {
-    public class AppEventsContext : EventsContext
+    public class LightBulbsEventsContext : EventsContext
     {
         public static string AfterSaveChangesQueueName { get; } = "AfterSaveChangesQueue";
 
@@ -20,7 +20,7 @@ namespace AzureSignalRSample.Events
                 .ThenIsSentToAllAzureSignalRUsers("lightBulbHub");
         }
 
-        public AppEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) : base(options, rootAppServiceProvider)
+        public LightBulbsEventsContext(EventsContextOptions options, IRootAppServiceProvider rootAppServiceProvider) : base(options, rootAppServiceProvider)
         {
         }
     }

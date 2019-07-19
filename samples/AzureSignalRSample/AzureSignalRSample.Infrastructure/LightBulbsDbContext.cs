@@ -1,24 +1,24 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AzureSignalRSample.Application;
 using AzureSignalRSample.Domain;
-using AzureSignalRSample.Events;
 using FluentEvents;
 using Microsoft.EntityFrameworkCore;
 
-namespace AzureSignalRSample.Persistence
+namespace AzureSignalRSample.Infrastructure
 {
-    public class AppDbContext : DbContext
+    public class LightBulbsDbContext : DbContext, ILightBulbsTransaction
     {
-        private readonly AppEventsContext _appEventsContext;
+        private readonly LightBulbsEventsContext _lightBulbsEventsContext;
         private readonly EventsScope _eventsScope;
 
-        public AppDbContext(
-            AppEventsContext appEventsContext,
+        public LightBulbsDbContext(
+            LightBulbsEventsContext lightBulbsEventsContext,
             EventsScope eventsScope,
-            DbContextOptions<AppDbContext> options
+            DbContextOptions<LightBulbsDbContext> options
         ) : base(options)
         {
-            _appEventsContext = appEventsContext;
+            _lightBulbsEventsContext = lightBulbsEventsContext;
             _eventsScope = eventsScope;
         }
 
@@ -37,9 +37,14 @@ namespace AzureSignalRSample.Persistence
         {
             var result = await base.SaveChangesAsync(cancellationToken);
 
-            await _appEventsContext.ProcessQueuedEventsAsync(_eventsScope, AppEventsContext.AfterSaveChangesQueueName);
+            await _lightBulbsEventsContext.ProcessQueuedEventsAsync(_eventsScope, LightBulbsEventsContext.AfterSaveChangesQueueName);
 
             return result;
+        }
+
+        public async Task CommitAsync()
+        {
+            await SaveChangesAsync();
         }
     }
 }

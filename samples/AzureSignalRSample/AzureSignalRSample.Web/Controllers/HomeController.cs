@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using AzureSignalRSample.Application;
-using AzureSignalRSample.Domain;
-using AzureSignalRSample.Persistence;
 using AzureSignalRSample.Query;
 using Microsoft.AspNetCore.Mvc;
 using AzureSignalRSample.Web.Models;
@@ -13,17 +11,14 @@ namespace AzureSignalRSample.Web.Controllers
     {
         private readonly ILightBulbTogglingService _lightBulbTogglingService;
         private readonly ILightBulbQueryService _lightBulbQueryService;
-        private readonly AppDbContext _appDbContext;
 
         public HomeController(
             ILightBulbTogglingService lightBulbTogglingService,
-            ILightBulbQueryService lightBulbQueryService,
-            AppDbContext appDbContext
+            ILightBulbQueryService lightBulbQueryService
         )
         {
             _lightBulbTogglingService = lightBulbTogglingService;
             _lightBulbQueryService = lightBulbQueryService;
-            _appDbContext = appDbContext;
         }
 
         public async Task<IActionResult> Index()
@@ -38,7 +33,6 @@ namespace AzureSignalRSample.Web.Controllers
         public async Task<IActionResult> ToggleLightBulb()
         {
             await _lightBulbTogglingService.ToggleLightBulbAsync("Toggled by API request");
-            await _appDbContext.SaveChangesAsync();
 
             return Ok();
         }

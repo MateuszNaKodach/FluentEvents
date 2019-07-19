@@ -1,22 +1,22 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using AzureSignalRSample.Persistence;
+using AzureSignalRSample.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace AzureSignalRSample.Query
 {
     public class LightBulbQueryService : ILightBulbQueryService
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly LightBulbsDbContext _lightBulbsDbContext;
 
-        public LightBulbQueryService(AppDbContext appDbContext)
+        public LightBulbQueryService(LightBulbsDbContext lightBulbsDbContext)
         {
-            _appDbContext = appDbContext;
+            _lightBulbsDbContext = lightBulbsDbContext;
         }
 
         public async Task<bool> IsLightBulbOnAsync()
         {
-            return await _appDbContext.LightBulbs.Select(x => x.IsOn).FirstOrDefaultAsync();
+            return await _lightBulbsDbContext.LightBulbs.Select(x => x.IsOn).FirstOrDefaultAsync();
         }
     }
 }
