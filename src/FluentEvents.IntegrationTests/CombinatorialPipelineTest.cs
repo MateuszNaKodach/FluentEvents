@@ -7,6 +7,7 @@ using FluentEvents.Pipelines.Filters;
 using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -44,7 +45,7 @@ namespace FluentEvents.IntegrationTests
             _context = serviceScope.ServiceProvider.GetRequiredService<TestEventsContext>();
             _eventsScope = serviceScope.ServiceProvider.GetRequiredService<EventsScope>();
 
-            _context.Attach(_entity, _eventsScope);
+            _context.WatchSourceEvents(_entity, _eventsScope);
         }
 
         [Test]

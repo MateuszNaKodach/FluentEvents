@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 
 namespace FluentEvents
 {

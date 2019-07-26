@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
+using FluentEvents.ServiceProviders;
 using NUnit.Framework;
 
 namespace FluentEvents.Azure.SignalR.IntegrationTests

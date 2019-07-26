@@ -116,7 +116,7 @@
                 An <see cref="T:FluentEvents.EventsContext"/> should be treated as a singleton.
             </summary>
         </member>
-        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,FluentEvents.Infrastructure.IRootAppServiceProvider)">
+        <member name="M:FluentEvents.EventsContext.#ctor(FluentEvents.EventsContextOptions,FluentEvents.ServiceProviders.IRootAppServiceProvider)">
             <summary>
                 Creates a new <see cref="T:FluentEvents.EventsContext"/>
             </summary>
@@ -147,16 +147,30 @@
             <remarks>The default implementation of this method does nothing.</remarks>
             <param name="pipelinesBuilder">The builder that defines the model for the context being created.</param>
         </member>
-        <member name="M:FluentEvents.EventsContext.Attach(System.Object,FluentEvents.EventsScope)">
+        <member name="M:FluentEvents.EventsContext.WatchSourceEvents(System.Object,FluentEvents.EventsScope)">
             <summary>
-                Attach an event source to the context in order to forward it's events to the configured pipelines.
+                <para>
+                     Subscribes the <see cref="T:FluentEvents.EventsContext"/> to every source's event field having a delegate with
+                     a single parameter (of any type) and a return type of <see cref="T:System.Threading.Tasks.Task"/> or <see langword="void"/>.
+                </para>
+                <para>
+                    Examples of valid delegates:
+                    <see cref="T:System.Func`2">Func&lt;<see cref="T:System.Object"/>, <see cref="T:System.Threading.Tasks.Task"/>&gt;</see> or
+                    <see cref="T:System.Action`1" /> or
+                    <see cref="T:FluentEvents.AsyncEventPublisher`1" /> or
+                    <see cref="T:FluentEvents.EventPublisher`1" />
+                </para>
+                <para>
+                    This subscription allows the <see cref="T:FluentEvents.EventsContext"/> to forward the events
+                    to the corresponding pipelines.
+                </para>
             </summary>
             <param name="source">The event source.</param>
             <param name="eventsScope">The scope of the events published from this source.</param>
         </member>
         <member name="M:FluentEvents.EventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope,System.String)">
             <summary>
-                Continues the processing of the events that have been queued.
+                Resumes the processing of the events that have been queued.
             </summary>
             <param name="eventsScope">The scope where the queued events were published.</param>
             <param name="queueName">
@@ -192,7 +206,7 @@
         <member name="T:FluentEvents.EventsScope">
             <inheritdoc />
         </member>
-        <member name="M:FluentEvents.EventsScope.#ctor(FluentEvents.Infrastructure.IScopedAppServiceProvider)">
+        <member name="M:FluentEvents.EventsScope.#ctor(FluentEvents.ServiceProviders.IScopedAppServiceProvider)">
             <summary>
                 Creates a new <see cref="T:FluentEvents.EventsScope"/>
             </summary>
@@ -236,16 +250,23 @@
                 An interface for <see cref="T:FluentEvents.EventsContext"/>s.
             </summary>
         </member>
-        <member name="M:FluentEvents.IEventsContext.Attach(System.Object,FluentEvents.EventsScope)">
-            <summary>
-                Attach an event source to the context in order to forward it's events to the configured pipelines.
-            </summary>
-            <param name="source">The event source.</param>
-            <param name="eventsScope">The scope of the events published from this source.</param>
+        <member name="M:FluentEvents.IEventsContext.WatchSourceEvents(System.Object,FluentEvents.EventsScope)">
+             <summary>
+                 Subscribes the <see cref="T:FluentEvents.EventsContext"/> to every source's event field having a delegate with
+                 a single parameter (of any type) and a return type of <see cref="T:System.Threading.Tasks.Task"/> or <see langword="void"/>.
+            
+                 Examples:
+                 <see cref="T:System.Func`2">Func&lt;<see cref="T:System.Object"/>, <see cref="T:System.Threading.Tasks.Task"/>&gt;</see> or
+                 <see cref="T:System.Action`1" /> or
+                 <see cref="T:FluentEvents.AsyncEventPublisher`1" /> or
+                 <see cref="T:FluentEvents.EventPublisher`1" />
+             </summary>
+             <param name="source">The event source.</param>
+             <param name="eventsScope">The scope of the events published from this source.</param>
         </member>
         <member name="M:FluentEvents.IEventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope,System.String)">
             <summary>
-                Continues the processing of the events that have been queued.
+                Resumes the processing of the events that have been queued.
             </summary>
             <param name="eventsScope">The scope where the queued events were published.</param>
             <param name="queueName">
@@ -274,7 +295,7 @@
                 are handled or queued.
             </summary>
         </member>
-        <member name="M:FluentEvents.Infrastructure.IEventsScope.GetOrAddFeature``1(System.Func{FluentEvents.Infrastructure.IScopedAppServiceProvider,``0})">
+        <member name="M:FluentEvents.Infrastructure.IEventsScope.GetOrAddFeature``1(System.Func{FluentEvents.ServiceProviders.IScopedAppServiceProvider,``0})">
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
@@ -290,16 +311,6 @@
             <summary>
                 This API supports the FluentEvents infrastructure and is not intended to be used
                 directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Infrastructure.IRootAppServiceProvider">
-            <summary>
-                Represents the application service provider.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Infrastructure.IScopedAppServiceProvider">
-            <summary>
-                Represents a scoped application service provider.
             </summary>
         </member>
         <member name="T:FluentEvents.Model.ISourceModelsService">
@@ -863,6 +874,16 @@
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register with.</param>
             <param name="addServices">An <see cref="T:System.Action"/> that add services to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
+        </member>
+        <member name="T:FluentEvents.ServiceProviders.IRootAppServiceProvider">
+            <summary>
+                Represents the application service provider.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.ServiceProviders.IScopedAppServiceProvider">
+            <summary>
+                Represents a scoped application service provider.
+            </summary>
         </member>
         <member name="T:FluentEvents.Subscriptions.EventTypeMismatchException">
             <summary>

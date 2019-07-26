@@ -6,6 +6,7 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

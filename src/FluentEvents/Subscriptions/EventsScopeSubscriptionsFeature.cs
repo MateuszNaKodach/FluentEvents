@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 
 namespace FluentEvents.Subscriptions
 {

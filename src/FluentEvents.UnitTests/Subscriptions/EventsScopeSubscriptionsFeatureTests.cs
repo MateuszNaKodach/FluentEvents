@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;

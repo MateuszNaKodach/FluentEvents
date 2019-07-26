@@ -1,5 +1,6 @@
 ﻿using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 using NUnit.Framework;
 
 namespace FluentEvents.IntegrationTests

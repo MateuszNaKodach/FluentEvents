@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
+using FluentEvents.ServiceProviders;
 using Moq;
 using NUnit.Framework;
 

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
+using FluentEvents.ServiceProviders;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Logging;
 using Moq;

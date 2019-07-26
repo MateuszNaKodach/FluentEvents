@@ -4,6 +4,7 @@ using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -32,7 +33,7 @@ namespace FluentEvents.IntegrationTests
         {
             Assert.That(() =>
             {
-                _testEventsContext.Attach(new TestEntity(), _eventsScope);
+                _testEventsContext.WatchSourceEvents(new TestEntity(), _eventsScope);
             }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());
         }
 

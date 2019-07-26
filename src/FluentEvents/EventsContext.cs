@@ -5,6 +5,7 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
 using FluentEvents.Routing;
+using FluentEvents.ServiceProviders;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -68,17 +69,31 @@ namespace FluentEvents
         protected virtual void OnBuildingPipelines(IPipelinesBuilder pipelinesBuilder) { }
 
         /// <summary>
-        ///     Attach an event source to the context in order to forward it's events to the configured pipelines.
+        ///     <para>
+        ///          Subscribes the <see cref="EventsContext"/> to every source's event field having a delegate with
+        ///          a single parameter (of any type) and a return type of <see cref="Task"/> or <see langword="void"/>.
+        ///     </para>
+        ///     <para>
+        ///         Examples of valid delegates:
+        ///         <see cref="Func{TEvent, TTask}">Func&lt;<see cref="object"/>, <see cref="Task"/>&gt;</see> or
+        ///         <see cref="Action{TEvent}" /> or
+        ///         <see cref="AsyncEventPublisher{TEvent}" /> or
+        ///         <see cref="EventPublisher{TEvent}" />
+        ///     </para>
+        ///     <para>
+        ///         This subscription allows the <see cref="EventsContext"/> to forward the events
+        ///         to the corresponding pipelines.
+        ///     </para>
         /// </summary>
         /// <param name="source">The event source.</param>
         /// <param name="eventsScope">The scope of the events published from this source.</param>
-        public virtual void Attach(object source, EventsScope eventsScope)
+        public virtual void WatchSourceEvents(object source, EventsScope eventsScope)
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IAttachingService>()
                 .Attach(source, eventsScope);
 
         /// <summary>
-        ///     Continues the processing of the events that have been queued.
+        ///     Resumes the processing of the events that have been queued.
         /// </summary>
         /// <param name="eventsScope">The scope where the queued events were published.</param>
         /// <param name="queueName">

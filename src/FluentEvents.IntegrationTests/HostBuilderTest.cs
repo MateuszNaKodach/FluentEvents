@@ -3,6 +3,7 @@ using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;

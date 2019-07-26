@@ -10,6 +10,7 @@ using FluentEvents.Pipelines.Queues;
 using FluentEvents.Plugins;
 using FluentEvents.Queues;
 using FluentEvents.Routing;
+using FluentEvents.ServiceProviders;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;

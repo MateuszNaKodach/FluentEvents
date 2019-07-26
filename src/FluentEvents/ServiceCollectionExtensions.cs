@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -147,7 +148,7 @@ namespace FluentEvents
             {
                 var eventsContext = serviceProvider.GetRequiredService<TEventsContext>();
                 var eventsScope = serviceProvider.GetRequiredService<EventsScope>();
-                eventsContext.Attach(service, eventsScope);
+                eventsContext.WatchSourceEvents(service, eventsScope);
             }
         }
 

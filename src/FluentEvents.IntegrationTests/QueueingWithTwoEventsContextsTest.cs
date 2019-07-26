@@ -6,6 +6,7 @@ using FluentEvents.Infrastructure;
 using FluentEvents.IntegrationTests.Common;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 

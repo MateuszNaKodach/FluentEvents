@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 
 namespace FluentEvents.Subscriptions
 {

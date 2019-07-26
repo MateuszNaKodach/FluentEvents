@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentEvents.Infrastructure
+namespace FluentEvents.ServiceProviders
 {
     internal class AppServiceProvider : IRootAppServiceProvider, IScopedAppServiceProvider
     {

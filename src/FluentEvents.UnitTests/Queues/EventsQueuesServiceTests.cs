@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using FluentEvents.Queues;
+using FluentEvents.ServiceProviders;
 using Moq;
 using NUnit.Framework;
 

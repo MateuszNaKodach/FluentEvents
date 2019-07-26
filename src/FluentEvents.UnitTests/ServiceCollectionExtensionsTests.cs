@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using FluentEvents.Infrastructure;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
@@ -56,7 +57,7 @@ namespace FluentEvents.UnitTests
             var eventsScope = new EventsScope(scopedAppServiceProviderMock.Object);
 
             eventsContextMock
-                .Setup(x => x.Attach(It.IsAny<TestService1>(), eventsScope))
+                .Setup(x => x.WatchSourceEvents(It.IsAny<TestService1>(), eventsScope))
                 .Verifiable();
 
             serviceProviderMock

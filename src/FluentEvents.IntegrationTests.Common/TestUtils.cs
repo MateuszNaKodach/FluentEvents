@@ -15,7 +15,7 @@ namespace FluentEvents.IntegrationTests.Common
                 Id = _defaultTestEntityId
             };
 
-            eventsContext.Attach(entity, eventsScope);
+            eventsContext.WatchSourceEvents(entity, eventsScope);
 
             entity.RaiseEvent(_defaultTestEventArgsValue);
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentEvents.Infrastructure
+namespace FluentEvents.ServiceProviders
 {
     /// <summary>
     ///     Represents a scoped application service provider.

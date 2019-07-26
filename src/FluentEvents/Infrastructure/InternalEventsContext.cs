@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentEvents.Configuration;
+using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.Infrastructure
