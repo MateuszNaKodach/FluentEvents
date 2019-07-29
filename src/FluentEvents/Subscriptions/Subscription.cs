@@ -44,13 +44,4 @@ namespace FluentEvents.Subscriptions
             return Task.CompletedTask;
         }
     }
-
-    [Serializable]
-    internal class SubscribedEventHandlerThrewException : FluentEventsException
-    {
-        public SubscribedEventHandlerThrewException(TargetInvocationException targetInvocationException) 
-            : base("The event handler threw an exception.", targetInvocationException.InnerException)
-        {
-        }
-    }
 }
