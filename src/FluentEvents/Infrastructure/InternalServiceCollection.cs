@@ -50,7 +50,6 @@ namespace FluentEvents.Infrastructure
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();
             services.AddSingleton<IScopedSubscriptionsService, ScopedSubscriptionsService>();
             services.AddSingleton<IRoutingService, RoutingService>();
-            services.AddSingleton<IForwardingService, ForwardingService>();
             services.AddSingleton<IEventsQueueNamesService, EventsQueueNamesService>();
             services.AddSingleton<IEventsSerializationService, JsonEventsSerializationService>();
             services.AddSingleton<IGlobalSubscriptionsService, GlobalSubscriptionsService>();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
+using FluentEvents.Pipelines;
 using FluentEvents.Utils;
 
 namespace FluentEvents.Routing
@@ -9,17 +11,17 @@ namespace FluentEvents.Routing
     internal class AttachingService : IAttachingService
     {
         private readonly ISourceModelsService _sourceModelsService;
-        private readonly IForwardingService _forwardingService;
+        private readonly IRoutingService _routingService;
         private readonly IEnumerable<IAttachingInterceptor> _attachingInterceptors;
 
         public AttachingService(
             ISourceModelsService sourceModelsService,
-            IForwardingService forwardingService,
+            IRoutingService routingService,
             IEnumerable<IAttachingInterceptor> attachingInterceptors
         )
         {
             _sourceModelsService = sourceModelsService;
-            _forwardingService = forwardingService;
+            _routingService = routingService;
             _attachingInterceptors = attachingInterceptors;
         }
 
@@ -31,13 +33,21 @@ namespace FluentEvents.Routing
             foreach (var attachingInterceptor in _attachingInterceptors)
                 attachingInterceptor.OnAttaching(this, source, eventsScope);
 
-            var sourceType = source.GetType();
+            var sourceModel = _sourceModelsService.GetOrCreateSourceModel(source.GetType());
 
-            foreach (var baseSourceType in sourceType.GetBaseTypesAndInterfacesInclusive())
+            foreach (var eventField in sourceModel.EventFields)
             {
-                var sourceModel = _sourceModelsService.GetOrCreateSourceModel(baseSourceType);
+                void HandlerAction(object @event) =>
+                    HandlerActionAsync(@event).GetAwaiter().GetResult();
 
-                _forwardingService.ForwardEventsToRouting(sourceModel, source, eventsScope);
+                Task HandlerActionAsync(object @event) =>
+                    _routingService.RouteEventAsync(new PipelineEvent(@event), eventsScope);
+
+                var eventHandler = eventField.IsAsync
+                    ? sourceModel.CreateEventHandler<Func<object, Task>>(eventField, HandlerActionAsync)
+                    : sourceModel.CreateEventHandler<Action<object>>(eventField, HandlerAction);
+
+                eventField.EventInfo.AddEventHandler(source, eventHandler);
             }
         }
     }

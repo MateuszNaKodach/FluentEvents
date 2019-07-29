@@ -670,12 +670,6 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
-        <member name="T:FluentEvents.Routing.SourceDoesNotMatchModelTypeException">
-            <summary>
-                An exception thrown when trying to route an event with a source type different from
-                the <see cref="P:FluentEvents.Model.SourceModel.ClrType"/>.
-            </summary>
-        </member>
         <member name="T:FluentEvents.ServiceCollectionExtensions">
             <summary>
                 Extension methods for configuring an <see cref="T:FluentEvents.EventsContext"/> with Dependency Injection.
