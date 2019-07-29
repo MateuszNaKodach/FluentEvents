@@ -16,7 +16,7 @@ namespace FluentEvents.Subscriptions
             _eventsHandler = eventsHandler ?? throw new ArgumentNullException(nameof(eventsHandler));
         }
 
-        internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
+        internal async Task InvokeEventsHandlerAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!EventType.IsInstanceOfType(pipelineEvent.Event))
@@ -24,7 +24,7 @@ namespace FluentEvents.Subscriptions
 
             try
             {
-                await InvokeEventHandlerAsync(pipelineEvent, _eventsHandler).ConfigureAwait(false);
+                await InvokeEventsHandlerAsync(pipelineEvent, _eventsHandler).ConfigureAwait(false);
             }
             catch (TargetInvocationException ex)
             {
@@ -32,7 +32,7 @@ namespace FluentEvents.Subscriptions
             }
         }
 
-        private static Task InvokeEventHandlerAsync(PipelineEvent pipelineEvent, Delegate eventHandler)
+        private static Task InvokeEventsHandlerAsync(PipelineEvent pipelineEvent, Delegate eventHandler)
         {
             var isAsync = eventHandler.Method.ReturnType == typeof(Task);
 

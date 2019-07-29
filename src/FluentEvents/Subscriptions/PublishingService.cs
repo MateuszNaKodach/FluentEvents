@@ -58,7 +58,7 @@ namespace FluentEvents.Subscriptions
             {
                 try
                 {
-                    await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
+                    await eventsSubscription.InvokeEventsHandlerAsync(pipelineEvent).ConfigureAwait(false);
                 }
                 catch (SubscribedEventHandlerThrewException ex)
                 {
