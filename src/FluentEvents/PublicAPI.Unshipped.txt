@@ -84,7 +84,6 @@ FluentEvents.Routing.IAttachingInterceptor
 FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService attachingService, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
 FluentEvents.Routing.IAttachingService
 FluentEvents.Routing.IAttachingService.Attach(object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
-FluentEvents.Routing.SourceDoesNotMatchModelTypeException
 FluentEvents.ServiceCollectionExtensions
 FluentEvents.ServiceProviders.IRootAppServiceProvider
 FluentEvents.ServiceProviders.IScopedAppServiceProvider
