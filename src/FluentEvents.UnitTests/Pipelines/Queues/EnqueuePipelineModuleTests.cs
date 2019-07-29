@@ -14,7 +14,6 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
     {
         private const string QueueName = nameof(QueueName);
 
-        private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IEventsQueuesService> _eventsQueuesServiceMock;
         private Mock<IEventsScope> _eventsScopeMock;
 
@@ -27,7 +26,6 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         [SetUp]
         public void SetUp()
         {
-            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventsQueuesServiceMock = new Mock<IEventsQueuesService>(MockBehavior.Strict);
             _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
 
@@ -36,7 +34,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
                 QueueName = QueueName
             };
             _pipelineEvent = new PipelineEvent(new object());
-            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScopeMock.Object, _serviceProviderMock.Object);
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScopeMock.Object);
 
             _enqueuePipelineModule = new EnqueuePipelineModule(_eventsQueuesServiceMock.Object);
         }
@@ -44,7 +42,6 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         [TearDown]
         public void TearDown()
         {
-            _serviceProviderMock.Verify();
             _eventsQueuesServiceMock.Verify();
             _eventsScopeMock.Verify();
         }

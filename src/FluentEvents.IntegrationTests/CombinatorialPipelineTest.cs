@@ -199,20 +199,20 @@ namespace FluentEvents.IntegrationTests
             }
 
             private void ContinueConfiguration<TEvent>(
-                EventPipelineConfigurator<TEvent> pipelineConfigurator
+                EventPipelineConfiguration<TEvent> eventPipelineConfiguration
             )
                 where TEvent : class
             {
                 if (_parameters.IsQueued)
-                    pipelineConfigurator.ThenIsQueuedTo("DefaultQueue");
+                    eventPipelineConfiguration.ThenIsQueuedTo("DefaultQueue");
 
                 switch (_parameters.PublicationType)
                 {
                     case PublicationType.GlobalWithServiceHandlerSubscription:
-                        pipelineConfigurator.ThenIsPublishedToGlobalSubscriptions();
+                        eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions();
                         break;
                     case PublicationType.ScopedWithServiceHandlerSubscription:
-                        pipelineConfigurator.ThenIsPublishedToScopedSubscriptions();
+                        eventPipelineConfiguration.ThenIsPublishedToScopedSubscriptions();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

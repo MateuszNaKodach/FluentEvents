@@ -19,12 +19,12 @@ namespace FluentEvents.Azure.ServiceBus
         /// </remarks>
         /// <param name="configureTransmission">
         ///     The <see cref="IConfigureTransmission"/> provided by the
-        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfigurator{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     <see cref="EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfiguration{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
         ///     method.
         /// </param>
         /// <returns>
         ///     The <see cref="IPublishTransmissionConfiguration"/> for the
-        ///     <see cref="EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfigurator{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
+        ///     <see cref="EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfiguration{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
         ///     method.
         /// </returns>
         public static IPublishTransmissionConfiguration WithAzureTopic(

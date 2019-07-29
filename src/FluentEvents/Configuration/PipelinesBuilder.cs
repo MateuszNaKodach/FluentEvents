@@ -11,10 +11,10 @@ namespace FluentEvents.Configuration
             _serviceProvider = serviceProvider;
         }
 
-        public EventConfigurator<TEvent> Event<TEvent>()
+        public EventConfiguration<TEvent> Event<TEvent>()
             where TEvent : class
         {
-            return new EventConfigurator<TEvent>(_serviceProvider);
+            return new EventConfiguration<TEvent>(_serviceProvider);
         }
     }
 }

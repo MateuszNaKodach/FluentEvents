@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
@@ -17,7 +18,6 @@ namespace FluentEvents.UnitTests.Queues
         private static readonly string _queueName = "queueName";
 
         private Mock<IRootAppServiceProvider> _appServiceProviderMock;
-        private Mock<IEventsContext> _eventsContextMock;
         private Mock<IPipeline> _pipelineMock;
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
         private Mock<IEventsScope> _eventsScopeMock;
@@ -27,12 +27,12 @@ namespace FluentEvents.UnitTests.Queues
         private PipelineEvent _pipelineEvent;
 
         private EventsQueuesService _eventsQueuesService;
+        private Guid _contextGuid;
 
         [SetUp]
         public void SetUp()
         {
             _appServiceProviderMock = new Mock<IRootAppServiceProvider>(MockBehavior.Strict);
-            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
             _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
@@ -41,16 +41,18 @@ namespace FluentEvents.UnitTests.Queues
             _eventsQueue = new EventsQueue(_queueName);
             _pipelineEvent = MakeNewPipelineEvent();
 
-            _eventsQueuesService = new EventsQueuesService(_eventsContextMock.Object, _eventsQueueNamesServiceMock.Object);
+            _eventsQueuesService = new EventsQueuesService(_eventsQueueNamesServiceMock.Object);
+            _contextGuid = (Guid)_eventsQueuesService
+                .GetType()
+                .GetField(nameof(_contextGuid), BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(_eventsQueuesService);
         }
 
         [TearDown]
         public void TearDown()
         {
             _appServiceProviderMock.Verify();
-            _eventsContextMock.Verify();
             _pipelineMock.Verify();
-            _eventsContextMock.Verify();
             _eventsQueueNamesServiceMock.Verify();
             _eventsScopeMock.Verify();
             _eventsScopeQueuesFeatureMock.Verify();
@@ -86,7 +88,7 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
 
             _eventsScopeQueuesFeatureMock
-                .Setup(x => x.GetEventsQueues(_eventsContextMock.Object))
+                .Setup(x => x.GetEventsQueues(_contextGuid))
                 .Returns(queues)
                 .Verifiable();
 
@@ -155,7 +157,7 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
 
             _eventsScopeQueuesFeatureMock
-                .Setup(x => x.GetEventsQueues(_eventsContextMock.Object))
+                .Setup(x => x.GetEventsQueues(_contextGuid))
                 .Returns(queues)
                 .Verifiable();
 
@@ -176,7 +178,7 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
 
             _eventsScopeQueuesFeatureMock
-                .Setup(x => x.GetOrAddEventsQueue(_eventsContextMock.Object, _queueName))
+                .Setup(x => x.GetOrAddEventsQueue(_contextGuid, _queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 
@@ -256,7 +258,7 @@ namespace FluentEvents.UnitTests.Queues
                 .Verifiable();
 
             _eventsScopeQueuesFeatureMock
-                .Setup(x => x.GetOrAddEventsQueue(_eventsContextMock.Object, _queueName))
+                .Setup(x => x.GetOrAddEventsQueue(_contextGuid, _queueName))
                 .Returns(_eventsQueue)
                 .Verifiable();
 

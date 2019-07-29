@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.ServiceProviders;
 using Microsoft.Extensions.DependencyInjection;

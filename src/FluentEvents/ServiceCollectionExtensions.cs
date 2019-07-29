@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.ServiceProviders;
 using FluentEvents.Transmission;

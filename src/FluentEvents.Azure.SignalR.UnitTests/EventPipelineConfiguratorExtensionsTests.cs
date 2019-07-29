@@ -15,7 +15,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         private Mock<IPipeline> _pipelineMock;
         private Mock<IServiceProvider> _serviceProviderMock;
 
-        private EventPipelineConfigurator<TestEvent> _eventPipelineConfigurator;
+        private EventPipelineConfiguration<TestEvent> _eventPipelineConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -23,7 +23,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             
-            _eventPipelineConfigurator = new EventPipelineConfigurator<TestEvent>(
+            _eventPipelineConfiguration = new EventPipelineConfiguration<TestEvent>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -41,7 +41,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 .Verifiable();
 
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            _eventPipelineConfigurator.ThenIsSentToAllAzureSignalRUsers(HubName, hubMethodName);
+            _eventPipelineConfiguration.ThenIsSentToAllAzureSignalRUsers(HubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubMethodNameNull, config);
             Assert.That(
@@ -68,7 +68,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
             string[] UserIdsProviderAction(TestEvent args) => new[] {""};
 
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            _eventPipelineConfigurator.ThenIsSentToAzureSignalRUsers(UserIdsProviderAction, HubName, hubMethodName);
+            _eventPipelineConfiguration.ThenIsSentToAzureSignalRUsers(UserIdsProviderAction, HubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubMethodNameNull, config);
             Assert.That(
@@ -95,7 +95,7 @@ namespace FluentEvents.Azure.SignalR.UnitTests
             string[] GroupIdsProviderAction(TestEvent args) => new[] { "" };
 
             var hubMethodName = isHubMethodNameNull ? null : HubMethodName;
-            _eventPipelineConfigurator.ThenIsSentToAzureSignalRGroups(GroupIdsProviderAction, HubName, hubMethodName);
+            _eventPipelineConfiguration.ThenIsSentToAzureSignalRGroups(GroupIdsProviderAction, HubName, hubMethodName);
 
             AssertThatHubNameAndHubMethodNamesAreCorrect(isHubMethodNameNull, config);
             Assert.That(

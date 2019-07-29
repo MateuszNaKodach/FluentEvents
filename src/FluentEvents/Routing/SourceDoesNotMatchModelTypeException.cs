@@ -1,6 +1,7 @@
 ﻿using System;
+using FluentEvents.Model;
 
-namespace FluentEvents.Model
+namespace FluentEvents.Routing
 {
     /// <summary>
     ///     An exception thrown when trying to route an event with a source type different from

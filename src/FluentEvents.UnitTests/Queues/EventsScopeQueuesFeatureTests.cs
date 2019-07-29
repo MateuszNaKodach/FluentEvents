@@ -1,4 +1,5 @@
-﻿using FluentEvents.Queues;
+﻿using System;
+using FluentEvents.Queues;
 using Moq;
 using NUnit.Framework;
 
@@ -7,14 +8,14 @@ namespace FluentEvents.UnitTests.Queues
     [TestFixture]
     public class EventsScopeQueuesFeatureTests
     {
-        private Mock<IEventsContext> _eventsContextMock;
+        private Guid _contextGuid;
 
         private EventsScopeQueuesFeature _eventsScope;
 
         [SetUp]
         public void SetUp()
         {
-            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            _contextGuid = Guid.NewGuid();
 
             _eventsScope = new EventsScopeQueuesFeature();
         }
@@ -22,10 +23,10 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void GetOrAddEventsQueue_WithExistingQueue_ShouldOnlyReturn()
         {
-            var eventsQueue1 = _eventsScope.GetOrAddEventsQueue(_eventsContextMock.Object, "1");
-            var eventsQueue2 = _eventsScope.GetOrAddEventsQueue(_eventsContextMock.Object, "1");
+            var eventsQueue1 = _eventsScope.GetOrAddEventsQueue(_contextGuid, "1");
+            var eventsQueue2 = _eventsScope.GetOrAddEventsQueue(_contextGuid, "1");
 
-            var eventsQueues = _eventsScope.GetEventsQueues(_eventsContextMock.Object);
+            var eventsQueues = _eventsScope.GetEventsQueues(_contextGuid);
 
             Assert.That(eventsQueues, Has.One.Items);
             Assert.That(eventsQueue1, Is.EqualTo(eventsQueue2));
@@ -34,10 +35,10 @@ namespace FluentEvents.UnitTests.Queues
         [Test]
         public void GetEventsQueues_ShouldReturnAllQueues()
         {
-            _eventsScope.GetOrAddEventsQueue(_eventsContextMock.Object, "1");
-            _eventsScope.GetOrAddEventsQueue(_eventsContextMock.Object, "2");
+            _eventsScope.GetOrAddEventsQueue(_contextGuid, "1");
+            _eventsScope.GetOrAddEventsQueue(_contextGuid, "2");
 
-            var eventsQueues = _eventsScope.GetEventsQueues(_eventsContextMock.Object);
+            var eventsQueues = _eventsScope.GetEventsQueues(_contextGuid);
 
             Assert.That(eventsQueues, Has.Exactly(2).Items);
         }

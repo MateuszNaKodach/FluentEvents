@@ -16,7 +16,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
+        private EventPipelineConfiguration<object> _eventPipelineConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
        
-            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            _eventPipelineConfiguration = new EventPipelineConfiguration<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -47,9 +47,9 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToScopedSubscriptions();
+            var eventPipelineConfigurator = _eventPipelineConfiguration.ThenIsPublishedToScopedSubscriptions();
             
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfiguration));
         }
 
         [Test]
@@ -62,9 +62,9 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions();
+            var eventPipelineConfigurator = _eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions();
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfiguration));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
         {
             Assert.That(() =>
             {
-                _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(null);
+                _eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -91,11 +91,11 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
                 )
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
+            var eventPipelineConfigurator = _eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions(
                 x => ((IConfigureTransmission)x).With<TestEventSender>()
             );
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfiguration));
         }
 
 
@@ -109,7 +109,7 @@ namespace FluentEvents.UnitTests.Pipelines.Publication
 
             Assert.That(() =>
             {
-                _eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(
+                _eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions(
                     x => ((IConfigureTransmission)x).With<TestEventSender>()
                 );
             }, Throws.TypeOf<EventTransmissionPluginIsNotConfiguredException>());

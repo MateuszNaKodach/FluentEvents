@@ -17,7 +17,6 @@ namespace FluentEvents.Subscriptions
             _isOptional = isOptional;
         }
 
-        /// <inheritdoc />
         public IEnumerable<Subscription> CreateSubscriptions(IServiceProvider appServiceProvider)
         {
             var services = appServiceProvider.GetService<IEnumerable<TService>>().ToArray();

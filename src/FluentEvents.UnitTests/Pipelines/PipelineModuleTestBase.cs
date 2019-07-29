@@ -8,21 +8,17 @@ namespace FluentEvents.UnitTests.Pipelines
 {
     public class PipelineModuleTestBase
     {
-        private Mock<IServiceProvider> _internalServiceProviderMock;
-
         protected Mock<IEventsScope> EventsScopeMock { get; private set; }
 
         [SetUp]
         public void BaseSetUp()
         {
-            _internalServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             EventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
         }
 
         [TearDown]
         public void BaseTearDown()
         {
-            _internalServiceProviderMock.Verify();
             EventsScopeMock.Verify();
         }
 
@@ -30,8 +26,7 @@ namespace FluentEvents.UnitTests.Pipelines
         {
             return new PipelineContext(
                 new PipelineEvent(e),
-                EventsScopeMock.Object,
-                _internalServiceProviderMock.Object
+                EventsScopeMock.Object
             );
         }
     }

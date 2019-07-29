@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentEvents.Configuration;
 
 namespace FluentEvents.Pipelines
 {

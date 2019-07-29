@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentEvents.Plugins;
 
-namespace FluentEvents
+namespace FluentEvents.Configuration
 {
     /// <summary>
     ///     The options used by an <see cref="EventsContext"/>

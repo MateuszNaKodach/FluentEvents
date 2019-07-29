@@ -10,16 +10,14 @@ namespace FluentEvents.UnitTests.Infrastructure
     [TestFixture]
     public class InternalEventsContextTests
     {
-        private EventsContextOptions _options;
         private Mock<IRootAppServiceProvider> _appServiceProviderMock;
-        private Mock<IEventsContext> _eventsContextMock;
+        private EventsContextOptions _options;
 
         [SetUp]
         public void SetUp()
         {
-            _options = new EventsContextOptions();
             _appServiceProviderMock = new Mock<IRootAppServiceProvider>(MockBehavior.Strict);
-            _eventsContextMock = new Mock<IEventsContext>(MockBehavior.Strict);
+            _options = new EventsContextOptions();
         }
 
         [TearDown]
@@ -46,8 +44,7 @@ namespace FluentEvents.UnitTests.Infrastructure
                 OnConfiguring,
                 OnBuildingPipelines,
                 OnBuildingSubscriptions,
-                _appServiceProviderMock.Object,
-                _eventsContextMock.Object
+                _appServiceProviderMock.Object
             );
 
             Assert.That(isOnConfiguringInvoked, Is.True);
@@ -80,8 +77,7 @@ namespace FluentEvents.UnitTests.Infrastructure
                 OnConfiguring,
                 OnBuildingPipelines,
                 OnBuildingSubscriptions,
-                _appServiceProviderMock.Object,
-                _eventsContextMock.Object
+                _appServiceProviderMock.Object
             );
 
             internalEventsContext.Dispose();

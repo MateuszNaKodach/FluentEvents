@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.ComponentModel;
 using FluentEvents.Infrastructure;
 using FluentEvents.ServiceProviders;
 
 namespace FluentEvents
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     The <see cref="EventsScope"/> represents the scope where entities are attached and the events
+    ///     are handled or queued.
+    /// </summary>
     public sealed class EventsScope : IEventsScope
     {
         private readonly IScopedAppServiceProvider _scopedAppServiceProvider;

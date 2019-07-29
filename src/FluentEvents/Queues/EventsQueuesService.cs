@@ -7,12 +7,12 @@ namespace FluentEvents.Queues
 {
     internal class EventsQueuesService : IEventsQueuesService
     {
-        private readonly IEventsContext _eventsContext;
         private readonly IEventsQueueNamesService _eventsQueueNamesService;
+        private readonly Guid _contextGuid;
 
-        public EventsQueuesService(IEventsContext eventsContext, IEventsQueueNamesService eventsQueueNamesService)
+        public EventsQueuesService(IEventsQueueNamesService eventsQueueNamesService)
         {
-            _eventsContext = eventsContext;
+            _contextGuid = Guid.NewGuid();
             _eventsQueueNamesService = eventsQueueNamesService;
         }
 
@@ -25,12 +25,12 @@ namespace FluentEvents.Queues
                 if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
+                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_contextGuid, queueName);
                 await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_eventsContext))
+                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_contextGuid))
                     await ProcessQueueAsync(eventsQueue).ConfigureAwait(false);
             }
         }
@@ -50,12 +50,12 @@ namespace FluentEvents.Queues
                 if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                     throw new EventsQueueNotFoundException();
 
-                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
+                var eventsQueue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_contextGuid, queueName);
                 eventsQueue.DiscardQueuedEvents();
             }
             else
             {
-                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_eventsContext))
+                foreach (var eventsQueue in eventsScope.GetQueuesFeature().GetEventsQueues(_contextGuid))
                     eventsQueue.DiscardQueuedEvents();
             }
         }
@@ -69,7 +69,7 @@ namespace FluentEvents.Queues
             if (!_eventsQueueNamesService.IsQueueNameExisting(queueName))
                 throw new EventsQueueNotFoundException();
 
-            var queue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_eventsContext, queueName);
+            var queue = eventsScope.GetQueuesFeature().GetOrAddEventsQueue(_contextGuid, queueName);
 
             queue.Enqueue(new QueuedPipelineEvent(invokeNextModule));
         }

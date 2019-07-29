@@ -6,15 +6,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace FluentEvents.Transmission
 {
-    /// <inheritdoc />
     internal class JsonEventsSerializationService : IEventsSerializationService
     {
         private readonly JsonSerializerSettings _serializerSettings;
 
-        /// <summary>
-        ///     This API supports the FluentEvents infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public JsonEventsSerializationService()
         {
             _serializerSettings = new JsonSerializerSettings
@@ -26,14 +21,12 @@ namespace FluentEvents.Transmission
             };
         }
 
-        /// <inheritdoc />
         public byte[] SerializeEvent(PipelineEvent pipelineEvent)
         {
             var data = JsonConvert.SerializeObject(pipelineEvent, pipelineEvent.EventType, _serializerSettings);
             return Encoding.UTF8.GetBytes(data);
         }
 
-        /// <inheritdoc />
         public PipelineEvent DeserializeEvent(byte[] eventData)
         {
             var stringData = Encoding.UTF8.GetString(eventData);

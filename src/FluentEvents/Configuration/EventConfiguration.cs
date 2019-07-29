@@ -8,14 +8,14 @@ namespace FluentEvents.Configuration
     /// <summary>
     ///     Provides a simple API surface for configuring an event.
     /// </summary>
-    public sealed class EventConfigurator<TEvent> : IInfrastructure<IServiceProvider>
+    public sealed class EventConfiguration<TEvent> : IInfrastructure<IServiceProvider>
         where TEvent : class 
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;
 
         private readonly IServiceProvider _serviceProvider;
 
-        internal EventConfigurator(IServiceProvider serviceProvider)
+        internal EventConfiguration(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -24,9 +24,9 @@ namespace FluentEvents.Configuration
         ///     This method creates a pipeline for the current event.
         /// </summary>
         /// <returns>
-        ///     An <see cref="EventPipelineConfigurator{TEventArgs}"/> to configure the modules of the pipeline.
+        ///     An <see cref="EventPipelineConfiguration{TEvent}"/> to configure the modules of the pipeline.
         /// </returns>
-        public EventPipelineConfigurator<TEvent> IsPiped()
+        public EventPipelineConfiguration<TEvent> IsPiped()
         {
             var pipeline = new Pipeline(_serviceProvider);
 
@@ -34,7 +34,7 @@ namespace FluentEvents.Configuration
 
             pipelinesService.AddPipeline(typeof(TEvent), pipeline);
 
-            return new EventPipelineConfigurator<TEvent>(pipeline, this);
+            return new EventPipelineConfiguration<TEvent>(pipeline, this);
         }
     }
 }

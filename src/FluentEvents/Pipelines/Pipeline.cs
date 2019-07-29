@@ -8,21 +8,19 @@ using Microsoft.Extensions.Logging;
 
 namespace FluentEvents.Pipelines
 {
-    /// <inheritdoc />
-    public class Pipeline : IPipeline
+    internal class Pipeline : IPipeline
     {
         private readonly IServiceProvider _internalServiceProvider;
         private readonly ICollection<ModuleProxy> _moduleProxies;
         private NextModuleDelegate _nextModule;
 
-        internal Pipeline(IServiceProvider internalServiceProvider)
+        public Pipeline(IServiceProvider internalServiceProvider)
         {
             _internalServiceProvider = internalServiceProvider;
             _moduleProxies = new List<ModuleProxy>();
             _nextModule = null;
         }
 
-        /// <inheritdoc />
         public void AddModule<TModule, TConfig>(TConfig moduleConfig) where TModule : IPipelineModule<TConfig>
         {
             if (moduleConfig == null)
@@ -35,14 +33,13 @@ namespace FluentEvents.Pipelines
             _moduleProxies.Add(new ModuleProxy<TConfig>(typeof(TModule), moduleConfig));
         }
 
-        /// <inheritdoc />
         public Task ProcessEventAsync(
             PipelineEvent pipelineEvent,
             IEventsScope eventsScope
         )
         {
             var pipeline = _nextModule ?? (_nextModule = Build());
-            return pipeline(new PipelineContext(pipelineEvent, eventsScope, _internalServiceProvider));
+            return pipeline(new PipelineContext(pipelineEvent, eventsScope));
         }
 
         private NextModuleDelegate Build()
@@ -52,7 +49,7 @@ namespace FluentEvents.Pipelines
             return next;
         }
 
-        private static NextModuleDelegate GetNextModuleDelegate(Stack<ModuleProxy> moduleProxies)
+        private NextModuleDelegate GetNextModuleDelegate(Stack<ModuleProxy> moduleProxies)
         {
             var moduleProxy = moduleProxies.Count > 0 ? moduleProxies.Pop() : null;
             if (moduleProxy == null)
@@ -64,10 +61,10 @@ namespace FluentEvents.Pipelines
 
             Task NextModuleDelegate(PipelineContext pipelineContext)
             {
-                var logger = (ILogger) pipelineContext.ServiceProvider.GetRequiredService(loggerType);
+                var logger = (ILogger) _internalServiceProvider.GetRequiredService(loggerType);
                 logger.InvokingPipelineModule(moduleType, pipelineContext.PipelineEvent);
 
-                return moduleProxy.InvokeAsync(pipelineContext, next);
+                return moduleProxy.InvokeAsync(_internalServiceProvider, pipelineContext, next);
             }
 
             return NextModuleDelegate;
@@ -82,7 +79,11 @@ namespace FluentEvents.Pipelines
                 Type = type;
             }
 
-            public abstract Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next);
+            public abstract Task InvokeAsync(
+                IServiceProvider serviceProvider,
+                PipelineContext pipelineContext,
+                NextModuleDelegate next
+            );
         }
 
         private class ModuleProxy<TConfig> : ModuleProxy
@@ -94,9 +95,13 @@ namespace FluentEvents.Pipelines
                 _config = config;
             }
 
-            public override Task InvokeAsync(PipelineContext pipelineContext, NextModuleDelegate next)
+            public override Task InvokeAsync(
+                IServiceProvider serviceProvider, 
+                PipelineContext pipelineContext,
+                NextModuleDelegate next
+            )
             {
-                var module = (IPipelineModule<TConfig>) pipelineContext.ServiceProvider.GetRequiredService(Type);
+                var module = (IPipelineModule<TConfig>) serviceProvider.GetRequiredService(Type);
            
                 return module.InvokeAsync(_config, pipelineContext, next);
             }

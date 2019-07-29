@@ -13,8 +13,8 @@ namespace FluentEvents.UnitTests.Config
         private Mock<IGlobalSubscriptionsService> _globalSubscriptionsServiceMock;
         private Mock<IScopedSubscriptionsService> _scopedSubscriptionsServiceMock;
 
-        private ServiceHandlerConfigurator<SubscribingService, object> _serviceHandlerConfigurator;
-        private ServiceHandlerConfigurator<SubscribingService, object> _optionalServiceHandlerConfigurator;
+        private ServiceHandlerConfiguration<SubscribingService, object> _serviceHandlerConfiguration;
+        private ServiceHandlerConfiguration<SubscribingService, object> _optionalServiceHandlerConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -22,13 +22,13 @@ namespace FluentEvents.UnitTests.Config
             _globalSubscriptionsServiceMock = new Mock<IGlobalSubscriptionsService>(MockBehavior.Strict);
             _scopedSubscriptionsServiceMock = new Mock<IScopedSubscriptionsService>(MockBehavior.Strict);
 
-            _serviceHandlerConfigurator = new ServiceHandlerConfigurator<SubscribingService, object>(
+            _serviceHandlerConfiguration = new ServiceHandlerConfiguration<SubscribingService, object>(
                 _scopedSubscriptionsServiceMock.Object,
                 _globalSubscriptionsServiceMock.Object,
                 false
             );
 
-            _optionalServiceHandlerConfigurator = new ServiceHandlerConfigurator<SubscribingService, object>(
+            _optionalServiceHandlerConfiguration = new ServiceHandlerConfiguration<SubscribingService, object>(
                 _scopedSubscriptionsServiceMock.Object,
                 _globalSubscriptionsServiceMock.Object,
                 true
@@ -50,9 +50,9 @@ namespace FluentEvents.UnitTests.Config
                 .Verifiable();
 
             if (isServiceHandlerOptional)
-                _optionalServiceHandlerConfigurator.HasGlobalSubscription();
+                _optionalServiceHandlerConfiguration.HasGlobalSubscription();
             else
-                _serviceHandlerConfigurator.HasGlobalSubscription();
+                _serviceHandlerConfiguration.HasGlobalSubscription();
         }
         
         [Test]
@@ -63,9 +63,9 @@ namespace FluentEvents.UnitTests.Config
                 .Verifiable();
 
             if (isServiceHandlerOptional)
-                _optionalServiceHandlerConfigurator.HasScopedSubscription();
+                _optionalServiceHandlerConfiguration.HasScopedSubscription();
             else
-                _serviceHandlerConfigurator.HasScopedSubscription();
+                _serviceHandlerConfiguration.HasScopedSubscription();
         }
         
         private class SubscribingService : IAsyncEventHandler<object>

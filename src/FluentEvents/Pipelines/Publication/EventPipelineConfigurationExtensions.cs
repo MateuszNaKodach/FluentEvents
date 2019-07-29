@@ -10,30 +10,30 @@ namespace FluentEvents.Pipelines.Publication
     /// <summary>
     ///     Extension methods for adding a publishing module to the pipeline.
     /// </summary>
-    public static class EventPipelineConfiguratorExtensions
+    public static class EventPipelineConfigurationExtensions
     {
         /// <summary>
         ///     Adds a module to the current pipeline that publishes the event to all the subscriptions in scope locally.
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
+        /// <param name="eventPipelineConfiguration">
+        ///     The <see cref="EventPipelineConfiguration{TEvent}"/> for the pipeline being configured.
         /// </param>
-        /// <returns>The same <see cref="EventPipelineConfigurator{TEvent}"/> instance so that multiple calls can be chained.</returns>
-        public static EventPipelineConfigurator<TEvent> ThenIsPublishedToScopedSubscriptions<TEvent>(
-            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator
+        /// <returns>The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.</returns>
+        public static EventPipelineConfiguration<TEvent> ThenIsPublishedToScopedSubscriptions<TEvent>(
+            this EventPipelineConfiguration<TEvent> eventPipelineConfiguration
         )
             where TEvent : class
         {
-            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
+            if (eventPipelineConfiguration == null) throw new ArgumentNullException(nameof(eventPipelineConfiguration));
 
-            eventPipelineConfigurator
+            eventPipelineConfiguration
                 .Get<IPipeline>()
                 .AddModule<ScopedPublishPipelineModule, ScopedPublishPipelineModuleConfig>(
                     new ScopedPublishPipelineModuleConfig()
                 );
 
-            return eventPipelineConfigurator;
+            return eventPipelineConfiguration;
         }
 
         /// <summary>
@@ -44,13 +44,13 @@ namespace FluentEvents.Pipelines.Publication
         ///     This method can be used to configure a publication to multiple application instances with this <see cref="EventsContext"/>
         /// </remarks>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
+        /// <param name="eventPipelineConfiguration">
+        ///     The <see cref="EventPipelineConfiguration{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="configurePublishTransmission">A delegate for configuring how the event is transmitted.</param>
-        /// <returns>The same <see cref="EventPipelineConfigurator{TEvent}"/> instance so that multiple calls can be chained.</returns>
-        public static EventPipelineConfigurator<TEvent> ThenIsPublishedToGlobalSubscriptions<TEvent>(
-            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator, 
+        /// <returns>The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.</returns>
+        public static EventPipelineConfiguration<TEvent> ThenIsPublishedToGlobalSubscriptions<TEvent>(
+            this EventPipelineConfiguration<TEvent> eventPipelineConfiguration, 
             Func<ConfigureTransmission, IPublishTransmissionConfiguration> configurePublishTransmission
         )
             where TEvent : class
@@ -67,7 +67,7 @@ namespace FluentEvents.Pipelines.Publication
 
             if (moduleConfig.SenderType != null)
             {
-                var serviceProvider = eventPipelineConfigurator.Get<IServiceProvider>();
+                var serviceProvider = eventPipelineConfiguration.Get<IServiceProvider>();
                 var eventSenderExists = serviceProvider
                     .GetServices<IEventSender>()
                     .Any(x => x.GetType() == moduleConfig.SenderType);
@@ -76,28 +76,28 @@ namespace FluentEvents.Pipelines.Publication
                     throw new EventTransmissionPluginIsNotConfiguredException();
             }
 
-            eventPipelineConfigurator
+            eventPipelineConfiguration
                 .Get<IPipeline>()
                 .AddModule<GlobalPublishPipelineModule, GlobalPublishPipelineModuleConfig>(
                     moduleConfig
                 );
 
-            return eventPipelineConfigurator;
+            return eventPipelineConfiguration;
         }
 
         /// <summary>
         ///     Adds a module to the current pipeline that publishes the event to all the global subscriptions locally.
         /// </summary>
         /// <typeparam name="TEvent">The type that publishes the event.</typeparam>
-        /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
+        /// <param name="eventPipelineConfiguration">
+        ///     The <see cref="EventPipelineConfiguration{TEvent}"/> for the pipeline being configured.
         /// </param>
-        /// <returns>The same <see cref="EventPipelineConfigurator{TEvent}"/> instance so that multiple calls can be chained.</returns>
-        public static EventPipelineConfigurator<TEvent> ThenIsPublishedToGlobalSubscriptions<TEvent>(
-            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator
+        /// <returns>The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.</returns>
+        public static EventPipelineConfiguration<TEvent> ThenIsPublishedToGlobalSubscriptions<TEvent>(
+            this EventPipelineConfiguration<TEvent> eventPipelineConfiguration
         )
             where TEvent : class
 
-            => eventPipelineConfigurator.ThenIsPublishedToGlobalSubscriptions(x => ConfigureTransmission.Locally());
+            => eventPipelineConfiguration.ThenIsPublishedToGlobalSubscriptions(x => ConfigureTransmission.Locally());
     }
 }

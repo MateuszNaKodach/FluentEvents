@@ -1,9 +1,10 @@
 ﻿using System;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests
+namespace FluentEvents.UnitTests.Config
 {
     [TestFixture]
     public class EventsContextOptionsTests

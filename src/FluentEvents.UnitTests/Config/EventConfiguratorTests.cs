@@ -13,7 +13,7 @@ namespace FluentEvents.UnitTests.Config
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IPipelinesService> _pipelinesServiceMock;
 
-        private EventConfigurator<object> _eventConfigurator;
+        private EventConfiguration<object> _eventConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +21,7 @@ namespace FluentEvents.UnitTests.Config
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipelinesServiceMock = new Mock<IPipelinesService>(MockBehavior.Strict);
 
-            _eventConfigurator = new EventConfigurator<object>(
+            _eventConfiguration = new EventConfiguration<object>(
                 _serviceProviderMock.Object
             );
         }
@@ -45,7 +45,7 @@ namespace FluentEvents.UnitTests.Config
                 .Setup(x => x.AddPipeline(typeof(object), It.IsAny<IPipeline>()))
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventConfigurator.IsPiped();
+            var eventPipelineConfigurator = _eventConfiguration.IsPiped();
 
             Assert.That(eventPipelineConfigurator, Is.Not.Null);
 

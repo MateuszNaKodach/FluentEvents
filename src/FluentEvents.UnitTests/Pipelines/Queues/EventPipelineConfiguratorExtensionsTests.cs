@@ -17,7 +17,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         private Mock<IEventsQueueNamesService> _eventsQueueNamesServiceMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
+        private EventPipelineConfiguration<object> _eventPipelineConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -26,7 +26,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
             _eventsQueueNamesServiceMock = new Mock<IEventsQueueNamesService>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            _eventPipelineConfiguration = new EventPipelineConfiguration<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -59,7 +59,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
                 .Setup(x => x.RegisterQueueNameIfNotExists(QueueName))
                 .Verifiable();
 
-            _eventPipelineConfigurator.ThenIsQueuedTo(QueueName);
+            _eventPipelineConfiguration.ThenIsQueuedTo(QueueName);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace FluentEvents.UnitTests.Pipelines.Queues
         {
             Assert.That(() =>
             {
-                _eventPipelineConfigurator.ThenIsQueuedTo(null);
+                _eventPipelineConfiguration.ThenIsQueuedTo(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
     }

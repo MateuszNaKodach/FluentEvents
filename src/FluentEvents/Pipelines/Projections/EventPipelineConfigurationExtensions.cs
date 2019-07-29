@@ -7,7 +7,7 @@ namespace FluentEvents.Pipelines.Projections
     /// <summary>
     ///     Extension methods for adding a projection to a pipeline.
     /// </summary>
-    public static class EventPipelineConfiguratorExtensions
+    public static class EventPipelineConfigurationExtensions
     {
         /// <summary>
         ///     Adds a module to the current pipeline that replaces event with a projection.
@@ -18,38 +18,38 @@ namespace FluentEvents.Pipelines.Projections
         /// </remarks>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <typeparam name="TToEvent">The type of the projected event.</typeparam>
-        /// <param name="eventPipelineConfigurator">
-        ///     The <see cref="EventPipelineConfigurator{TEvent}"/> for the pipeline being configured.
+        /// <param name="eventPipelineConfiguration">
+        ///     The <see cref="EventPipelineConfiguration{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <param name="eventConverter">
         ///     A <see cref="Func{TEvent, TToEvent}"/> that takes the event as input and returns a new object.
         /// </param>
         /// <returns>
-        ///     A new <see cref="EventPipelineConfigurator{TToEvent}"/> instance so that multiple calls can be chained.
+        ///     A new <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
-        public static EventPipelineConfigurator<TToEvent> ThenIsProjected<TEvent, TToEvent>(
-            this EventPipelineConfigurator<TEvent> eventPipelineConfigurator,
+        public static EventPipelineConfiguration<TToEvent> ThenIsProjected<TEvent, TToEvent>(
+            this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             Func<TEvent, TToEvent> eventConverter
         )
             where TEvent : class
             where TToEvent : class
         {
-            if (eventPipelineConfigurator == null) throw new ArgumentNullException(nameof(eventPipelineConfigurator));
+            if (eventPipelineConfiguration == null) throw new ArgumentNullException(nameof(eventPipelineConfiguration));
             if (eventConverter == null) throw new ArgumentNullException(nameof(eventConverter));
             
             var projectionPipelineModuleConfig = new ProjectionPipelineModuleConfig(
                 new EventProjection<TEvent, TToEvent>(eventConverter)
             );
 
-            eventPipelineConfigurator
+            eventPipelineConfiguration
                 .Get<IPipeline>()
                 .AddModule<ProjectionPipelineModule, ProjectionPipelineModuleConfig>(
                     projectionPipelineModuleConfig
                 );
 
-            return new EventPipelineConfigurator<TToEvent>(
-                eventPipelineConfigurator.Get<IServiceProvider>(),
-                eventPipelineConfigurator.Get<IPipeline>()
+            return new EventPipelineConfiguration<TToEvent>(
+                eventPipelineConfiguration.Get<IServiceProvider>(),
+                eventPipelineConfiguration.Get<IPipeline>()
             );
         }
     }

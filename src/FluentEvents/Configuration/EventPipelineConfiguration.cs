@@ -7,7 +7,7 @@ namespace FluentEvents.Configuration
     /// <summary>
     ///     Provides a simple API surface for configuring an event pipeline.
     /// </summary>
-    public sealed class EventPipelineConfigurator<TEvent> : IInfrastructure<IServiceProvider>, IInfrastructure<IPipeline>
+    public sealed class EventPipelineConfiguration<TEvent> : IInfrastructure<IServiceProvider>, IInfrastructure<IPipeline>
         where TEvent : class
     {
         IServiceProvider IInfrastructure<IServiceProvider>.Instance => _serviceProvider;
@@ -17,27 +17,27 @@ namespace FluentEvents.Configuration
         private readonly IPipeline _pipeline;
 
         /// <summary>
-        ///     Creates an instance by taking dependencies from an <see cref="EventConfigurator{TEvent}"/>
+        ///     Creates an instance by taking dependencies from an <see cref="EventConfiguration{TEvent}"/>
         /// </summary>
         /// <param name="pipeline">The pipeline to configure.</param>
-        /// <param name="eventConfigurator">The event configurator.</param>
-        public EventPipelineConfigurator(
+        /// <param name="eventConfiguration">The event configuration.</param>
+        public EventPipelineConfiguration(
             IPipeline pipeline,
-            EventConfigurator<TEvent> eventConfigurator
+            EventConfiguration<TEvent> eventConfiguration
         )
         {
-            if (eventConfigurator == null) throw new ArgumentNullException(nameof(eventConfigurator));
+            if (eventConfiguration == null) throw new ArgumentNullException(nameof(eventConfiguration));
 
-            _serviceProvider = eventConfigurator.Get<IServiceProvider>();
+            _serviceProvider = eventConfiguration.Get<IServiceProvider>();
             _pipeline = pipeline;
         }
 
         /// <summary>
-        ///     Allows to create an instance without passing an <see cref="EventConfigurator{TEvent}"/>
+        ///     Allows to create an instance without passing an <see cref="EventConfiguration{TEvent}"/>
         /// </summary>
         /// <param name="serviceProvider">The events context.</param>
         /// <param name="pipeline">The pipeline to configure.</param>
-        public EventPipelineConfigurator(
+        public EventPipelineConfiguration(
             IServiceProvider serviceProvider,
             IPipeline pipeline
         )

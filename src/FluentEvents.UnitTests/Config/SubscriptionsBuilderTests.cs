@@ -41,7 +41,7 @@ namespace FluentEvents.UnitTests.Config
             Assert.That(serviceConfigurator, Is.Not.Null);
             Assert.That(
                 serviceConfigurator,
-                Is.TypeOf<ServiceHandlerConfigurator<SubscribingService, object>>()
+                Is.TypeOf<ServiceHandlerConfiguration<SubscribingService, object>>()
             );
         }
 
@@ -53,7 +53,7 @@ namespace FluentEvents.UnitTests.Config
             Assert.That(serviceConfigurator, Is.Not.Null);
             Assert.That(
                 serviceConfigurator,
-                Is.TypeOf<ServiceHandlerConfigurator<SubscribingService, object>>()
+                Is.TypeOf<ServiceHandlerConfiguration<SubscribingService, object>>()
             );
         }
 

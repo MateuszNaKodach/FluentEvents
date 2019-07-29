@@ -2,14 +2,12 @@
 
 namespace FluentEvents.Azure.SignalR
 {
-    /// <inheritdoc />
     /// <summary>
     ///     An exception thrown by the FluentEvents.Azure.SignalR plugin.
     /// </summary>
     [Serializable]
     public abstract class FluentEventsAzureSignalRException : FluentEventsException
     {
-        /// <inheritdoc />
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
         /// </summary>
@@ -17,7 +15,6 @@ namespace FluentEvents.Azure.SignalR
         {
         }
 
-        /// <inheritdoc />
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsAzureSignalRException" /> class.
         /// </summary>

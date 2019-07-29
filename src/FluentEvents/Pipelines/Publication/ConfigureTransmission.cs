@@ -1,6 +1,8 @@
 ﻿namespace FluentEvents.Pipelines.Publication
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Provides a simple API surface to specify the sender to invoke for the transmission being configured. 
+    /// </summary>
     public sealed class ConfigureTransmission : IConfigureTransmission
     {
         IPublishTransmissionConfiguration IConfigureTransmission.With<T>() => new PublishTransmissionConfiguration(typeof(T));

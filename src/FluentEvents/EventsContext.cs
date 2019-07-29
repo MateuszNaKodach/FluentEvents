@@ -13,10 +13,14 @@ using Microsoft.Extensions.Hosting;
 namespace FluentEvents
 {
     /// <summary>
-    ///     The <see cref="EventsContext"/> provides the API surface to configure the event pipelines and the event subscriptions.
-    ///     An <see cref="EventsContext"/> should be treated as a singleton.
+    ///     <para>
+    ///         The <see cref="EventsContext"/> provides the API surface to configure the event pipelines and the event subscriptions.
+    ///     </para>
+    ///     <para>
+    ///         An <see cref="EventsContext"/> should be treated as a singleton.
+    ///     </para>
     /// </summary>
-    public abstract class EventsContext : IEventsContext
+    public abstract class EventsContext
     {
         private readonly Lazy<InternalEventsContext> _internalEventsContext;
 
@@ -35,8 +39,7 @@ namespace FluentEvents
                 OnConfiguring,
                 OnBuildingPipelines,
                 OnBuildingSubscriptions,
-                rootAppServiceProvider,
-                this
+                rootAppServiceProvider
             ), LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
@@ -100,6 +103,9 @@ namespace FluentEvents
         ///     The name of the queue.
         ///     If null all the events will be processed.
         /// </param>
+        /// <exception cref="EventsQueueNotFoundException">
+        ///     No queues were found with the supplied <paramref name="queueName"/>.
+        /// </exception>
         public virtual Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null)
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
@@ -113,6 +119,9 @@ namespace FluentEvents
         ///     The name of the queue.
         ///     If null all the events will be discarded.
         /// </param>
+        /// <exception cref="EventsQueueNotFoundException">
+        ///     No queues were found with the supplied <paramref name="queueName"/>.
+        /// </exception>
         public virtual void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null)
             => GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()

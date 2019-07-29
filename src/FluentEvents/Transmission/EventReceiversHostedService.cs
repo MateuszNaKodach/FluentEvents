@@ -13,13 +13,11 @@ namespace FluentEvents.Transmission
             _eventReceiversService = eventReceiversService;
         }
 
-        /// <inheritdoc />
         public Task StartAsync(CancellationToken cancellationToken)
         {
             return _eventReceiversService.StartReceiversAsync(cancellationToken);
         }
 
-        /// <inheritdoc />
         public Task StopAsync(CancellationToken cancellationToken)
         {
             return _eventReceiversService.StopReceiversAsync(cancellationToken);

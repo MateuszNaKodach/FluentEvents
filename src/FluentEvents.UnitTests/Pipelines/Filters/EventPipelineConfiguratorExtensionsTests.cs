@@ -15,7 +15,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         private Mock<ISourceModelsService> _sourceModelsServiceMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
+        private EventPipelineConfiguration<object> _eventPipelineConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
             _sourceModelsServiceMock = new Mock<ISourceModelsService>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            _eventPipelineConfiguration = new EventPipelineConfiguration<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -41,9 +41,9 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
                 .Callback<FilterPipelineModuleConfig>(paramsConfig => config = paramsConfig)
                 .Verifiable();
 
-            var eventPipelineConfigurator = _eventPipelineConfigurator.ThenIsFiltered(e => isMatching);
+            var eventPipelineConfigurator = _eventPipelineConfiguration.ThenIsFiltered(e => isMatching);
 
-            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfigurator));
+            Assert.That(eventPipelineConfigurator, Is.EqualTo(_eventPipelineConfiguration));
             Assert.That(config, Is.Not.Null);
             Assert.That(config.IsMatching(new object()), Is.EqualTo(isMatching));
         }
@@ -53,7 +53,7 @@ namespace FluentEvents.UnitTests.Pipelines.Filters
         {
             Assert.That(() =>
             {
-                _eventPipelineConfigurator.ThenIsFiltered(null);
+                _eventPipelineConfiguration.ThenIsFiltered(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 

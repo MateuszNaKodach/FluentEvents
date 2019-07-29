@@ -19,12 +19,12 @@
             </remarks>
             <param name="configureTransmission">
                 The <see cref="T:FluentEvents.Pipelines.Publication.IConfigureTransmission"/> provided by the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfigurator{``0},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfiguration{``0},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
                 method.
             </param>
             <returns>
                 The <see cref="T:FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration"/> for the
-                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfiguratorExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfigurator{``0},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
+                <see cref="M:FluentEvents.Pipelines.Publication.EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfiguration{``0},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})"/>
                 method.
             </returns>
         </member>
@@ -85,19 +85,16 @@
             <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException">
-            <inheritdoc />
             <summary>
                 An exception thrown by the FluentEvents.Azure.ServiceBus plugin.
             </summary>
         </member>
         <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor(System.String)">
-            <inheritdoc />
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
             </summary>
         </member>
         <member name="M:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException.#ctor(System.String,System.Exception)">
-            <inheritdoc />
             <summary>
                 Initializes a new instance of the <see cref="T:FluentEvents.Azure.ServiceBus.FluentEventsServiceBusException" /> class.
             </summary>
@@ -151,13 +148,11 @@
             </summary>
         </member>
         <member name="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException">
-            <inheritdoc />
             <summary>
                 An exception thrown when the creation of an Azure Service Bus topic subscription fails.
             </summary>
         </member>
         <member name="M:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException.#ctor(System.Exception)">
-            <inheritdoc />
             <summary>
                 Creates a new instance of <see cref="T:FluentEvents.Azure.ServiceBus.Receiving.ServiceBusSubscriptionCreationException" />
             </summary>

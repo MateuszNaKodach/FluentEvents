@@ -56,23 +56,24 @@ namespace FluentEvents.UnitTests.Subscriptions
         {
             var subscription = isAsync ? _asyncSubscription : _subscription;
 
-            var exception = await subscription.PublishEventAsync(_pipelineEvent);
+            await subscription.PublishEventAsync(_pipelineEvent);
 
             Assert.That(_handlerActionEvent, Is.EqualTo(_pipelineEvent.Event));
-            Assert.That(exception, Is.Null);
         }
 
         [Test]
-        public async Task PublishEvent_ShouldCatchAndReturnTargetInvocationExceptions([Values] bool isAsync)
+        public void PublishEvent_ShouldCatchAndReturnTargetInvocationExceptions([Values] bool isAsync)
         {
             var subscription = isAsync ? _asyncSubscription : _subscription;
 
             _isThrowingEnabled = true;
 
-            var exception = await subscription.PublishEventAsync(_pipelineEvent);
-            
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception, Is.EqualTo(_exception));
+            Assert.That(
+                async () => { await subscription.PublishEventAsync(_pipelineEvent); },
+                Throws.TypeOf<SubscribedEventHandlerThrewException>()
+                    .And
+                    .With.Property(nameof(Exception.InnerException)).EqualTo(_exception)
+            );
         }
         
         private void HandlerAction(object args)

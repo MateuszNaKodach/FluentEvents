@@ -2,14 +2,12 @@
 
 namespace FluentEvents.Azure.ServiceBus
 {
-    /// <inheritdoc />
     /// <summary>
     ///     An exception thrown by the FluentEvents.Azure.ServiceBus plugin.
     /// </summary>
     [Serializable]
     public abstract class FluentEventsServiceBusException : FluentEventsException
     {
-        /// <inheritdoc />
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
         /// </summary>
@@ -17,7 +15,6 @@ namespace FluentEvents.Azure.ServiceBus
         {
         }
 
-        /// <inheritdoc />
         /// <summary>
         ///     Initializes a new instance of the <see cref="FluentEventsServiceBusException" /> class.
         /// </summary>

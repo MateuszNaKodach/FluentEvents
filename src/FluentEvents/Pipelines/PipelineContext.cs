@@ -14,11 +14,6 @@ namespace FluentEvents.Pipelines
         public PipelineEvent PipelineEvent { get; set; }
 
         /// <summary>
-        ///     The internal service provider.
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; }
-
-        /// <summary>
         ///     The current events scope.
         /// </summary>
         public IEventsScope EventsScope { get; }
@@ -28,12 +23,11 @@ namespace FluentEvents.Pipelines
         /// </summary>
         /// <param name="pipelineEvent">The event being processed.</param>
         /// <param name="eventsScope">The current events scope.</param>
-        /// <param name="serviceProvider">The internal service provider.</param>
-        public PipelineContext(PipelineEvent pipelineEvent, IEventsScope eventsScope, IServiceProvider serviceProvider)
+        /// <exception cref="ArgumentNullException"><paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are null.</exception>
+        public PipelineContext(PipelineEvent pipelineEvent, IEventsScope eventsScope)
         {
             PipelineEvent = pipelineEvent ?? throw new ArgumentNullException(nameof(pipelineEvent));
             EventsScope = eventsScope ?? throw new ArgumentNullException(nameof(eventsScope));
-            ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
     }
 }

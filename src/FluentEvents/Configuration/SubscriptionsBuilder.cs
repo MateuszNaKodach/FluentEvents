@@ -16,22 +16,22 @@ namespace FluentEvents.Configuration
             _scopedSubscriptionsService = scopedSubscriptionsService;
         }
 
-        public ServiceHandlerConfigurator<TService, TEvent> ServiceHandler<TService, TEvent>()
+        public ServiceHandlerConfiguration<TService, TEvent> ServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class
         {
-            return new ServiceHandlerConfigurator<TService, TEvent>(
+            return new ServiceHandlerConfiguration<TService, TEvent>(
                 _scopedSubscriptionsService,
                 _globalSubscriptionsService,
                 false
             );
         }
 
-        public ServiceHandlerConfigurator<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
+        public ServiceHandlerConfiguration<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class
         {
-            return new ServiceHandlerConfigurator<TService, TEvent>(
+            return new ServiceHandlerConfiguration<TService, TEvent>(
                 _scopedSubscriptionsService,
                 _globalSubscriptionsService,
                 true

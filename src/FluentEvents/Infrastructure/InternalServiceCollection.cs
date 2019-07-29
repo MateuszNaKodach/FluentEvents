@@ -30,7 +30,7 @@ namespace FluentEvents.Infrastructure
             _rootAppServiceProvider = rootAppServiceProvider;
         }
 
-        public ServiceProvider BuildServiceProvider(IEventsContext eventsContext, IFluentEventsPluginOptions options)
+        public ServiceProvider BuildServiceProvider(IFluentEventsPluginOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
                 x => _rootAppServiceProvider.GetService<ILoggerFactory>() ??
@@ -45,7 +45,6 @@ namespace FluentEvents.Infrastructure
             ));
 
             services.AddSingleton(_rootAppServiceProvider);
-            services.AddSingleton(eventsContext);
             services.AddSingleton<PipelinesBuilder>();
             services.AddSingleton<SubscriptionsBuilder>();
             services.AddSingleton<IEventsQueuesService, EventsQueuesService>();

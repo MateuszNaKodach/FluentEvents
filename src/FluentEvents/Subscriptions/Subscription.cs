@@ -13,10 +13,10 @@ namespace FluentEvents.Subscriptions
         internal Subscription(Type sourceType, Delegate eventsHandler)
         {
             EventType = sourceType ?? throw new ArgumentNullException(nameof(sourceType));
-            _eventsHandler = eventsHandler;
+            _eventsHandler = eventsHandler ?? throw new ArgumentNullException(nameof(eventsHandler));
         }
 
-        internal async Task<Exception> PublishEventAsync(PipelineEvent pipelineEvent)
+        internal async Task PublishEventAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!EventType.IsInstanceOfType(pipelineEvent.Event))
@@ -25,12 +25,10 @@ namespace FluentEvents.Subscriptions
             try
             {
                 await InvokeEventHandlerAsync(pipelineEvent, _eventsHandler).ConfigureAwait(false);
-
-                return null;
             }
             catch (TargetInvocationException ex)
             {
-                return ex.InnerException;
+                throw new SubscribedEventHandlerThrewException(ex);
             }
         }
 
@@ -44,6 +42,15 @@ namespace FluentEvents.Subscriptions
             eventHandler.DynamicInvoke(pipelineEvent.Event);
 
             return Task.CompletedTask;
+        }
+    }
+
+    [Serializable]
+    internal class SubscribedEventHandlerThrewException : FluentEventsException
+    {
+        public SubscribedEventHandlerThrewException(TargetInvocationException targetInvocationException) 
+            : base("The event handler threw an exception.", targetInvocationException.InnerException)
+        {
         }
     }
 }

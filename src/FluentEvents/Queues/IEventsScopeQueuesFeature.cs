@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FluentEvents.Queues
 {
     internal interface IEventsScopeQueuesFeature
     {
-        IEnumerable<IEventsQueue> GetEventsQueues(IEventsContext eventsContext);
-        IEventsQueue GetOrAddEventsQueue(IEventsContext eventsContext, string queueName);
+        IEnumerable<IEventsQueue> GetEventsQueues(Guid contextGuid);
+        IEventsQueue GetOrAddEventsQueue(Guid contextGuid, string queueName);
     }
 }

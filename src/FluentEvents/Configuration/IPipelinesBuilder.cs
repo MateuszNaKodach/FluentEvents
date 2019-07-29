@@ -12,7 +12,7 @@
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <returns>The configuration object for the specified event.</returns>
-        EventConfigurator<TEvent> Event<TEvent>()
+        EventConfiguration<TEvent> Event<TEvent>()
             where TEvent : class;
     }
 }

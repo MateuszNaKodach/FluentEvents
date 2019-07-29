@@ -6,17 +6,12 @@ using FluentEvents.Utils;
 
 namespace FluentEvents.Routing
 {
-    /// <inheritdoc />
     internal class AttachingService : IAttachingService
     {
         private readonly ISourceModelsService _sourceModelsService;
         private readonly IForwardingService _forwardingService;
         private readonly IEnumerable<IAttachingInterceptor> _attachingInterceptors;
 
-        /// <summary>
-        ///     This API supports the FluentEvents infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public AttachingService(
             ISourceModelsService sourceModelsService,
             IForwardingService forwardingService,
@@ -28,7 +23,6 @@ namespace FluentEvents.Routing
             _attachingInterceptors = attachingInterceptors;
         }
 
-        /// <inheritdoc />
         public void Attach(object source, IEventsScope eventsScope)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));

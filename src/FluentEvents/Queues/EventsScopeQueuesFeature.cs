@@ -1,27 +1,28 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace FluentEvents.Queues
 {
     internal class EventsScopeQueuesFeature : IEventsScopeQueuesFeature
     {
-        private readonly ConcurrentDictionary<IEventsContext, ConcurrentDictionary<string, IEventsQueue>> _eventsQueues;
+        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<string, IEventsQueue>> _eventsQueues;
 
         public EventsScopeQueuesFeature()
         {
-            _eventsQueues = new ConcurrentDictionary<IEventsContext, ConcurrentDictionary<string, IEventsQueue>>();
+            _eventsQueues = new ConcurrentDictionary<Guid, ConcurrentDictionary<string, IEventsQueue>>();
         }
 
-        public IEnumerable<IEventsQueue> GetEventsQueues(IEventsContext eventsContext)
+        public IEnumerable<IEventsQueue> GetEventsQueues(Guid contextGuid)
         {
-            if  (_eventsQueues.TryGetValue(eventsContext, out var eventsQueues))
+            if  (_eventsQueues.TryGetValue(contextGuid, out var eventsQueues))
                 foreach (var eventsQueue in eventsQueues.Values)
                     yield return eventsQueue;
         }
 
-        public IEventsQueue GetOrAddEventsQueue(IEventsContext eventsContext, string queueName)
+        public IEventsQueue GetOrAddEventsQueue(Guid contextGuid, string queueName)
         {
-            var queues = _eventsQueues.GetOrAdd(eventsContext, x => new ConcurrentDictionary<string, IEventsQueue>());
+            var queues = _eventsQueues.GetOrAdd(contextGuid, x => new ConcurrentDictionary<string, IEventsQueue>());
             return queues.GetOrAdd(queueName, x => new EventsQueue(queueName));
         }
     }

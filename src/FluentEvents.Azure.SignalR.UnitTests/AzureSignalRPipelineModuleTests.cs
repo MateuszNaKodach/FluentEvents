@@ -14,7 +14,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         private static readonly string[] _receiverIds = {"1", "2"};
 
         private Mock<IEventSendingService> _azureSignalRClientMock;
-        private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IEventsScope> _eventsScopeMock;
 
         private AzureSignalRPipelineModuleConfig _azureSignalRPipelineModuleConfig;
@@ -27,7 +26,6 @@ namespace FluentEvents.Azure.SignalR.UnitTests
         public void SetUp()
         {
             _azureSignalRClientMock = new Mock<IEventSendingService>(MockBehavior.Strict);
-            _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _eventsScopeMock = new Mock<IEventsScope>(MockBehavior.Strict);
 
             _azureSignalRPipelineModuleConfig = new AzureSignalRPipelineModuleConfig
@@ -38,9 +36,16 @@ namespace FluentEvents.Azure.SignalR.UnitTests
                 ReceiverIdsProviderAction = e => _receiverIds
             };
             _pipelineEvent = new PipelineEvent(typeof(object));
-            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScopeMock.Object, _serviceProviderMock.Object);
+            _pipelineContext = new PipelineContext(_pipelineEvent, _eventsScopeMock.Object);
 
             _azureSignalRPipelineModule = new AzureSignalRPipelineModule(_azureSignalRClientMock.Object);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _eventsScopeMock.Verify();
+            _azureSignalRClientMock.Verify();
         }
 
         [Test]

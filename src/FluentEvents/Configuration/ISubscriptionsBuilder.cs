@@ -17,7 +17,7 @@ namespace FluentEvents.Configuration
         ///     Returns an object that can be used to configure subscriptions for
         ///     an <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> method.
         /// </returns>
-        ServiceHandlerConfigurator<TService, TEvent> ServiceHandler<TService, TEvent>()
+        ServiceHandlerConfiguration<TService, TEvent> ServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class;
 
@@ -31,7 +31,7 @@ namespace FluentEvents.Configuration
         ///     Returns an object that can be used to configure subscriptions for
         ///     an <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> method.
         /// </returns>
-        ServiceHandlerConfigurator<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
+        ServiceHandlerConfiguration<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class;
     }

@@ -30,6 +30,7 @@ namespace FluentEvents.Subscriptions
 
         public Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope)
         {
+            if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
             var subscriptions = eventsScope.GetSubscriptionsFeature().GetSubscriptions(_scopedSubscriptionsService);
@@ -38,7 +39,11 @@ namespace FluentEvents.Subscriptions
         }
 
         public Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent)
-            => PublishInternalAsync(pipelineEvent, _globalSubscriptionsService.GetGlobalSubscriptions());
+        {
+            if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
+
+            return PublishInternalAsync(pipelineEvent, _globalSubscriptionsService.GetGlobalSubscriptions());
+        }
 
         private async Task PublishInternalAsync(PipelineEvent pipelineEvent, IEnumerable<Subscription> subscriptions)
         {
@@ -51,12 +56,14 @@ namespace FluentEvents.Subscriptions
 
             foreach (var eventsSubscription in eventsSubscriptions)
             {
-                var exception = await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
-
-                if (exception != null)
+                try
                 {
-                    exceptions.Add(exception);
-                    _logger.EventHandlerThrew(exception);
+                    await eventsSubscription.PublishEventAsync(pipelineEvent).ConfigureAwait(false);
+                }
+                catch (SubscribedEventHandlerThrewException ex)
+                {
+                    exceptions.Add(ex.InnerException);
+                    _logger.EventHandlerThrew(ex.InnerException);
                 }
             }
 

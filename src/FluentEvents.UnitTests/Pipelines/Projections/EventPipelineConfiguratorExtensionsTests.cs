@@ -14,7 +14,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         private Mock<IServiceProvider> _serviceProviderMock;
         private Mock<IPipeline> _pipelineMock;
 
-        private EventPipelineConfigurator<object> _eventPipelineConfigurator;
+        private EventPipelineConfiguration<object> _eventPipelineConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -22,7 +22,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipelineMock = new Mock<IPipeline>(MockBehavior.Strict);
 
-            _eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            _eventPipelineConfiguration = new EventPipelineConfiguration<object>(
                 _serviceProviderMock.Object,
                 _pipelineMock.Object
             );
@@ -41,11 +41,11 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
             ProjectionPipelineModuleConfig config = null;
             SetUpPipeline(callbackConfig => config = callbackConfig);
 
-            var newEventPipelineConfigurator = _eventPipelineConfigurator.ThenIsProjected(x => new ProjectedEvent());
+            var newEventPipelineConfigurator = _eventPipelineConfiguration.ThenIsProjected(x => new ProjectedEvent());
             
             Assert.That(
                 newEventPipelineConfigurator,
-                Is.TypeOf<EventPipelineConfigurator<ProjectedEvent>>()
+                Is.TypeOf<EventPipelineConfiguration<ProjectedEvent>>()
             );
             
             Assert.That(config, Has.Property(nameof(ProjectionPipelineModuleConfig.EventProjection)).Not.Null);
@@ -58,7 +58,7 @@ namespace FluentEvents.UnitTests.Pipelines.Projections
         {
             Assert.That(() =>
             {
-                _eventPipelineConfigurator.ThenIsProjected<object, object>(null);
+                _eventPipelineConfiguration.ThenIsProjected<object, object>(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 

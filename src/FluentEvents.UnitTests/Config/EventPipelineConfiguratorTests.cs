@@ -13,14 +13,14 @@ namespace FluentEvents.UnitTests.Config
         private Mock<IServiceProvider> _serviceProviderMock;
 
         private Pipeline _pipeline;
-        private EventConfigurator<object> _eventConfigurator;
+        private EventConfiguration<object> _eventConfiguration;
 
         [SetUp]
         public void SetUp()
         {
             _serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
             _pipeline = new Pipeline(_serviceProviderMock.Object);
-            _eventConfigurator = new EventConfigurator<object>(
+            _eventConfiguration = new EventConfiguration<object>(
                 _serviceProviderMock.Object
             );
         }
@@ -28,9 +28,9 @@ namespace FluentEvents.UnitTests.Config
         [Test]
         public void Ctor_WithEventConfigurator_ShouldInheritPropertyValuesFromEventConfigurator()
         {
-            var eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            var eventPipelineConfigurator = new EventPipelineConfiguration<object>(
                 _pipeline,
-                _eventConfigurator
+                _eventConfiguration
             );
 
             var pipeline = eventPipelineConfigurator.Get<IPipeline>();
@@ -43,7 +43,7 @@ namespace FluentEvents.UnitTests.Config
         [Test]
         public void Ctor_WithAllParameters_ShouldSetPropertiesFromParameters()
         {
-            var eventPipelineConfigurator = new EventPipelineConfigurator<object>(
+            var eventPipelineConfigurator = new EventPipelineConfiguration<object>(
                 _serviceProviderMock.Object,
                 _pipeline
             );
