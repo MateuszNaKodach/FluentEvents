@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FluentEvents.Configuration
 {
     /// <summary>
-    ///     Provides a simple API surface for configuring an event.
+    ///     Allows configuration to be performed for an event type.
     /// </summary>
     public sealed class EventConfiguration<TEvent> : IInfrastructure<IServiceProvider>
         where TEvent : class 

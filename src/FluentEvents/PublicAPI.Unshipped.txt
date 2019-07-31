@@ -2,7 +2,6 @@
 FluentEvents.Configuration.EventConfiguration<TEvent>
 FluentEvents.Configuration.EventConfiguration<TEvent>.IsPiped() -> FluentEvents.Configuration.EventPipelineConfiguration<TEvent>
 FluentEvents.Configuration.EventPipelineConfiguration<TEvent>
-FluentEvents.Configuration.EventPipelineConfiguration<TEvent>.EventPipelineConfiguration(FluentEvents.Pipelines.IPipeline pipeline, FluentEvents.Configuration.EventConfiguration<TEvent> eventConfiguration) -> void
 FluentEvents.Configuration.EventPipelineConfiguration<TEvent>.EventPipelineConfiguration(System.IServiceProvider serviceProvider, FluentEvents.Pipelines.IPipeline pipeline) -> void
 FluentEvents.Configuration.EventsContextOptions
 FluentEvents.Configuration.EventsContextOptions.EventsContextOptions() -> void

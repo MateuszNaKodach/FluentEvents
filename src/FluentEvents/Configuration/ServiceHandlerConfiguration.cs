@@ -3,7 +3,7 @@
 namespace FluentEvents.Configuration
 {
     /// <summary>
-    ///     Provides an API surface to configure the subscriptions of a service event handler.
+    ///     Allows configuration to be performed for a service type.
     /// </summary>
     public class ServiceHandlerConfiguration<TService, TEvent>
         where TService : class, IAsyncEventHandler<TEvent>
@@ -25,7 +25,7 @@ namespace FluentEvents.Configuration
         }
 
         /// <summary>
-        ///     Subscribes the <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> to global events.
+        ///     Subscribes the service handler to global events.
         /// </summary>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceHandlerConfiguration<TService, TEvent> HasGlobalSubscription()
@@ -36,7 +36,7 @@ namespace FluentEvents.Configuration
         }
 
         /// <summary>
-        ///     Subscribes the <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> to scoped events.
+        ///     Subscribes the service handler to scoped events.
         /// </summary>
         /// <returns>The configuration object to add more subscriptions.</returns>
         public ServiceHandlerConfiguration<TService, TEvent> HasScopedSubscription()

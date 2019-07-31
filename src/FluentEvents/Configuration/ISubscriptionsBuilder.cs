@@ -3,33 +3,35 @@
 namespace FluentEvents.Configuration
 {
     /// <summary>
-    ///     Provides a simple API surface to select a service and configure it fluently.
+    ///     Allows subscriptions configuration to be performed for a service type and an event type.
     /// </summary>
     public interface ISubscriptionsBuilder
     {
         /// <summary>
-        ///     Maps required services to the <see cref="EventsContext"/>.
-        ///     If the <see cref="IServiceProvider"/> doesn't return any service of this type an exception is thrown during publishing.
+        ///     Allows configuration for required event subscriptions, to be performed for a service type.
+        ///     (Multiple services with the same type are supported)
+        ///     When a configured subscription receives an event and the <see cref="IServiceProvider"/>
+        ///     doesn't return any service of this type an exception is thrown during publishing.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
-        /// <typeparam name="TEvent">The type of the event</typeparam>
+        /// <typeparam name="TEvent">The type of the event to handle.</typeparam>
         /// <returns>
-        ///     Returns an object that can be used to configure subscriptions for
-        ///     an <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> method.
+        ///     Returns an object that can be used to configure subscriptions for the service type.
         /// </returns>
         ServiceHandlerConfiguration<TService, TEvent> ServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>
             where TEvent : class;
 
         /// <summary>
-        ///     Maps optional services to the <see cref="EventsContext"/>.
-        ///     If the <see cref="IServiceProvider"/> doesn't return any service of this type no exceptions will be thrown during publishing.
+        ///     Allows configuration for optional event subscriptions, to be performed for a service type.
+        ///     (Multiple services with the same type are supported)
+        ///     When a configured subscription receives an event and the <see cref="IServiceProvider"/>
+        ///     doesn't return any service of this type no exceptions will be thrown.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
-        /// <typeparam name="TEvent">The type of the event</typeparam>
+        /// <typeparam name="TEvent">The type of the event to handle.</typeparam>
         /// <returns>
-        ///     Returns an object that can be used to configure subscriptions for
-        ///     an <see cref="IAsyncEventHandler{TEvent}.HandleEventAsync"/> method.
+        ///     Returns an object that can be used to configure subscriptions for the service type.
         /// </returns>
         ServiceHandlerConfiguration<TService, TEvent> OptionalServiceHandler<TService, TEvent>()
             where TService : class, IAsyncEventHandler<TEvent>

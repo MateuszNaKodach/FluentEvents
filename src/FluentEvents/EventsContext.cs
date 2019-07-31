@@ -48,7 +48,7 @@ namespace FluentEvents
         private IServiceProvider GetCurrentInternalServiceProvider() => GetCurrentContext().InternalServiceProvider;
 
         /// <summary>
-        ///     Override this method to override the options supplied in the constructor.
+        ///     Override this method to alter the options supplied in the constructor.
         ///     The resulting configuration may be cached and re-used during the entire lifespan of the context.
         /// </summary> 
         /// <remarks>The default implementation of this method does nothing.</remarks>
