@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentEvents.Pipelines;
 using FluentEvents.Pipelines.Publication;
+using FluentEvents.Publication;
 using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;

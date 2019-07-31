@@ -79,6 +79,10 @@ FluentEvents.Plugins.IFluentEventsPlugin.ApplyServices(Microsoft.Extensions.Depe
 FluentEvents.Plugins.IFluentEventsPluginOptions
 FluentEvents.Plugins.IFluentEventsPluginOptions.AddPlugin(FluentEvents.Plugins.IFluentEventsPlugin plugin) -> void
 FluentEvents.Plugins.IFluentEventsPluginOptions.Plugins.get -> System.Collections.Generic.IEnumerable<FluentEvents.Plugins.IFluentEventsPlugin>
+FluentEvents.Publication.IPublishingService
+FluentEvents.Publication.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> System.Threading.Tasks.Task
+FluentEvents.Publication.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
+FluentEvents.Publication.PublicationAggregateException
 FluentEvents.Queues.EventsQueueNotFoundException
 FluentEvents.Routing.IAttachingInterceptor
 FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService attachingService, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
@@ -88,12 +92,8 @@ FluentEvents.ServiceCollectionExtensions
 FluentEvents.ServiceProviders.IRootAppServiceProvider
 FluentEvents.ServiceProviders.IScopedAppServiceProvider
 FluentEvents.Subscriptions.EventTypeMismatchException
-FluentEvents.Subscriptions.IPublishingService
-FluentEvents.Subscriptions.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent) -> System.Threading.Tasks.Task
-FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException.ServiceType.get -> System.Type
-FluentEvents.Subscriptions.SubscriptionPublishAggregateException
 FluentEvents.Transmission.IEventReceiver
 FluentEvents.Transmission.IEventReceiver.StartReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task
 FluentEvents.Transmission.IEventReceiver.StopReceivingAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task

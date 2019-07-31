@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 
-namespace FluentEvents.Subscriptions
+namespace FluentEvents.Publication
 {
     /// <summary>
     ///     Provides APIs to publish events.
@@ -19,7 +19,7 @@ namespace FluentEvents.Subscriptions
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are <see langword="null"/>.
         /// </exception>
-        /// <exception cref="SubscriptionPublishAggregateException">
+        /// <exception cref="PublicationAggregateException">
         ///     One or more event handlers threw an exception.
         /// </exception>
         Task PublishEventToScopedSubscriptionsAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope);
@@ -32,7 +32,7 @@ namespace FluentEvents.Subscriptions
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="pipelineEvent"/> is <see langword="null"/>.
         /// </exception>
-        /// <exception cref="SubscriptionPublishAggregateException">
+        /// <exception cref="PublicationAggregateException">
         ///     One or more event handlers threw an exception.
         /// </exception>
         Task PublishEventToGlobalSubscriptionsAsync(PipelineEvent pipelineEvent);

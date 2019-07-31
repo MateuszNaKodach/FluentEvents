@@ -2,9 +2,9 @@
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
 
-namespace FluentEvents.Subscriptions
+namespace FluentEvents.Publication
 {
-    internal static class SubscriptionsLoggerMessages
+    internal static class PublicationLoggerMessages
     {
         private static readonly Action<ILogger, Exception> _eventHandlerThrew = LoggerMessage.Define(
             LogLevel.Error,

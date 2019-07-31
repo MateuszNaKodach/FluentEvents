@@ -640,6 +640,43 @@
                 Returns the list of the added plugins.
             </summary>
         </member>
+        <member name="T:FluentEvents.Publication.IPublishingService">
+            <summary>
+                Provides APIs to publish events.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Publication.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
+            <summary>
+                Publish an events to all the scoped subscriptions.
+            </summary>
+            <param name="pipelineEvent">The event to publish.</param>
+            <param name="eventsScope">The scope of the event and the subscriptions.</param>
+            <returns>An awaitable <see cref="T:System.Threading.Tasks.Task"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are <see langword="null"/>.
+            </exception>
+            <exception cref="T:FluentEvents.Publication.PublicationAggregateException">
+                One or more event handlers threw an exception.
+            </exception>
+        </member>
+        <member name="M:FluentEvents.Publication.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent)">
+            <summary>
+                Publishes an event to all the global subscriptions.
+            </summary>
+            <param name="pipelineEvent">The event to publish.</param>
+            <returns>An awaitable <see cref="T:System.Threading.Tasks.Task"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="pipelineEvent"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:FluentEvents.Publication.PublicationAggregateException">
+                One or more event handlers threw an exception.
+            </exception>
+        </member>
+        <member name="T:FluentEvents.Publication.PublicationAggregateException">
+            <summary>
+                An exception that aggregates all exceptions thrown by the handlers of an event.
+            </summary>
+        </member>
         <member name="T:FluentEvents.Queues.EventsQueueNotFoundException">
             <summary>
                 An exception that is thrown when the events queue with the specified name does not exists.
@@ -734,38 +771,6 @@
                 is not an instance of <see cref="P:FluentEvents.Subscriptions.Subscription.EventType"/>.
             </summary>
         </member>
-        <member name="T:FluentEvents.Subscriptions.IPublishingService">
-            <summary>
-                Provides APIs to publish events.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
-            <summary>
-                Publish an events to all the scoped subscriptions.
-            </summary>
-            <param name="pipelineEvent">The event to publish.</param>
-            <param name="eventsScope">The scope of the event and the subscriptions.</param>
-            <returns>An awaitable <see cref="T:System.Threading.Tasks.Task"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">
-                <paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are <see langword="null"/>.
-            </exception>
-            <exception cref="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException">
-                One or more event handlers threw an exception.
-            </exception>
-        </member>
-        <member name="M:FluentEvents.Subscriptions.IPublishingService.PublishEventToGlobalSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent)">
-            <summary>
-                Publishes an event to all the global subscriptions.
-            </summary>
-            <param name="pipelineEvent">The event to publish.</param>
-            <returns>An awaitable <see cref="T:System.Threading.Tasks.Task"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">
-                <paramref name="pipelineEvent"/> is <see langword="null"/>.
-            </exception>
-            <exception cref="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException">
-                One or more event handlers threw an exception.
-            </exception>
-        </member>
         <member name="M:FluentEvents.Subscriptions.ISubscriptionCreationTask.CreateSubscriptions(System.IServiceProvider)">
             <exception cref="T:FluentEvents.Subscriptions.SubscribingServiceNotFoundException">
                 The service provider cannot resolve the subscribing service.
@@ -780,11 +785,6 @@
         <member name="P:FluentEvents.Subscriptions.SubscribingServiceNotFoundException.ServiceType">
             <summary>
                 The type of the service that wasn't found.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Subscriptions.SubscriptionPublishAggregateException">
-            <summary>
-                An exception that aggregates all exceptions thrown by the handlers of an event.
             </summary>
         </member>
         <member name="T:FluentEvents.Transmission.IEventReceiver">

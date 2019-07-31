@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
+using FluentEvents.Publication;
 using FluentEvents.ServiceProviders;
 using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Subscriptions
+namespace FluentEvents.UnitTests.Publication
 {
     [TestFixture]
     public class PublishingServiceTests
@@ -115,7 +116,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Error,
-                    SubscriptionsLoggerMessages.EventIds.EventHandlerThrew,
+                    PublicationLoggerMessages.EventIds.EventHandlerThrew,
                     It.IsAny<object>(),
                     _exception,
                     It.IsAny<Func<object, Exception, string>>()
@@ -128,7 +129,7 @@ namespace FluentEvents.UnitTests.Subscriptions
                     _pipelineEvent,
                     _eventsScopeMock.Object
                 );
-            }, Throws.TypeOf<SubscriptionPublishAggregateException>());
+            }, Throws.TypeOf<PublicationAggregateException>());
         }
 
         [Test]
@@ -173,7 +174,7 @@ namespace FluentEvents.UnitTests.Subscriptions
             _loggerMock
                 .Setup(x => x.Log(
                     LogLevel.Information,
-                    SubscriptionsLoggerMessages.EventIds.PublishingEvent,
+                    PublicationLoggerMessages.EventIds.PublishingEvent,
                     It.IsAny<object>(),
                     null,
                     It.IsAny<Func<object, Exception, string>>()

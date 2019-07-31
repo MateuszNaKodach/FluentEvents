@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
+using FluentEvents.Subscriptions;
 using Microsoft.Extensions.Logging;
 
-namespace FluentEvents.Subscriptions
+namespace FluentEvents.Publication
 {
     internal class PublishingService : IPublishingService
     {
@@ -68,7 +69,7 @@ namespace FluentEvents.Subscriptions
             }
 
             if (exceptions.Any())
-                throw new SubscriptionPublishAggregateException(exceptions);
+                throw new PublicationAggregateException(exceptions);
         }
     }
 }

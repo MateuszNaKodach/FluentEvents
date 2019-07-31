@@ -8,6 +8,7 @@ using FluentEvents.Pipelines.Projections;
 using FluentEvents.Pipelines.Publication;
 using FluentEvents.Pipelines.Queues;
 using FluentEvents.Plugins;
+using FluentEvents.Publication;
 using FluentEvents.Queues;
 using FluentEvents.Routing;
 using FluentEvents.ServiceProviders;

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FluentEvents.Subscriptions
+namespace FluentEvents.Publication
 {
     /// <summary>
     ///     An exception that aggregates all exceptions thrown by the handlers of an event.
     /// </summary>
-    public class SubscriptionPublishAggregateException : AggregateException
+    public class PublicationAggregateException : AggregateException
     {
-        internal SubscriptionPublishAggregateException(IEnumerable<Exception> exceptions) 
+        internal PublicationAggregateException(IEnumerable<Exception> exceptions) 
             : base(exceptions)
         {
         }

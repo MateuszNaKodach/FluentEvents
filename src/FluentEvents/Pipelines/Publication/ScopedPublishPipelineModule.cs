@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FluentEvents.Publication;
 using FluentEvents.Subscriptions;
 
 namespace FluentEvents.Pipelines.Publication

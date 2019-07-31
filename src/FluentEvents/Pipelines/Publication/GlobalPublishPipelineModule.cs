@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentEvents.Publication;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 

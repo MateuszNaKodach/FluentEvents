@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentEvents.Azure.ServiceBus.Receiving;
 using FluentEvents.Pipelines;
+using FluentEvents.Publication;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
 using Microsoft.Azure.ServiceBus;
