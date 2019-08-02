@@ -10,7 +10,7 @@ namespace FluentEvents.Pipelines.Publication
     public class EventTransmissionPluginIsNotConfiguredException : FluentEventsException
     {
         internal EventTransmissionPluginIsNotConfiguredException()
-            : base($"The transmission plugin is not configured in the {nameof(EventsContextOptions)}")
+            : base($"A transmission method has been specified but it's plugin wasn't configured in the {nameof(EventsContextOptions)}")
         {
             
         }
