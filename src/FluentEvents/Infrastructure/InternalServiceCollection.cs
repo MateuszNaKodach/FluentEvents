@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentEvents.Attachment;
 using FluentEvents.Configuration;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
@@ -10,7 +11,6 @@ using FluentEvents.Pipelines.Queues;
 using FluentEvents.Plugins;
 using FluentEvents.Publication;
 using FluentEvents.Queues;
-using FluentEvents.Routing;
 using FluentEvents.ServiceProviders;
 using FluentEvents.Subscriptions;
 using FluentEvents.Transmission;
@@ -31,7 +31,7 @@ namespace FluentEvents.Infrastructure
             _rootAppServiceProvider = rootAppServiceProvider;
         }
 
-        public ServiceProvider BuildServiceProvider(IFluentEventsPluginOptions options)
+        public ServiceProvider BuildServiceProvider(IEventsContextOptions options)
         {
             Func<IServiceProvider, object> GetLoggerFactory() =>
                 x => _rootAppServiceProvider.GetService<ILoggerFactory>() ??
