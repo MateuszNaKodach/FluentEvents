@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentEvents.Configuration;
-using FluentEvents.Pipelines;
 using FluentEvents.Infrastructure;
+using FluentEvents.Pipelines;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Config
+namespace FluentEvents.UnitTests.Configuration
 {
     [TestFixture]
     public class EventPipelineConfiguratorTests

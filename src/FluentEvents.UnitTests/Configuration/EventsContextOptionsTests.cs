@@ -4,7 +4,7 @@ using FluentEvents.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Config
+namespace FluentEvents.UnitTests.Configuration
 {
     [TestFixture]
     public class EventsContextOptionsTests
@@ -22,7 +22,7 @@ namespace FluentEvents.UnitTests.Config
         {
             Assert.That(() =>
             {
-                ((IFluentEventsPluginOptions) _eventsContextOptions).AddPlugin(null);
+                ((IEventsContextOptions) _eventsContextOptions).AddPlugin(null);
             }, Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -34,8 +34,8 @@ namespace FluentEvents.UnitTests.Config
 
             Assert.That(() =>
             {
-                ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin1);
-                ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin2);
+                ((IEventsContextOptions)_eventsContextOptions).AddPlugin(plugin1);
+                ((IEventsContextOptions)_eventsContextOptions).AddPlugin(plugin2);
             }, Throws.TypeOf<DuplicatePluginException>());
         }
 
@@ -44,9 +44,9 @@ namespace FluentEvents.UnitTests.Config
         {
             var plugin = new TestPlugin<object>();
 
-            ((IFluentEventsPluginOptions)_eventsContextOptions).AddPlugin(plugin);
+            ((IEventsContextOptions)_eventsContextOptions).AddPlugin(plugin);
 
-            Assert.That(((IFluentEventsPluginOptions) _eventsContextOptions).Plugins, Has.One.Items.EqualTo(plugin));
+            Assert.That(((IEventsContextOptions) _eventsContextOptions).Plugins, Has.One.Items.EqualTo(plugin));
         }
 
         private class TestPlugin<T> : IFluentEventsPlugin

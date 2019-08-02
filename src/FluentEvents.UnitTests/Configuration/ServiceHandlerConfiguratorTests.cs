@@ -5,7 +5,7 @@ using FluentEvents.Subscriptions;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentEvents.UnitTests.Config
+namespace FluentEvents.UnitTests.Configuration
 {
     [TestFixture]
     public class ServiceHandlerConfiguratorTests
