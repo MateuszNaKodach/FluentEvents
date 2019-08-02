@@ -27,6 +27,9 @@ namespace FluentEvents.Azure.ServiceBus
         ///     <see cref="EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions{TEvent}(EventPipelineConfiguration{TEvent},Func{ConfigureTransmission, IPublishTransmissionConfiguration})"/>
         ///     method.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="configureTransmission"/> is <see langword="null"/>.
+        /// </exception>
         public static IPublishTransmissionConfiguration WithAzureTopic(
             this IConfigureTransmission configureTransmission
         )

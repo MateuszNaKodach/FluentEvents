@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 
 namespace FluentEvents.Pipelines
@@ -15,6 +16,12 @@ namespace FluentEvents.Pipelines
         /// <typeparam name="TModule">The type of the module.</typeparam>
         /// <typeparam name="TConfig">The type of the module configuration.</typeparam>
         /// <param name="moduleConfig">An instance of the module configuration</param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="moduleConfig"/> is null.
+        /// </exception>
+        /// <exception cref="PipelineModuleNotFoundException">
+        ///     The TModule type wasn't registered in the internal service provider.
+        /// </exception>
         void AddModule<TModule, TConfig>(TConfig moduleConfig) where TModule : IPipelineModule<TConfig>;
 
         
@@ -23,7 +30,6 @@ namespace FluentEvents.Pipelines
         /// </summary>
         /// <param name="pipelineEvent">The event.</param>
         /// <param name="eventsScope">The scope of the event.</param>
-        /// <returns></returns>
         Task ProcessEventAsync(PipelineEvent pipelineEvent, IEventsScope eventsScope);
     }
 }

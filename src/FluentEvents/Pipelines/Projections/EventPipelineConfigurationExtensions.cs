@@ -27,6 +27,9 @@ namespace FluentEvents.Pipelines.Projections
         /// <returns>
         ///     A new <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> and/or <paramref name="eventConverter"/> are <see langword="null"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TToEvent> ThenIsProjected<TEvent, TToEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             Func<TEvent, TToEvent> eventConverter

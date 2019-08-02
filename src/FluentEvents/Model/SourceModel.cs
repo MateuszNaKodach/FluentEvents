@@ -30,6 +30,9 @@ namespace FluentEvents.Model
         ///     Creates a new instance of a <see cref="SourceModel"/>.
         /// </summary>
         /// <param name="clrType"></param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="clrType"/> is null.
+        /// </exception>
         public SourceModel(Type clrType)
         {
             ClrType = clrType ?? throw new ArgumentNullException(nameof(clrType));

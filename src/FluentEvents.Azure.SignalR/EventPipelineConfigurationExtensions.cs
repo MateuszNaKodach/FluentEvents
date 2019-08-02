@@ -23,6 +23,12 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> and/or <paramref name="hubName"/> are <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="PipelineModuleNotFoundException">
+        ///     The AzureSignalR plugin wasn't registered in the <see cref="EventsContextOptions"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsSentToAllAzureSignalRUsers<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             string hubName,
@@ -54,6 +60,12 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> and/or <paramref name="hubName"/> are <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="PipelineModuleNotFoundException">
+        ///     The AzureSignalR plugin wasn't registered in the <see cref="EventsContextOptions"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsSentToAzureSignalRUsers<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             Func<TEvent, string[]> userIdsProviderAction,
@@ -86,6 +98,12 @@ namespace FluentEvents.Azure.SignalR
         /// <returns>
         ///     The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> and/or <paramref name="hubName"/> are <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="PipelineModuleNotFoundException">
+        ///     The AzureSignalR plugin wasn't registered in the <see cref="EventsContextOptions"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsSentToAzureSignalRGroups<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             Func<TEvent, string[]> groupIdsProviderAction,

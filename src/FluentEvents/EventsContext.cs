@@ -90,10 +90,18 @@ namespace FluentEvents
         /// </summary>
         /// <param name="source">The event source.</param>
         /// <param name="eventsScope">The scope of the events published from this source.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="source"/> and/or <paramref name="eventsScope"/> are <see langword="null"/>.
+        /// </exception>
         public virtual void WatchSourceEvents(object source, EventsScope eventsScope)
-            => GetCurrentInternalServiceProvider()
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
+
+            GetCurrentInternalServiceProvider()
                 .GetRequiredService<IAttachingService>()
                 .Attach(source, eventsScope);
+        }
 
         /// <summary>
         ///     Resumes the processing of the events that have been queued.
@@ -106,10 +114,17 @@ namespace FluentEvents
         /// <exception cref="EventsQueueNotFoundException">
         ///     No queues were found with the supplied <paramref name="queueName"/>.
         /// </exception>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventsScope"/> is <see langword="null"/>.
+        /// </exception>
         public virtual Task ProcessQueuedEventsAsync(EventsScope eventsScope, string queueName = null)
-            => GetCurrentInternalServiceProvider()
+        {
+            if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
+
+            return GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
                 .ProcessQueuedEventsAsync(eventsScope, queueName);
+        }
 
         /// <summary>
         ///     Discards all the events of a queue.
@@ -122,13 +137,21 @@ namespace FluentEvents
         /// <exception cref="EventsQueueNotFoundException">
         ///     No queues were found with the supplied <paramref name="queueName"/>.
         /// </exception>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventsScope"/> is <see langword="null"/>.
+        /// </exception>
         public virtual void DiscardQueuedEvents(EventsScope eventsScope, string queueName = null)
-            => GetCurrentInternalServiceProvider()
+        {
+            if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
+
+            GetCurrentInternalServiceProvider()
                 .GetRequiredService<IEventsQueuesService>()
                 .DiscardQueuedEvents(eventsScope, queueName);
+        }
 
         /// <summary>
-        ///     Returns an <see cref="IHostedService"/> that can start or stop the configured event receivers.
+        ///     Returns an <see cref="IHostedService"/> that can start or stop the configured
+        ///     event receivers.
         /// </summary>
         public IHostedService GetEventReceiversHostedService()
             => GetCurrentInternalServiceProvider()

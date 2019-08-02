@@ -33,12 +33,16 @@ namespace FluentEvents
         ///     </para>
         /// </param>
         /// <returns>The original <see cref="IServiceCollection"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="services"/> or <paramref name="optionsBuilder"/> is <see langword="null"/>.
+        /// </exception>
         public static IServiceCollection AddEventsContext<T>(
             this IServiceCollection services,
             Action<EventsContextOptions> optionsBuilder
         )
             where T : EventsContext
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
             if (optionsBuilder == null) throw new ArgumentNullException(nameof(optionsBuilder));
 
             var options = new EventsContextOptions();

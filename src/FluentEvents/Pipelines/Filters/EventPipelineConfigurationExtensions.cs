@@ -24,6 +24,9 @@ namespace FluentEvents.Pipelines.Filters
         /// <returns>
         ///     The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> and/or <paramref name="filter"/> are <see langword="null"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsFiltered<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration,
             Func<TEvent, bool> filter

@@ -20,6 +20,9 @@ namespace FluentEvents.Pipelines.Publication
         ///     The <see cref="EventPipelineConfiguration{TEvent}"/> for the pipeline being configured.
         /// </param>
         /// <returns>The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="eventPipelineConfiguration"/> is <see langword="null"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsPublishedToScopedSubscriptions<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration
         )
@@ -49,6 +52,12 @@ namespace FluentEvents.Pipelines.Publication
         /// </param>
         /// <param name="configurePublishTransmission">A delegate for configuring how the event is transmitted.</param>
         /// <returns>The same <see cref="EventPipelineConfiguration{TEvent}"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="configurePublishTransmission"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="EventTransmissionPluginIsNotConfiguredException">
+        ///     A transmission method has been specified but it's plugin wasn't configured in the <see cref="EventsContextOptions"/>.
+        /// </exception>
         public static EventPipelineConfiguration<TEvent> ThenIsPublishedToGlobalSubscriptions<TEvent>(
             this EventPipelineConfiguration<TEvent> eventPipelineConfiguration, 
             Func<ConfigureTransmission, IPublishTransmissionConfiguration> configurePublishTransmission
