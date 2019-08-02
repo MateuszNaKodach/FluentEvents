@@ -49,9 +49,6 @@ FluentEvents.Pipelines.IPipeline.AddModule<TModule, TConfig>(TConfig moduleConfi
 FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
 FluentEvents.Pipelines.IPipelineModule<TConfig>
 FluentEvents.Pipelines.IPipelineModule<TConfig>.InvokeAsync(TConfig config, FluentEvents.Pipelines.PipelineContext pipelineContext, FluentEvents.Pipelines.NextModuleDelegate invokeNextModule) -> System.Threading.Tasks.Task
-FluentEvents.Pipelines.IPipelinesService
-FluentEvents.Pipelines.IPipelinesService.AddPipeline(System.Type eventType, FluentEvents.Pipelines.IPipeline pipeline) -> void
-FluentEvents.Pipelines.IPipelinesService.GetPipelines(System.Type eventType) -> System.Collections.Generic.IEnumerable<FluentEvents.Pipelines.IPipeline>
 FluentEvents.Pipelines.NextModuleDelegate
 FluentEvents.Pipelines.PipelineContext
 FluentEvents.Pipelines.PipelineContext.EventsScope.get -> FluentEvents.Infrastructure.IEventsScope
@@ -83,14 +80,12 @@ FluentEvents.Publication.IPublishingService.PublishEventToGlobalSubscriptionsAsy
 FluentEvents.Publication.IPublishingService.PublishEventToScopedSubscriptionsAsync(FluentEvents.Pipelines.PipelineEvent pipelineEvent, FluentEvents.Infrastructure.IEventsScope eventsScope) -> System.Threading.Tasks.Task
 FluentEvents.Publication.PublicationAggregateException
 FluentEvents.Queues.EventsQueueNotFoundException
-FluentEvents.Routing.IAttachingInterceptor
-FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService attachingService, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
-FluentEvents.Routing.IAttachingService
-FluentEvents.Routing.IAttachingService.Attach(object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
+FluentEvents.Attachment.AttachDelegate
+FluentEvents.Attachment.IAttachingInterceptor
+FluentEvents.Attachment.IAttachingInterceptor.OnAttaching(FluentEvents.Attachment.AttachDelegate attach, object source, FluentEvents.Infrastructure.IEventsScope eventsScope) -> void
 FluentEvents.ServiceCollectionExtensions
 FluentEvents.ServiceProviders.IRootAppServiceProvider
 FluentEvents.ServiceProviders.IScopedAppServiceProvider
-FluentEvents.Subscriptions.EventTypeMismatchException
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException
 FluentEvents.Subscriptions.SubscribingServiceNotFoundException.ServiceType.get -> System.Type
 FluentEvents.Transmission.IEventReceiver

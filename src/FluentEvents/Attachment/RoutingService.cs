@@ -3,7 +3,7 @@ using FluentEvents.Infrastructure;
 using FluentEvents.Pipelines;
 using Microsoft.Extensions.Logging;
 
-namespace FluentEvents.Routing
+namespace FluentEvents.Attachment
 {
     internal class RoutingService : IRoutingService
     {

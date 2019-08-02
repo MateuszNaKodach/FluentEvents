@@ -1,19 +1,19 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using FluentEvents.Attachment;
 using FluentEvents.Infrastructure;
-using FluentEvents.Routing;
 
 namespace FluentEvents.EntityFramework
 {
     internal class DbContextAttachingInterceptor<TDbContext> : IAttachingInterceptor
         where TDbContext : DbContext
     {
-        public void OnAttaching(IAttachingService attachingService, object source, IEventsScope eventsScope)
+        public void OnAttaching(AttachDelegate attach, object source, IEventsScope eventsScope)
         {
             if (source is TDbContext dbContext)
                 ((IObjectContextAdapter)dbContext).ObjectContext.ObjectMaterialized += (sender, args) =>
                 {
-                    attachingService.Attach(args.Entity, eventsScope);
+                    attach(args.Entity, eventsScope);
                 };
         }
     }

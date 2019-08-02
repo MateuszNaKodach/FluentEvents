@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
+using FluentEvents.Attachment;
 using FluentEvents.Plugins;
-using FluentEvents.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentEvents.EntityFramework

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentEvents.Attachment;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
-using FluentEvents.Routing;
 using Moq;
 using NUnit.Framework;
 
@@ -100,11 +100,11 @@ namespace FluentEvents.UnitTests.Routing
         private void SetUpInterceptors(object source)
         {
             _attachingInterceptorMock1
-                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScopeMock.Object))
+                .Setup(x => x.OnAttaching(It.IsAny<AttachDelegate>(), source, _eventsScopeMock.Object))
                 .Verifiable();
 
             _attachingInterceptorMock2
-                .Setup(x => x.OnAttaching(_attachingService, source, _eventsScopeMock.Object))
+                .Setup(x => x.OnAttaching(It.IsAny<AttachDelegate>(), source, _eventsScopeMock.Object))
                 .Verifiable();
         }
 

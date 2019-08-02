@@ -1,5 +1,5 @@
-﻿using FluentEvents.Plugins;
-using FluentEvents.Routing;
+﻿using FluentEvents.Attachment;
+using FluentEvents.Plugins;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

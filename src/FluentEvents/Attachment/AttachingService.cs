@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using FluentEvents.Infrastructure;
 using FluentEvents.Model;
 using FluentEvents.Pipelines;
-using FluentEvents.Utils;
 
-namespace FluentEvents.Routing
+namespace FluentEvents.Attachment
 {
     internal class AttachingService : IAttachingService
     {
@@ -31,17 +30,22 @@ namespace FluentEvents.Routing
             if (eventsScope == null) throw new ArgumentNullException(nameof(eventsScope));
 
             foreach (var attachingInterceptor in _attachingInterceptors)
-                attachingInterceptor.OnAttaching(this, source, eventsScope);
+                attachingInterceptor.OnAttaching(AttachInternal, source, eventsScope);
 
+            AttachInternal(source, eventsScope);
+        }
+
+        private void AttachInternal(object source, IEventsScope eventsScope)
+        {
             var sourceModel = _sourceModelsService.GetOrCreateSourceModel(source.GetType());
 
             foreach (var eventField in sourceModel.EventFields)
             {
-                void HandlerAction(object @event) =>
-                    HandlerActionAsync(@event).GetAwaiter().GetResult();
+                void HandlerAction(object e) =>
+                    HandlerActionAsync(e).GetAwaiter().GetResult();
 
-                Task HandlerActionAsync(object @event) =>
-                    _routingService.RouteEventAsync(new PipelineEvent(@event), eventsScope);
+                Task HandlerActionAsync(object e) =>
+                    _routingService.RouteEventAsync(new PipelineEvent(e), eventsScope);
 
                 var eventHandler = eventField.IsAsync
                     ? sourceModel.CreateEventHandler<Func<object, Task>>(eventField, HandlerActionAsync)

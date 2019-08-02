@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentEvents.Attachment;
 using FluentEvents.Configuration;
 using FluentEvents.Infrastructure;
 using FluentEvents.Queues;
-using FluentEvents.Routing;
 using FluentEvents.ServiceProviders;
 using FluentEvents.Transmission;
 using Microsoft.Extensions.DependencyInjection;
