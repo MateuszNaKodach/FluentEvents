@@ -11,6 +11,28 @@
             <param name="e">The event.</param>
             <typeparam name="TEvent">The type of the event.</typeparam>
         </member>
+        <member name="T:FluentEvents.Attachment.AttachDelegate">
+            <summary>
+                Allows interceptors to attach sources in the <see cref="M:FluentEvents.Attachment.IAttachingInterceptor.OnAttaching(FluentEvents.Attachment.AttachDelegate,System.Object,FluentEvents.Infrastructure.IEventsScope)"/> method.
+            </summary>
+            <param name="source">The events source being attached.</param>
+            <param name="eventsScope">The current <see cref="T:FluentEvents.Infrastructure.IEventsScope"/></param>
+        </member>
+        <member name="T:FluentEvents.Attachment.IAttachingInterceptor">
+            <summary>
+                This interface can be implemented to intercept every attaching made
+                to the <see cref="T:FluentEvents.EventsContext"/>.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Attachment.IAttachingInterceptor.OnAttaching(FluentEvents.Attachment.AttachDelegate,System.Object,FluentEvents.Infrastructure.IEventsScope)">
+            <summary>
+                This method can be used to handle complex attaching situations
+                (For example attaching to the entities of an ORM).
+            </summary>
+            <param name="attach">A delegate that allows the interceptor to attach sources.</param>
+            <param name="source">The events source being attached.</param>
+            <param name="eventsScope">The current <see cref="T:FluentEvents.Infrastructure.IEventsScope"/></param>
+        </member>
         <member name="T:FluentEvents.Configuration.EventConfiguration`1">
             <summary>
                 Allows configuration to be performed for an event type.
@@ -44,6 +66,32 @@
         <member name="M:FluentEvents.Configuration.EventsContextOptions.#ctor">
             <summary>
                 Initializes a new instance.
+            </summary>
+        </member>
+        <member name="T:FluentEvents.Configuration.IEventsContextOptions">
+            <summary>
+                Provides a way to add or list plugins.
+            </summary>
+        </member>
+        <member name="M:FluentEvents.Configuration.IEventsContextOptions.AddPlugin(FluentEvents.Plugins.IFluentEventsPlugin)">
+            <summary>
+                Adds a plugin.
+            </summary>
+            <remarks>
+                This method should be called with custom extension methods
+                to provide a better configuration experience.
+            </remarks>
+            <param name="plugin">The instance of the plugin.</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="plugin"/> is null.
+            </exception>
+            <exception cref="T:FluentEvents.Plugins.DuplicatePluginException">
+                Another plugin with the same type has already been added.
+            </exception>
+        </member>
+        <member name="P:FluentEvents.Configuration.IEventsContextOptions.Plugins">
+            <summary>
+                Returns the list of the added plugins.
             </summary>
         </member>
         <member name="T:FluentEvents.Configuration.IPipelinesBuilder">
@@ -176,6 +224,9 @@
             </summary>
             <param name="source">The event source.</param>
             <param name="eventsScope">The scope of the events published from this source.</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="source"/> and/or <paramref name="eventsScope"/> are <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:FluentEvents.EventsContext.ProcessQueuedEventsAsync(FluentEvents.EventsScope,System.String)">
             <summary>
@@ -188,6 +239,9 @@
             </param>
             <exception cref="T:FluentEvents.Queues.EventsQueueNotFoundException">
                 No queues were found with the supplied <paramref name="queueName"/>.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventsScope"/> is <see langword="null"/>.
             </exception>
         </member>
         <member name="M:FluentEvents.EventsContext.DiscardQueuedEvents(FluentEvents.EventsScope,System.String)">
@@ -202,10 +256,14 @@
             <exception cref="T:FluentEvents.Queues.EventsQueueNotFoundException">
                 No queues were found with the supplied <paramref name="queueName"/>.
             </exception>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventsScope"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:FluentEvents.EventsContext.GetEventReceiversHostedService">
             <summary>
-                Returns an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/> that can start or stop the configured event receivers.
+                Returns an <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/> that can start or stop the configured
+                event receivers.
             </summary>
         </member>
         <member name="T:FluentEvents.EventsScope">
@@ -306,6 +364,9 @@
                 Creates a new instance of a <see cref="T:FluentEvents.Model.SourceModel"/>.
             </summary>
             <param name="clrType"></param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="clrType"/> is null.
+            </exception>
         </member>
         <member name="T:FluentEvents.Model.SourceModelEventField">
             <summary>
@@ -358,6 +419,9 @@
             <returns>
                 The same <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> instance so that multiple calls can be chained.
             </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventPipelineConfiguration"/> and/or <paramref name="filter"/> are <see langword="null"/>.
+            </exception>
         </member>
         <member name="T:FluentEvents.Pipelines.IPipeline">
             <summary>
@@ -372,6 +436,12 @@
             <typeparam name="TModule">The type of the module.</typeparam>
             <typeparam name="TConfig">The type of the module configuration.</typeparam>
             <param name="moduleConfig">An instance of the module configuration</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="moduleConfig"/> is null.
+            </exception>
+            <exception cref="T:FluentEvents.Pipelines.PipelineModuleNotFoundException">
+                The TModule type wasn't registered in the internal service provider.
+            </exception>
         </member>
         <member name="M:FluentEvents.Pipelines.IPipeline.ProcessEventAsync(FluentEvents.Pipelines.PipelineEvent,FluentEvents.Infrastructure.IEventsScope)">
             <summary>
@@ -379,7 +449,6 @@
             </summary>
             <param name="pipelineEvent">The event.</param>
             <param name="eventsScope">The scope of the event.</param>
-            <returns></returns>
         </member>
         <member name="T:FluentEvents.Pipelines.IPipelineModule`1">
             <summary>
@@ -396,27 +465,6 @@
             <param name="pipelineContext">The current pipeline processing context.</param>
             <param name="invokeNextModule">The delegate to invoke the next module in the pipeline.</param>
             <returns>A task to await.</returns>
-        </member>
-        <member name="T:FluentEvents.Pipelines.IPipelinesService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Pipelines.IPipelinesService.AddPipeline(System.Type,FluentEvents.Pipelines.IPipeline)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Pipelines.IPipelinesService.GetPipelines(System.Type)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-                 <paramref name="eventType"/> is <see langword="null"/>.
-            </exception>
         </member>
         <member name="T:FluentEvents.Pipelines.NextModuleDelegate">
             <summary>
@@ -446,7 +494,9 @@
             </summary>
             <param name="pipelineEvent">The event being processed.</param>
             <param name="eventsScope">The current events scope.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are null.</exception>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="pipelineEvent"/> and/or <paramref name="eventsScope"/> are null.
+            </exception>
         </member>
         <member name="T:FluentEvents.Pipelines.PipelineEvent">
             <summary>
@@ -501,6 +551,9 @@
             <returns>
                 A new <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> instance so that multiple calls can be chained.
             </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventPipelineConfiguration"/> and/or <paramref name="eventConverter"/> are <see langword="null"/>.
+            </exception>
         </member>
         <member name="T:FluentEvents.Pipelines.Publication.ConfigureTransmission">
             <summary>
@@ -521,6 +574,9 @@
                 The <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> for the pipeline being configured.
             </param>
             <returns>The same <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> instance so that multiple calls can be chained.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventPipelineConfiguration"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:FluentEvents.Pipelines.Publication.EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfiguration{``0},System.Func{FluentEvents.Pipelines.Publication.ConfigureTransmission,FluentEvents.Pipelines.Publication.IPublishTransmissionConfiguration})">
             <summary>
@@ -536,6 +592,12 @@
             </param>
             <param name="configurePublishTransmission">A delegate for configuring how the event is transmitted.</param>
             <returns>The same <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> instance so that multiple calls can be chained.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="configurePublishTransmission"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:FluentEvents.Pipelines.Publication.EventTransmissionPluginIsNotConfiguredException">
+                A transmission method has been specified but it's plugin wasn't configured in the <see cref="T:FluentEvents.Configuration.EventsContextOptions"/>.
+            </exception>
         </member>
         <member name="M:FluentEvents.Pipelines.Publication.EventPipelineConfigurationExtensions.ThenIsPublishedToGlobalSubscriptions``1(FluentEvents.Configuration.EventPipelineConfiguration{``0})">
             <summary>
@@ -598,6 +660,9 @@
             <returns>
                 The same <see cref="T:FluentEvents.Configuration.EventPipelineConfiguration`1"/> instance so that multiple calls can be chained.
             </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="eventPipelineConfiguration"/> and/or <paramref name="queueName"/> are null <see langword="null"/>.
+            </exception>
         </member>
         <member name="T:FluentEvents.Plugins.DuplicatePluginException">
             <summary>
@@ -614,26 +679,6 @@
                 Adds the services required for the plugin to the framework's internal <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
             <param name="services">The framework's internal <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
-        </member>
-        <member name="T:FluentEvents.Plugins.IFluentEventsPluginOptions">
-            <summary>
-                Provides a way to add or list plugins.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Plugins.IFluentEventsPluginOptions.AddPlugin(FluentEvents.Plugins.IFluentEventsPlugin)">
-            <summary>
-                Adds a plugin.
-            </summary>
-            <remarks>
-                This method should be called with custom extension methods
-                to provide a better configuration experience.
-            </remarks>
-            <param name="plugin">The instance of the plugin.</param>
-        </member>
-        <member name="P:FluentEvents.Plugins.IFluentEventsPluginOptions.Plugins">
-            <summary>
-                Returns the list of the added plugins.
-            </summary>
         </member>
         <member name="T:FluentEvents.Publication.IPublishingService">
             <summary>
@@ -677,31 +722,6 @@
                 An exception that is thrown when the events queue with the specified name does not exists.
             </summary>
         </member>
-        <member name="T:FluentEvents.Routing.IAttachingInterceptor">
-            <summary>
-                This interface can be implemented to intercept every attaching made to the <see cref="T:FluentEvents.EventsContext"/>.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Routing.IAttachingInterceptor.OnAttaching(FluentEvents.Routing.IAttachingService,System.Object,FluentEvents.Infrastructure.IEventsScope)">
-            <summary>
-                This method can be used to handle complex attaching situations (For example attaching to the entities of an ORM).
-            </summary>
-            <param name="attachingService">The attaching service that invokes the interceptor.</param>
-            <param name="source">The events source being attached.</param>
-            <param name="eventsScope">The current <see cref="T:FluentEvents.Infrastructure.IEventsScope"/></param>
-        </member>
-        <member name="T:FluentEvents.Routing.IAttachingService">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
-        <member name="M:FluentEvents.Routing.IAttachingService.Attach(System.Object,FluentEvents.Infrastructure.IEventsScope)">
-            <summary>
-                This API supports the FluentEvents infrastructure and is not intended to be used
-                directly from your code. This API may change or be removed in future releases.
-            </summary>
-        </member>
         <member name="T:FluentEvents.ServiceCollectionExtensions">
             <summary>
                 Extension methods for configuring an <see cref="T:FluentEvents.EventsContext"/> with Dependency Injection.
@@ -726,6 +746,9 @@
                 </para>
             </param>
             <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="services"/> or <paramref name="optionsBuilder"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action)">
             <summary>
@@ -758,12 +781,6 @@
         <member name="T:FluentEvents.ServiceProviders.IScopedAppServiceProvider">
             <summary>
                 Represents a scoped application service provider.
-            </summary>
-        </member>
-        <member name="T:FluentEvents.Subscriptions.EventTypeMismatchException">
-            <summary>
-                An exception that is thrown when the source of the event to publish
-                is not an instance of <see cref="P:FluentEvents.Subscriptions.Subscription.EventType"/>.
             </summary>
         </member>
         <member name="M:FluentEvents.Subscriptions.ISubscriptionCreationTask.CreateSubscriptions(System.IServiceProvider)">

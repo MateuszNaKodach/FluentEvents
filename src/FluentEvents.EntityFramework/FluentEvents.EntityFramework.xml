@@ -4,12 +4,12 @@
         <name>FluentEvents.EntityFramework</name>
     </assembly>
     <members>
-        <member name="T:FluentEvents.EntityFramework.FluentEventsPluginOptionsExtensions">
+        <member name="T:FluentEvents.EntityFramework.EventsContextOptionsExtensions">
             <summary>
-                Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
+                Extensions for <see cref="T:FluentEvents.Configuration.IEventsContextOptions"/>
             </summary>
         </member>
-        <member name="M:FluentEvents.EntityFramework.FluentEventsPluginOptionsExtensions.AttachToDbContextEntities``1(FluentEvents.Plugins.IFluentEventsPluginOptions)">
+        <member name="M:FluentEvents.EntityFramework.EventsContextOptionsExtensions.AttachToDbContextEntities``1(FluentEvents.Configuration.IEventsContextOptions)">
             <summary>
                 Adds a plugin that attaches the entities tracked by a <see cref="T:System.Data.Entity.DbContext"/>
                 to the <see cref="T:FluentEvents.EventsContext"/> automatically.
@@ -24,14 +24,16 @@
                 services.AddWithEventsAttachedTo&lt;SampleEventsContext&gt;(() =&gt; {
                     services.AddScoped&lt;MyDbContext&gt;();
                 });
-                    
                 services.AddEventsContext&lt;SampleEventsContext&gt;(options =&gt; {
                     options.AttachToDbContextEntities&lt;MyDbContext&gt;();
                 });
             </example>
-            <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
+            <param name="options">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <typeparam name="TDbContext">The type of the <see cref="T:System.Data.Entity.DbContext"/>.</typeparam>
-            <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
+            <returns>The same instance of <see cref="T:FluentEvents.Configuration.IEventsContextOptions"/> for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="options"/> is <see langword="null"/>.
+            </exception>
         </member>
     </members>
 </doc>

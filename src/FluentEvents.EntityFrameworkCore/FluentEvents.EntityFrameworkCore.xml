@@ -4,12 +4,12 @@
         <name>FluentEvents.EntityFrameworkCore</name>
     </assembly>
     <members>
-        <member name="T:FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions">
+        <member name="T:FluentEvents.EntityFrameworkCore.EventsContextOptionsExtensions">
             <summary>
-                Extensions for <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/>
+                Extensions for <see cref="T:FluentEvents.Configuration.IEventsContextOptions"/>
             </summary>
         </member>
-        <member name="M:FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions.AttachToDbContextEntities``1(FluentEvents.Plugins.IFluentEventsPluginOptions)">
+        <member name="M:FluentEvents.EntityFrameworkCore.EventsContextOptionsExtensions.AttachToDbContextEntities``1(FluentEvents.Configuration.IEventsContextOptions)">
             <summary>
                 Adds a plugin that attaches the entities tracked by a <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/>
                 to the <see cref="T:FluentEvents.EventsContext"/> automatically.
@@ -29,9 +29,12 @@
                     options.AttachToDbContextEntities&lt;MyDbContext&gt;();
                 });
             </example>
-            <param name="pluginOptions">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
+            <param name="options">The <see cref="T:FluentEvents.EventsContext"/> options.</param>
             <typeparam name="TDbContext">The type of the <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/>.</typeparam>
-            <returns>The same instance of <see cref="T:FluentEvents.Plugins.IFluentEventsPluginOptions"/> for chaining.</returns>
+            <returns>The same instance of <see cref="T:FluentEvents.Configuration.IEventsContextOptions"/> for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="options"/> is <see langword="null"/>.
+            </exception>
         </member>
     </members>
 </doc>
