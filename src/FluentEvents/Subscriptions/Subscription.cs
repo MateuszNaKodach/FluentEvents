@@ -7,16 +7,16 @@ namespace FluentEvents.Subscriptions
 {
     internal class Subscription
     {
-        internal Type EventType { get; }
+        public Type EventType { get; }
         private readonly Delegate _eventsHandler;
 
-        internal Subscription(Type sourceType, Delegate eventsHandler)
+        public Subscription(Type sourceType, Delegate eventsHandler)
         {
             EventType = sourceType ?? throw new ArgumentNullException(nameof(sourceType));
             _eventsHandler = eventsHandler ?? throw new ArgumentNullException(nameof(eventsHandler));
         }
 
-        internal async Task InvokeEventsHandlerAsync(PipelineEvent pipelineEvent)
+        public async Task InvokeEventsHandlerAsync(PipelineEvent pipelineEvent)
         {
             if (pipelineEvent == null) throw new ArgumentNullException(nameof(pipelineEvent));
             if (!EventType.IsInstanceOfType(pipelineEvent.Event))
