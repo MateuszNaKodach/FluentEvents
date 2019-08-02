@@ -1,13 +1,14 @@
 ﻿using System;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 using Microsoft.EntityFrameworkCore;
 
 namespace FluentEvents.EntityFrameworkCore
 {
     /// <summary>
-    ///     Extensions for <see cref="IFluentEventsPluginOptions"/>
+    ///     Extensions for <see cref="IEventsContextOptions"/>
     /// </summary>
-    public static class FluentEventsPluginOptionsExtensions
+    public static class EventsContextOptionsExtensions
     {
         /// <summary>
         ///     Adds a plugin that attaches the entities tracked by a <see cref="DbContext"/>
@@ -28,19 +29,22 @@ namespace FluentEvents.EntityFrameworkCore
         ///         options.AttachToDbContextEntities&lt;MyDbContext&gt;();
         ///     });
         /// </example>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <typeparam name="TDbContext">The type of the <see cref="DbContext"/>.</typeparam>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions AttachToDbContextEntities<TDbContext>(
-            this IFluentEventsPluginOptions pluginOptions
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="options"/> is <see langword="null"/>.
+        /// </exception>
+        public static IEventsContextOptions AttachToDbContextEntities<TDbContext>(
+            this IEventsContextOptions options
         )
             where TDbContext : DbContext
         {
-            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
-            pluginOptions.AddPlugin(new EntityFrameworkPlugin<TDbContext>());
+            options.AddPlugin(new EntityFrameworkPlugin<TDbContext>());
 
-            return pluginOptions;
+            return options;
         }
     }
 }

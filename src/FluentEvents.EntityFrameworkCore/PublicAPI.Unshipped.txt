@@ -1,2 +1,2 @@
-﻿FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions
-static FluentEvents.EntityFrameworkCore.FluentEventsPluginOptionsExtensions.AttachToDbContextEntities<TDbContext>(this FluentEvents.Plugins.IFluentEventsPluginOptions pluginOptions) -> FluentEvents.Plugins.IFluentEventsPluginOptions
+﻿FluentEvents.EntityFrameworkCore.EventsContextOptionsExtensions
+static FluentEvents.EntityFrameworkCore.EventsContextOptionsExtensions.AttachToDbContextEntities<TDbContext>(this FluentEvents.Configuration.IEventsContextOptions options) -> FluentEvents.Configuration.IEventsContextOptions

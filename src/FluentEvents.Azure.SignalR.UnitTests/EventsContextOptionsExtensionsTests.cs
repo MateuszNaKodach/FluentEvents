@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,14 +10,14 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.SignalR.UnitTests
 {
     [TestFixture]
-    public class FluentEventsPluginOptionsExtensionsTests
+    public class EventsContextOptionsExtensionsTests
     {
-        private Mock<IFluentEventsPluginOptions> _fluentEventsPluginOptionsMock;
+        private Mock<IEventsContextOptions> _fluentEventsPluginOptionsMock;
 
         [SetUp]
         public void SetUp()
         {
-            _fluentEventsPluginOptionsMock = new Mock<IFluentEventsPluginOptions>(MockBehavior.Strict);
+            _fluentEventsPluginOptionsMock = new Mock<IEventsContextOptions>(MockBehavior.Strict);
         }
 
         [TearDown]

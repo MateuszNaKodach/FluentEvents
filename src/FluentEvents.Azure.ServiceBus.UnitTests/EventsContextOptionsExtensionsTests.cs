@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentEvents.Azure.ServiceBus.Receiving;
 using FluentEvents.Azure.ServiceBus.Sending;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -9,14 +10,14 @@ using NUnit.Framework;
 namespace FluentEvents.Azure.ServiceBus.UnitTests
 {
     [TestFixture]
-    public class FluentEventsPluginOptionsExtensionsTests
+    public class EventsContextOptionsExtensionsTests
     {
-        private Mock<IFluentEventsPluginOptions> _fluentEventPluginOptionsMock;
+        private Mock<IEventsContextOptions> _fluentEventPluginOptionsMock;
 
         [SetUp]
         public void SetUp()
         {
-            _fluentEventPluginOptionsMock = new Mock<IFluentEventsPluginOptions>(MockBehavior.Strict);
+            _fluentEventPluginOptionsMock = new Mock<IEventsContextOptions>(MockBehavior.Strict);
         }
 
         [TearDown]

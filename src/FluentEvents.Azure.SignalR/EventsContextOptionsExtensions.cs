@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,31 +8,31 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FluentEvents.Azure.SignalR
 {
     /// <summary>
-    ///     Extensions for <see cref="IFluentEventsPluginOptions"/>
+    ///     Extensions for <see cref="IEventsContextOptions"/>
     /// </summary>
-    public static class FluentEventsPluginOptionsExtensions
+    public static class EventsContextOptionsExtensions
     {
         /// <summary>
         ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
         /// </summary>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureAction">
         ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceOptions"/> for
         ///     the topic sender plugin.
         /// </param>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalRService(
-            this IFluentEventsPluginOptions pluginOptions,
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        public static IEventsContextOptions UseAzureSignalRService(
+            this IEventsContextOptions options,
             Action<AzureSignalRServiceOptions> configureAction
         )
         {
-            return pluginOptions.UseAzureSignalRService(configureAction, null);
+            return options.UseAzureSignalRService(configureAction, null);
         }
 
         /// <summary>
         ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
         /// </summary>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <param name="configureAction">
         ///     An <see cref="Action"/> to configure the <see cref="AzureSignalRServiceOptions"/> for
         ///     the topic sender plugin.
@@ -40,41 +41,44 @@ namespace FluentEvents.Azure.SignalR
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
         ///     the Azure SignalR Service.
         /// </param>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalRService(
-            this IFluentEventsPluginOptions pluginOptions,
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="options"/> and/or <paramref name="configureAction"/> are <see langword="null"/>.
+        /// </exception>
+        public static IEventsContextOptions UseAzureSignalRService(
+            this IEventsContextOptions options,
             Action<AzureSignalRServiceOptions> configureAction,
             Action<IHttpClientBuilder> httpClientBuilder
         )
         {
-            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             if (configureAction == null) throw new ArgumentNullException(nameof(configureAction));
 
-            pluginOptions.AddPlugin(new AzureSignalRPlugin(configureAction, httpClientBuilder));
+            options.AddPlugin(new AzureSignalRPlugin(configureAction, httpClientBuilder));
 
-            return pluginOptions;
+            return options;
         }
 
         /// <summary>
         ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
         /// </summary>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
         ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceOptions"/> type.
         /// </param>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalRService(
-            this IFluentEventsPluginOptions pluginOptions,
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        public static IEventsContextOptions UseAzureSignalRService(
+            this IEventsContextOptions options,
             IConfiguration configuration
         )
         {
-            return pluginOptions.UseAzureSignalRService(configuration, null);
+            return options.UseAzureSignalRService(configuration, null);
         }
 
         /// <summary>
         ///     Adds a plugin that invokes hub methods on an Azure SignalR Service when events are published.
         /// </summary>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <param name="configuration">
         ///     A configuration section with the same structure of the <see cref="AzureSignalRServiceOptions"/> type.
         /// </param>
@@ -82,19 +86,22 @@ namespace FluentEvents.Azure.SignalR
         ///     An <see cref="Action{T}"/> to further configure the <see cref="HttpClient"/> used to make requests to
         ///     the Azure SignalR Service.
         /// </param>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions UseAzureSignalRService(
-            this IFluentEventsPluginOptions pluginOptions,
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="options"/> and/or <paramref name="configuration"/> are <see langword="null"/>.
+        /// </exception>
+        public static IEventsContextOptions UseAzureSignalRService(
+            this IEventsContextOptions options,
             IConfiguration configuration,
             Action<IHttpClientBuilder> httpClientBuilder
         )
         {
-            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
-            pluginOptions.AddPlugin(new AzureSignalRPlugin(configuration, httpClientBuilder));
+            options.AddPlugin(new AzureSignalRPlugin(configuration, httpClientBuilder));
 
-            return pluginOptions;
+            return options;
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Data.Entity;
+using FluentEvents.Configuration;
 using FluentEvents.Plugins;
 
 namespace FluentEvents.EntityFramework
 {
     /// <summary>
-    ///     Extensions for <see cref="IFluentEventsPluginOptions"/>
+    ///     Extensions for <see cref="IEventsContextOptions"/>
     /// </summary>
-    public static class FluentEventsPluginOptionsExtensions
+    public static class EventsContextOptionsExtensions
     {
         /// <summary>
         ///     Adds a plugin that attaches the entities tracked by a <see cref="DbContext"/>
@@ -16,31 +17,33 @@ namespace FluentEvents.EntityFramework
         /// <remarks>
         ///     In order to automatically attach the entities the <see cref="DbContext"/> must be attached
         ///     to the <see cref="EventsContext"/> manually or by using the 
-        ///     <see cref="FluentEvents.ServiceCollectionExtensions.AddWithEventsAttachedTo{TEventsContext}"/>
+        ///     <see cref="ServiceCollectionExtensions.AddWithEventsAttachedTo{TEventsContext}"/>
         ///     method. (See example)
         /// </remarks>
         /// <example>
         ///     services.AddWithEventsAttachedTo&lt;SampleEventsContext&gt;(() =&gt; {
         ///         services.AddScoped&lt;MyDbContext&gt;();
         ///     });
-        ///         
         ///     services.AddEventsContext&lt;SampleEventsContext&gt;(options =&gt; {
         ///         options.AttachToDbContextEntities&lt;MyDbContext&gt;();
         ///     });
         /// </example>
-        /// <param name="pluginOptions">The <see cref="EventsContext"/> options.</param>
+        /// <param name="options">The <see cref="EventsContext"/> options.</param>
         /// <typeparam name="TDbContext">The type of the <see cref="DbContext"/>.</typeparam>
-        /// <returns>The same instance of <see cref="IFluentEventsPluginOptions"/> for chaining.</returns>
-        public static IFluentEventsPluginOptions AttachToDbContextEntities<TDbContext>(
-            this IFluentEventsPluginOptions pluginOptions
+        /// <returns>The same instance of <see cref="IEventsContextOptions"/> for chaining.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="options"/> is <see langword="null"/>.
+        /// </exception>
+        public static IEventsContextOptions AttachToDbContextEntities<TDbContext>(
+            this IEventsContextOptions options
         )
             where TDbContext : DbContext
         {
-            if (pluginOptions == null) throw new ArgumentNullException(nameof(pluginOptions));
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
-            pluginOptions.AddPlugin(new EntityFrameworkPlugin<TDbContext>());
+            options.AddPlugin(new EntityFrameworkPlugin<TDbContext>());
 
-            return pluginOptions;
+            return options;
         }
     }
 }
